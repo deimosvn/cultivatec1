@@ -7,6 +7,7 @@ import { AchievementsScreen, AchievementToast, AchievementUnlockPopup, ACHIEVEME
 import RobotSimulator from './components/RobotSimulator';
 import CircuitBuilder from './CircuitBuilder';
 import { MODULOS_DATA, CODE_CHALLENGES_DATA } from './data/modulesData';
+import { OnboardingScreen, RobotAvatar, RobotMini, StoryProgress } from './Onboarding';
 
 // --- CONFIGURACIÓN Y MOCK DATA DE FIREBASE ---
 const appId = 'default-app-id'; 
@@ -282,7 +283,7 @@ const CodeGenerationModal = ({ isOpen, onClose, setCode, setAiExplanation }) => 
                                 <p className="text-xs text-[#777] font-semibold">{output.explanation}</p>
                             </div>
                             <div>
-                                <h3 className="font-black text-[#58CC02] mb-1 flex items-center text-sm"><Code size={14} className="mr-1" /> Código:</h3>
+                                <h3 className="font-black text-[#2563EB] mb-1 flex items-center text-sm"><Code size={14} className="mr-1" /> Código:</h3>
                                 <pre className="bg-gray-900 text-green-400 p-3 rounded-lg text-xs overflow-x-auto whitespace-pre-wrap font-mono">{output.code}</pre>
                             </div>
                             <button
@@ -380,7 +381,7 @@ const WorkshopScreen = ({ goToMenu }) => {
                         <div className="flex gap-1.5 mr-3">
                             <div className="w-3 h-3 rounded-full bg-[#FF4B4B]"></div>
                             <div className="w-3 h-3 rounded-full bg-[#FFC800]"></div>
-                            <div className="w-3 h-3 rounded-full bg-[#58CC02]"></div>
+                            <div className="w-3 h-3 rounded-full bg-[#2563EB]"></div>
                         </div>
                         <span className="text-xs font-black text-white/60">Editor Python</span>
                     </div>
@@ -397,10 +398,10 @@ const WorkshopScreen = ({ goToMenu }) => {
                 <div className="flex flex-col gap-3">
                     <div className="bg-gray-900 rounded-2xl overflow-hidden flex flex-col flex-grow h-48 md:h-full border-2 border-gray-700">
                         <div className="bg-gray-800 px-4 py-2.5 flex items-center border-b border-gray-700">
-                            <Terminal size={14} className="mr-2 text-[#58CC02]" />
+                            <Terminal size={14} className="mr-2 text-[#2563EB]" />
                             <span className="text-xs font-black text-gray-400">Consola de Salida</span>
                         </div>
-                        <pre className="flex-grow font-mono text-sm p-4 whitespace-pre-wrap text-[#58CC02]">
+                        <pre className="flex-grow font-mono text-sm p-4 whitespace-pre-wrap text-[#2563EB]">
                             {output || <span className="text-gray-600 italic">La salida aparecerá aquí...</span>}
                         </pre>
                     </div>
@@ -608,11 +609,11 @@ const InteractiveLEDGuide = ({ onBack }) => {
             return (
                 <div className="text-center p-6 space-y-4">
                     <span className="text-7xl">🌟</span>
-                    <h2 className="text-3xl font-black text-[#58CC02]">¡Felicidades, Súper Ingeniero!</h2>
+                    <h2 className="text-3xl font-black text-[#2563EB]">¡Felicidades, Súper Ingeniero!</h2>
                     <p className="text-base text-[#777] font-semibold">
                         Acabas de construir tu primer circuito básico. Entendiste cómo la **Pila** da energía, la **Resistencia** la protege, el **LED** la usa para brillar, y el **Botón** la controla.
                     </p>
-                    <div className="mt-6 p-4 bg-[#D7FFB8] rounded-2xl font-black text-[#58CC02] border-2 border-[#58CC02]/30">
+                    <div className="mt-6 p-4 bg-[#DBEAFE] rounded-2xl font-black text-[#2563EB] border-2 border-[#2563EB]/30">
                         <p>¡El concepto clave es el **Circuito Cerrado**!</p>
                     </div>
                     <button onClick={onBack} className="mt-6 py-3.5 px-8 btn-3d btn-3d-green rounded-2xl text-base">
@@ -625,7 +626,7 @@ const InteractiveLEDGuide = ({ onBack }) => {
 
     return (
         <div className="min-h-full bg-white flex flex-col animate-fade-in">
-            <div className="px-4 pt-4 mb-3">
+            <div className="px-4 pt-4 mb-3 flex items-center justify-between">
                 <button 
                     onClick={onBack} 
                     className="text-[#AFAFAF] hover:text-[#3C3C3C] transition flex items-center bg-white p-2.5 rounded-xl border-2 border-[#E5E5E5] active:scale-95"
@@ -633,12 +634,18 @@ const InteractiveLEDGuide = ({ onBack }) => {
                     <ArrowLeft size={18} className="mr-1" />
                     <span className="text-sm font-black">Biblioteca</span>
                 </button>
+                {userProfile && (
+                    <div className="flex items-center gap-2 bg-blue-50 px-3 py-1.5 rounded-xl">
+                        <RobotMini config={userProfile.robotConfig} size={28} />
+                        <span className="text-xs font-black text-[#2563EB]">¡Vamos, {userProfile.userName}!</span>
+                    </div>
+                )}
             </div>
 
             {/* Step indicator - Duolingo progress bar */}
             <div className="px-4 mb-3">
                 <div className="w-full bg-[#E5E5E5] rounded-full h-4 overflow-hidden">
-                    <div className="h-full bg-[#58CC02] rounded-full transition-all duration-500 flex items-center justify-end pr-1" style={{ width: `${((step + 1) / steps.length) * 100}%` }}>
+                    <div className="h-full bg-[#2563EB] rounded-full transition-all duration-500 flex items-center justify-end pr-1" style={{ width: `${((step + 1) / steps.length) * 100}%` }}>
                         <span className="text-[8px] font-black text-white">{step + 1}/{steps.length}</span>
                     </div>
                 </div>
@@ -678,7 +685,7 @@ const LessonCardComponent = ({ lesson, onSelect }) => {
         <div
             onClick={() => onSelect(lesson.id)}
             className={`bg-white rounded-2xl border-2 border-[#E5E5E5] cursor-pointer 
-                        transform transition-all duration-300 hover:scale-[1.03] active:scale-[0.96] hover:border-[#58CC02]
+                        transform transition-all duration-300 hover:scale-[1.03] active:scale-[0.96] hover:border-[#2563EB]
                         flex flex-col justify-between h-40 p-4 overflow-hidden relative group`}
         >
             <span className="text-4xl">{lesson.icon}</span>
@@ -686,7 +693,7 @@ const LessonCardComponent = ({ lesson, onSelect }) => {
                 <h3 className="text-sm font-black text-[#3C3C3C] leading-tight">{lesson.titulo}</h3>
                 <p className="text-[11px] font-bold text-[#AFAFAF] mt-0.5">{lesson.subtitulo}</p>
             </div>
-            <div className="absolute bottom-3 right-3 w-8 h-8 bg-[#58CC02] rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all border-b-2 border-[#46A302]">
+            <div className="absolute bottom-3 right-3 w-8 h-8 bg-[#2563EB] rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all border-b-2 border-[#1D4ED8]">
                 <span className="text-white text-xs font-black">▶</span>
             </div>
         </div>
@@ -749,7 +756,7 @@ const Module1View = ({ module, onBack, startPractice }) => {
     return (
         <div className="min-h-full bg-white flex flex-col animate-fade-in">
             {/* Header */}
-            <div className="bg-[#58CC02] px-6 pt-6 pb-8 text-center">
+            <div className="bg-[#2563EB] px-6 pt-6 pb-8 text-center">
                 <button onClick={onBack} className="absolute left-4 top-4 text-white/80 hover:text-white flex items-center text-sm font-black active:scale-95 transition"><ArrowLeft size={18} className="mr-1" /> Biblioteca</button>
                 <span className="text-4xl block mb-1">⚡</span>
                 <h1 className="text-2xl font-black text-white">Fundamentos Eléctricos</h1>
@@ -780,7 +787,7 @@ const Module1View = ({ module, onBack, startPractice }) => {
         </div>
     );
 };
-const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete }) => { 
+const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete, userProfile }) => { 
     if (!currentModule || !currentModule.contenidoTeorico) return <PlaceholderScreen title="Contenido No Disponible" color="yellow" />;
 
     const moduleIndex = MODULOS_DE_ROBOTICA.findIndex(m => m.id === currentModule.id);
@@ -871,17 +878,17 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete }) => {
                 <div className="bg-white rounded-2xl border-2 border-[#E5E5E5] overflow-hidden animate-scale-in">
                     <div className="bg-[#3C3C3C] px-4 py-3 flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                            <div className="flex gap-1.5"><div className="w-3 h-3 rounded-full bg-[#FF4B4B]"></div><div className="w-3 h-3 rounded-full bg-[#FFC800]"></div><div className="w-3 h-3 rounded-full bg-[#58CC02]"></div></div>
+                            <div className="flex gap-1.5"><div className="w-3 h-3 rounded-full bg-[#FF4B4B]"></div><div className="w-3 h-3 rounded-full bg-[#FFC800]"></div><div className="w-3 h-3 rounded-full bg-[#2563EB]"></div></div>
                             <span className="text-xs font-black text-white/70">{section.titulo}</span>
                         </div>
-                        <span className="text-[10px] font-black text-[#58CC02] bg-[#58CC02]/20 px-2 py-0.5 rounded-full">{section.lenguaje}</span>
+                        <span className="text-[10px] font-black text-[#2563EB] bg-[#2563EB]/20 px-2 py-0.5 rounded-full">{section.lenguaje}</span>
                     </div>
                     <pre className="bg-[#1a1a2e] text-green-400 p-4 text-xs font-mono overflow-x-auto whitespace-pre-wrap leading-relaxed">{section.codigo}</pre>
-                    <div className="p-4 bg-gradient-to-r from-[#58CC02]/10 to-[#1CB0F6]/10 border-t-2 border-[#58CC02]/20">
+                    <div className="p-4 bg-gradient-to-r from-[#2563EB]/10 to-[#1CB0F6]/10 border-t-2 border-[#2563EB]/20">
                         <div className="flex items-start gap-2">
                             <span className="text-lg">🤖</span>
                             <div>
-                                <p className="text-xs font-black text-[#58CC02] mb-1">¿Qué hace este código?</p>
+                                <p className="text-xs font-black text-[#2563EB] mb-1">¿Qué hace este código?</p>
                                 <p className="text-xs text-[#777] font-semibold">{section.explicacion}</p>
                             </div>
                         </div>
@@ -906,7 +913,7 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete }) => {
                                 let btnClass = 'bg-white border-2 border-[#E5E5E5] text-[#3C3C3C] hover:border-[#CE82FF] hover:bg-[#CE82FF]/5';
                                 let emoji = '';
                                 if (answered) {
-                                    if (oIdx === section.respuestaCorrecta) { btnClass = 'bg-[#D7FFB8] border-2 border-[#58CC02] text-[#58CC02]'; emoji = ' ✅'; }
+                                    if (oIdx === section.respuestaCorrecta) { btnClass = 'bg-[#DBEAFE] border-2 border-[#2563EB] text-[#2563EB]'; emoji = ' ✅'; }
                                     else if (answered === 'wrong' && quizAnswers[`${index}_selected`] === oIdx) { btnClass = 'bg-[#FF4B4B]/10 border-2 border-[#FF4B4B] text-[#FF4B4B]'; emoji = ' ❌'; }
                                     else { btnClass = 'bg-[#F7F7F7] border-2 border-[#E5E5E5] text-[#AFAFAF]'; }
                                 }
@@ -921,7 +928,7 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete }) => {
                             })}
                         </div>
                         {answered && (
-                            <div className={`p-3.5 rounded-xl text-sm font-semibold animate-bounce-in ${answered === 'correct' ? 'bg-[#D7FFB8] text-[#58CC02]' : 'bg-[#FF4B4B]/10 text-[#FF4B4B]'}`}>
+                            <div className={`p-3.5 rounded-xl text-sm font-semibold animate-bounce-in ${answered === 'correct' ? 'bg-[#DBEAFE] text-[#2563EB]' : 'bg-[#FF4B4B]/10 text-[#FF4B4B]'}`}>
                                 <span className="text-lg mr-1">{answered === 'correct' ? '🎉' : '💪'}</span>
                                 {section.explicacion}
                             </div>
@@ -954,10 +961,10 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete }) => {
         }
         if (section.tipo === 'tip') {
             return (
-                <div className="bg-gradient-to-br from-[#58CC02]/10 to-[#46A302]/10 p-5 rounded-2xl border-2 border-[#58CC02]/30 animate-scale-in">
+                <div className="bg-gradient-to-br from-[#2563EB]/10 to-[#1D4ED8]/10 p-5 rounded-2xl border-2 border-[#2563EB]/30 animate-scale-in">
                     <div className="flex items-center gap-2 mb-2">
                         <span className="text-2xl">💡</span>
-                        <h3 className="text-base font-black text-[#58CC02]">{section.titulo}</h3>
+                        <h3 className="text-base font-black text-[#2563EB]">{section.titulo}</h3>
                     </div>
                     <p className="text-sm text-[#777] font-semibold leading-relaxed" dangerouslySetInnerHTML={{ __html: boldReplace(section.texto) }} />
                 </div>
@@ -995,10 +1002,18 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete }) => {
     // Celebration screen
     if (showCelebration) {
         return (
-            <div className="min-h-full bg-gradient-to-b from-[#58CC02] to-[#46A302] flex flex-col items-center justify-center p-6 animate-fade-in">
+            <div className="min-h-full bg-gradient-to-b from-[#2563EB] to-[#1D4ED8] flex flex-col items-center justify-center p-6 animate-fade-in">
                 <div className="text-center">
-                    <div className="text-7xl mb-4 animate-bounce-in">🎉</div>
-                    <h1 className="text-3xl font-black text-white mb-2">¡Módulo Completado!</h1>
+                    {userProfile ? (
+                        <div className="w-24 h-24 mx-auto mb-4 bg-white/20 rounded-3xl flex items-center justify-center animate-bounce-in">
+                            <RobotAvatar config={userProfile.robotConfig} size={80} animate />
+                        </div>
+                    ) : (
+                        <div className="text-7xl mb-4 animate-bounce-in">🎉</div>
+                    )}
+                    <h1 className="text-3xl font-black text-white mb-2">
+                        {userProfile ? `¡Genial, ${userProfile.userName}!` : '¡Módulo Completado!'}
+                    </h1>
                     <p className="text-white/80 font-bold text-base mb-6">{currentModule.titulo}</p>
                     
                     <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 mb-6 max-w-xs mx-auto">
@@ -1026,7 +1041,7 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete }) => {
                         </div>
                     </div>
 
-                    <button onClick={goToMenu} className="mt-6 w-full max-w-xs py-4 bg-white text-[#58CC02] rounded-2xl font-black text-base border-b-4 border-[#E5E5E5] active:scale-95 transition hover:bg-gray-50">
+                    <button onClick={goToMenu} className="mt-6 w-full max-w-xs py-4 bg-white text-[#2563EB] rounded-2xl font-black text-base border-b-4 border-[#E5E5E5] active:scale-95 transition hover:bg-gray-50">
                         ¡Continuar Aprendiendo! 🚀
                     </button>
                 </div>
@@ -1035,7 +1050,7 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete }) => {
     }
 
     const currentSection = content[currentStep];
-    const nodeColors = ['#58CC02', '#1CB0F6', '#CE82FF', '#FF9600', '#FF4B4B', '#FFC800'];
+    const nodeColors = ['#2563EB', '#1CB0F6', '#CE82FF', '#FF9600', '#FF4B4B', '#FFC800'];
     const moduleColor = nodeColors[moduleIndex % nodeColors.length];
 
     return (
@@ -1066,7 +1081,7 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete }) => {
                             className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
                                 i === currentStep ? 'scale-125' : completedSteps.has(i) ? '' : 'bg-[#E5E5E5]'
                             }`}
-                            style={i === currentStep ? { backgroundColor: moduleColor } : completedSteps.has(i) ? { backgroundColor: '#58CC02' } : {}}
+                            style={i === currentStep ? { backgroundColor: moduleColor } : completedSteps.has(i) ? { backgroundColor: '#2563EB' } : {}}
                         />
                     ))}
                 </div>
@@ -1088,7 +1103,7 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete }) => {
             {/* XP Pop animation */}
             {showXpPop && (
                 <div className="fixed top-20 right-6 z-30 animate-xp-pop">
-                    <span className="text-sm font-black text-[#58CC02] bg-[#D7FFB8] px-3 py-1.5 rounded-full shadow-lg">+10 XP ⭐</span>
+                    <span className="text-sm font-black text-[#2563EB] bg-[#DBEAFE] px-3 py-1.5 rounded-full shadow-lg">+10 XP ⭐</span>
                 </div>
             )}
 
@@ -1103,9 +1118,15 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete }) => {
             <div className="bg-white border-t-2 border-[#E5E5E5] px-4 py-3">
                 {/* Mascot bubble */}
                 <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 bg-[#F7F7F7] rounded-full flex items-center justify-center text-xl animate-pulse-soft border-2 border-[#E5E5E5]">
-                        {mascotEmojis[mascotMood]}
-                    </div>
+                    {userProfile ? (
+                        <div className="w-10 h-10 flex-shrink-0">
+                            <RobotMini config={userProfile.robotConfig} size={40} />
+                        </div>
+                    ) : (
+                        <div className="w-10 h-10 bg-[#F7F7F7] rounded-full flex items-center justify-center text-xl animate-pulse-soft border-2 border-[#E5E5E5]">
+                            {mascotEmojis[mascotMood]}
+                        </div>
+                    )}
                     <div className="bg-[#F7F7F7] px-3 py-2 rounded-xl rounded-bl-none flex-grow">
                         <p className="text-xs font-bold text-[#777]">{randomMsg(mascotMood)}</p>
                     </div>
@@ -1134,7 +1155,7 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete }) => {
 };
 // --- SECTION / UNIT DEFINITIONS ---
 const LEARNING_SECTIONS = [
-    { startIdx: 0, title: '🔬 Fundamentos', subtitle: 'Electricidad, electrónica y mecánica', color: '#58CC02', colorLight: '#D7FFB8' },
+    { startIdx: 0, title: '🔬 Fundamentos', subtitle: 'Electricidad, electrónica y mecánica', color: '#2563EB', colorLight: '#DBEAFE' },
     { startIdx: 3, title: '💻 Programación', subtitle: 'Lógica, código y Arduino', color: '#1CB0F6', colorLight: '#D0ECFB' },
     { startIdx: 6, title: '🛠️ Prácticas', subtitle: 'Proyectos físicos paso a paso', color: '#FF9600', colorLight: '#FFECD0' },
     { startIdx: 9, title: '🧠 Avanzado', subtitle: 'Control, diseño y más', color: '#CE82FF', colorLight: '#F0DEFF' },
@@ -1150,7 +1171,7 @@ const ModuleCard = ({ module, onStart, userScores, index, totalModules, sectionC
     const isLocked = !isActive && !isCompleted;
     
     const nodeColors = [
-        { hex: '#58CC02', hexDark: '#46A302', hexLight: '#D7FFB8' },
+        { hex: '#2563EB', hexDark: '#1D4ED8', hexLight: '#DBEAFE' },
         { hex: '#1CB0F6', hexDark: '#1899D6', hexLight: '#D0ECFB' },
         { hex: '#CE82FF', hexDark: '#A855F7', hexLight: '#F0DEFF' },
         { hex: '#FF9600', hexDark: '#E58600', hexLight: '#FFECD0' },
@@ -1288,7 +1309,7 @@ const SectionBanner = ({ section, modulesInSection, userScores }) => {
     );
 };
 
-const LibraryScreen = ({ startLesson, userId, userScores, onShowAchievements, userStats }) => {
+const LibraryScreen = ({ startLesson, userId, userScores, onShowAchievements, userStats, userProfile }) => {
     const totalModules = MODULOS_DE_ROBOTICA.length;
     const completedModules = Object.values(userScores).filter(s => s && Math.round((s.score / s.total) * 100) >= 100).length;
     const overallProgress = Math.round((completedModules / totalModules) * 100);
@@ -1299,6 +1320,7 @@ const LibraryScreen = ({ startLesson, userId, userScores, onShowAchievements, us
         <div className="sticky top-0 z-20 bg-white border-b-2 border-gray-100 px-4 py-2.5">
             <div className="flex items-center justify-between max-w-xl mx-auto">
                 <div className="flex items-center gap-3">
+                    {userProfile && <RobotMini config={userProfile.robotConfig} size={34} />}
                     <div className="flex items-center gap-1 bg-[#FF9600]/10 px-2.5 py-1 rounded-xl">
                         <span className="text-lg">🔥</span>
                         <span className="text-sm font-black text-[#FF9600]">{userStats?.modulesVisited || 3}</span>
@@ -1334,6 +1356,9 @@ const LibraryScreen = ({ startLesson, userId, userScores, onShowAchievements, us
         {/* Hero Section */}
         <div className="bg-white px-5 pt-5 pb-6 border-b-2 border-gray-100">
             <div className="max-w-xl mx-auto">
+                {userProfile && (
+                    <p className="text-sm font-black text-[#2563EB] mb-2">¡Hola, {userProfile.userName}! 👋</p>
+                )}
                 <div className="flex items-center justify-between mb-3">
                     <div>
                         <h2 className="text-2xl font-black text-[#3C3C3C]">Ruta de Aprendizaje</h2>
@@ -1343,17 +1368,17 @@ const LibraryScreen = ({ startLesson, userId, userScores, onShowAchievements, us
                         {/* Circular progress indicator */}
                         <svg className="w-14 h-14 -rotate-90" viewBox="0 0 36 36">
                             <circle cx="18" cy="18" r="15" fill="none" stroke="#E5E5E5" strokeWidth="3" />
-                            <circle cx="18" cy="18" r="15" fill="none" stroke="#58CC02" strokeWidth="3" 
+                            <circle cx="18" cy="18" r="15" fill="none" stroke="#2563EB" strokeWidth="3" 
                                 strokeDasharray={`${overallProgress * 0.942} 100`} strokeLinecap="round" />
                         </svg>
                         <div className="absolute inset-0 flex items-center justify-center">
-                            <span className="text-xs font-black text-[#58CC02]">{overallProgress}%</span>
+                            <span className="text-xs font-black text-[#2563EB]">{overallProgress}%</span>
                         </div>
                     </div>
                 </div>
                 {/* Full width progress bar */}
                 <div className="w-full h-3 bg-[#E5E5E5] rounded-full overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-[#58CC02] to-[#46A302] rounded-full transition-all duration-1000 relative" 
+                    <div className="h-full bg-gradient-to-r from-[#2563EB] to-[#1D4ED8] rounded-full transition-all duration-1000 relative" 
                         style={{ width: `${Math.max(overallProgress, 3)}%` }}>
                         <div className="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-white rounded-full shadow-sm"></div>
                     </div>
@@ -1365,6 +1390,16 @@ const LibraryScreen = ({ startLesson, userId, userScores, onShowAchievements, us
                 </div>
             </div>
         </div>
+        
+        {/* Story Progress */}
+        {userProfile && (
+            <StoryProgress 
+                modulesCompleted={userStats?.modulesCompleted || 0}
+                robotConfig={userProfile.robotConfig}
+                robotName={userProfile.robotName}
+                userName={userProfile.userName}
+            />
+        )}
         
         {/* Path-based Module Layout */}
         <div className="px-4 w-full max-w-xl mx-auto py-5 space-y-4">
@@ -1479,7 +1514,7 @@ const ChallengeBlock = ({ block, onClick, isSolutionBlock, challengeStatus }) =>
 
     if (isSolutionBlock) {
         if (challengeStatus === 'correct') {
-            colorClass = 'bg-[#D7FFB8] text-[#58CC02] border-[#58CC02]/30';
+            colorClass = 'bg-[#DBEAFE] text-[#2563EB] border-[#2563EB]/30';
             cursor = 'cursor-not-allowed';
         } else if (challengeStatus === 'incorrect') {
             colorClass = 'bg-[#FF4B4B]/10 text-[#FF4B4B] border-[#FF4B4B]/30';
@@ -1597,7 +1632,7 @@ const ChallengeView = ({ currentChallengeId, startChallenge, goToMenu }) => {
             </div>
             
             {challengeStatus !== 'active' && (
-                <div className={`mx-4 text-white p-3 rounded-xl font-black text-sm text-center mb-3 animate-bounce-in border-b-4 ${challengeStatus === 'correct' ? 'bg-[#58CC02] border-[#46A302]' : 'bg-[#FF4B4B] border-[#EA2B2B]'}`}>
+                <div className={`mx-4 text-white p-3 rounded-xl font-black text-sm text-center mb-3 animate-bounce-in border-b-4 ${challengeStatus === 'correct' ? 'bg-[#2563EB] border-[#1D4ED8]' : 'bg-[#FF4B4B] border-[#EA2B2B]'}`}>
                     {statusMessage}
                 </div>
             )}
@@ -1675,7 +1710,7 @@ const BottomNavBar = ({ currentTab, onSelectTab, setViewMode }) => {
                                 }}
                                 className={`flex flex-col items-center justify-center py-2.5 px-2 flex-1 transition-all duration-200 active:scale-90 relative border-t-[3px]
                                     ${isActive 
-                                        ? 'border-[#58CC02] text-[#58CC02]' 
+                                        ? 'border-[#2563EB] text-[#2563EB]' 
                                         : 'border-transparent text-[#AFAFAF] hover:text-[#777]'}`}
                             >
                                 <span className={`text-[22px] mb-0.5 transition-transform duration-200 ${isActive ? 'scale-110' : ''}`}>{tab.icon}</span>
@@ -1697,6 +1732,24 @@ export default function App() {
     const [currentModuleId, setCurrentModuleId] = useState(null);
     const [currentChallengeId, setCurrentChallengeId] = useState(null); 
     
+    // User Profile (from Onboarding)
+    const [userProfile, setUserProfile] = useState(() => {
+        try {
+            const saved = localStorage.getItem('cultivatec_profile');
+            return saved ? JSON.parse(saved) : null;
+        } catch { return null; }
+    });
+
+    const handleOnboardingComplete = (profile) => {
+        setUserProfile(profile);
+        localStorage.setItem('cultivatec_profile', JSON.stringify(profile));
+    };
+
+    // Show onboarding if no profile
+    if (!userProfile) {
+        return <OnboardingScreen onComplete={handleOnboardingComplete} />;
+    }
+
     // Estados de "Firebase" (usando mocks)
     const [userId, setUserId] = useState(null);
     const [userScores, setUserScores] = useState({});
@@ -1850,6 +1903,7 @@ export default function App() {
                             currentModule={currentModule} 
                             goToMenu={() => goToMenu('Biblioteca')}
                             onModuleComplete={handleModuleComplete}
+                            userProfile={userProfile}
                         />;
     } else if (viewMode === 'quiz') {
         ScreenContent = <QuizScreen 
@@ -1885,6 +1939,7 @@ export default function App() {
                     userScores={userScores}
                     onShowAchievements={() => setViewMode('achievements')}
                     userStats={userStats}
+                    userProfile={userProfile}
                 />;
                 break;
             case 'Taller':
@@ -1906,14 +1961,14 @@ export default function App() {
                 ScreenContent = <ClassroomScreen />;
                 break;
             default:
-                ScreenContent = <LibraryScreen startLesson={startLesson} userId={userId} userScores={userScores} />; 
+                ScreenContent = <LibraryScreen startLesson={startLesson} userId={userId} userScores={userScores} userProfile={userProfile} />; 
         }
     }
 
 
     if (!userId) {
         return (
-            <div className="flex items-center justify-center min-h-screen bg-[#58CC02] text-white font-sans">
+            <div className="flex items-center justify-center min-h-screen bg-[#2563EB] text-white font-sans">
                 <div className="text-center animate-scale-in">
                     <div className="w-28 h-28 mx-auto mb-6 bg-white rounded-3xl p-4 shadow-xl animate-pulse-soft">
                         <img src={CULTIVATEC_LOGO_PATH} alt="Logo" className="w-full h-full object-contain" onError={(e) => { e.target.style.display='none'; }} />

@@ -4,9 +4,9 @@
 
 /* ===== DUOLINGO-INSPIRED DESIGN SYSTEM ===== */
 :root {
-  --duo-green: #58CC02;
-  --duo-green-dark: #46A302;
-  --duo-green-light: #D7FFB8;
+  --duo-green: #2563EB;
+  --duo-green-dark: #1D4ED8;
+  --duo-green-light: #DBEAFE;
   --duo-blue: #1CB0F6;
   --duo-blue-dark: #1899D6;
   --duo-red: #FF4B4B;
@@ -72,8 +72,8 @@
   100% { transform: scale(1); }
 }
 @keyframes glow-pulse {
-  0%, 100% { box-shadow: 0 0 5px rgba(88,204,2,0.3); }
-  50% { box-shadow: 0 0 20px rgba(88,204,2,0.6), 0 0 40px rgba(88,204,2,0.2); }
+  0%, 100% { box-shadow: 0 0 5px rgba(37,99,235,0.3); }
+  50% { box-shadow: 0 0 20px rgba(37,99,235,0.6), 0 0 40px rgba(37,99,235,0.2); }
 }
 
 .animate-float { animation: float 3s ease-in-out infinite; }
@@ -135,8 +135,8 @@ body {
   border-bottom-width: 2px;
   transform: translateY(2px);
 }
-.btn-3d-green { background: #58CC02; border-bottom-color: #46A302; color: white; }
-.btn-3d-green:hover { background: #61D404; }
+.btn-3d-green { background: #2563EB; border-bottom-color: #1D4ED8; color: white; }
+.btn-3d-green:hover { background: #3B82F6; }
 .btn-3d-blue { background: #1CB0F6; border-bottom-color: #1899D6; color: white; }
 .btn-3d-blue:hover { background: #2CBAF8; }
 .btn-3d-red { background: #FF4B4B; border-bottom-color: #EA2B2B; color: white; }
@@ -157,7 +157,7 @@ body {
 
 /* Gradient text */
 .gradient-text {
-  background: linear-gradient(135deg, #58CC02, #1CB0F6);
+  background: linear-gradient(135deg, #2563EB, #1CB0F6);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -165,7 +165,7 @@ body {
 
 /* Module node glow */
 .node-active {
-  box-shadow: 0 0 0 4px rgba(88,204,2,0.2), 0 4px 12px rgba(88,204,2,0.25);
+  box-shadow: 0 0 0 4px rgba(37,99,235,0.2), 0 4px 12px rgba(37,99,235,0.25);
 }
 .node-locked {
   filter: grayscale(0.4);
