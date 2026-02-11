@@ -747,15 +747,37 @@ const PlacedComponent = ({ component, onDrag, onPinClick, selectedPin, isActive,
 // COMPONENT: Wire Connection
 // ============================================
 
-const Wire = ({ from, to, isActive }) => {
+const Wire = ({ from, to, isActive, onDelete }) => {
   const dx = Math.abs(to.x - from.x);
   const cpOffset = Math.max(dx * 0.4, 40);
   const path = `M ${from.x} ${from.y} C ${from.x + cpOffset} ${from.y}, ${to.x - cpOffset} ${to.y}, ${to.x} ${to.y}`;
 
+  // Midpoint for delete button
+  const midX = (from.x + to.x) / 2;
+  const midY = (from.y + to.y) / 2;
+
   return (
-    <g>
+    <g className="group/wire">
       <path d={path} fill="none" stroke="rgba(0,0,0,0.15)" strokeWidth={7} strokeLinecap="round"/>
       <path d={path} fill="none" stroke={isActive ? '#22C55E' : '#9CA3AF'} strokeWidth={4.5} strokeLinecap="round"/>
+      {/* Invisible thick hitbox for easier tapping */}
+      {onDelete && (
+        <path d={path} fill="none" stroke="transparent" strokeWidth={22} strokeLinecap="round"
+          style={{ cursor: 'pointer', pointerEvents: 'stroke' }}
+          onClick={(e) => { e.stopPropagation(); onDelete(); }}
+          onTouchEnd={(e) => { e.stopPropagation(); onDelete(); }}/>
+      )}
+      {/* Delete button at midpoint — visible on hover/tap */}
+      {onDelete && (
+        <g onClick={(e) => { e.stopPropagation(); onDelete(); }}
+           onTouchEnd={(e) => { e.stopPropagation(); onDelete(); }}
+           style={{ cursor: 'pointer', pointerEvents: 'all' }}
+           className="opacity-0 group-hover/wire:opacity-100 transition-opacity">
+          <circle cx={midX} cy={midY} r="10" fill="#EF4444" stroke="white" strokeWidth="2"/>
+          <text x={midX} y={midY + 1} textAnchor="middle" dominantBaseline="middle"
+            fill="white" fontSize="12" fontWeight="bold">✕</text>
+        </g>
+      )}
       {isActive && (
         <>
           <path d={path} fill="none" stroke="#4ADE80" strokeWidth={2.5} strokeLinecap="round"
@@ -1173,8 +1195,46 @@ const CircuitBuilder = ({ onBack }) => {
   };
 
   const handleDelete = (id) => {
-    setPlacedComponents(prev => prev.filter(c => c.id !== id));
+    // Clear pin selection if it references the deleted component
+    if (selectedPinData?.component?.id === id) {
+      setSelectedPin(null);
+      setSelectedPinData(null);
+    }
+    // Find wires connected to this component to clean up peer connections
+    const wiresToRemove = wires.filter(w => w.from.componentId === id || w.to.componentId === id);
+    // Clean up connections array on peer components
+    setPlacedComponents(prev => {
+      const filtered = prev.filter(c => c.id !== id);
+      return filtered.map(c => {
+        const pinsToRemove = new Set();
+        wiresToRemove.forEach(w => {
+          if (w.from.componentId === c.id) pinsToRemove.add(w.from.pinId);
+          if (w.to.componentId === c.id) pinsToRemove.add(w.to.pinId);
+        });
+        if (pinsToRemove.size > 0) {
+          return { ...c, connections: (c.connections || []).filter(pid => !pinsToRemove.has(pid)) };
+        }
+        return c;
+      });
+    });
     setWires(prev => prev.filter(w => w.from.componentId !== id && w.to.componentId !== id));
+  };
+
+  const handleDeleteWire = (wireId) => {
+    const wire = wires.find(w => w.id === wireId);
+    if (!wire) return;
+    // Remove wire
+    setWires(prev => prev.filter(w => w.id !== wireId));
+    // Clean up connections on both connected components
+    setPlacedComponents(prev => prev.map(c => {
+      if (c.id === wire.from.componentId) {
+        return { ...c, connections: (c.connections || []).filter(pid => pid !== wire.from.pinId) };
+      }
+      if (c.id === wire.to.componentId) {
+        return { ...c, connections: (c.connections || []).filter(pid => pid !== wire.to.pinId) };
+      }
+      return c;
+    }));
   };
 
   const handlePinClick = (pinId, component, pin) => {
@@ -1182,10 +1242,22 @@ const CircuitBuilder = ({ onBack }) => {
       setSelectedPin(pinId);
       setSelectedPinData({ component, pin });
     } else if (selectedPin === pinId) {
+      // Click same pin: deselect
       setSelectedPin(null); setSelectedPinData(null);
     } else {
       // Don't connect pins from same component
       if (selectedPinData.component.id === component.id) {
+        setSelectedPin(pinId); setSelectedPinData({ component, pin }); return;
+      }
+      // Prevent duplicate wires between same two pins
+      const alreadyConnected = wires.some(w =>
+        (w.from.componentId === selectedPinData.component.id && w.from.pinId === selectedPinData.pin.id &&
+         w.to.componentId === component.id && w.to.pinId === pin.id) ||
+        (w.to.componentId === selectedPinData.component.id && w.to.pinId === selectedPinData.pin.id &&
+         w.from.componentId === component.id && w.from.pinId === pin.id)
+      );
+      if (alreadyConnected) {
+        // Just move selection to new pin
         setSelectedPin(pinId); setSelectedPinData({ component, pin }); return;
       }
       const newWire = {
@@ -1289,6 +1361,12 @@ const CircuitBuilder = ({ onBack }) => {
           <div className="hidden md:flex items-center gap-1 text-xs bg-blue-50 text-blue-700 px-3 py-1.5 rounded-lg font-semibold">
             <Zap size={14}/> {placedComponents.length} componentes · {wires.length} cables
           </div>
+          {selectedPin && (
+            <button onClick={() => { setSelectedPin(null); setSelectedPinData(null); }}
+              className="px-2 md:px-3 py-2 rounded-xl bg-yellow-50 text-yellow-700 font-bold text-xs flex items-center gap-1 hover:bg-yellow-100 transition-colors border border-yellow-300 animate-pulse">
+              ✕ Deseleccionar pin
+            </button>
+          )}
           <button onClick={resetCircuit}
             className="px-2 md:px-3 py-2 rounded-xl bg-red-50 text-red-600 font-bold text-xs md:text-sm flex items-center gap-1 hover:bg-red-100 transition-colors border border-red-200">
             <RotateCcw size={14}/>
@@ -1354,7 +1432,7 @@ const CircuitBuilder = ({ onBack }) => {
             onTouchEnd={handleCanvasTap}>
 
             {/* SVG wires */}
-            <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 5 }}>
+            <svg className="absolute inset-0 w-full h-full" style={{ zIndex: 5, pointerEvents: 'none' }}>
               <defs>
                 <style>{`
                   @keyframes wireFlow { to { stroke-dashoffset: -15; } }
@@ -1362,7 +1440,9 @@ const CircuitBuilder = ({ onBack }) => {
                 `}</style>
               </defs>
               {wires.map(w => (
-                <Wire key={w.id} from={w.from} to={w.to} isActive={circuitState.activeWires.includes(w.id)}/>
+                <Wire key={w.id} from={w.from} to={w.to}
+                  isActive={circuitState.activeWires.includes(w.id)}
+                  onDelete={() => handleDeleteWire(w.id)}/>
               ))}
             </svg>
 
@@ -1387,6 +1467,7 @@ const CircuitBuilder = ({ onBack }) => {
                   </p>
                   <p className="text-xs md:text-sm mt-1 hidden md:block">Arrastra componentes aquí · Haz clic en los pines (●) para conectar cables</p>
                   <p className="text-xs mt-1 md:hidden">Toca un componente arriba, luego toca aquí para colocarlo</p>
+                  <p className="text-[10px] md:text-xs mt-1 text-gray-300">💡 Toca un cable para desconectarlo</p>
                   <div className="mt-3 flex items-center justify-center gap-2 flex-wrap text-[10px] md:text-xs">
                     <span className="bg-red-100 text-red-600 px-2 py-1 rounded-full font-bold">● Positivo (+)</span>
                     <span className="bg-gray-200 text-gray-600 px-2 py-1 rounded-full font-bold">● Negativo (−)</span>

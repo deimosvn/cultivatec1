@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-import { ArrowLeft, Play, RotateCcw, Trash2, Zap, Cpu, ChevronRight, Pause, ChevronUp, ChevronDown, X, Users, Gamepad2, Trophy, Upload, Wifi, Check, Monitor } from 'lucide-react';
+import { ArrowLeft, Play, RotateCcw, Trash2, Zap, Cpu, ChevronRight, Pause, ChevronUp, ChevronDown, X, Users, Gamepad2, Trophy, Upload, Wifi, Check, Monitor, Volume2, VolumeX, BookOpen, Wrench, AlertTriangle, Lightbulb, Package, CheckCircle } from 'lucide-react';
 import RobotBuildGamesHub from './RobotBuildGames';
+import { RobotMini } from '../Onboarding';
 
 /* ================================================================
    IMÁGENES SVG INLINE DE PIEZAS REALES
@@ -246,6 +247,597 @@ const ROBOT_TEMPLATES = [
   },
 ];
 
+/* ================================================================
+   INSTRUCCIONES DE ARMADO DETALLADAS (PARA VIDA REAL)
+   ================================================================ */
+const ASSEMBLY_INSTRUCTIONS = {
+  sumo: {
+    title: '🤼 Robot Sumo de Combate',
+    difficulty: 'Intermedio',
+    time: '2-3 horas',
+    age: '10+ años',
+    intro: '¡Vamos a construir un robot súper fuerte que puede empujar a otros robots fuera del ring! Este robot usa sensores para detectar enemigos y tiene una rampa frontal para levantarlos.',
+    materials: [
+      { name: 'Arduino UNO', emoji: '🔌', desc: 'El cerebro del robot', quantity: 1, buyTip: 'Busca en Amazon o tiendas de electrónica local' },
+      { name: 'Driver L298N', emoji: '⚡', desc: 'Controla los motores', quantity: 1, buyTip: 'Viene en módulo rojo con disipador' },
+      { name: 'Motor DC con rueda', emoji: '🔄', desc: 'Hace que el robot se mueva', quantity: 2, buyTip: 'Los amarillos con caja reductora son perfectos' },
+      { name: 'Sensor Ultrasónico HC-SR04', emoji: '👁️', desc: 'Detecta enemigos a distancia', quantity: 1, buyTip: 'Tiene 4 pines: VCC, Trig, Echo, GND' },
+      { name: 'Batería 9V o Pack 6xAA', emoji: '🔋', desc: 'Energía para todo el robot', quantity: 1, buyTip: 'Las recargables son mejores para el ambiente' },
+      { name: 'Chasis de acrílico o madera', emoji: '📦', desc: 'El cuerpo del robot', quantity: 1, buyTip: 'Puedes hacerlo con una caja de CD vieja' },
+      { name: 'Cables jumper', emoji: '🔗', desc: 'Conectan todo', quantity: 20, buyTip: 'Macho-macho y macho-hembra' },
+      { name: 'Rampa de metal o plástico', emoji: '⛏️', desc: 'Para levantar enemigos', quantity: 1, buyTip: 'Una regla de metal doblada funciona' },
+      { name: 'Tornillos y tuercas', emoji: '🔩', desc: 'Para fijar piezas', quantity: 15, buyTip: 'M3 son los más comunes' },
+    ],
+    tools: ['Destornillador', 'Pinzas', 'Cinta aislante', 'Pegamento caliente'],
+    steps: [
+      {
+        title: '📦 Paso 1: Prepara el Chasis',
+        emoji: '📦',
+        description: 'Primero necesitamos hacer la base donde irán todas las piezas.',
+        details: [
+          '1. Toma tu chasis de acrílico o madera (una caja rectangular de unos 15x10 cm es perfecta)',
+          '2. Marca con un lápiz dónde irán los motores (en las esquinas traseras)',
+          '3. Haz 4 agujeros pequeños para fijar cada motor',
+          '¡Tip! Si usas una caja de CD, ya tiene buen tamaño'
+        ],
+        safety: 'Pide ayuda a un adulto si necesitas hacer agujeros',
+        image: '📐'
+      },
+      {
+        title: '🔄 Paso 2: Instala los Motores',
+        emoji: '🔄',
+        description: 'Los motores son los músculos del robot, ¡le dan movimiento!',
+        details: [
+          '1. Coloca los dos motores DC en las esquinas traseras del chasis',
+          '2. Los ejes de los motores deben apuntar hacia afuera',
+          '3. Fija cada motor con 2 tornillos o usa abrazaderas',
+          '4. Conecta las ruedas a los ejes de los motores',
+          '¡Importante! Los cables de cada motor deben quedar accesibles'
+        ],
+        safety: 'No aprietes demasiado los tornillos para no romper el motor',
+        image: '⚙️'
+      },
+      {
+        title: '👁️ Paso 3: Coloca el Sensor Ultrasónico',
+        emoji: '👁️',
+        description: 'Este sensor es como los ojos del robot, detecta cosas a distancia.',
+        details: [
+          '1. El sensor tiene dos círculos (parecen ojos) - ese lado va hacia adelante',
+          '2. Fíjalo en la parte delantera del chasis, a unos 3-4 cm del suelo',
+          '3. Usa pegamento caliente o haz un soporte con cartón',
+          '4. Debe poder "ver" hacia el frente sin obstáculos'
+        ],
+        safety: 'El pegamento caliente quema, pide ayuda a un adulto',
+        image: '👀'
+      },
+      {
+        title: '🔌 Paso 4: Monta el Arduino',
+        emoji: '🔌',
+        description: 'El Arduino es el cerebro del robot, aquí va el programa.',
+        details: [
+          '1. Coloca el Arduino en el centro del chasis',
+          '2. Puedes pegarlo con cinta doble cara o atornillarlo',
+          '3. El puerto USB debe quedar accesible para programar',
+          '4. Deja espacio alrededor para los cables'
+        ],
+        safety: 'No toques los componentes del Arduino con los dedos mojados',
+        image: '🧠'
+      },
+      {
+        title: '⚡ Paso 5: Conecta el Driver L298N',
+        emoji: '⚡',
+        description: 'El driver amplifica la señal del Arduino para mover los motores.',
+        details: [
+          '1. Coloca el driver L298N cerca de los motores',
+          '2. Conecta los cables de los motores a las salidas OUT1-OUT2 y OUT3-OUT4',
+          '3. Conecta IN1, IN2, IN3, IN4 a los pines digitales del Arduino (ej: 5, 6, 9, 10)',
+          '4. Conecta GND del driver al GND del Arduino',
+          '5. El pin 12V del driver va a la batería positivo (+)'
+        ],
+        safety: 'Verifica la polaridad antes de conectar la batería',
+        image: '🔗'
+      },
+      {
+        title: '🔋 Paso 6: Instala la Batería',
+        emoji: '🔋',
+        description: 'La batería es la energía que hace funcionar todo.',
+        details: [
+          '1. El positivo (+) de la batería va al pin 12V del driver',
+          '2. El negativo (-) va al GND (tierra) común',
+          '3. Puedes agregar un interruptor para encender/apagar fácilmente',
+          '4. Fija la batería con velcro o una banda elástica'
+        ],
+        safety: 'Nunca conectes la batería al revés, puede dañar los componentes',
+        image: '⚡'
+      },
+      {
+        title: '⛏️ Paso 7: Agrega la Rampa Frontal',
+        emoji: '⛏️',
+        description: 'La rampa es el arma del robot, levanta a los enemigos.',
+        details: [
+          '1. Corta una pieza de metal o plástico resistente de unos 12 cm',
+          '2. Dóblala un poco para formar un ángulo de unos 30 grados',
+          '3. Fíjala en la parte delantera, debajo del sensor',
+          '4. Debe tocar el suelo ligeramente para poder levantar otros robots'
+        ],
+        safety: 'Cuidado con los bordes del metal, pueden cortar',
+        image: '🛡️'
+      },
+      {
+        title: '🔗 Paso 8: Conecta el Sensor al Arduino',
+        emoji: '🔗',
+        description: 'Ahora conectamos los ojos al cerebro.',
+        details: [
+          '1. VCC del sensor → 5V del Arduino',
+          '2. GND del sensor → GND del Arduino',
+          '3. TRIG del sensor → Pin digital 7 del Arduino',
+          '4. ECHO del sensor → Pin digital 8 del Arduino',
+          '¡Listo! El sensor ya puede enviar información al Arduino'
+        ],
+        safety: 'Asegúrate de que no haya cables sueltos que puedan hacer cortocircuito',
+        image: '🔌'
+      },
+      {
+        title: '✅ Paso 9: Prueba Final',
+        emoji: '✅',
+        description: '¡Es hora de probar tu robot sumo!',
+        details: [
+          '1. Revisa todas las conexiones una última vez',
+          '2. Carga el programa de sumo en el Arduino',
+          '3. Enciende el robot con el interruptor',
+          '4. Pon tu mano frente al sensor - el robot debería reaccionar',
+          '¡Felicidades! Tu robot sumo está listo para competir'
+        ],
+        safety: 'Prueba primero en un espacio amplio lejos de objetos frágiles',
+        image: '🎉'
+      }
+    ],
+    tips: [
+      '💡 El peso es importante: un robot más pesado es más difícil de empujar',
+      '💡 Las ruedas de goma tienen mejor agarre que las de plástico',
+      '💡 Baja el centro de gravedad poniendo la batería abajo',
+      '💡 El sensor debe estar a la altura del chasis enemigo'
+    ],
+    code: `// Código básico para Robot Sumo
+#define TRIG 7
+#define ECHO 8
+#define MOTOR_IZQ_A 5
+#define MOTOR_IZQ_B 6
+#define MOTOR_DER_A 9
+#define MOTOR_DER_B 10
+
+void setup() {
+  pinMode(TRIG, OUTPUT);
+  pinMode(ECHO, INPUT);
+  pinMode(MOTOR_IZQ_A, OUTPUT);
+  pinMode(MOTOR_IZQ_B, OUTPUT);
+  pinMode(MOTOR_DER_A, OUTPUT);
+  pinMode(MOTOR_DER_B, OUTPUT);
+}
+
+void loop() {
+  int distancia = medirDistancia();
+  if (distancia < 30) {
+    // ¡Enemigo detectado! Atacar
+    avanzar(255);
+  } else {
+    // Buscar enemigo girando
+    girarDerecha(150);
+  }
+  delay(50);
+}
+
+int medirDistancia() {
+  digitalWrite(TRIG, LOW);
+  delayMicroseconds(2);
+  digitalWrite(TRIG, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIG, LOW);
+  return pulseIn(ECHO, HIGH) / 58;
+}`
+  },
+  line: {
+    title: '〰️ Robot Sigue Líneas Veloz',
+    difficulty: 'Principiante',
+    time: '1-2 horas',
+    age: '8+ años',
+    intro: '¡Este robot es súper inteligente! Puede seguir una línea negra en el piso sin perderse. Usa sensores infrarrojos que detectan colores claros y oscuros.',
+    materials: [
+      { name: 'Arduino UNO', emoji: '🔌', desc: 'El cerebro del robot', quantity: 1, buyTip: 'También sirve un Arduino Nano' },
+      { name: 'Driver L298N', emoji: '⚡', desc: 'Controla los motores', quantity: 1, buyTip: 'O un driver L293D más pequeño' },
+      { name: 'Motor DC con rueda', emoji: '🔄', desc: 'Para moverse', quantity: 2, buyTip: 'Los amarillos de caja reductora' },
+      { name: 'Sensor Infrarrojo TCRT5000', emoji: '🔴', desc: 'Detecta la línea negra', quantity: 2, buyTip: 'O módulos FC-51 que ya vienen armados' },
+      { name: 'Batería 9V o Pack 4xAA', emoji: '🔋', desc: 'Energía', quantity: 1, buyTip: 'Las AA duran más' },
+      { name: 'Chasis de robot 2WD', emoji: '📦', desc: 'Body del robot', quantity: 1, buyTip: 'Venden kits con chasis y motores' },
+      { name: 'Rueda loca', emoji: '🔵', desc: 'Tercer punto de apoyo', quantity: 1, buyTip: 'Una canica en un soporte también sirve' },
+      { name: 'Cables jumper', emoji: '🔗', desc: 'Para conectar', quantity: 15, buyTip: 'Macho-hembra mayormente' },
+    ],
+    tools: ['Destornillador pequeño', 'Cinta aislante'],
+    steps: [
+      {
+        title: '📦 Paso 1: Arma el Chasis',
+        emoji: '📦',
+        description: 'Prepara la base del robot con los motores y ruedas.',
+        details: [
+          '1. Si compraste un kit, sigue las instrucciones para armar el chasis',
+          '2. Si lo haces casero, usa una base de unos 12x8 cm',
+          '3. Instala los dos motores en los lados',
+          '4. Pon la rueda loca en la parte delantera'
+        ],
+        safety: 'Fija bien los motores para que no se muevan',
+        image: '🚗'
+      },
+      {
+        title: '🔴 Paso 2: Instala los Sensores IR',
+        emoji: '🔴',
+        description: 'Los sensores van debajo del robot, mirando al piso.',
+        details: [
+          '1. Coloca los dos sensores en la parte delantera, separados unos 3 cm',
+          '2. Deben estar a solo 0.5-1 cm del suelo',
+          '3. Apuntan hacia abajo para "ver" la línea',
+          '4. Uno va a la izquierda de centro, otro a la derecha',
+          'La distancia entre ellos debe ser menor que el ancho de la línea'
+        ],
+        safety: 'Los sensores son delicados, no los presiones mucho',
+        image: '👁️'
+      },
+      {
+        title: '🔌 Paso 3: Monta el Arduino y Driver',
+        emoji: '🔌',
+        description: 'Coloca los componentes electrónicos en el chasis.',
+        details: [
+          '1. El Arduino va en el centro o parte trasera',
+          '2. El driver L298N cerca de los motores',
+          '3. Usa cinta doble cara o tornillos para fijarlos',
+          '4. Deja el puerto USB accesible'
+        ],
+        safety: 'Evita que los componentes toquen partes metálicas',
+        image: '🧠'
+      },
+      {
+        title: '🔗 Paso 4: Conecta Todo',
+        emoji: '🔗',
+        description: 'Hora de cablear todas las conexiones.',
+        details: [
+          '1. Motores → OUT del driver (izq: OUT1-2, der: OUT3-4)',
+          '2. Driver IN1-IN4 → Pines Arduino 5, 6, 9, 10',
+          '3. Sensor izquierdo OUT → Arduino A0',
+          '4. Sensor derecho OUT → Arduino A1',
+          '5. VCC de sensores → 5V, GND → GND',
+          '6. Batería + → Driver 12V, Batería - → GND común'
+        ],
+        safety: 'Revisa dos veces antes de encender',
+        image: '⚡'
+      },
+      {
+        title: '✅ Paso 5: Prepara la Pista y Prueba',
+        emoji: '✅',
+        description: '¡Crea una pista y prueba tu robot!',
+        details: [
+          '1. Dibuja una línea negra en papel blanco (cinta eléctrica funciona)',
+          '2. La línea debe ser de unos 2-3 cm de ancho',
+          '3. Carga el programa en el Arduino',
+          '4. Pon el robot sobre la línea y enciéndelo',
+          '5. Ajusta la sensibilidad con el potenciómetro del sensor si es necesario'
+        ],
+        safety: 'Prueba con curvas suaves primero',
+        image: '🏁'
+      }
+    ],
+    tips: [
+      '💡 La línea debe ser negra sobre fondo blanco para mejor detección',
+      '💡 Ajusta la altura de los sensores si no detecta bien',
+      '💡 Empieza con velocidad lenta para que no se salga de la línea',
+      '💡 Las curvas cerradas son más difíciles'
+    ],
+    code: `// Código básico para Robot Sigue Líneas
+#define SENSOR_IZQ A0
+#define SENSOR_DER A1
+#define MOTOR_IZQ_A 5
+#define MOTOR_IZQ_B 6
+#define MOTOR_DER_A 9
+#define MOTOR_DER_B 10
+
+int velocidad = 150;
+
+void setup() {
+  pinMode(MOTOR_IZQ_A, OUTPUT);
+  pinMode(MOTOR_IZQ_B, OUTPUT);
+  pinMode(MOTOR_DER_A, OUTPUT);
+  pinMode(MOTOR_DER_B, OUTPUT);
+}
+
+void loop() {
+  int izq = analogRead(SENSOR_IZQ);
+  int der = analogRead(SENSOR_DER);
+  
+  // Umbral de detección (ajustar según sensor)
+  bool lineaIzq = izq > 500;
+  bool lineaDer = der > 500;
+  
+  if (lineaIzq && lineaDer) {
+    avanzar(velocidad);  // Línea en centro
+  } else if (lineaIzq) {
+    girarIzquierda(velocidad);  // Línea a la izq
+  } else if (lineaDer) {
+    girarDerecha(velocidad);  // Línea a la der
+  } else {
+    detener();  // Perdió la línea
+  }
+  delay(10);
+}`
+  },
+  dog: {
+    title: '🐕 Perro Robot Cuadrúpedo',
+    difficulty: 'Avanzado',
+    time: '4-6 horas',
+    age: '12+ años',
+    intro: '¡Este es el proyecto más divertido! Vamos a construir un perrito robot que camina con 4 patas, puede sentarse, ladrar y hasta detectar obstáculos. Usa servomotores para mover las patas.',
+    materials: [
+      { name: 'Arduino UNO o Nano', emoji: '🔌', desc: 'El cerebro del perrito', quantity: 1, buyTip: 'Nano si quieres algo más compacto' },
+      { name: 'Servo Motor SG90', emoji: '🦿', desc: 'Para mover las patas', quantity: 4, buyTip: 'Los pequeños azules son perfectos' },
+      { name: 'Sensor Ultrasónico HC-SR04', emoji: '👁️', desc: 'Para ver obstáculos', quantity: 1, buyTip: 'Será la nariz del perrito' },
+      { name: 'Módulo de sonido/micrófono', emoji: '👂', desc: 'Para escuchar comandos', quantity: 1, buyTip: 'Módulo KY-037 o similar' },
+      { name: 'Buzzer activo', emoji: '🔊', desc: 'Para ladrar', quantity: 1, buyTip: 'Los pequeños de 5V' },
+      { name: 'LED RGB', emoji: '💡', desc: 'Los ojos del perrito', quantity: 1, buyTip: 'O 2 LEDs normales' },
+      { name: 'Batería LiPo 7.4V o Pack 6xAA', emoji: '🔋', desc: 'Energía', quantity: 1, buyTip: '4 servos necesitan buena energía' },
+      { name: 'Cuerpo impreso 3D o cartón', emoji: '📦', desc: 'El cuerpo del perrito', quantity: 1, buyTip: 'Hay muchos diseños gratis en Thingiverse' },
+      { name: 'Cables y conectores', emoji: '🔗', desc: 'Para todo', quantity: 20, buyTip: 'Los servos traen sus propios cables' },
+    ],
+    tools: ['Destornillador', 'Pistola de silicona', 'Tijeras', 'Regla'],
+    steps: [
+      {
+        title: '📐 Paso 1: Diseña o Consigue el Cuerpo',
+        emoji: '📐',
+        description: 'Necesitas un cuerpo con espacio para 4 servos.',
+        details: [
+          '1. Si tienes impresora 3D, busca "quadruped robot" en Thingiverse',
+          '2. Si no, puedes hacer uno con cartón grueso o madera',
+          '3. El cuerpo debe tener 4 espacios para los servos (las caderas)',
+          '4. Cada pata necesita 1 servo para moverse arriba/abajo',
+          'Tamaño recomendado: cuerpo de 10x6 cm, patas de 5 cm'
+        ],
+        safety: 'Si usas tijeras o cutter, ten cuidado',
+        image: '🏗️'
+      },
+      {
+        title: '🦿 Paso 2: Prepara las Patas',
+        emoji: '🦿',
+        description: 'Cada pata tiene un servo y una extensión.',
+        details: [
+          '1. Toma el brazo (horn) que viene con cada servo',
+          '2. Pega o atornilla una extensión de cartón/madera de 5 cm',
+          '3. Haz 4 patas iguales',
+          '4. Puedes agregar una punta de goma para mejor agarre',
+          'Las patas delanteras y traseras son iguales'
+        ],
+        safety: 'El pegamento caliente puede quemar',
+        image: '🦵'
+      },
+      {
+        title: '⚙️ Paso 3: Instala los Servos',
+        emoji: '⚙️',
+        description: 'Coloca los 4 servos en el cuerpo.',
+        details: [
+          '1. Los servos van en las 4 esquinas del cuerpo',
+          '2. El eje de cada servo debe apuntar hacia afuera y abajo',
+          '3. Fíjalos con tornillos o pegamento caliente',
+          '4. Asegúrate de que todos giren libremente',
+          '5. Conecta los brazos con las patas a cada servo'
+        ],
+        safety: 'No fuerces los servos, son delicados',
+        image: '🔧'
+      },
+      {
+        title: '👃 Paso 4: Agrega la Cabeza',
+        emoji: '👃',
+        description: 'La cabeza tiene el sensor, buzzer y LEDs.',
+        details: [
+          '1. Haz una caja pequeña para la cabeza (4x3x3 cm)',
+          '2. El sensor ultrasónico va al frente (es la nariz)',
+          '3. Pon el LED RGB arriba (serán los ojos)',
+          '4. El buzzer va adentro (para ladrar)',
+          '5. Pega la cabeza al frente del cuerpo'
+        ],
+        safety: 'Deja espacio para los cables que salen de la cabeza',
+        image: '🐶'
+      },
+      {
+        title: '🔌 Paso 5: Monta la Electrónica',
+        emoji: '🔌',
+        description: 'Coloca el Arduino y la batería en el cuerpo.',
+        details: [
+          '1. El Arduino va en la parte superior del cuerpo',
+          '2. La batería va debajo o atrás para equilibrar peso',
+          '3. Organiza los cables para que no estorben las patas',
+          '4. Usa velcro para poder quitar la batería fácilmente'
+        ],
+        safety: 'Verifica que nada se atore con las patas al moverse',
+        image: '🧠'
+      },
+      {
+        title: '🔗 Paso 6: Conecta los Servos',
+        emoji: '🔗',
+        description: 'Cada servo tiene 3 cables: señal, VCC, GND.',
+        details: [
+          '1. Servo pata delantera izquierda → Pin 3',
+          '2. Servo pata delantera derecha → Pin 5',
+          '3. Servo pata trasera izquierda → Pin 6',
+          '4. Servo pata trasera derecha → Pin 9',
+          '5. IMPORTANTE: Los servos necesitan buena corriente',
+          'Conecta VCC de servos a la batería, no al Arduino 5V'
+        ],
+        safety: '4 servos juntos pueden consumir mucha corriente',
+        image: '⚡'
+      },
+      {
+        title: '🎛️ Paso 7: Conecta Sensores y Salidas',
+        emoji: '🎛️',
+        description: 'Conecta el sensor, micrófono, buzzer y LEDs.',
+        details: [
+          '1. Sensor ultrasónico: TRIG→Pin 7, ECHO→Pin 8',
+          '2. Micrófono OUT → Pin A0',
+          '3. Buzzer → Pin 11',
+          '4. LED RGB: R→Pin 10, G→Pin 12, B→Pin 13',
+          '5. Todos los GND juntos, VCC a 5V del Arduino'
+        ],
+        safety: 'El LED RGB puede necesitar resistencias de 220Ω',
+        image: '📡'
+      },
+      {
+        title: '✅ Paso 8: Calibra y Programa',
+        emoji: '✅',
+        description: '¡Hora de dar vida a tu perrito!',
+        details: [
+          '1. Carga un programa de prueba que ponga todos los servos a 90°',
+          '2. Con los servos a 90°, ajusta las patas para que estén rectas',
+          '3. Carga el programa completo de caminar',
+          '4. Prueba cada movimiento: caminar, sentarse, ladrar',
+          '¡Felicidades! Tu perrito robot está vivo 🎉'
+        ],
+        safety: 'Si un servo hace ruido raro, apágalo y revisa',
+        image: '🐕'
+      }
+    ],
+    tips: [
+      '💡 Calibra los servos a 90° antes de pegar las patas',
+      '💡 Usa una fuente de alimentación externa para los servos',
+      '💡 El equilibrio es importante: distribuye el peso uniformemente',
+      '💡 Empieza con movimientos pequeños y lentos',
+      '💡 Los servos se calientan si se bloquean, ¡ten cuidado!'
+    ],
+    code: `// Código básico para Perro Robot
+#include <Servo.h>
+
+Servo pataFI, pataFD, pataTI, pataTD;
+#define BUZZER 11
+#define TRIG 7
+#define ECHO 8
+
+void setup() {
+  pataFI.attach(3);
+  pataFD.attach(5);
+  pataTI.attach(6);
+  pataTD.attach(9);
+  
+  pinMode(BUZZER, OUTPUT);
+  pinMode(TRIG, OUTPUT);
+  pinMode(ECHO, INPUT);
+  
+  // Posición inicial: parado
+  posicionParado();
+}
+
+void posicionParado() {
+  pataFI.write(90);
+  pataFD.write(90);
+  pataTI.write(90);
+  pataTD.write(90);
+}
+
+void caminar() {
+  // Paso 1: Levanta patas izquierdas
+  pataFI.write(60);
+  pataTI.write(60);
+  delay(200);
+  
+  // Paso 2: Baja y levanta derechas
+  pataFI.write(90);
+  pataTI.write(90);
+  pataFD.write(60);
+  pataTD.write(60);
+  delay(200);
+  
+  // Paso 3: Baja derechas
+  pataFD.write(90);
+  pataTD.write(90);
+  delay(200);
+}
+
+void ladrar() {
+  for (int i = 0; i < 3; i++) {
+    digitalWrite(BUZZER, HIGH);
+    delay(100);
+    digitalWrite(BUZZER, LOW);
+    delay(100);
+  }
+}
+
+void loop() {
+  int dist = medirDistancia();
+  if (dist < 20) {
+    ladrar();
+    sentarse();
+  } else {
+    caminar();
+  }
+}`
+  },
+  free: {
+    title: '🔧 Diseño Libre',
+    difficulty: 'Variable',
+    time: 'Lo que necesites',
+    age: 'Todas las edades',
+    intro: '¡Aquí puedes crear el robot que imagines! Usa las piezas disponibles para diseñar tu propia creación. No hay reglas, solo tu creatividad.',
+    materials: [
+      { name: 'Depende de tu diseño', emoji: '❓', desc: 'Elige las piezas que necesites', quantity: 0, buyTip: 'Empieza simple y ve agregando' },
+    ],
+    tools: ['Lo que tengas disponible'],
+    steps: [
+      {
+        title: '💭 Paso 1: Imagina tu Robot',
+        emoji: '💭',
+        description: '¿Qué quieres que haga tu robot?',
+        details: [
+          '1. Piensa en la función principal: ¿se mueve? ¿detecta cosas? ¿hace sonidos?',
+          '2. Dibuja un boceto simple en papel',
+          '3. Haz una lista de las piezas que necesitas',
+          '4. ¡Sé creativo! No hay respuestas incorrectas'
+        ],
+        safety: 'Empieza con algo simple y ve mejorando',
+        image: '✨'
+      },
+      {
+        title: '🔧 Paso 2: Construye y Experimenta',
+        emoji: '🔧',
+        description: '¡Manos a la obra!',
+        details: [
+          '1. Arma tu robot paso a paso',
+          '2. Prueba cada parte antes de agregar más',
+          '3. No tengas miedo de equivocarte',
+          '4. Los mejores inventores aprenden de sus errores'
+        ],
+        safety: 'Recuerda pedir ayuda si usas herramientas peligrosas',
+        image: '🛠️'
+      }
+    ],
+    tips: [
+      '💡 Empieza simple: un motor y un sensor son suficientes para empezar',
+      '💡 Usa materiales reciclados para el cuerpo',
+      '💡 Busca inspiración en Internet pero hazlo tuyo',
+      '💡 ¡Diviértete experimentando!'
+    ],
+    code: `// Tu código aquí
+// Ejemplo básico:
+void setup() {
+  // Configura tus pines
+}
+
+void loop() {
+  // Tu lógica aquí
+}`
+  }
+};
+
+// Frases del robot para TTS
+const ROBOT_INSTRUCTION_PHRASES = [
+  '¡Escucha con atención!',
+  '¡Te explico este paso!',
+  '¡Esto es importante!',
+  '¡Vamos con el siguiente!',
+  '¡Presta mucha atención!',
+];
+
 const ALL_PARTS = [
   { id: 'chassis_sumo', name: 'Chasis Sumo', cat: 'Chasis', svg: 'chassis_sumo' },
   { id: 'chassis_line', name: 'Chasis Veloz', cat: 'Chasis', svg: 'chassis_line' },
@@ -265,33 +857,73 @@ const ALL_PARTS = [
 ];
 
 const PROGRAM_BLOCKS = [
-  { id: 'move_forward', label: '⬆️ Avanzar', cat: 'Movimiento', color: 'bg-blue-500', code: 'avanzar(150);' },
-  { id: 'move_forward_fast', label: '⏩ Avanzar Rápido', cat: 'Movimiento', color: 'bg-blue-600', code: 'avanzar(255);' },
-  { id: 'move_backward', label: '⬇️ Retroceder', cat: 'Movimiento', color: 'bg-blue-400', code: 'retroceder(150);' },
-  { id: 'turn_left', label: '⬅️ Girar Izquierda', cat: 'Movimiento', color: 'bg-indigo-500', code: 'girarIzq();' },
-  { id: 'turn_right', label: '➡️ Girar Derecha', cat: 'Movimiento', color: 'bg-indigo-500', code: 'girarDer();' },
-  { id: 'turn_180', label: '🔄 Giro 180°', cat: 'Movimiento', color: 'bg-indigo-600', code: 'giro180();' },
-  { id: 'stop', label: '⏹️ Detener', cat: 'Movimiento', color: 'bg-gray-500', code: 'detener();' },
-  { id: 'walk_forward', label: '🐾 Caminar', cat: 'Movimiento', color: 'bg-amber-500', code: 'caminar(4);' },
-  { id: 'sit', label: '🐕 Sentarse', cat: 'Movimiento', color: 'bg-amber-400', code: 'sentarse();' },
-  { id: 'detect_enemy', label: '📡 Detectar Enemigo', cat: 'Sensores', color: 'bg-cyan-500', code: 'dist = ultrasonico.medir();' },
-  { id: 'read_sensors', label: '🔴 Leer Sensores IR', cat: 'Sensores', color: 'bg-cyan-500', code: 'sL=leerIR(A0); sR=leerIR(A1);' },
-  { id: 'check_distance', label: '📏 Medir Distancia', cat: 'Sensores', color: 'bg-cyan-400', code: 'dist = ultrasonico.medir();' },
-  { id: 'if_enemy_near', label: '🚨 Si Enemigo Cerca', cat: 'Condición', color: 'bg-amber-500', code: 'if (dist < 25) {' },
-  { id: 'if_obstacle', label: '🚧 Si Obstáculo', cat: 'Condición', color: 'bg-amber-500', code: 'if (dist < 20) {' },
-  { id: 'if_line_left', label: '↩️ Si Línea Izq.', cat: 'Condición', color: 'bg-amber-500', code: 'if (sL > umbral) {' },
-  { id: 'if_line_right', label: '↪️ Si Línea Der.', cat: 'Condición', color: 'bg-amber-500', code: 'if (sR > umbral) {' },
-  { id: 'if_line_center', label: '⬆️ Si Línea Centro', cat: 'Condición', color: 'bg-amber-400', code: 'if (sL<umbral && sR<umbral) {' },
-  { id: 'if_edge', label: '⚠️ Si Borde Ring', cat: 'Condición', color: 'bg-orange-500', code: 'if (sensorBorde == LOW) {' },
-  { id: 'else', label: '↔️ Si No...', cat: 'Condición', color: 'bg-yellow-500', code: '} else {' },
-  { id: 'end_if', label: '🔚 Fin Si', cat: 'Condición', color: 'bg-yellow-400', code: '}' },
-  { id: 'wait_1s', label: '⏱️ Esperar 1s', cat: 'Control', color: 'bg-purple-500', code: 'delay(1000);' },
-  { id: 'wait_half', label: '⏱️ Esperar 0.5s', cat: 'Control', color: 'bg-purple-400', code: 'delay(500);' },
-  { id: 'repeat_forever', label: '♾️ Repetir Siempre', cat: 'Control', color: 'bg-purple-600', code: 'while(true) {' },
-  { id: 'repeat_3', label: '🔁 Repetir 3x', cat: 'Control', color: 'bg-purple-500', code: 'for(int i=0;i<3;i++){' },
-  { id: 'bark', label: '🔊 Ladrar', cat: 'Acción', color: 'bg-rose-500', code: 'tone(BUZZER,1000,200);' },
-  { id: 'led_on', label: '💡 LED Encender', cat: 'Acción', color: 'bg-rose-400', code: 'digitalWrite(LED,HIGH);' },
-  { id: 'led_off', label: '🔌 LED Apagar', cat: 'Acción', color: 'bg-rose-300', code: 'digitalWrite(LED,LOW);' },
+  { id: 'move_forward', label: '⬆️ Avanzar', cat: 'Movimiento', color: 'bg-blue-500', code: 'avanzar(150);', hint: 'El robot va hacia adelante' },
+  { id: 'move_forward_fast', label: '⏩ Avanzar Rápido', cat: 'Movimiento', color: 'bg-blue-600', code: 'avanzar(255);', hint: '¡A toda velocidad!' },
+  { id: 'move_backward', label: '⬇️ Retroceder', cat: 'Movimiento', color: 'bg-blue-400', code: 'retroceder(150);', hint: 'Va para atrás' },
+  { id: 'turn_left', label: '⬅️ Girar Izquierda', cat: 'Movimiento', color: 'bg-indigo-500', code: 'girarIzq();', hint: 'Gira hacia la izquierda' },
+  { id: 'turn_right', label: '➡️ Girar Derecha', cat: 'Movimiento', color: 'bg-indigo-500', code: 'girarDer();', hint: 'Gira hacia la derecha' },
+  { id: 'turn_180', label: '🔄 Giro 180°', cat: 'Movimiento', color: 'bg-indigo-600', code: 'giro180();', hint: 'Da media vuelta' },
+  { id: 'stop', label: '⏹️ Detener', cat: 'Movimiento', color: 'bg-gray-500', code: 'detener();', hint: 'El robot se para' },
+  { id: 'walk_forward', label: '🐾 Caminar', cat: 'Movimiento', color: 'bg-amber-500', code: 'caminar(4);', hint: 'Mueve las 4 patas' },
+  { id: 'sit', label: '🐕 Sentarse', cat: 'Movimiento', color: 'bg-amber-400', code: 'sentarse();', hint: 'El perro se sienta' },
+  { id: 'detect_enemy', label: '📡 Buscar Enemigo', cat: 'Sensores', color: 'bg-cyan-500', code: 'dist = ultrasonico.medir();', hint: 'Revisa si hay alguien cerca' },
+  { id: 'read_sensors', label: '🔴 Leer Sensores', cat: 'Sensores', color: 'bg-cyan-500', code: 'sL=leerIR(A0); sR=leerIR(A1);', hint: 'Lee los ojos infrarrojos' },
+  { id: 'check_distance', label: '📏 Medir Distancia', cat: 'Sensores', color: 'bg-cyan-400', code: 'dist = ultrasonico.medir();', hint: '¿Qué tan lejos está algo?' },
+  { id: 'if_enemy_near', label: '🚨 Si Enemigo Cerca', cat: 'Pregunta', color: 'bg-amber-500', code: 'if (dist < 25) {', hint: '¿Hay alguien a menos de 25cm?' },
+  { id: 'if_obstacle', label: '🚧 Si Hay Obstáculo', cat: 'Pregunta', color: 'bg-amber-500', code: 'if (dist < 20) {', hint: '¿Hay algo bloqueando?' },
+  { id: 'if_line_left', label: '↩️ Si Línea a Izq.', cat: 'Pregunta', color: 'bg-amber-500', code: 'if (sL > umbral) {', hint: '¿La línea está a la izquierda?' },
+  { id: 'if_line_right', label: '↪️ Si Línea a Der.', cat: 'Pregunta', color: 'bg-amber-500', code: 'if (sR > umbral) {', hint: '¿La línea está a la derecha?' },
+  { id: 'if_line_center', label: '⬆️ Si Línea al Centro', cat: 'Pregunta', color: 'bg-amber-400', code: 'if (sL<umbral && sR<umbral) {', hint: '¿La línea está al medio?' },
+  { id: 'if_edge', label: '⚠️ Si Borde del Ring', cat: 'Pregunta', color: 'bg-orange-500', code: 'if (sensorBorde == LOW) {', hint: '¡Cuidado con la orilla!' },
+  { id: 'else', label: '↔️ Si No...', cat: 'Pregunta', color: 'bg-yellow-500', code: '} else {', hint: 'Qué hacer si la respuesta es NO' },
+  { id: 'end_if', label: '🔚 Fin Pregunta', cat: 'Pregunta', color: 'bg-yellow-400', code: '}', hint: 'Cierra la pregunta' },
+  { id: 'wait_1s', label: '⏱️ Esperar 1 seg', cat: 'Control', color: 'bg-purple-500', code: 'delay(1000);', hint: 'Pausa de 1 segundo' },
+  { id: 'wait_half', label: '⏱️ Esperar 0.5 seg', cat: 'Control', color: 'bg-purple-400', code: 'delay(500);', hint: 'Pausa cortita' },
+  { id: 'repeat_forever', label: '♾️ Repetir Siempre', cat: 'Control', color: 'bg-purple-600', code: 'while(true) {', hint: 'Hace lo mismo una y otra vez' },
+  { id: 'repeat_3', label: '🔁 Repetir 3 veces', cat: 'Control', color: 'bg-purple-500', code: 'for(int i=0;i<3;i++){', hint: 'Repite 3 veces' },
+  { id: 'bark', label: '🔊 Ladrar', cat: 'Acción', color: 'bg-rose-500', code: 'tone(BUZZER,1000,200);', hint: '¡El robot hace sonido!' },
+  { id: 'led_on', label: '💡 Prender Luz', cat: 'Acción', color: 'bg-rose-400', code: 'digitalWrite(LED,HIGH);', hint: '¡Se enciende la lucecita!' },
+  { id: 'led_off', label: '🔌 Apagar Luz', cat: 'Acción', color: 'bg-rose-300', code: 'digitalWrite(LED,LOW);', hint: 'Se apaga la lucecita' },
+];
+
+// Kid-friendly tips for each build phase
+const BUILD_TIPS = {
+  sumo: [
+    '🤖 Un robot sumo necesita ser pesado y fuerte',
+    '👁️ El sensor ultrasónico son los "ojos" del robot',
+    '⚙️ Los motores son los "músculos" que lo mueven',
+    '🧠 El Arduino es el "cerebro" - procesa la información',
+    '🔋 Sin batería no hay energía - como comer le da energía a tu cuerpo',
+  ],
+  line: [
+    '〰️ Los sensores infrarrojos detectan colores claros y oscuros',
+    '🔴 Funcionan como tus ojos mirando al piso',
+    '⚙️ Los motores giran las ruedas para seguir la línea',
+    '🧠 El Arduino decide: ¿giro izquierda o derecha?',
+    '💡 La velocidad del robot depende de cuánta energía le des',
+  ],
+  dog: [
+    '🐕 Cada pata tiene un servo motor que la mueve',
+    '🦿 Los servos giran a posiciones exactas (como un reloj)',
+    '👂 El micrófono escucha sonidos a su alrededor',
+    '🔊 El buzzer es como una bocina pequeña para ladrar',
+    '👁️ El sensor ultrasónico le ayuda a no chocar con cosas',
+  ],
+  free: [
+    '✨ ¡Usa tu imaginación para crear algo único!',
+    '🔧 Puedes combinar cualquier pieza que quieras',
+    '💡 Empieza con pocas piezas e ir agregando',
+    '🧪 ¡Experimenta! No hay respuestas equivocadas',
+  ],
+};
+
+// Kid-friendly programming tips
+const PROGRAM_TIPS = [
+  '💡 Las instrucciones se ejecutan de arriba hacia abajo, como leer',
+  '🔄 "Repetir" hace que el robot haga lo mismo muchas veces',
+  '❓ Las "Preguntas" hacen que el robot tome decisiones',
+  '📡 Los "Sensores" son como los sentidos del robot',
+  '⚡ Puedes subir y bajar bloques para cambiar el orden',
 ];
 
 /* ================================================================
@@ -1271,7 +1903,7 @@ const SimulationArena = ({ robotType, isRunning, simStep, totalSteps, simAction,
    MAIN COMPONENT
    ================================================================ */
 export default function RobotSimulator({ onBack }) {
-  const [phase, setPhase] = useState('select'); // select | build | program | simulate | battle
+  const [phase, setPhase] = useState('select'); // select | instructions | build | program | simulate | battle
   const [template, setTemplate] = useState(null);
   const [workspace, setWorkspace] = useState([]); // placed parts
   const [program, setProgram] = useState([]); // program blocks sequence
@@ -1314,6 +1946,62 @@ export default function RobotSimulator({ onBack }) {
   const [uploadStep, setUploadStep] = useState('');
   const [uploadLog, setUploadLog] = useState([]);
   const uploadRef = useRef(null);
+
+  // Instructions and TTS state
+  const [currentStep, setCurrentStep] = useState(0);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [showMaterials, setShowMaterials] = useState(true);
+  const [showCode, setShowCode] = useState(false);
+  const [completedSteps, setCompletedSteps] = useState([]);
+  const speechRef = useRef(null);
+
+  // Get robot config from localStorage for avatar
+  const robotConfig = (() => {
+    try {
+      const profile = localStorage.getItem('cultivatec_profile');
+      if (profile) return JSON.parse(profile).robotConfig;
+    } catch {}
+    return null;
+  })();
+
+  // TTS Functions
+  const stopSpeaking = useCallback(() => {
+    if ('speechSynthesis' in window) speechSynthesis.cancel();
+    setIsSpeaking(false);
+  }, []);
+
+  const speakText = useCallback((text) => {
+    if (!('speechSynthesis' in window)) return;
+    
+    speechSynthesis.cancel();
+    setIsSpeaking(true);
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'es-MX';
+    utterance.rate = 0.85;
+    utterance.pitch = 1.1;
+
+    const voices = speechSynthesis.getVoices();
+    const spanishVoice = voices.find(v => v.lang.startsWith('es'));
+    if (spanishVoice) utterance.voice = spanishVoice;
+
+    utterance.onend = () => setIsSpeaking(false);
+    utterance.onerror = () => setIsSpeaking(false);
+
+    speechRef.current = utterance;
+    speechSynthesis.speak(utterance);
+  }, []);
+
+  const speakStep = useCallback((step) => {
+    const phrase = ROBOT_INSTRUCTION_PHRASES[Math.floor(Math.random() * ROBOT_INSTRUCTION_PHRASES.length)];
+    const fullText = `${phrase} ${step.title}. ${step.description}. ${step.details.join('. ')}`;
+    speakText(fullText);
+  }, [speakText]);
+
+  // Cleanup TTS on unmount
+  useEffect(() => {
+    return () => { if ('speechSynthesis' in window) speechSynthesis.cancel(); };
+  }, []);
 
   useEffect(() => {
     logEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -1509,7 +2197,13 @@ export default function RobotSimulator({ onBack }) {
       setProgram([]);
       setSlotAssignments({});
     }
-    setPhase('build');
+    // Reset instruction state and go to instructions phase
+    setCurrentStep(0);
+    setCompletedSteps([]);
+    setShowMaterials(true);
+    setShowCode(false);
+    stopSpeaking();
+    setPhase('instructions');
   };
 
   const addPartToWorkspace = (part) => {
@@ -1802,42 +2496,401 @@ export default function RobotSimulator({ onBack }) {
     setSimFailed(false);
   };
 
-  // -- Select screen --
+  // -- Select screen (kid-friendly) --
   if (phase === 'select') {
     return (
-      <div className="min-h-full bg-white animate-fade-in">
-        <div className="bg-[#CE82FF] px-6 pt-6 pb-10 border-b-4 border-[#A855F7]">
-          <button onClick={onBack} className="text-white/70 hover:text-white mb-3 flex items-center text-sm font-black active:scale-95 transition">
-            <ArrowLeft size={18} className="mr-1" /> Menú
+      <div className="min-h-full bg-gradient-to-b from-purple-50 to-white animate-fade-in">
+        <div className="bg-gradient-to-r from-[#CE82FF] to-[#A855F7] px-6 pt-6 pb-12 border-b-4 border-[#9333EA]">
+          <button onClick={onBack} className="text-white/80 hover:text-white mb-4 flex items-center text-sm font-black active:scale-95 transition">
+            <ArrowLeft size={18} className="mr-1" /> Volver
           </button>
           <div className="text-center">
-            <span className="text-5xl mb-2 block animate-float">🤖</span>
-            <h1 className="text-2xl font-black text-white">Simulador de Robots</h1>
-            <p className="text-white/80 text-sm font-bold mt-1">Arma con piezas reales, programa y mira cómo se mueve</p>
-          </div>
-        </div>
-        <div className="px-4 mt-6 pb-24 space-y-3 stagger-children">
-          {ROBOT_TEMPLATES.map(t => (
-            <div key={t.id} onClick={() => pickTemplate(t)}
-              className="bg-white rounded-2xl border-2 border-[#E5E5E5] overflow-hidden cursor-pointer hover:border-[#CE82FF] transition-all duration-300 active:scale-[0.97]">
-              <div className={`h-2 bg-gradient-to-r ${t.color}`}/>
-              <div className="p-4 flex items-center gap-4">
-                <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${t.color} flex items-center justify-center text-3xl flex-shrink-0 border-b-2 border-black/10`}>
-                  {t.icon}
-                </div>
-                <div className="flex-grow">
-                  <h3 className="text-base font-black text-[#3C3C3C]">{t.name}</h3>
-                  <p className="text-xs text-[#777] mt-0.5">{t.desc}</p>
-                  {t.parts.length > 0 && (
-                    <span className="text-[10px] font-black text-[#CE82FF] bg-[#F3E8FF] px-2 py-0.5 rounded-full mt-1.5 inline-block">
-                      {t.parts.length} piezas · {t.program.length} instrucciones
-                    </span>
-                  )}
-                </div>
-                <ChevronRight size={20} className="text-[#E5E5E5] flex-shrink-0" />
+            <div className="flex justify-center mb-3">
+              <div className="relative">
+                <span className="text-6xl block animate-bounce">🤖</span>
+                <span className="absolute -right-2 -top-1 text-2xl animate-pulse">✨</span>
               </div>
             </div>
-          ))}
+            <h1 className="text-2xl font-black text-white drop-shadow-lg">¡Construye tu Robot!</h1>
+            <p className="text-white/90 text-sm font-bold mt-2 max-w-[280px] mx-auto">
+              Elige un robot para aprender a armarlo de verdad 🔧
+            </p>
+          </div>
+        </div>
+        
+        {/* Robot avatar helper */}
+        <div className="flex justify-center -mt-6 mb-4">
+          <div className="bg-white rounded-full p-1 shadow-lg border-2 border-purple-200">
+            <RobotMini config={robotConfig} size={48} />
+          </div>
+        </div>
+        
+        <div className="px-4 pb-24 space-y-4">
+          <p className="text-center text-sm text-purple-600 font-bold mb-2">
+            👇 Toca un robot para ver las instrucciones
+          </p>
+          
+          {ROBOT_TEMPLATES.map(t => {
+            const instructions = ASSEMBLY_INSTRUCTIONS[t.id];
+            return (
+              <div key={t.id} onClick={() => pickTemplate(t)}
+                className="bg-white rounded-3xl border-3 border-[#E5E5E5] overflow-hidden cursor-pointer hover:border-[#CE82FF] hover:shadow-xl transition-all duration-300 active:scale-[0.97] shadow-md">
+                <div className={`h-3 bg-gradient-to-r ${t.color}`}/>
+                <div className="p-5">
+                  <div className="flex items-center gap-4 mb-3">
+                    <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${t.color} flex items-center justify-center text-4xl flex-shrink-0 border-b-4 border-black/10 shadow-lg`}>
+                      {t.icon}
+                    </div>
+                    <div className="flex-grow">
+                      <h3 className="text-lg font-black text-[#3C3C3C]">{t.name}</h3>
+                      <p className="text-sm text-[#666] mt-1">{t.desc}</p>
+                    </div>
+                  </div>
+                  
+                  {instructions && t.id !== 'free' && (
+                    <div className="flex flex-wrap gap-2 mt-3">
+                      <span className="text-xs font-black text-purple-600 bg-purple-100 px-3 py-1.5 rounded-full flex items-center gap-1">
+                        <span>🎓</span> {instructions.difficulty}
+                      </span>
+                      <span className="text-xs font-black text-blue-600 bg-blue-100 px-3 py-1.5 rounded-full flex items-center gap-1">
+                        <span>⏱️</span> {instructions.time}
+                      </span>
+                      <span className="text-xs font-black text-green-600 bg-green-100 px-3 py-1.5 rounded-full flex items-center gap-1">
+                        <span>👦</span> {instructions.age}
+                      </span>
+                    </div>
+                  )}
+                  
+                  <div className="mt-4 flex items-center justify-between">
+                    {t.parts.length > 0 ? (
+                      <span className="text-xs font-bold text-[#777]">
+                        📦 {t.parts.length} piezas · 📝 {instructions?.steps?.length || 0} pasos
+                      </span>
+                    ) : (
+                      <span className="text-xs font-bold text-[#777]">
+                        ✨ ¡Crea lo que imagines!
+                      </span>
+                    )}
+                    <div className={`px-4 py-2 rounded-xl bg-gradient-to-r ${t.color} text-white text-xs font-black shadow-md`}>
+                      ¡Empezar! →
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+
+  // -- Instructions screen (kid-friendly with TTS) --
+  if (phase === 'instructions' && template) {
+    const instructions = ASSEMBLY_INSTRUCTIONS[template.id];
+    const steps = instructions?.steps || [];
+    const currentStepData = steps[currentStep];
+    const progress = steps.length > 0 ? ((currentStep + 1) / steps.length) * 100 : 0;
+
+    return (
+      <div className="min-h-full bg-gradient-to-b from-purple-50 to-white animate-fade-in flex flex-col">
+        {/* Header */}
+        <div className="bg-gradient-to-r from-[#CE82FF] to-[#A855F7] px-5 pt-4 pb-5 border-b-4 border-[#9333EA]">
+          <div className="flex justify-between items-center mb-3">
+            <button onClick={() => { stopSpeaking(); setPhase('select'); }} 
+              className="text-white/80 hover:text-white flex items-center text-sm font-black active:scale-95 transition">
+              <ArrowLeft size={18} className="mr-1" /> Cambiar Robot
+            </button>
+            <div className="flex items-center gap-2">
+              <div className="bg-white/20 px-3 py-1.5 rounded-full flex items-center gap-1.5">
+                <span className="text-lg">{template.icon}</span>
+                <span className="text-xs font-black text-white">{template.name}</span>
+              </div>
+            </div>
+          </div>
+          
+          <h2 className="text-xl font-black text-white text-center mb-2">{instructions?.title}</h2>
+          
+          {/* Progress bar */}
+          <div className="bg-white/20 rounded-full h-3 overflow-hidden">
+            <div 
+              className="bg-white h-full rounded-full transition-all duration-500"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+          <p className="text-white/80 text-xs font-bold text-center mt-1">
+            Paso {currentStep + 1} de {steps.length}
+          </p>
+        </div>
+
+        {/* Robot Avatar with speech */}
+        <div className="flex justify-center py-4 bg-gradient-to-b from-purple-100 to-transparent">
+          <div className="relative">
+            <div className={`rounded-full p-1 shadow-lg border-3 transition-all duration-300 ${
+              isSpeaking ? 'border-green-400 bg-green-50 animate-pulse' : 'border-purple-200 bg-white'
+            }`}>
+              <RobotMini config={robotConfig} size={64} />
+            </div>
+            {isSpeaking && (
+              <div className="absolute -right-2 -top-2">
+                <span className="text-2xl animate-bounce">🔊</span>
+              </div>
+            )}
+          </div>
+          <div className="ml-3 flex flex-col justify-center">
+            <p className="text-sm font-black text-purple-700">
+              {isSpeaking ? '¡Escucha con atención!' : '¡Toca el botón para que te lea!'}
+            </p>
+            <button 
+              onClick={() => currentStepData && (isSpeaking ? stopSpeaking() : speakStep(currentStepData))}
+              className={`mt-1 px-4 py-2 rounded-xl text-xs font-black flex items-center gap-2 active:scale-95 transition shadow-md ${
+                isSpeaking 
+                  ? 'bg-red-500 text-white' 
+                  : 'bg-gradient-to-r from-green-500 to-emerald-600 text-white'
+              }`}
+            >
+              {isSpeaking ? <><VolumeX size={16}/> Detener</> : <><Volume2 size={16}/> Leer Paso</>}
+            </button>
+          </div>
+        </div>
+
+        {/* Tab navigation */}
+        <div className="flex gap-2 px-4 mb-3">
+          <button 
+            onClick={() => { setShowMaterials(true); setShowCode(false); }}
+            className={`flex-1 py-2.5 rounded-xl text-xs font-black transition ${
+              showMaterials && !showCode ? 'bg-purple-600 text-white shadow-md' : 'bg-gray-100 text-gray-600'
+            }`}
+          >
+            📦 Materiales
+          </button>
+          <button 
+            onClick={() => { setShowMaterials(false); setShowCode(false); }}
+            className={`flex-1 py-2.5 rounded-xl text-xs font-black transition ${
+              !showMaterials && !showCode ? 'bg-purple-600 text-white shadow-md' : 'bg-gray-100 text-gray-600'
+            }`}
+          >
+            🔧 Pasos
+          </button>
+          <button 
+            onClick={() => { setShowMaterials(false); setShowCode(true); }}
+            className={`flex-1 py-2.5 rounded-xl text-xs font-black transition ${
+              showCode ? 'bg-purple-600 text-white shadow-md' : 'bg-gray-100 text-gray-600'
+            }`}
+          >
+            💻 Código
+          </button>
+        </div>
+
+        {/* Content */}
+        <div className="flex-grow overflow-y-auto px-4 pb-32">
+          
+          {/* Materials tab */}
+          {showMaterials && !showCode && (
+            <div className="space-y-4 animate-fade-in">
+              <div className="bg-white rounded-2xl p-4 border-2 border-purple-100 shadow-md">
+                <h3 className="text-lg font-black text-purple-700 mb-3 flex items-center gap-2">
+                  <Package size={20}/> Lo que Necesitas
+                </h3>
+                <p className="text-sm text-gray-600 mb-4">{instructions?.intro}</p>
+                
+                <div className="space-y-3">
+                  {instructions?.materials?.map((mat, i) => (
+                    <div key={i} className="flex items-start gap-3 p-3 bg-purple-50 rounded-xl">
+                      <span className="text-2xl">{mat.emoji}</span>
+                      <div className="flex-grow">
+                        <div className="flex items-center justify-between">
+                          <span className="font-black text-sm text-gray-800">{mat.name}</span>
+                          {mat.quantity > 0 && (
+                            <span className="text-xs font-bold text-purple-600 bg-purple-200 px-2 py-0.5 rounded-full">
+                              x{mat.quantity}
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-xs text-gray-500 mt-0.5">{mat.desc}</p>
+                        {mat.buyTip && (
+                          <p className="text-xs text-purple-600 mt-1 flex items-center gap-1">
+                            <Lightbulb size={12}/> {mat.buyTip}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Tools */}
+              <div className="bg-white rounded-2xl p-4 border-2 border-orange-100 shadow-md">
+                <h3 className="text-base font-black text-orange-700 mb-2 flex items-center gap-2">
+                  <Wrench size={18}/> Herramientas
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {instructions?.tools?.map((tool, i) => (
+                    <span key={i} className="text-xs font-bold text-orange-700 bg-orange-100 px-3 py-1.5 rounded-full">
+                      🔧 {tool}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Tips */}
+              <div className="bg-white rounded-2xl p-4 border-2 border-yellow-100 shadow-md">
+                <h3 className="text-base font-black text-yellow-700 mb-2 flex items-center gap-2">
+                  <Lightbulb size={18}/> Consejos Útiles
+                </h3>
+                <div className="space-y-2">
+                  {instructions?.tips?.map((tip, i) => (
+                    <p key={i} className="text-xs text-gray-600">{tip}</p>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Steps tab */}
+          {!showMaterials && !showCode && (
+            <div className="space-y-4 animate-fade-in">
+              {/* Current step card */}
+              {currentStepData && (
+                <div className="bg-white rounded-2xl p-4 border-3 border-purple-200 shadow-lg">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center text-2xl shadow-md">
+                      {currentStepData.emoji}
+                    </div>
+                    <div className="flex-grow">
+                      <h3 className="text-lg font-black text-gray-800">{currentStepData.title}</h3>
+                      <button 
+                        onClick={() => isSpeaking ? stopSpeaking() : speakStep(currentStepData)}
+                        className="text-xs text-purple-600 font-bold flex items-center gap-1 mt-0.5"
+                      >
+                        {isSpeaking ? <VolumeX size={12}/> : <Volume2 size={12}/>}
+                        {isSpeaking ? 'Detener' : 'Escuchar este paso'}
+                      </button>
+                    </div>
+                    {completedSteps.includes(currentStep) && (
+                      <CheckCircle size={24} className="text-green-500"/>
+                    )}
+                  </div>
+                  
+                  <p className="text-sm text-gray-600 mb-4 font-medium">{currentStepData.description}</p>
+                  
+                  <div className="bg-gray-50 rounded-xl p-3 mb-3">
+                    <h4 className="text-xs font-black text-gray-500 mb-2">📋 INSTRUCCIONES:</h4>
+                    <div className="space-y-2">
+                      {currentStepData.details?.map((detail, i) => (
+                        <p key={i} className="text-sm text-gray-700 flex items-start gap-2">
+                          <span className="text-purple-500 mt-0.5">•</span>
+                          {detail}
+                        </p>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  {currentStepData.safety && (
+                    <div className="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-3 flex items-start gap-2">
+                      <AlertTriangle size={18} className="text-yellow-600 flex-shrink-0 mt-0.5"/>
+                      <div>
+                        <span className="text-xs font-black text-yellow-700">⚠️ SEGURIDAD:</span>
+                        <p className="text-xs text-yellow-700 mt-0.5">{currentStepData.safety}</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Step navigation */}
+              <div className="flex gap-2">
+                <button
+                  onClick={() => { stopSpeaking(); setCurrentStep(s => Math.max(0, s - 1)); }}
+                  disabled={currentStep === 0}
+                  className={`flex-1 py-3 rounded-xl font-black text-sm flex items-center justify-center gap-1 transition ${
+                    currentStep === 0 
+                      ? 'bg-gray-100 text-gray-400' 
+                      : 'bg-gray-200 text-gray-700 active:scale-95'
+                  }`}
+                >
+                  <ChevronUp size={16}/> Anterior
+                </button>
+                <button
+                  onClick={() => { 
+                    if (!completedSteps.includes(currentStep)) {
+                      setCompletedSteps(prev => [...prev, currentStep]);
+                    }
+                    stopSpeaking(); 
+                    setCurrentStep(s => Math.min(steps.length - 1, s + 1)); 
+                  }}
+                  disabled={currentStep >= steps.length - 1}
+                  className={`flex-1 py-3 rounded-xl font-black text-sm flex items-center justify-center gap-1 transition ${
+                    currentStep >= steps.length - 1
+                      ? 'bg-gray-100 text-gray-400' 
+                      : 'bg-gradient-to-r from-purple-500 to-purple-600 text-white active:scale-95 shadow-md'
+                  }`}
+                >
+                  Siguiente <ChevronDown size={16}/>
+                </button>
+              </div>
+
+              {/* All steps overview */}
+              <div className="bg-white rounded-2xl p-4 border-2 border-gray-100">
+                <h4 className="text-sm font-black text-gray-700 mb-3">📝 Todos los Pasos</h4>
+                <div className="space-y-2">
+                  {steps.map((step, i) => (
+                    <button
+                      key={i}
+                      onClick={() => { stopSpeaking(); setCurrentStep(i); }}
+                      className={`w-full text-left p-3 rounded-xl flex items-center gap-3 transition ${
+                        currentStep === i 
+                          ? 'bg-purple-100 border-2 border-purple-300' 
+                          : 'bg-gray-50 hover:bg-gray-100'
+                      }`}
+                    >
+                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-lg ${
+                        completedSteps.includes(i) 
+                          ? 'bg-green-500 text-white' 
+                          : currentStep === i 
+                            ? 'bg-purple-500 text-white' 
+                            : 'bg-gray-200 text-gray-600'
+                      }`}>
+                        {completedSteps.includes(i) ? <Check size={16}/> : step.emoji}
+                      </div>
+                      <span className={`text-sm font-bold ${currentStep === i ? 'text-purple-700' : 'text-gray-700'}`}>
+                        {step.title}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Code tab */}
+          {showCode && (
+            <div className="animate-fade-in">
+              <div className="bg-gray-900 rounded-2xl p-4 shadow-lg overflow-hidden">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-3 h-3 rounded-full bg-red-500"/>
+                  <div className="w-3 h-3 rounded-full bg-yellow-500"/>
+                  <div className="w-3 h-3 rounded-full bg-green-500"/>
+                  <span className="ml-auto text-xs text-gray-400 font-mono">Arduino IDE</span>
+                </div>
+                <pre className="text-xs text-green-400 font-mono overflow-x-auto whitespace-pre-wrap">
+                  {instructions?.code}
+                </pre>
+              </div>
+              <p className="text-xs text-gray-500 text-center mt-3">
+                💡 Copia este código y pégalo en Arduino IDE
+              </p>
+            </div>
+          )}
+        </div>
+
+        {/* Bottom action button */}
+        <div className="fixed bottom-20 left-0 right-0 px-4 pb-4 bg-gradient-to-t from-white via-white to-transparent pt-6">
+          <button
+            onClick={() => { stopSpeaking(); setPhase('build'); }}
+            className="w-full py-4 rounded-2xl bg-gradient-to-r from-green-500 to-emerald-600 text-white font-black text-lg shadow-xl active:scale-[0.98] transition flex items-center justify-center gap-2"
+          >
+            <Wrench size={20}/> Ir al Simulador Virtual →
+          </button>
         </div>
       </div>
     );
@@ -1861,16 +2914,17 @@ export default function RobotSimulator({ onBack }) {
           </div>
         </div>
         {/* Phase tabs */}
-        <div className="flex gap-1.5 mt-2">
+        <div className="flex gap-1 mt-2">
           {[
+            { id: 'instructions', label: '📖 Guía' },
             { id: 'build', label: '🔧 Armar' },
             { id: 'program', label: '💻 Prog.' },
             { id: 'simulate', label: '▶️ Simular' },
             { id: 'battle', label: '⚔️ Batalla' },
           ].map(tab => (
             <button key={tab.id}
-              onClick={() => { setPhase(tab.id); if (tab.id !== 'simulate') { resetSim(); stopManualMode(); } if (tab.id !== 'battle') { resetBattle(); } }}
-              className={`flex-1 py-2 rounded-xl text-[11px] font-black transition active:scale-95
+              onClick={() => { setPhase(tab.id); if (tab.id !== 'simulate') { resetSim(); stopManualMode(); } if (tab.id !== 'battle') { resetBattle(); } if (tab.id === 'instructions') stopSpeaking(); }}
+              className={`flex-1 py-2 rounded-xl text-[10px] font-black transition active:scale-95
                 ${phase === tab.id ? 'bg-white text-[#CE82FF] shadow-md' : 'bg-white/20 text-white/80 hover:bg-white/30'}`}>
               {tab.label}
             </button>
@@ -1884,16 +2938,32 @@ export default function RobotSimulator({ onBack }) {
         {/* ======= BUILD PHASE ======= */}
         {phase === 'build' && (
           <div className="space-y-4">
+            {/* Kid-friendly welcome tip */}
+            <div className="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-2xl p-4 border-2 border-purple-100">
+              <div className="flex items-start gap-3">
+                <div className="text-3xl animate-bounce">🔧</div>
+                <div>
+                  <h3 className="text-base font-black text-purple-700">¡Hora de Armar tu Robot!</h3>
+                  <p className="text-sm text-purple-600 mt-1">
+                    {template?.id === 'sumo' && 'Coloca las piezas en tu robot de combate. ¡Necesita ser fuerte y rápido!'}
+                    {template?.id === 'line' && 'Arma tu robot seguidor de líneas. ¡Debe tener buenos sensores para no perderse!'}
+                    {template?.id === 'dog' && 'Construye tu perrito robot. ¡Necesita 4 patas, ojos y una voz para ladrar!'}
+                    {template?.id === 'free' && '¡Crea lo que imagines! Elige las piezas que quieras.'}
+                  </p>
+                </div>
+              </div>
+            </div>
+
             {/* Visual chassis assembly */}
-            <div className="bg-white rounded-2xl border-2 border-[#E5E5E5] p-3">
+            <div className="bg-white rounded-2xl border-2 border-[#E5E5E5] p-4">
               <div className="flex justify-between items-center mb-3">
-                <h3 className="text-sm font-black text-[#3C3C3C] flex items-center">
-                  🔧 Armado del Robot
-                  <span className="ml-2 text-[10px] font-black text-[#CE82FF] bg-[#F3E8FF] px-2 py-0.5 rounded-full">{workspace.length} piezas</span>
+                <h3 className="text-base font-black text-[#3C3C3C] flex items-center">
+                  🤖 Tu Robot
+                  <span className="ml-2 text-xs font-black text-[#CE82FF] bg-[#F3E8FF] px-2.5 py-1 rounded-full">{workspace.length} piezas</span>
                 </h3>
                 {workspace.length > 0 && (
-                  <button onClick={() => { setWorkspace([]); setSlotAssignments({}); }} className="text-[10px] font-black text-[#FF4B4B] bg-[#FFE1E1] px-2 py-1 rounded-full hover:bg-[#FFD0D0] transition flex items-center">
-                    <Trash2 size={10} className="mr-0.5"/> Limpiar
+                  <button onClick={() => { setWorkspace([]); setSlotAssignments({}); }} className="text-xs font-black text-[#FF4B4B] bg-[#FFE1E1] px-3 py-1.5 rounded-full hover:bg-[#FFD0D0] transition flex items-center">
+                    <Trash2 size={12} className="mr-1"/> Quitar Todo
                   </button>
                 )}
               </div>
@@ -1907,19 +2977,34 @@ export default function RobotSimulator({ onBack }) {
                 onSlotRemove={handleSlotRemove}
               />
 
-              {/* Component checklist */}
-              <div className="flex gap-2 mt-3 flex-wrap">
+              {/* Component checklist - more descriptive */}
+              <div className="mt-4 space-y-2">
+                <p className="text-xs font-black text-gray-500">📋 ¿Tu robot tiene todo lo necesario?</p>
                 {[
-                  { ok: hasController, label: '🧠 Arduino' },
-                  { ok: hasBattery, label: '🔋 Batería' },
-                  { ok: hasMotor, label: '⚙️ Motor' },
+                  { ok: hasController, label: '🧠 Cerebro (Arduino)', desc: 'Piensa y toma decisiones' },
+                  { ok: hasBattery, label: '🔋 Energía (Batería)', desc: 'Le da poder para moverse' },
+                  { ok: hasMotor, label: '⚙️ Músculos (Motor)', desc: 'Lo hace caminar o rodar' },
                 ].map((c, i) => (
-                  <span key={i} className={`text-[10px] font-bold px-2 py-1 rounded-full ${c.ok ? 'bg-green-100 text-green-700' : 'bg-red-50 text-red-500'}`}>
-                    {c.ok ? '✅' : '❌'} {c.label}
-                  </span>
+                  <div key={i} className={`flex items-center gap-3 p-2.5 rounded-xl text-sm transition ${c.ok ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'}`}>
+                    <span className="text-lg">{c.ok ? '✅' : '❌'}</span>
+                    <div>
+                      <span className={`font-black ${c.ok ? 'text-green-700' : 'text-red-600'}`}>{c.label}</span>
+                      <p className={`text-xs ${c.ok ? 'text-green-600' : 'text-red-500'}`}>{c.desc}</p>
+                    </div>
+                  </div>
                 ))}
               </div>
             </div>
+
+            {/* Kid-friendly build tips */}
+            {template && BUILD_TIPS[template.id] && (
+              <div className="bg-yellow-50 rounded-2xl border-2 border-yellow-200 p-4">
+                <h4 className="text-sm font-black text-yellow-700 mb-2 flex items-center gap-1">💡 ¿Sabías que...?</h4>
+                <p className="text-sm text-yellow-700">
+                  {BUILD_TIPS[template.id][Math.floor(Math.random() * BUILD_TIPS[template.id].length)]}
+                </p>
+              </div>
+            )}
 
             {/* Mini-Games Hub - personalized per robot */}
             {template && template.id !== 'free' && (
@@ -1928,18 +3013,21 @@ export default function RobotSimulator({ onBack }) {
 
             {/* Parts catalog with drag */}
             <div className="bg-white rounded-2xl border-2 border-[#E5E5E5] p-4">
-              <h3 className="text-sm font-black text-[#3C3C3C] mb-1">📦 Catálogo de Piezas</h3>
-              <p className="text-[10px] text-[#AFAFAF] font-bold mb-3">Toca o arrastra una pieza para instalarla en tu robot</p>
-              <div className="flex gap-1.5 overflow-x-auto pb-2 mb-3 -mx-1 px-1">
-                {partCategories.map(cat => (
-                  <button key={cat} onClick={() => setPartCat(cat)}
-                    className={`whitespace-nowrap px-3 py-1.5 rounded-full text-[10px] font-black transition active:scale-95
-                      ${partCat === cat ? 'bg-[#CE82FF] text-white border-b-2 border-[#A855F7]' : 'bg-[#F7F7F7] text-[#777] hover:bg-[#E5E5E5]'}`}>
-                    {cat}
-                  </button>
-                ))}
+              <h3 className="text-base font-black text-[#3C3C3C] mb-1">📦 Piezas Disponibles</h3>
+              <p className="text-sm text-gray-500 font-medium mb-3">👆 Toca una pieza para agregarla a tu robot</p>
+              <div className="flex gap-2 overflow-x-auto pb-2 mb-3 -mx-1 px-1">
+                {partCategories.map(cat => {
+                  const catEmoji = { 'Chasis': '📦', 'Motores': '⚙️', 'Ruedas': '🔵', 'Sensores': '👁️', 'Control': '🧠', 'Energía': '🔋', 'Otros': '🔧' };
+                  return (
+                    <button key={cat} onClick={() => setPartCat(cat)}
+                      className={`whitespace-nowrap px-3 py-2 rounded-full text-xs font-black transition active:scale-95 flex items-center gap-1
+                        ${partCat === cat ? 'bg-[#CE82FF] text-white shadow-md border-b-2 border-[#A855F7]' : 'bg-[#F7F7F7] text-[#777] hover:bg-[#E5E5E5]'}`}>
+                      {catEmoji[cat] || '📦'} {cat}
+                    </button>
+                  );
+                })}
               </div>
-              <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 {ALL_PARTS.filter(p => p.cat === partCat).map(part => (
                   <div key={part.id}
                     draggable
@@ -1959,11 +3047,11 @@ export default function RobotSimulator({ onBack }) {
                         addPartToWorkspace(part);
                       }
                     }}
-                    className="flex flex-col items-center p-2.5 bg-white rounded-xl border border-gray-200 cursor-grab active:cursor-grabbing hover:border-violet-400 hover:shadow-md transition active:scale-95 group"
+                    className="flex flex-col items-center p-3 bg-white rounded-2xl border-2 border-gray-200 cursor-grab active:cursor-grabbing hover:border-violet-400 hover:shadow-lg transition active:scale-95 group"
                   >
-                    <PartSVG partId={part.svg} size={54} />
-                    <span className="text-[9px] font-bold text-gray-700 mt-1 text-center leading-tight">{part.name}</span>
-                    <span className="text-[8px] text-gray-400 font-semibold">{part.cat}</span>
+                    <PartSVG partId={part.svg} size={60} />
+                    <span className="text-xs font-black text-gray-700 mt-2 text-center leading-tight">{part.name}</span>
+                    <span className="text-[10px] text-gray-400 font-bold mt-0.5">{part.cat}</span>
                   </div>
                 ))}
               </div>
@@ -1974,40 +3062,58 @@ export default function RobotSimulator({ onBack }) {
         {/* ======= PROGRAM PHASE ======= */}
         {phase === 'program' && (
           <div className="space-y-4">
+            {/* Kid-friendly intro */}
+            <div className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-2xl p-4 border-2 border-blue-100">
+              <div className="flex items-start gap-3">
+                <div className="text-3xl animate-bounce">💻</div>
+                <div>
+                  <h3 className="text-base font-black text-blue-700">¡Programa tu Robot!</h3>
+                  <p className="text-sm text-blue-600 mt-1">
+                    Agrega instrucciones para decirle a tu robot qué hacer.
+                    Es como darle una receta: primero haz esto, luego aquello...
+                  </p>
+                </div>
+              </div>
+            </div>
+
             {/* Current program */}
             <div className="bg-white rounded-2xl border-2 border-[#E5E5E5] p-4">
               <div className="flex justify-between items-center mb-3">
-                <h3 className="text-sm font-black text-[#3C3C3C] flex items-center">
-                  <Cpu size={16} className="mr-1.5 text-[#CE82FF]"/> Programa
-                  <span className="ml-2 text-[10px] font-black text-[#CE82FF] bg-[#F3E8FF] px-2 py-0.5 rounded-full">{program.length} bloques</span>
+                <h3 className="text-base font-black text-[#3C3C3C] flex items-center">
+                  📝 Instrucciones del Robot
+                  <span className="ml-2 text-xs font-black text-[#CE82FF] bg-[#F3E8FF] px-2.5 py-1 rounded-full">{program.length} pasos</span>
                 </h3>
                 {program.length > 0 && (
-                  <button onClick={() => setProgram([])} className="text-[10px] font-black text-[#FF4B4B] bg-[#FFE1E1] px-2 py-1 rounded-full hover:bg-[#FFD0D0] transition flex items-center">
-                    <Trash2 size={10} className="mr-0.5"/> Limpiar
+                  <button onClick={() => setProgram([])} className="text-xs font-black text-[#FF4B4B] bg-[#FFE1E1] px-3 py-1.5 rounded-full hover:bg-[#FFD0D0] transition flex items-center">
+                    <Trash2 size={12} className="mr-1"/> Borrar Todo
                   </button>
                 )}
               </div>
               {program.length === 0 ? (
-                <div className="text-center py-6 text-[#AFAFAF]">
-                  <span className="text-3xl block mb-2">📝</span>
-                  <p className="text-xs font-semibold">Agrega bloques de instrucciones</p>
+                <div className="text-center py-8 bg-gray-50 rounded-xl border-2 border-dashed border-gray-200">
+                  <span className="text-5xl block mb-3">📝</span>
+                  <p className="text-sm font-bold text-gray-500">¡Tu robot no tiene instrucciones!</p>
+                  <p className="text-xs text-gray-400 mt-1">Agrega bloques de abajo para enseñarle qué hacer 👇</p>
                 </div>
               ) : (
-                <div className="space-y-1.5 max-h-[280px] overflow-y-auto pr-1">
+                <div className="space-y-2 max-h-[300px] overflow-y-auto pr-1">
                   {program.map((block, idx) => (
                     <div key={block.uid}
-                      className={`flex items-center gap-1.5 pl-2 pr-1 py-1.5 rounded-lg border text-white ${block.color} border-white/20 group transition`}>
-                      <span className="text-[10px] font-mono text-white/60 w-5 text-right">{idx+1}</span>
-                      <span className="text-xs font-bold flex-grow">{block.label}</span>
-                      <div className="flex gap-0.5 opacity-60 group-hover:opacity-100 transition">
-                        <button onClick={() => moveBlock(idx, -1)} className="w-5 h-5 bg-white/20 rounded text-[10px] hover:bg-white/40 flex items-center justify-center">
-                          <ChevronUp size={12}/>
+                      className={`flex items-center gap-2 pl-3 pr-2 py-2.5 rounded-xl border-2 text-white ${block.color} border-white/20 group transition shadow-sm`}>
+                      <span className="w-7 h-7 rounded-lg bg-white/20 flex items-center justify-center text-xs font-black">{idx+1}</span>
+                      <div className="flex-grow">
+                        <span className="text-sm font-bold block">{block.label}</span>
+                        {block.hint && <span className="text-[10px] text-white/70 block">{block.hint}</span>}
+                      </div>
+                      <div className="flex gap-1 opacity-70 group-hover:opacity-100 transition">
+                        <button onClick={() => moveBlock(idx, -1)} className="w-7 h-7 bg-white/20 rounded-lg hover:bg-white/40 flex items-center justify-center" title="Mover arriba">
+                          <ChevronUp size={14}/>
                         </button>
-                        <button onClick={() => moveBlock(idx, 1)} className="w-5 h-5 bg-white/20 rounded text-[10px] hover:bg-white/40 flex items-center justify-center">
-                          <ChevronDown size={12}/>
+                        <button onClick={() => moveBlock(idx, 1)} className="w-7 h-7 bg-white/20 rounded-lg hover:bg-white/40 flex items-center justify-center" title="Mover abajo">
+                          <ChevronDown size={14}/>
                         </button>
-                        <button onClick={() => removeBlockFromProgram(idx)} className="w-5 h-5 bg-red-400/60 rounded text-[10px] hover:bg-red-400 flex items-center justify-center">
-                          <X size={12}/>
+                        <button onClick={() => removeBlockFromProgram(idx)} className="w-7 h-7 bg-red-400/60 rounded-lg hover:bg-red-400 flex items-center justify-center" title="Quitar">
+                          <X size={14}/>
                         </button>
                       </div>
                     </div>
@@ -2016,13 +3122,22 @@ export default function RobotSimulator({ onBack }) {
               )}
             </div>
 
+            {/* Programming tip */}
+            <div className="bg-yellow-50 rounded-2xl border-2 border-yellow-200 p-4">
+              <h4 className="text-sm font-black text-yellow-700 mb-1 flex items-center gap-1">💡 Consejo</h4>
+              <p className="text-sm text-yellow-700">
+                {PROGRAM_TIPS[program.length % PROGRAM_TIPS.length]}
+              </p>
+            </div>
+
             {/* Code preview */}
             {program.length > 0 && (
               <div className="bg-gray-900 p-4 rounded-2xl border-2 border-gray-700">
-                <h3 className="text-xs font-bold text-gray-400 mb-2 flex items-center">
-                  <Zap size={12} className="mr-1 text-green-400"/> Código Arduino Generado
+                <h3 className="text-sm font-bold text-gray-300 mb-2 flex items-center">
+                  <Zap size={14} className="mr-1.5 text-green-400"/> Así se ve en código real
                 </h3>
-                <pre className="text-[10px] text-green-400 font-mono overflow-x-auto leading-relaxed">
+                <p className="text-xs text-gray-500 mb-3">Esto es lo que un programador escribe en su computadora:</p>
+                <pre className="text-xs text-green-400 font-mono overflow-x-auto leading-relaxed">
 {`void setup() {
   Serial.begin(9600);
   // Configurar pines...
@@ -2041,8 +3156,8 @@ ${program.map(b => `  ${b.code}`).join('\n')}
                 {/* Upload button */}
                 {!isUploading && uploadProgress === 0 && (
                   <button onClick={startUpload}
-                    className="w-full py-3.5 btn-3d btn-3d-green rounded-xl text-sm flex items-center justify-center gap-2">
-                    <Upload size={18}/> Cargar Programa al Robot
+                    className="w-full py-4 btn-3d btn-3d-green rounded-xl text-sm flex items-center justify-center gap-2 font-black">
+                    <Upload size={18}/> 📡 Enviar Programa al Robot
                   </button>
                 )}
                 {/* Upload progress */}
@@ -2055,7 +3170,7 @@ ${program.map(b => `  ${b.code}`).join('\n')}
                 {/* Reset upload */}
                 {uploadProgress >= 100 && (
                   <button onClick={resetUpload}
-                    className="w-full py-2.5 bg-gray-100 text-gray-600 text-xs font-bold rounded-xl hover:bg-gray-200 transition active:scale-[0.97] flex items-center justify-center gap-1.5">
+                    className="w-full py-3 bg-gray-100 text-gray-600 text-sm font-bold rounded-xl hover:bg-gray-200 transition active:scale-[0.97] flex items-center justify-center gap-1.5">
                     <RotateCcw size={14}/> Cargar de Nuevo
                   </button>
                 )}
@@ -2064,21 +3179,29 @@ ${program.map(b => `  ${b.code}`).join('\n')}
 
             {/* Block palette */}
             <div className="bg-white rounded-2xl border-2 border-[#E5E5E5] p-4">
-              <h3 className="text-sm font-black text-[#3C3C3C] mb-3">🧩 Bloques de Instrucciones</h3>
-              <div className="flex gap-1.5 overflow-x-auto pb-2 mb-3 -mx-1 px-1">
-                {blockCategories.map(cat => (
-                  <button key={cat} onClick={() => setBlockCat(cat)}
-                    className={`whitespace-nowrap px-3 py-1.5 rounded-full text-[10px] font-black transition active:scale-95
-                      ${blockCat === cat ? 'bg-[#CE82FF] text-white border-b-2 border-[#A855F7]' : 'bg-[#F7F7F7] text-[#777] hover:bg-[#E5E5E5]'}`}>
-                    {cat}
-                  </button>
-                ))}
+              <h3 className="text-base font-black text-[#3C3C3C] mb-1">🧩 Bloques de Instrucciones</h3>
+              <p className="text-sm text-gray-500 font-medium mb-3">👆 Toca un bloque para agregarlo al programa</p>
+              <div className="flex gap-2 overflow-x-auto pb-2 mb-3 -mx-1 px-1">
+                {blockCategories.map(cat => {
+                  const catEmoji = { 'Movimiento': '🏃', 'Sensores': '👁️', 'Pregunta': '❓', 'Control': '🎮', 'Acción': '⚡' };
+                  return (
+                    <button key={cat} onClick={() => setBlockCat(cat)}
+                      className={`whitespace-nowrap px-3 py-2 rounded-full text-xs font-black transition active:scale-95 flex items-center gap-1
+                        ${blockCat === cat ? 'bg-[#CE82FF] text-white shadow-md border-b-2 border-[#A855F7]' : 'bg-[#F7F7F7] text-[#777] hover:bg-[#E5E5E5]'}`}>
+                      {catEmoji[cat] || '📦'} {cat}
+                    </button>
+                  );
+                })}
               </div>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="space-y-2">
                 {PROGRAM_BLOCKS.filter(b => b.cat === blockCat).map(block => (
                   <button key={block.id} onClick={() => addBlockToProgram(block)}
-                    className={`${block.color} text-white px-3 py-2.5 rounded-xl text-xs font-bold text-left transition active:scale-95 hover:shadow-md hover:brightness-110`}>
-                    {block.label}
+                    className={`${block.color} w-full text-white px-4 py-3 rounded-xl text-left transition active:scale-[0.97] hover:shadow-lg hover:brightness-110 flex items-center gap-3`}>
+                    <span className="text-lg">{block.label.split(' ')[0]}</span>
+                    <div>
+                      <span className="text-sm font-bold block">{block.label.split(' ').slice(1).join(' ')}</span>
+                      {block.hint && <span className="text-[10px] text-white/70 block">{block.hint}</span>}
+                    </div>
                   </button>
                 ))}
               </div>
@@ -2089,17 +3212,36 @@ ${program.map(b => `  ${b.code}`).join('\n')}
         {/* ======= SIMULATE PHASE ======= */}
         {phase === 'simulate' && (
           <div className="space-y-4">
-            {/* Mode toggle */}
-            <div className="flex gap-2">
+            {/* Kid-friendly intro */}
+            <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-4 border-2 border-green-100">
+              <div className="flex items-start gap-3">
+                <div className="text-3xl animate-bounce">▶️</div>
+                <div>
+                  <h3 className="text-base font-black text-green-700">¡Mira tu Robot en Acción!</h3>
+                  <p className="text-sm text-green-600 mt-1">
+                    {manualMode 
+                      ? '🎮 ¡Tú controlas el robot! Usa los botones o el teclado para moverlo.' 
+                      : '🤖 El robot sigue las instrucciones que le programaste. ¡Observa qué pasa!'}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Mode toggle - bigger and clearer */}
+            <div className="flex gap-3">
               <button onClick={() => { stopManualMode(); }} 
-                className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition active:scale-95 flex items-center justify-center gap-1.5
-                  ${!manualMode ? 'bg-indigo-600 text-white shadow-md' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>
-                <Cpu size={14}/> Auto (Programa)
+                className={`flex-1 py-3.5 rounded-2xl text-sm font-black transition active:scale-95 flex flex-col items-center justify-center gap-1
+                  ${!manualMode ? 'bg-indigo-600 text-white shadow-lg border-b-4 border-indigo-800' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'}`}>
+                <Cpu size={20}/>
+                <span>Automático</span>
+                <span className={`text-[10px] font-medium ${!manualMode ? 'text-indigo-200' : 'text-gray-400'}`}>El robot piensa solo</span>
               </button>
               <button onClick={startManualMode}
-                className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition active:scale-95 flex items-center justify-center gap-1.5
-                  ${manualMode ? 'bg-emerald-600 text-white shadow-md' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>
-                <Gamepad2 size={14}/> Control Manual
+                className={`flex-1 py-3.5 rounded-2xl text-sm font-black transition active:scale-95 flex flex-col items-center justify-center gap-1
+                  ${manualMode ? 'bg-emerald-600 text-white shadow-lg border-b-4 border-emerald-800' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'}`}>
+                <Gamepad2 size={20}/>
+                <span>Tú lo Controlas</span>
+                <span className={`text-[10px] font-medium ${manualMode ? 'text-emerald-200' : 'text-gray-400'}`}>Como un videojuego</span>
               </button>
             </div>
 
@@ -2119,61 +3261,73 @@ ${program.map(b => `  ${b.code}`).join('\n')}
             {/* Manual D-Pad */}
             {manualMode && (
               <div className="flex justify-center">
-                <div className="bg-gray-900 rounded-2xl p-3 border-2 border-gray-700">
+                <div className="bg-gray-900 rounded-2xl p-4 border-2 border-gray-700">
                   <VirtualDPad player={1} onMove={handleManualMove} onStop={handleManualStop} />
-                  <p className="text-[9px] text-gray-500 text-center mt-2 font-semibold">También usa WASD o flechas del teclado</p>
+                  <p className="text-xs text-gray-400 text-center mt-3 font-bold">
+                    🎮 Toca las flechas o usa WASD en tu teclado
+                  </p>
                 </div>
               </div>
             )}
 
-            {/* Checklist (before start) - only in auto mode */}
+            {/* Checklist (before start) - only in auto mode - more kid-friendly */}
             {!manualMode && !simRunning && simLog.length === 0 && (
               <div className="bg-white p-4 rounded-2xl border-2 border-[#E5E5E5]">
-                <h3 className="text-sm font-black text-[#3C3C3C] mb-3">✅ Verificación Pre-Vuelo</h3>
-                <div className="space-y-2">
+                <h3 className="text-base font-black text-[#3C3C3C] mb-1">🚀 ¿Listo para Despegar?</h3>
+                <p className="text-sm text-gray-500 mb-3">Revisemos que tu robot tenga todo lo necesario:</p>
+                <div className="space-y-2.5">
                   {[
-                    { ok: hasController, label: 'Arduino instalado' },
-                    { ok: hasBattery, label: 'Batería conectada' },
-                    { ok: hasMotor, label: 'Motor(es) instalado(s)' },
-                    { ok: program.length > 0, label: `Programa cargado (${program.length} instrucciones)` },
+                    { ok: hasController, label: '🧠 Cerebro (Arduino)', desc: 'Para pensar y decidir', emoji: '🧠' },
+                    { ok: hasBattery, label: '🔋 Energía (Batería)', desc: 'Para tener poder', emoji: '🔋' },
+                    { ok: hasMotor, label: '⚙️ Músculos (Motor)', desc: 'Para moverse', emoji: '⚙️' },
+                    { ok: program.length > 0, label: `📝 Instrucciones (${program.length} pasos)`, desc: 'Lo que el robot hará', emoji: '📝' },
                   ].map((item, i) => (
-                    <div key={i} className={`flex items-center gap-2 p-2.5 rounded-xl text-xs font-bold ${item.ok ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-600'}`}>
-                      <span className="text-base">{item.ok ? '✅' : '❌'}</span>
-                      <span>{item.label}</span>
+                    <div key={i} className={`flex items-center gap-3 p-3 rounded-xl text-sm font-bold transition ${item.ok ? 'bg-green-50 border-2 border-green-200' : 'bg-red-50 border-2 border-red-200'}`}>
+                      <span className="text-xl">{item.ok ? '✅' : '❌'}</span>
+                      <div>
+                        <span className={item.ok ? 'text-green-700' : 'text-red-600'}>{item.label}</span>
+                        <p className={`text-xs font-medium ${item.ok ? 'text-green-600' : 'text-red-500'}`}>{item.desc}</p>
+                      </div>
                     </div>
                   ))}
                 </div>
                 {!canSimulate && (
-                  <p className="text-[11px] text-red-500 font-semibold mt-3 text-center">
-                    ⚠️ Completa todos los requisitos para simular
-                  </p>
+                  <div className="mt-4 bg-orange-50 border-2 border-orange-200 rounded-xl p-3 text-center">
+                    <span className="text-2xl">🤔</span>
+                    <p className="text-sm text-orange-700 font-bold mt-1">
+                      Tu robot necesita más cosas para funcionar
+                    </p>
+                    <p className="text-xs text-orange-600 mt-0.5">
+                      Regresa a "Armar" o "Programar" para completarlo
+                    </p>
+                  </div>
                 )}
               </div>
             )}
 
-            {/* Log */}
+            {/* Simulation Log - kid-friendly */}
             {!manualMode && simLog.length > 0 && (
               <div className="bg-gray-900 rounded-2xl border-2 border-gray-700 overflow-hidden">
-                <div className="flex justify-between items-center px-4 py-2 bg-gray-800 border-b border-gray-700">
-                  <h3 className="text-xs font-bold text-gray-400 flex items-center">
-                    <Zap size={12} className="mr-1 text-green-400"/> Consola de Simulación
+                <div className="flex justify-between items-center px-4 py-3 bg-gray-800 border-b border-gray-700">
+                  <h3 className="text-sm font-bold text-gray-300 flex items-center">
+                    <Zap size={14} className="mr-1.5 text-green-400"/> 📺 Lo que hace tu Robot
                   </h3>
-                  <button onClick={resetSim} className="text-[10px] font-bold text-gray-500 bg-gray-700 px-2 py-1 rounded hover:bg-gray-600 transition flex items-center">
-                    <RotateCcw size={10} className="mr-0.5"/> Reset
+                  <button onClick={resetSim} className="text-xs font-bold text-gray-400 bg-gray-700 px-3 py-1.5 rounded-lg hover:bg-gray-600 transition flex items-center">
+                    <RotateCcw size={12} className="mr-1"/> Reiniciar
                   </button>
                 </div>
-                <div className="max-h-[200px] overflow-y-auto p-3 space-y-0.5">
+                <div className="max-h-[240px] overflow-y-auto p-3 space-y-1">
                   {simLog.map((log, i) => (
-                    <div key={i} className={`text-[11px] font-mono py-0.5 px-1 rounded animate-slide-up
-                      ${log.type === 'system' ? 'text-gray-400' : ''}
-                      ${log.type === 'ok' ? 'text-green-400' : ''}
-                      ${log.type === 'error' ? 'text-red-400 font-bold' : ''}
-                      ${log.type === 'success' ? 'text-green-400 font-bold' : ''}
-                      ${log.type === 'move' ? 'text-blue-300' : ''}
-                      ${log.type === 'sensor' ? 'text-cyan-300' : ''}
-                      ${log.type === 'condition' ? 'text-amber-300' : ''}
-                      ${log.type === 'control' ? 'text-purple-300' : ''}
-                      ${log.type === 'action' ? 'text-rose-300' : ''}
+                    <div key={i} className={`text-sm font-mono py-1 px-2 rounded-lg animate-slide-up
+                      ${log.type === 'system' ? 'text-gray-400 bg-gray-800/50' : ''}
+                      ${log.type === 'ok' ? 'text-green-400 bg-green-900/20' : ''}
+                      ${log.type === 'error' ? 'text-red-400 font-bold bg-red-900/20' : ''}
+                      ${log.type === 'success' ? 'text-green-400 font-bold bg-green-900/30' : ''}
+                      ${log.type === 'move' ? 'text-blue-300 bg-blue-900/20' : ''}
+                      ${log.type === 'sensor' ? 'text-cyan-300 bg-cyan-900/20' : ''}
+                      ${log.type === 'condition' ? 'text-amber-300 bg-amber-900/20' : ''}
+                      ${log.type === 'control' ? 'text-purple-300 bg-purple-900/20' : ''}
+                      ${log.type === 'action' ? 'text-rose-300 bg-rose-900/20' : ''}
                       ${log.type === 'divider' ? 'text-gray-600' : ''}
                     `}>
                       {log.text}
@@ -2184,14 +3338,14 @@ ${program.map(b => `  ${b.code}`).join('\n')}
               </div>
             )}
 
-            {/* Parts summary */}
+            {/* Parts summary - more visual */}
             <div className="bg-white p-4 rounded-2xl border-2 border-[#E5E5E5]">
-              <h3 className="text-xs font-black text-[#777] mb-2">Piezas instaladas:</h3>
+              <h3 className="text-sm font-black text-gray-700 mb-2">🔧 Piezas de tu Robot:</h3>
               <div className="flex flex-wrap gap-2">
-                {workspace.map((p, i) => (
-                  <div key={p.uid} className="flex items-center gap-1 bg-gray-50 border border-gray-200 rounded-lg px-2 py-1">
-                    <PartSVG partId={p.svg} size={20}/>
-                    <span className="text-[9px] font-bold text-gray-600">{p.name}</span>
+                {workspace.map((p) => (
+                  <div key={p.uid} className="flex items-center gap-2 bg-purple-50 border border-purple-200 rounded-xl px-3 py-1.5">
+                    <PartSVG partId={p.svg} size={24}/>
+                    <span className="text-xs font-bold text-purple-700">{p.name}</span>
                   </div>
                 ))}
               </div>
@@ -2202,31 +3356,46 @@ ${program.map(b => `  ${b.code}`).join('\n')}
         {/* ======= BATTLE PHASE ======= */}
         {phase === 'battle' && (
           <div className="space-y-4">
-            {/* Battle info card */}
+            {/* Battle info card - kid-friendly */}
             {!battleActive && !winner && countdown === 0 && (
-              <div className="bg-white border-2 border-[#E5E5E5] p-5 rounded-2xl text-center">
-                <div className="text-5xl mb-3">⚔️</div>
-                <h3 className="text-lg font-black text-[#3C3C3C]">Modo Batalla</h3>
-                <p className="text-xs text-[#777] mt-1 mb-4">2 robots iguales, 30 segundos, ¡empuja a tu rival fuera!</p>
-                <div className="grid grid-cols-2 gap-3 mb-4">
-                  <div className="bg-[#DDF4FF] border-2 border-[#1CB0F6] p-3 rounded-xl">
-                    <div className="text-2xl mb-1">🔵</div>
-                    <div className="text-xs font-black text-[#1CB0F6]">Jugador 1</div>
-                    <div className="text-[10px] text-blue-500 font-semibold mt-1">WASD / D-Pad izq.</div>
+              <div className="bg-gradient-to-b from-purple-50 to-white border-2 border-purple-200 p-5 rounded-2xl text-center">
+                <div className="text-6xl mb-3 animate-bounce">⚔️</div>
+                <h3 className="text-xl font-black text-[#3C3C3C]">¡Modo Batalla!</h3>
+                <p className="text-sm text-gray-600 mt-2 mb-5">Juega con un amigo: ¡cada uno controla un robot y tiene que empujar al otro fuera!</p>
+                
+                <div className="grid grid-cols-2 gap-4 mb-5">
+                  <div className="bg-blue-50 border-3 border-blue-400 p-4 rounded-2xl shadow-md">
+                    <div className="text-3xl mb-2">🔵</div>
+                    <div className="text-sm font-black text-blue-600">Jugador 1</div>
+                    <div className="bg-blue-100 rounded-lg p-2 mt-2">
+                      <p className="text-xs font-bold text-blue-700">🎮 Controles:</p>
+                      <p className="text-xs text-blue-600 mt-1">Teclas <span className="font-mono bg-blue-200 px-1 rounded">W</span> <span className="font-mono bg-blue-200 px-1 rounded">A</span> <span className="font-mono bg-blue-200 px-1 rounded">S</span> <span className="font-mono bg-blue-200 px-1 rounded">D</span></p>
+                      <p className="text-xs text-blue-600">o D-Pad izquierdo</p>
+                    </div>
                   </div>
-                  <div className="bg-[#FFE1E1] border-2 border-[#FF4B4B] p-3 rounded-xl">
-                    <div className="text-2xl mb-1">🔴</div>
-                    <div className="text-xs font-black text-[#FF4B4B]">Jugador 2</div>
-                    <div className="text-[10px] text-[#FF4B4B]/70 font-bold mt-1">Flechas / D-Pad der.</div>
+                  <div className="bg-red-50 border-3 border-red-400 p-4 rounded-2xl shadow-md">
+                    <div className="text-3xl mb-2">🔴</div>
+                    <div className="text-sm font-black text-red-600">Jugador 2</div>
+                    <div className="bg-red-100 rounded-lg p-2 mt-2">
+                      <p className="text-xs font-bold text-red-700">🎮 Controles:</p>
+                      <p className="text-xs text-red-600 mt-1">Teclas <span className="font-mono bg-red-200 px-1 rounded">↑</span> <span className="font-mono bg-red-200 px-1 rounded">←</span> <span className="font-mono bg-red-200 px-1 rounded">↓</span> <span className="font-mono bg-red-200 px-1 rounded">→</span></p>
+                      <p className="text-xs text-red-600">o D-Pad derecho</p>
+                    </div>
                   </div>
                 </div>
-                <div className="text-[10px] text-gray-500 font-semibold mb-3">
-                  🏟️ Arena: {template?.arena === 'sumo' ? 'Ring de Sumo - ¡Saca al rival del ring!' : 'Campo - ¡Empuja al rival al borde!'}
+                
+                <div className="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-3 mb-4">
+                  <p className="text-sm text-yellow-700 font-bold flex items-center justify-center gap-1">
+                    🏟️ {template?.arena === 'sumo' ? '¡Saca al rival del ring para ganar!' : '¡Empuja al rival fuera del campo!'}
+                  </p>
+                  <p className="text-xs text-yellow-600 mt-1">⏱️ Tienes 30 segundos por ronda</p>
                 </div>
-                <div className="flex gap-2 items-center justify-center mb-2">
-                  <span className="text-sm font-black text-[#CE82FF] bg-[#F3E8FF] px-3 py-1 rounded-full">
-                    <Trophy size={14} className="inline mr-1 -mt-0.5"/> Marcador: {scores[0]} - {scores[1]}
-                  </span>
+                
+                <div className="flex items-center justify-center gap-3">
+                  <div className="bg-purple-100 px-4 py-2 rounded-full">
+                    <Trophy size={16} className="inline mr-1.5 -mt-0.5 text-purple-600"/>
+                    <span className="text-base font-black text-purple-700">Marcador: {scores[0]} - {scores[1]}</span>
+                  </div>
                 </div>
               </div>
             )}
@@ -2286,49 +3455,55 @@ ${program.map(b => `  ${b.code}`).join('\n')}
         )}
       </div>
 
-      {/* Bottom action button */}
-      <div className="fixed bottom-20 left-0 right-0 px-4 z-20">
+      {/* Bottom action button - bigger and clearer for kids */}
+      <div className="fixed bottom-20 left-0 right-0 px-4 z-20 pb-2">
         <div className="max-w-xl mx-auto">
+          {phase === 'instructions' && (
+            <button onClick={() => setPhase('build')}
+              className="w-full py-4 btn-3d btn-3d-purple rounded-2xl text-base font-black flex items-center justify-center gap-2 shadow-xl">
+              🔧 Ir a Armar el Robot <ChevronRight size={20}/>
+            </button>
+          )}
           {phase === 'build' && (
             <button onClick={() => setPhase('program')}
-              className="w-full py-3.5 btn-3d btn-3d-purple rounded-xl text-sm flex items-center justify-center">
-              Siguiente: Programar <ChevronRight size={18} className="ml-1"/>
+              className="w-full py-4 btn-3d btn-3d-purple rounded-2xl text-base font-black flex items-center justify-center gap-2 shadow-xl">
+              💻 Siguiente: ¡Programar! <ChevronRight size={20}/>
             </button>
           )}
           {phase === 'program' && (
             <button onClick={() => setPhase('simulate')}
-              className="w-full py-3.5 btn-3d btn-3d-green rounded-xl text-sm flex items-center justify-center">
-              Siguiente: Simular <ChevronRight size={18} className="ml-1"/>
+              className="w-full py-4 btn-3d btn-3d-green rounded-2xl text-base font-black flex items-center justify-center gap-2 shadow-xl">
+              ▶️ Siguiente: ¡Ver en Acción! <ChevronRight size={20}/>
             </button>
           )}
           {phase === 'simulate' && !manualMode && !simRunning && (
             <button onClick={runSimulation} disabled={!canSimulate}
-              className={`w-full py-3.5 rounded-xl text-sm flex items-center justify-center
-                ${canSimulate ? 'btn-3d btn-3d-green' : 'bg-[#E5E5E5] text-[#AFAFAF] cursor-not-allowed font-black'}`}>
-              <Play size={18} className="mr-1.5"/> Iniciar Simulación
+              className={`w-full py-4 rounded-2xl text-base font-black flex items-center justify-center gap-2 shadow-xl
+                ${canSimulate ? 'btn-3d btn-3d-green' : 'bg-[#E5E5E5] text-[#AFAFAF] cursor-not-allowed'}`}>
+              <Play size={20}/> {canSimulate ? '🚀 ¡Arrancar Robot!' : '⚠️ Falta completar el robot'}
             </button>
           )}
           {phase === 'simulate' && !manualMode && simRunning && (
             <button onClick={stopSim}
-              className="w-full py-3.5 btn-3d btn-3d-red rounded-xl text-sm flex items-center justify-center">
-              <Pause size={18} className="mr-1.5"/> Detener Simulación
+              className="w-full py-4 btn-3d btn-3d-red rounded-2xl text-base font-black flex items-center justify-center gap-2 shadow-xl">
+              <Pause size={20}/> ⏹️ Detener Robot
             </button>
           )}
           {phase === 'simulate' && manualMode && (
-            <div className="bg-emerald-50 border border-emerald-200 rounded-xl py-2.5 px-4 text-center">
-              <span className="text-xs font-bold text-emerald-700">🎮 Modo Manual Activo — Usa el D-Pad o teclado (WASD / Flechas)</span>
+            <div className="bg-emerald-100 border-2 border-emerald-300 rounded-2xl py-3 px-4 text-center shadow-lg">
+              <span className="text-sm font-black text-emerald-700">🎮 ¡Estás controlando el robot! Usa las flechas del D-Pad</span>
             </div>
           )}
           {phase === 'battle' && !battleActive && !winner && countdown === 0 && (
             <button onClick={startBattle}
-              className="w-full py-3.5 btn-3d btn-3d-purple rounded-xl text-sm flex items-center justify-center">
-              <Users size={18} className="mr-1.5"/> ¡Iniciar Batalla!
+              className="w-full py-4 btn-3d btn-3d-purple rounded-2xl text-base font-black flex items-center justify-center gap-2 shadow-xl">
+              <Users size={20}/> ⚔️ ¡Iniciar Batalla!
             </button>
           )}
           {phase === 'battle' && battleActive && (
             <button onClick={resetBattle}
-              className="w-full py-3.5 btn-3d btn-3d-red rounded-xl text-sm flex items-center justify-center">
-              <Pause size={18} className="mr-1.5"/> Detener Batalla
+              className="w-full py-4 btn-3d btn-3d-red rounded-2xl text-base font-black flex items-center justify-center gap-2 shadow-xl">
+              <Pause size={20}/> ⏹️ Detener Batalla
             </button>
           )}
         </div>

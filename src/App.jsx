@@ -5,6 +5,7 @@ import GlossaryScreen from './components/GlossaryScreen';
 import ClassroomScreen from './components/ClassroomScreen';
 import { AchievementsScreen, AchievementToast, AchievementUnlockPopup, ACHIEVEMENTS } from './components/AchievementsScreen';
 import RobotSimulator from './components/RobotSimulator';
+import LicensesScreen from './components/LicensesScreen';
 import CircuitBuilder from './CircuitBuilder';
 import { MODULOS_DATA, CODE_CHALLENGES_DATA } from './data/modulesData';
 import { OnboardingScreen, RobotAvatar, RobotMini, StoryProgress } from './Onboarding';
@@ -111,10 +112,10 @@ const MODULO_1_LESSONS = [
         icon: '🚗',
         color: 'bg-red-600', // Color más intenso
         detail: {
-            title: "La Versión para Niños del $V=I \\cdot R$ (Ley de Ohm)",
+            title: "La Versión para Niños de V = I × R (Ley de Ohm)",
             body: "Imagina un tobogán de agua:\n\n1. **Voltaje (V):** Es la **altura del tobogán**. Cuanto más alto, más fuerza tiene el agua para bajar. El Voltaje es la 'fuerza' que empuja a los electrones.\n\n2. **Corriente (I):** Es la **cantidad de agua** que fluye por el tobogán. La Corriente es la cantidad de electrones que pasan por el cable.\n\n3. **Resistencia (R):** Son los **frenos o rocas en el camino** del tobogán. La Resistencia es lo que 'frena' el paso de los electrones. \n\nLa **Ley de Ohm** simplemente nos dice cómo se relacionan: ¡si empujas más (más **V**) o si hay menos frenos (menos **R**), más electrones pasan (**I**)!",
             keywords: ["Voltio (V)", "Amperio (A)", "Ohmio (Ω)", "Ley de Ohm"],
-            formula: "$$V=I \\cdot R$$" // Formula actualizada con notación LaTeX
+            formula: "V = I × R"
         }
     },
     { 
@@ -458,8 +459,10 @@ const WorkshopScreen = ({ goToMenu }) => {
         </div>
     );
 };
-const InteractiveLEDGuide = ({ onBack }) => {
+const InteractiveLEDGuide = ({ onBack, onModuleComplete, userProfile, onShowLicenses }) => {
     const [step, setStep] = useState(0);
+    const [showCelebration, setShowCelebration] = useState(false);
+    const [hasCompleted, setHasCompleted] = useState(false);
 
     const steps = [
         { type: 'intro', title: '¡A Construir Nuestro Primer Circuito!', icon: '🛠️' },
@@ -632,18 +635,80 @@ const InteractiveLEDGuide = ({ onBack }) => {
                     <span className="text-7xl">🌟</span>
                     <h2 className="text-3xl font-black text-[#2563EB]">¡Felicidades, Súper Ingeniero!</h2>
                     <p className="text-base text-[#777] font-semibold">
-                        Acabas de construir tu primer circuito básico. Entendiste cómo la **Pila** da energía, la **Resistencia** la protege, el **LED** la usa para brillar, y el **Botón** la controla.
+                        Acabas de construir tu primer circuito básico. Entendiste cómo la Pila da energía, la Resistencia la protege, el LED la usa para brillar, y el Botón la controla.
                     </p>
                     <div className="mt-6 p-4 bg-[#DBEAFE] rounded-2xl font-black text-[#2563EB] border-2 border-[#2563EB]/30">
-                        <p>¡El concepto clave es el **Circuito Cerrado**!</p>
+                        <p>¡El concepto clave es el Circuito Cerrado!</p>
                     </div>
-                    <button onClick={onBack} className="mt-6 py-3.5 px-8 btn-3d btn-3d-green rounded-2xl text-base">
-                        Volver a la Biblioteca
+                    <button onClick={() => {
+                        if (!hasCompleted) {
+                            setHasCompleted(true);
+                            onModuleComplete?.('mod_primer_led', 100);
+                        }
+                        setShowCelebration(true);
+                    }} className="mt-6 w-full py-3.5 px-8 btn-3d btn-3d-green rounded-2xl text-base">
+                        ✅ ¡Proyecto Completado!
                     </button>
                 </div>
             );
         }
     };
+
+    // Celebration screen after completing the project
+    if (showCelebration) {
+        return (
+            <div className="min-h-full bg-gradient-to-b from-[#2563EB] to-[#1D4ED8] flex flex-col items-center justify-center p-6 animate-fade-in">
+                <div className="text-center">
+                    {userProfile ? (
+                        <div className="w-24 h-24 mx-auto mb-4 bg-white/20 rounded-3xl flex items-center justify-center animate-bounce-in">
+                            <RobotAvatar config={userProfile.robotConfig} size={80} animate />
+                        </div>
+                    ) : (
+                        <div className="text-7xl mb-4 animate-bounce-in">🎉</div>
+                    )}
+                    <h1 className="text-3xl font-black text-white mb-2">
+                        {userProfile ? `¡Increíble, ${userProfile.userName}!` : '¡Proyecto Final Completado!'}
+                    </h1>
+                    <p className="text-white/80 font-bold text-base mb-6">¡Proyecto Final! 🏆</p>
+                    
+                    <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 mb-6 max-w-xs mx-auto">
+                        <div className="flex justify-center gap-1 mb-3">
+                            {[1,2,3].map(i => <span key={i} className="text-3xl animate-bounce" style={{animationDelay: `${i*150}ms`}}>⭐</span>)}
+                        </div>
+                        <div className="text-4xl font-black text-white mb-1">+100 XP</div>
+                        <p className="text-white/70 text-sm font-bold">¡Completaste el proyecto final!</p>
+                    </div>
+
+                    <div className="space-y-3 max-w-xs mx-auto">
+                        <div className="bg-white/20 rounded-xl p-3 flex items-center gap-3">
+                            <span className="text-2xl">🛠️</span>
+                            <div className="text-left">
+                                <p className="text-white font-black text-sm">7/7 pasos</p>
+                                <p className="text-white/60 text-xs font-bold">completados</p>
+                            </div>
+                        </div>
+                        <div className="bg-[#FFC800]/30 rounded-xl p-3 flex items-center gap-3 border border-[#FFC800]/50 animate-bounce-in" style={{animationDelay: '600ms'}}>
+                            <span className="text-2xl">📜</span>
+                            <div className="text-left flex-grow">
+                                <p className="text-white font-black text-sm">¡Licencia Obtenida!</p>
+                                <p className="text-white/70 text-xs font-bold">Proyecto Final - Primer LED</p>
+                            </div>
+                            <span className="text-lg">🏅</span>
+                        </div>
+                    </div>
+
+                    <div className="flex gap-2 mt-6 max-w-xs mx-auto">
+                        <button onClick={onShowLicenses} className="flex-1 py-4 bg-white/20 text-white rounded-2xl font-black text-sm border-b-4 border-white/10 active:scale-95 transition flex items-center justify-center gap-1">
+                            📜 Mis Licencias
+                        </button>
+                        <button onClick={onBack} className="flex-1 py-4 bg-white text-[#2563EB] rounded-2xl font-black text-sm border-b-4 border-[#E5E5E5] active:scale-95 transition hover:bg-gray-50">
+                            Continuar 🚀
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-full bg-white flex flex-col animate-fade-in">
@@ -832,7 +897,7 @@ const Module1View = ({ module, onBack, startPractice, onModuleComplete }) => {
         </div>
     );
 };
-const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete, userProfile }) => { 
+const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete, userProfile, onShowLicenses }) => { 
     if (!currentModule || !currentModule.contenidoTeorico) return <PlaceholderScreen title="Contenido No Disponible" color="yellow" />;
 
     const moduleIndex = MODULOS_DE_ROBOTICA.findIndex(m => m.id === currentModule.id);
@@ -982,6 +1047,50 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete, userPr
                 </div>
             );
         }
+        if (section.tipo === 'intro_hero') {
+            return (
+                <div className="bg-gradient-to-br from-[#58CC02]/10 via-[#2563EB]/5 to-[#CE82FF]/10 p-6 rounded-2xl border-2 border-[#58CC02]/40 animate-scale-in relative overflow-hidden">
+                    <div className="absolute top-2 right-2 text-5xl opacity-20 rotate-12">🤖</div>
+                    <div className="absolute bottom-2 left-2 text-4xl opacity-10 -rotate-12">⚡</div>
+                    <h3 className="text-xl font-black text-[#58CC02] mb-3 flex items-center gap-2">
+                        {section.titulo}
+                    </h3>
+                    <p className="text-sm text-[#555] font-semibold leading-relaxed relative z-10" dangerouslySetInnerHTML={{ __html: boldReplace(section.texto) }} />
+                    <div className="mt-4 bg-white/60 p-3 rounded-xl border border-[#58CC02]/20">
+                        <p className="text-xs font-black text-[#58CC02]">🌟 ¡Empecemos esta aventura juntos!</p>
+                    </div>
+                </div>
+            );
+        }
+        if (section.tipo === 'interactive_challenge') {
+            return (
+                <div className="bg-gradient-to-br from-[#FFC800]/10 via-[#FF9600]/10 to-[#FF4B4B]/10 p-5 rounded-2xl border-2 border-[#FF9600]/40 animate-scale-in relative overflow-hidden">
+                    <div className="absolute top-3 right-3 text-4xl opacity-15 rotate-6">🎮</div>
+                    <div className="flex items-center gap-2 mb-3">
+                        <span className="text-2xl animate-pulse-soft">🎯</span>
+                        <h3 className="text-lg font-black text-[#FF9600]">{section.titulo}</h3>
+                    </div>
+                    <p className="text-sm text-[#555] font-semibold leading-relaxed mb-3 whitespace-pre-line" dangerouslySetInnerHTML={{ __html: boldReplace(section.instruccion) }} />
+                    {section.recompensa && (
+                        <div className="bg-gradient-to-r from-[#FFC800]/30 to-[#FF9600]/20 p-3.5 rounded-xl border border-[#FFC800]/40 flex items-center gap-3">
+                            <span className="text-2xl">🏆</span>
+                            <div>
+                                <p className="text-xs font-black text-[#FF9600]">Recompensa:</p>
+                                <p className="text-sm font-bold text-[#E58600]">{section.recompensa}</p>
+                            </div>
+                        </div>
+                    )}
+                    {section.materiales && (
+                        <div className="mt-3 bg-white/60 p-3 rounded-xl border border-[#FF9600]/20">
+                            <p className="text-xs font-black text-[#FF9600] mb-2">📋 Necesitas:</p>
+                            <ul className="text-xs text-[#777] font-semibold space-y-1">
+                                {section.materiales.map((m, mIdx) => <li key={mIdx} className="flex items-center gap-2"><span className="w-5 h-5 bg-[#FF9600]/10 rounded-lg flex items-center justify-center text-[10px]">✓</span> {m}</li>)}
+                            </ul>
+                        </div>
+                    )}
+                </div>
+            );
+        }
         if (section.tipo === 'activity') {
             return (
                 <div className="bg-gradient-to-br from-[#1CB0F6]/10 to-[#0D8ECF]/10 p-5 rounded-2xl border-2 border-[#1CB0F6]/30 animate-scale-in">
@@ -1084,11 +1193,25 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete, userPr
                                 <p className="text-white/60 text-xs font-bold">correctas en mini-quizzes</p>
                             </div>
                         </div>
+                        {/* License earned badge */}
+                        <div className="bg-[#FFC800]/30 rounded-xl p-3 flex items-center gap-3 border border-[#FFC800]/50 animate-bounce-in" style={{animationDelay: '600ms'}}>
+                            <span className="text-2xl">📜</span>
+                            <div className="text-left flex-grow">
+                                <p className="text-white font-black text-sm">¡Licencia Obtenida!</p>
+                                <p className="text-white/70 text-xs font-bold">{currentModule.titulo}</p>
+                            </div>
+                            <span className="text-lg">🏅</span>
+                        </div>
                     </div>
 
-                    <button onClick={goToMenu} className="mt-6 w-full max-w-xs py-4 bg-white text-[#2563EB] rounded-2xl font-black text-base border-b-4 border-[#E5E5E5] active:scale-95 transition hover:bg-gray-50">
-                        ¡Continuar Aprendiendo! 🚀
-                    </button>
+                    <div className="flex gap-2 mt-6 max-w-xs mx-auto">
+                        <button onClick={onShowLicenses} className="flex-1 py-4 bg-white/20 text-white rounded-2xl font-black text-sm border-b-4 border-white/10 active:scale-95 transition flex items-center justify-center gap-1">
+                            📜 Mis Licencias
+                        </button>
+                        <button onClick={goToMenu} className="flex-1 py-4 bg-white text-[#2563EB] rounded-2xl font-black text-sm border-b-4 border-[#E5E5E5] active:scale-95 transition hover:bg-gray-50">
+                            Continuar 🚀
+                        </button>
+                    </div>
                 </div>
             </div>
         );
@@ -1200,10 +1323,11 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete, userPr
 };
 // --- SECTION / UNIT DEFINITIONS ---
 const LEARNING_SECTIONS = [
-    { startIdx: 0, title: '🔬 Fundamentos', subtitle: 'Electricidad, electrónica y mecánica', color: '#2563EB', colorLight: '#DBEAFE' },
-    { startIdx: 3, title: '💻 Programación', subtitle: 'Lógica, código y Arduino', color: '#1CB0F6', colorLight: '#D0ECFB' },
-    { startIdx: 6, title: '🛠️ Prácticas', subtitle: 'Proyectos físicos paso a paso', color: '#FF9600', colorLight: '#FFECD0' },
-    { startIdx: 9, title: '🧠 Avanzado', subtitle: 'Control, diseño y más', color: '#CE82FF', colorLight: '#F0DEFF' },
+    { startIdx: 0, title: '🤖 Introducción', subtitle: '¡Descubre el increíble mundo de los robots!', color: '#58CC02', colorLight: '#D7FFB8', emoji: '🚀' },
+    { startIdx: 3, title: '🔬 Fundamentos', subtitle: 'Electricidad, electrónica y mecánica', color: '#2563EB', colorLight: '#DBEAFE', emoji: '⚡' },
+    { startIdx: 6, title: '💻 Programación', subtitle: 'Lógica, código y Arduino', color: '#1CB0F6', colorLight: '#D0ECFB', emoji: '🎮' },
+    { startIdx: 9, title: '🛠️ Prácticas', subtitle: 'Proyectos físicos paso a paso', color: '#FF9600', colorLight: '#FFECD0', emoji: '🔧' },
+    { startIdx: 12, title: '🧠 Avanzado', subtitle: 'Control, diseño y más', color: '#CE82FF', colorLight: '#F0DEFF', emoji: '🏆' },
 ];
 
 const ModuleCard = ({ module, onStart, userScores, index, totalModules, sectionColor, allModules }) => {
@@ -1328,41 +1452,70 @@ const ModuleCard = ({ module, onStart, userScores, index, totalModules, sectionC
 const SectionBanner = ({ section, modulesInSection, userScores, sectionIndex }) => {
     const completedInSection = modulesInSection.filter(m => isModuleCompleted(userScores, m.id)).length;
     const totalInSection = modulesInSection.length;
+    const isComplete = completedInSection === totalInSection && totalInSection > 0;
     // A section is locked if first module of section is locked
     const firstModuleGlobalIdx = section.startIdx;
     const isSectionLocked = firstModuleGlobalIdx > 0 && !isModuleUnlocked(userScores, firstModuleGlobalIdx, MODULOS_DE_ROBOTICA);
 
+    // Fun motivational messages per section
+    const sectionMotivation = {
+        0: '¡Tu aventura robótica comienza aquí! 🚀',
+        1: '¡Domina los fundamentos como un pro! 💪',
+        2: '¡Es hora de programar robots! 🎮',
+        3: '¡Manos a la obra con proyectos reales! 🔧',
+        4: '¡Nivel experto desbloqueado! 🏆',
+    };
+
     return (
-        <div className={`w-full rounded-2xl overflow-hidden border-2 transition-all ${isSectionLocked ? 'opacity-60' : ''}`}
-            style={{ borderColor: isSectionLocked ? '#E5E5E5' : section.color + '40' }}>
-            <div className="px-5 py-4 flex items-center gap-3"
-                style={{ background: isSectionLocked ? '#F7F7F7' : `linear-gradient(135deg, ${section.color}15, ${section.colorLight})` }}>
-                <div className="flex-grow">
-                    <h3 className="text-base font-black flex items-center gap-2" style={{ color: isSectionLocked ? '#AFAFAF' : section.color }}>
+        <div className={`w-full rounded-2xl overflow-hidden border-2 transition-all ${isSectionLocked ? 'opacity-60' : 'hover:shadow-lg hover:shadow-black/5'}`}
+            style={{ borderColor: isSectionLocked ? '#E5E5E5' : section.color + '50' }}>
+            <div className="px-5 py-4 flex items-center gap-3 relative overflow-hidden"
+                style={{ background: isSectionLocked ? '#F7F7F7' : `linear-gradient(135deg, ${section.color}20, ${section.colorLight})` }}>
+                {/* Background decoration */}
+                {!isSectionLocked && (
+                    <div className="absolute right-0 top-0 text-6xl opacity-10 transform translate-x-4 -translate-y-2"
+                        style={{ color: section.color }}>
+                        {section.emoji || '⭐'}
+                    </div>
+                )}
+                <div className="flex-grow relative z-10">
+                    <h3 className="text-lg font-black flex items-center gap-2" style={{ color: isSectionLocked ? '#AFAFAF' : section.color }}>
                         {isSectionLocked && <span>🔒</span>} {section.title}
+                        {isComplete && <span className="animate-bounce-in">✨</span>}
                     </h3>
-                    <p className="text-[11px] font-bold text-[#AFAFAF] mt-0.5">
-                        {isSectionLocked ? 'Completa la sección anterior para desbloquear' : section.subtitle}
+                    <p className="text-[11px] font-bold text-[#777] mt-0.5">
+                        {isSectionLocked 
+                            ? '🔒 Completa la sección anterior para desbloquear' 
+                            : isComplete 
+                                ? '🎉 ¡Sección completada! ¡Eres increíble!' 
+                                : sectionMotivation[sectionIndex] || section.subtitle
+                        }
                     </p>
                 </div>
-                <div className="flex flex-col items-center gap-1">
-                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-black text-sm text-white`}
-                        style={{ backgroundColor: isSectionLocked ? '#AFAFAF' : section.color, borderBottom: `3px solid ${isSectionLocked ? '#999' : section.color + 'CC'}` }}>
-                        {completedInSection}/{totalInSection}
+                <div className="flex flex-col items-center gap-1 relative z-10">
+                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center font-black text-sm text-white transition-transform ${isComplete ? 'animate-pulse-soft scale-110' : ''}`}
+                        style={{ 
+                            backgroundColor: isSectionLocked ? '#AFAFAF' : isComplete ? '#58CC02' : section.color, 
+                            borderBottom: `4px solid ${isSectionLocked ? '#999' : isComplete ? '#4CAF00' : section.color + 'CC'}` 
+                        }}>
+                        {isComplete ? '⭐' : `${completedInSection}/${totalInSection}`}
                     </div>
                 </div>
             </div>
-            {/* Mini Progress */}
-            <div className="h-1" style={{ backgroundColor: section.colorLight }}>
-                <div className="h-full transition-all duration-700" 
+            {/* Mini Progress with animation */}
+            <div className="h-1.5 relative" style={{ backgroundColor: section.colorLight }}>
+                <div className="h-full transition-all duration-1000 relative" 
                     style={{ width: `${totalInSection > 0 ? (completedInSection / totalInSection) * 100 : 0}%`, backgroundColor: section.color }}>
+                    {completedInSection > 0 && completedInSection < totalInSection && (
+                        <div className="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-white rounded-full shadow-sm animate-pulse"></div>
+                    )}
                 </div>
             </div>
         </div>
     );
 };
 
-const LibraryScreen = ({ startLesson, userId, userScores, onShowAchievements, userStats, userProfile }) => {
+const LibraryScreen = ({ startLesson, userId, userScores, onShowAchievements, onShowLicenses, userStats, userProfile }) => {
     const totalModules = MODULOS_DE_ROBOTICA.length;
     const completedModulesCount = Object.values(userScores).filter(s => s && s.total > 0 && Math.round((s.score / s.total) * 100) >= 100).length;
     const overallProgress = Math.round((completedModulesCount / totalModules) * 100);
@@ -1397,6 +1550,13 @@ const LibraryScreen = ({ startLesson, userId, userScores, onShowAchievements, us
                         <span className="text-sm font-black text-[#1CB0F6]">50</span>
                     </div>
                     <button 
+                        onClick={onShowLicenses}
+                        className="flex items-center bg-[#2563EB]/10 p-2 rounded-xl hover:bg-[#2563EB]/20 transition active:scale-95"
+                        title="Mis Licencias"
+                    >
+                        <span className="text-lg">📜</span>
+                    </button>
+                    <button 
                         onClick={onShowAchievements}
                         className="flex items-center bg-[#FFC800]/10 p-2 rounded-xl hover:bg-[#FFC800]/20 transition active:scale-95"
                     >
@@ -1407,39 +1567,82 @@ const LibraryScreen = ({ startLesson, userId, userScores, onShowAchievements, us
         </div>
 
         {/* Hero Section */}
-        <div className="bg-white px-5 pt-5 pb-6 border-b-2 border-gray-100">
-            <div className="max-w-xl mx-auto">
+        <div className="bg-gradient-to-br from-white via-white to-[#DBEAFE]/30 px-5 pt-5 pb-6 border-b-2 border-gray-100 relative overflow-hidden">
+            {/* Background decoration */}
+            <div className="absolute right-0 top-0 text-8xl opacity-5 transform translate-x-8 -translate-y-4">🤖</div>
+            <div className="absolute left-0 bottom-0 text-6xl opacity-5 transform -translate-x-4 translate-y-4">⚡</div>
+            <div className="max-w-xl mx-auto relative z-10">
                 {userProfile && (
-                    <p className="text-sm font-black text-[#2563EB] mb-2">¡Hola, {userProfile.userName}! 👋</p>
-                )}
-                <div className="flex items-center justify-between mb-3">
-                    <div>
-                        <h2 className="text-2xl font-black text-[#3C3C3C]">Ruta de Aprendizaje</h2>
-                        <p className="text-xs text-[#AFAFAF] font-bold mt-0.5">{totalModules} módulos · {completedModulesCount} completados</p>
+                    <div className="flex items-center gap-2 mb-2">
+                        <p className="text-sm font-black text-[#2563EB]">¡Hola, {userProfile.userName}!</p>
+                        <span className="animate-bounce-in inline-block">👋</span>
                     </div>
-                    <div className="relative w-14 h-14">
+                )}
+                <div className="flex items-center justify-between mb-4">
+                    <div>
+                        <h2 className="text-2xl font-black text-[#3C3C3C] flex items-center gap-2">
+                            Ruta de Aprendizaje 
+                            <span className="text-lg">🚀</span>
+                        </h2>
+                        <p className="text-xs text-[#777] font-bold mt-0.5">
+                            {completedModulesCount === 0 
+                                ? '¡Empieza tu aventura robótica! 🌟' 
+                                : completedModulesCount === totalModules 
+                                    ? '¡FELICIDADES! ¡Eres un experto! 🏆' 
+                                    : `${totalModules - completedModulesCount} módulos por conquistar`
+                            }
+                        </p>
+                    </div>
+                    <div className="relative w-16 h-16">
                         {/* Circular progress indicator */}
-                        <svg className="w-14 h-14 -rotate-90" viewBox="0 0 36 36">
+                        <svg className="w-16 h-16 -rotate-90" viewBox="0 0 36 36">
                             <circle cx="18" cy="18" r="15" fill="none" stroke="#E5E5E5" strokeWidth="3" />
-                            <circle cx="18" cy="18" r="15" fill="none" stroke="#2563EB" strokeWidth="3" 
+                            <circle cx="18" cy="18" r="15" fill="none" 
+                                stroke={overallProgress === 100 ? '#58CC02' : '#2563EB'} 
+                                strokeWidth="3" 
                                 strokeDasharray={`${overallProgress * 0.942} 100`} strokeLinecap="round" />
                         </svg>
                         <div className="absolute inset-0 flex items-center justify-center">
-                            <span className="text-xs font-black text-[#2563EB]">{overallProgress}%</span>
+                            {overallProgress === 100 
+                                ? <span className="text-lg animate-pulse-soft">⭐</span>
+                                : <span className="text-sm font-black text-[#2563EB]">{overallProgress}%</span>
+                            }
                         </div>
                     </div>
                 </div>
-                {/* Full width progress bar */}
-                <div className="w-full h-3 bg-[#E5E5E5] rounded-full overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-[#2563EB] to-[#1D4ED8] rounded-full transition-all duration-1000 relative" 
-                        style={{ width: `${Math.max(overallProgress, 3)}%` }}>
-                        <div className="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-white rounded-full shadow-sm"></div>
+                {/* Full width progress bar with milestones */}
+                <div className="relative">
+                    <div className="w-full h-4 bg-[#E5E5E5] rounded-full overflow-hidden">
+                        <div className={`h-full rounded-full transition-all duration-1000 relative ${overallProgress === 100 ? 'bg-gradient-to-r from-[#58CC02] to-[#4CAF00]' : 'bg-gradient-to-r from-[#2563EB] to-[#1D4ED8]'}`}
+                            style={{ width: `${Math.max(overallProgress, 3)}%` }}>
+                            {overallProgress > 0 && overallProgress < 100 && (
+                                <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-md animate-pulse"></div>
+                            )}
+                        </div>
                     </div>
-                </div>
-                <div className="flex justify-between mt-1.5">
-                    <span className="text-[10px] font-bold text-[#AFAFAF]">Principiante</span>
-                    <span className="text-[10px] font-bold text-[#AFAFAF]">Avanzado</span>
-                    <span className="text-[10px] font-bold text-[#AFAFAF]">Experto 🏆</span>
+                    {/* Milestones */}
+                    <div className="flex justify-between mt-2">
+                        <div className="flex flex-col items-center">
+                            <span className={`text-sm ${overallProgress >= 0 ? 'grayscale-0' : 'grayscale opacity-50'}`}>🌱</span>
+                            <span className="text-[9px] font-bold text-[#AFAFAF]">Inicio</span>
+                        </div>
+                        <div className="flex flex-col items-center">
+                            <span className={`text-sm ${overallProgress >= 25 ? 'grayscale-0' : 'grayscale opacity-50'}`}>⚡</span>
+                            <span className="text-[9px] font-bold text-[#AFAFAF]">25%</span>
+                        </div>
+                        <div className="flex flex-col items-center">
+                            <span className={`text-sm ${overallProgress >= 50 ? 'grayscale-0' : 'grayscale opacity-50'}`}>🔧</span>
+                            <span className="text-[9px] font-bold text-[#AFAFAF]">50%</span>
+                        </div>
+                        <div className="flex flex-col items-center">
+                            <span className={`text-sm ${overallProgress >= 75 ? 'grayscale-0' : 'grayscale opacity-50'}`}>🚀</span>
+                            <span className="text-[9px] font-bold text-[#AFAFAF]">75%</span>
+                        </div>
+                        <div className="flex flex-col items-center">
+                            <span className={`text-sm ${overallProgress >= 100 ? 'grayscale-0 animate-bounce-in' : 'grayscale opacity-50'}`}>🏆</span>
+                            <span className="text-[9px] font-bold text-[#AFAFAF]">Experto</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1522,101 +1725,356 @@ const PlaceholderScreen = ({ title, color, goToMenu }) => (
         </button>}
     </div>
 );
-const ChallengeCard = ({ challenge, onStart }) => (
-    <div 
-        onClick={() => onStart(challenge.id)} 
-        className="bg-white rounded-2xl border-2 border-[#E5E5E5] hover:border-[#FF4B4B] transition-all duration-300 cursor-pointer overflow-hidden active:scale-[0.97] animate-scale-in"
-    >
-        <div className="p-4">
-            <div className="flex items-center gap-3 mb-3">
-                <div className="w-14 h-14 bg-[#FF4B4B] rounded-2xl flex items-center justify-center text-2xl shadow-md border-b-4 border-[#EA2B2B]">
-                    {challenge.icon}
+const ChallengeCard = ({ challenge, onStart, isCompleted }) => {
+    const difficultyStars = '⭐'.repeat(challenge.difficulty || 1);
+    const difficultyLabel = ['', 'Principiante', 'Aprendiz', 'Intermedio', 'Avanzado'][challenge.difficulty || 1];
+    const langColors = { 'Python': { bg: '#3776AB', light: '#E8F4FD' }, 'Arduino': { bg: '#00979D', light: '#E0F7F8' }, 'C++': { bg: '#659AD2', light: '#EAF0F9' } };
+    const lc = langColors[challenge.name] || { bg: '#FF4B4B', light: '#FFE8E8' };
+    
+    return (
+        <div 
+            onClick={() => onStart(challenge.id)} 
+            className={`bg-white rounded-2xl border-2 transition-all duration-300 cursor-pointer overflow-hidden active:scale-[0.97] animate-scale-in group ${isCompleted ? 'border-[#58CC02]/40' : 'border-[#E5E5E5] hover:border-[' + lc.bg + ']'}`}
+        >
+            <div className="p-4">
+                <div className="flex items-center gap-3 mb-2">
+                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-xl shadow-md border-b-4 transition-transform group-hover:scale-110"
+                        style={{ backgroundColor: lc.bg, borderColor: lc.bg + 'CC' }}>
+                        <span className="text-white">{challenge.icon}</span>
+                    </div>
+                    <div className="flex-grow min-w-0">
+                        <h2 className="text-sm font-black text-[#3C3C3C] leading-tight truncate">{challenge.title}</h2>
+                        <div className="flex items-center gap-2 mt-0.5">
+                            <span className="text-[10px] font-black px-2 py-0.5 rounded-full" style={{ backgroundColor: lc.light, color: lc.bg }}>{challenge.name}</span>
+                            <span className="text-[10px] font-bold text-[#AFAFAF]">{difficultyStars}</span>
+                        </div>
+                    </div>
+                    {isCompleted && (
+                        <div className="w-7 h-7 bg-[#58CC02] rounded-full flex items-center justify-center flex-shrink-0">
+                            <span className="text-xs text-white font-black">✓</span>
+                        </div>
+                    )}
                 </div>
-                <div className="flex-grow">
-                    <h2 className="text-sm font-black text-[#3C3C3C] leading-tight">{challenge.title}</h2>
-                    <span className="text-[11px] font-bold text-[#FF4B4B] mt-0.5 inline-block">{challenge.name}</span>
+                <p className="text-[11px] text-[#777] font-semibold leading-snug mb-3 line-clamp-2">{challenge.instructions}</p>
+                <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-bold text-[#AFAFAF] bg-[#F7F7F7] px-2 py-1 rounded-lg">{difficultyLabel}</span>
+                    <span className="text-[10px] font-bold text-[#AFAFAF] bg-[#F7F7F7] px-2 py-1 rounded-lg">{challenge.solution.length} bloques</span>
+                </div>
+                <button className="w-full py-2.5 btn-3d btn-3d-green rounded-xl text-sm text-center mt-3">
+                    {isCompleted ? '🔄 REPETIR' : '▶️ ¡EMPEZAR!'}
+                </button>
+            </div>
+        </div>
+    );
+};
+const ChallengeListScreen = ({ startChallenge, userScores, userStats }) => {
+    const [selectedDifficulty, setSelectedDifficulty] = useState(0);
+    const [selectedLang, setSelectedLang] = useState('Todos');
+    
+    const difficulties = [
+        { label: '🌟 Todos', value: 0 },
+        { label: '🌱 Principiante', value: 1 },
+        { label: '⭐ Aprendiz', value: 2 },
+        { label: '🚀 Intermedio', value: 3 },
+        { label: '🏆 Avanzado', value: 4 },
+    ];
+    const languages = ['Todos', 'Python', 'Arduino', 'C++'];
+    
+    const filteredChallenges = CODE_CHALLENGES.filter(c => {
+        if (selectedDifficulty > 0 && c.difficulty !== selectedDifficulty) return false;
+        if (selectedLang !== 'Todos' && c.name !== selectedLang) return false;
+        return true;
+    });
+    
+    const completedIds = Object.keys(userScores || {}).filter(k => k.startsWith('challenge_') && userScores[k]?.completed);
+    const totalCompleted = completedIds.length;
+    const totalChallenges = CODE_CHALLENGES.length;
+    const progressPercent = Math.round((totalCompleted / totalChallenges) * 100);
+    
+    // Per-language and per-level progress
+    const pyTotal = CODE_CHALLENGES.filter(c => c.name === 'Python').length;
+    const ardTotal = CODE_CHALLENGES.filter(c => c.name === 'Arduino').length;
+    const cppTotal = CODE_CHALLENGES.filter(c => c.name === 'C++').length;
+    const pyDone = userStats?.challengesPython || 0;
+    const ardDone = userStats?.challengesArduino || 0;
+    const cppDone = userStats?.challengesCpp || 0;
+    
+    // XP from challenges
+    const challengeXP = (userStats?.challengesCompleted || 0) * 10;
+    
+    // Milestone markers
+    const milestones = [
+        { at: 1, icon: '🧩', label: 'Primer Reto' },
+        { at: 5, icon: '🔥', label: 'Racha de 5' },
+        { at: 12, icon: '⚡', label: '50% Retos' },
+        { at: 24, icon: '🏆', label: '¡Todos!' },
+    ];
+
+    return (
+        <div className="pb-24 min-h-full bg-[#F7F7F7] w-full animate-fade-in"> 
+            {/* Header */}
+            <div className="bg-gradient-to-br from-[#FF4B4B] to-[#EA2B2B] px-6 pt-8 pb-10 text-center relative overflow-hidden">
+                <div className="absolute top-2 right-4 text-7xl opacity-10 rotate-12">🧩</div>
+                <div className="absolute bottom-2 left-4 text-5xl opacity-10 -rotate-12">💻</div>
+                <span className="text-5xl mb-2 block animate-float">🧩</span>
+                <h1 className="text-3xl font-black text-white">Zona de Retos</h1>
+                <p className="text-white/80 text-sm font-bold mt-1">¡Aprende programación ordenando bloques de código!</p>
+                <div className="mt-3 flex justify-center gap-3">
+                    <div className="bg-white/20 px-3 py-1.5 rounded-xl">
+                        <span className="text-white text-xs font-black">{totalChallenges} Retos</span>
+                    </div>
+                    <div className="bg-white/20 px-3 py-1.5 rounded-xl">
+                        <span className="text-white text-xs font-black">{totalCompleted} Completados</span>
+                    </div>
+                    <div className="bg-white/20 px-3 py-1.5 rounded-xl">
+                        <span className="text-white text-xs font-black">4 Niveles</span>
+                    </div>
                 </div>
             </div>
-            <button className="w-full py-2.5 btn-3d btn-3d-green rounded-xl text-sm text-center">
-                ¡EMPEZAR!
-            </button>
-        </div>
-    </div>
-);
-const ChallengeListScreen = ({ startChallenge }) => (
-     <div className="pb-24 min-h-full bg-white w-full animate-fade-in"> 
-        {/* Header */}
-        <div className="bg-[#FF4B4B] px-6 pt-8 pb-8 text-center">
-            <span className="text-5xl mb-2 block animate-float">🧩</span>
-            <h1 className="text-3xl font-black text-white">Zona de Retos</h1>
-            <p className="text-white/80 text-sm font-bold mt-1">Pon a prueba tu lógica con bloques de código</p>
-        </div>
+            
+            {/* Progress Section */}
+            <div className="px-4 -mt-5 max-w-4xl mx-auto relative z-10">
+                <div className="bg-white rounded-2xl border-2 border-[#E5E5E5] p-4 mb-4 shadow-sm">
+                    {/* Overall progress bar */}
+                    <div className="flex items-center gap-3 mb-3">
+                        <span className="text-2xl">📊</span>
+                        <div className="flex-grow">
+                            <div className="flex justify-between items-center mb-1">
+                                <p className="text-sm font-black text-[#3C3C3C]">Tu Progreso</p>
+                                <span className="text-xs font-black text-[#58CC02]">{totalCompleted}/{totalChallenges} ({progressPercent}%)</span>
+                            </div>
+                            <div className="w-full h-4 bg-[#E5E5E5] rounded-full overflow-hidden relative">
+                                <div className="h-full bg-gradient-to-r from-[#58CC02] to-[#46A302] rounded-full transition-all duration-700 ease-out relative"
+                                    style={{ width: `${progressPercent}%` }}>
+                                    {progressPercent > 8 && (
+                                        <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] font-black text-white">{progressPercent}%</span>
+                                    )}
+                                </div>
+                                {/* Milestone markers on progress bar */}
+                                {milestones.map(m => (
+                                    <div key={m.at} className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2"
+                                        style={{ left: `${(m.at / totalChallenges) * 100}%` }}>
+                                        <span className={`text-sm ${totalCompleted >= m.at ? '' : 'grayscale opacity-50'}`}
+                                            title={m.label}>{m.icon}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {/* Per-language mini bars */}
+                    <div className="grid grid-cols-3 gap-2">
+                        <div className="bg-[#3776AB]/5 rounded-xl p-2">
+                            <div className="flex items-center gap-1 mb-1">
+                                <span className="text-xs">🐍</span>
+                                <span className="text-[10px] font-black text-[#3776AB]">Python</span>
+                                <span className="text-[10px] font-bold text-[#AFAFAF] ml-auto">{pyDone}/{pyTotal}</span>
+                            </div>
+                            <div className="w-full h-1.5 bg-[#E5E5E5] rounded-full overflow-hidden">
+                                <div className="h-full bg-[#3776AB] rounded-full transition-all duration-500" style={{ width: `${pyTotal > 0 ? (pyDone/pyTotal)*100 : 0}%` }}></div>
+                            </div>
+                        </div>
+                        <div className="bg-[#00979D]/5 rounded-xl p-2">
+                            <div className="flex items-center gap-1 mb-1">
+                                <span className="text-xs">🔷</span>
+                                <span className="text-[10px] font-black text-[#00979D]">Arduino</span>
+                                <span className="text-[10px] font-bold text-[#AFAFAF] ml-auto">{ardDone}/{ardTotal}</span>
+                            </div>
+                            <div className="w-full h-1.5 bg-[#E5E5E5] rounded-full overflow-hidden">
+                                <div className="h-full bg-[#00979D] rounded-full transition-all duration-500" style={{ width: `${ardTotal > 0 ? (ardDone/ardTotal)*100 : 0}%` }}></div>
+                            </div>
+                        </div>
+                        <div className="bg-[#659AD2]/5 rounded-xl p-2">
+                            <div className="flex items-center gap-1 mb-1">
+                                <span className="text-xs">⚙️</span>
+                                <span className="text-[10px] font-black text-[#659AD2]">C++</span>
+                                <span className="text-[10px] font-bold text-[#AFAFAF] ml-auto">{cppDone}/{cppTotal}</span>
+                            </div>
+                            <div className="w-full h-1.5 bg-[#E5E5E5] rounded-full overflow-hidden">
+                                <div className="h-full bg-[#659AD2] rounded-full transition-all duration-500" style={{ width: `${cppTotal > 0 ? (cppDone/cppTotal)*100 : 0}%` }}></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Achievement milestones row */}
+                    <div className="mt-3 flex items-center gap-1.5 overflow-x-auto pb-1">
+                        {milestones.map(m => (
+                            <div key={m.at} className={`flex items-center gap-1 px-2.5 py-1 rounded-full border text-[10px] font-black whitespace-nowrap transition-all ${
+                                totalCompleted >= m.at 
+                                    ? 'bg-[#58CC02]/10 border-[#58CC02]/30 text-[#58CC02]' 
+                                    : 'bg-[#F7F7F7] border-[#E5E5E5] text-[#CDCDCD]'
+                            }`}>
+                                <span>{m.icon}</span>
+                                <span>{m.label}</span>
+                                {totalCompleted >= m.at && <span>✓</span>}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+            
+            {/* How it works */}
+            <div className="px-4 max-w-4xl mx-auto">
+                <div className="bg-white rounded-2xl border-2 border-[#E5E5E5] p-4 mb-4 shadow-sm">
+                    <div className="flex items-start gap-3">
+                        <span className="text-2xl">💡</span>
+                        <div>
+                            <p className="text-sm font-black text-[#3C3C3C]">¿Cómo funcionan los retos?</p>
+                            <p className="text-xs text-[#777] font-semibold mt-1 leading-relaxed">
+                                Arrastra los bloques de código en el <b className="text-[#1CB0F6]">orden correcto</b> para armar el programa. 
+                                Cada bloque tiene una <b className="text-[#FF9600]">explicación</b> de lo que hace. 
+                                ¡Gana <b className="text-[#58CC02]">logros</b> al completar retos! 🏆
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            {/* Filters */}
+            <div className="px-4 max-w-4xl mx-auto mb-4">
+                {/* Difficulty filter */}
+                <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide mb-2">
+                    {difficulties.map(d => (
+                        <button key={d.value} onClick={() => setSelectedDifficulty(d.value)}
+                            className={`px-3 py-1.5 rounded-xl text-xs font-black whitespace-nowrap transition-all active:scale-95
+                                ${selectedDifficulty === d.value 
+                                    ? 'bg-[#FF4B4B] text-white shadow-md' 
+                                    : 'bg-white text-[#777] border-2 border-[#E5E5E5] hover:border-[#FF4B4B]'}`}>
+                            {d.label}
+                        </button>
+                    ))}
+                </div>
+                {/* Language filter */}
+                <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+                    {languages.map(lang => {
+                        const langEmoji = { 'Todos': '🌐', 'Python': '🐍', 'Arduino': '🔷', 'C++': '⚙️' }[lang];
+                        return (
+                            <button key={lang} onClick={() => setSelectedLang(lang)}
+                                className={`px-3 py-1.5 rounded-xl text-xs font-black whitespace-nowrap transition-all active:scale-95
+                                    ${selectedLang === lang 
+                                        ? 'bg-[#2563EB] text-white shadow-md' 
+                                        : 'bg-white text-[#777] border-2 border-[#E5E5E5] hover:border-[#2563EB]'}`}>
+                                {langEmoji} {lang}
+                            </button>
+                        );
+                    })}
+                </div>
+            </div>
         
-        <div className="px-4 -mt-4 w-full max-w-4xl mx-auto relative z-10">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 stagger-children">
-                {CODE_CHALLENGES.map(challenge => (
-                    <ChallengeCard key={challenge.id} challenge={challenge} onStart={startChallenge} />
-                ))}
+            <div className="px-4 w-full max-w-4xl mx-auto relative z-10">
+                {filteredChallenges.length === 0 ? (
+                    <div className="text-center py-12">
+                        <span className="text-5xl block mb-3">🔍</span>
+                        <p className="text-lg font-black text-[#AFAFAF]">No hay retos con estos filtros</p>
+                        <p className="text-sm text-[#CDCDCD] font-bold mt-1">Prueba cambiando los filtros</p>
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 stagger-children">
+                        {filteredChallenges.map(challenge => (
+                            <ChallengeCard 
+                                key={challenge.id} 
+                                challenge={challenge} 
+                                onStart={startChallenge}
+                                isCompleted={completedIds.includes('challenge_' + challenge.id)}
+                            />
+                        ))}
+                    </div>
+                )}
             </div>
         </div>
-    </div>
-);
-const ChallengeBlock = ({ block, onClick, isSolutionBlock, challengeStatus }) => {
-    let colorClass = 'bg-white text-[#3C3C3C] border-[#E5E5E5] hover:border-[#1CB0F6]';
+    );
+};
+const ChallengeBlock = ({ block, onClick, isSolutionBlock, challengeStatus, showExplanation }) => {
+    let colorClass = 'bg-white text-[#3C3C3C] border-[#E5E5E5] hover:border-[#1CB0F6] hover:bg-[#1CB0F6]/5';
     let cursor = 'cursor-pointer';
     let isDisabled = challengeStatus !== 'active';
+    const isWrong = block.type === 'wrong';
 
     if (isSolutionBlock) {
         if (challengeStatus === 'correct') {
-            colorClass = 'bg-[#DBEAFE] text-[#2563EB] border-[#2563EB]/30';
+            colorClass = 'bg-[#58CC02]/10 text-[#3C3C3C] border-[#58CC02]/40';
             cursor = 'cursor-not-allowed';
         } else if (challengeStatus === 'incorrect') {
             colorClass = 'bg-[#FF4B4B]/10 text-[#FF4B4B] border-[#FF4B4B]/30';
         } else {
-            colorClass = 'bg-[#1CB0F6]/10 text-[#1CB0F6] border-[#1CB0F6]/30';
+            colorClass = 'bg-[#1CB0F6]/10 text-[#1CB0F6] border-[#1CB0F6]/30 hover:bg-[#1CB0F6]/20';
         }
-    } else if (block.type === 'wrong') {
-         colorClass = 'bg-[#F7F7F7] text-[#AFAFAF] border-[#E5E5E5] opacity-50';
+    } else if (isWrong && challengeStatus !== 'active') {
+         colorClass = 'bg-[#FF4B4B]/5 text-[#AFAFAF] border-[#FF4B4B]/20 opacity-60';
          cursor = 'cursor-not-allowed';
          isDisabled = true;
     }
 
     return (
-        <div 
-            key={block.id}
-            onClick={!isDisabled ? () => onClick(block.id) : null}
-            className={`text-xs font-mono font-bold px-3 py-2.5 rounded-xl border-2 transition duration-150 transform hover:scale-[1.01] 
-                        ${colorClass} ${cursor} ${isDisabled ? 'opacity-60' : ''}`}
-            style={{ paddingLeft: block.text.startsWith(' ') && isSolutionBlock ? '40px' : '' }} 
-        >
-            {block.text.trim()}
+        <div className="w-full">
+            <div 
+                key={block.id}
+                onClick={!isDisabled ? () => onClick(block.id) : null}
+                className={`text-xs font-mono font-bold px-3 py-2.5 rounded-xl border-2 transition duration-150 transform hover:scale-[1.01] 
+                            ${colorClass} ${cursor} ${isDisabled && !isSolutionBlock ? 'opacity-60' : ''}`}
+                style={{ paddingLeft: block.text.startsWith(' ') && isSolutionBlock ? '40px' : '' }} 
+            >
+                <div className="flex items-center gap-2">
+                    {isSolutionBlock && challengeStatus === 'active' && (
+                        <span className="text-[10px] text-[#1CB0F6] flex-shrink-0">✕</span>
+                    )}
+                    {!isSolutionBlock && !isWrong && challengeStatus === 'active' && (
+                        <span className="text-[10px] text-[#58CC02] flex-shrink-0">+</span>
+                    )}
+                    {isWrong && challengeStatus !== 'active' && (
+                        <span className="text-[10px] flex-shrink-0">🚫</span>
+                    )}
+                    <span className="flex-grow">{block.text.trim()}</span>
+                </div>
+            </div>
+            {/* Show explanation for solution blocks after checking */}
+            {showExplanation && isSolutionBlock && challengeStatus === 'correct' && block.explanation && (
+                <div className="ml-4 mt-1 mb-1 px-3 py-1.5 bg-[#58CC02]/5 rounded-lg border-l-3 border-[#58CC02]/30 animate-fade-in">
+                    <p className="text-[10px] text-[#555] font-semibold leading-relaxed">{block.explanation}</p>
+                </div>
+            )}
+            {/* Show why wrong for incorrect blocks */}
+            {showExplanation && isWrong && challengeStatus !== 'active' && block.whyWrong && (
+                <div className="ml-4 mt-1 mb-1 px-3 py-1.5 bg-[#FF4B4B]/5 rounded-lg border-l-3 border-[#FF4B4B]/20 animate-fade-in">
+                    <p className="text-[10px] text-[#FF4B4B]/80 font-semibold leading-relaxed">🚫 {block.whyWrong}</p>
+                </div>
+            )}
         </div>
     );
 };
-const ChallengeView = ({ currentChallengeId, startChallenge, goToMenu }) => {
+const ChallengeView = ({ currentChallengeId, startChallenge, goToMenu, userScores, setUserScores, setUserStats, setUnlockedPopupAchievement }) => {
     const currentChallenge = CODE_CHALLENGES.find(c => c.id === currentChallengeId);
     if (!currentChallenge) return <PlaceholderScreen title="Reto no encontrado" color="yellow" goToMenu={goToMenu} />;
 
     const [challengeBlocks, setChallengeBlocks] = useState(() => shuffleArray([...currentChallenge.solution, ...currentChallenge.extra_blocks])); 
     const [userSolution, setUserSolution] = useState([]); 
-    const [challengeStatus, setChallengeStatus] = useState('active'); 
+    const [challengeStatus, setChallengeStatus] = useState('active');
+    const [showConcept, setShowConcept] = useState(false);
+    const [showExplanations, setShowExplanations] = useState(false);
+    const [hintIndex, setHintIndex] = useState(-1);
+
+    // Find next/prev challenge
+    const currentIdx = CODE_CHALLENGES.findIndex(c => c.id === currentChallengeId);
+    const nextChallenge = CODE_CHALLENGES[currentIdx + 1];
+    const prevChallenge = CODE_CHALLENGES[currentIdx - 1];
 
     useEffect(() => {
         setChallengeBlocks(shuffleArray([...currentChallenge.solution, ...currentChallenge.extra_blocks]));
         setUserSolution([]);
         setChallengeStatus('active');
-    }, [currentChallengeId]); // Dependencia simplificada para resetear
+        setShowConcept(false);
+        setShowExplanations(false);
+        setHintIndex(-1);
+    }, [currentChallengeId]);
 
     const handleBlockMove = (blockId, fromList, fromListSetter, toListSetter) => {
         if (challengeStatus !== 'active') return;
         
         const block = fromList.find(b => b.id === blockId);
         if (!block) return;
-        if (!fromListSetter || !toListSetter) return; // Safety check
+        if (!fromListSetter || !toListSetter) return;
         
-        // Bloques incorrectos solo pueden ir a la lista de bloques disponibles
         if (block.type === 'wrong' && toListSetter === setUserSolution) return;
-
 
         fromListSetter(prevList => prevList.filter(b => b.id !== blockId));
         toListSetter(prevList => [...prevList, block]);
@@ -1634,104 +2092,259 @@ const ChallengeView = ({ currentChallengeId, startChallenge, goToMenu }) => {
         const solutionIds = currentChallenge.solution.map(b => b.id);
         const userIds = userSolution.map(b => b.id);
         
-        let isCorrect = false;
-
-        // Regla 1: Debe tener la cantidad correcta de bloques
+        // Check: same length + same order
         if (userIds.length !== solutionIds.length) {
             setChallengeStatus('incorrect');
             return;
         }
-
-        if (currentChallenge.id === 'cpp_hello_world') {
-            // C++: Orden estricto (1, 2, 3, 4, 5)
-            isCorrect = userIds.every((id, index) => id === solutionIds[index]);
-        } else if (currentChallenge.id === 'python_hello_world') {
-            // Python: Solo el bloque correcto (ID 1)
-            const correctBlock = solutionIds[0];
-            isCorrect = userIds.length === 1 && userIds[0] === correctBlock;
-        }
         
+        const isCorrect = userIds.every((id, index) => id === solutionIds[index]);
         setChallengeStatus(isCorrect ? 'correct' : 'incorrect');
+        
+        if (isCorrect) {
+            setShowExplanations(true);
+            // Save completion to userScores
+            const scoreKey = 'challenge_' + currentChallengeId;
+            const alreadyCompleted = userScores?.[scoreKey]?.completed;
+            if (setUserScores) {
+                setUserScores(prev => ({
+                    ...prev,
+                    [scoreKey]: { completed: true, score: 1, total: 1 }
+                }));
+            }
+            // Update userStats and check achievements (only if first time completing)
+            if (!alreadyCompleted && setUserStats) {
+                const langKey = { 'Python': 'challengesPython', 'Arduino': 'challengesArduino', 'C++': 'challengesCpp' }[currentChallenge.name];
+                const levelKey = `challengesLevel${currentChallenge.difficulty}`;
+                const xpEarned = (currentChallenge.difficulty || 1) * 10;
+                setUserStats(prev => {
+                    const newStats = {
+                        ...prev,
+                        challengesCompleted: (prev.challengesCompleted || 0) + 1,
+                        totalPoints: (prev.totalPoints || 0) + xpEarned,
+                    };
+                    if (langKey) newStats[langKey] = (prev[langKey] || 0) + 1;
+                    if (levelKey) newStats[levelKey] = (prev[levelKey] || 0) + 1;
+                    // Check for newly unlocked achievements
+                    if (ACHIEVEMENTS && ACHIEVEMENTS.length > 0 && setUnlockedPopupAchievement) {
+                        const newlyUnlocked = ACHIEVEMENTS.filter(a => {
+                            return a.condition(newStats) && !prev._unlockedIds?.includes(a.id) && !newStats._unlockedIds?.includes(a.id);
+                        });
+                        if (newlyUnlocked.length > 0) {
+                            newStats._unlockedIds = [...(prev._unlockedIds || []), ...newlyUnlocked.map(a => a.id)];
+                            setTimeout(() => setUnlockedPopupAchievement(newlyUnlocked[0]), 800);
+                        }
+                    }
+                    return newStats;
+                });
+            }
+        }
     };
 
-    let statusMessage = '';
-    let statusClass = '';
+    const boldReplace = (text) => text.replace(/\*\*(.*?)\*\*/g, '<b class="text-[#3C3C3C]">$1</b>');
+    const difficultyStars = '⭐'.repeat(currentChallenge.difficulty || 1);
+    const langColors = { 'Python': '#3776AB', 'Arduino': '#00979D', 'C++': '#659AD2' };
+    const lc = langColors[currentChallenge.name] || '#FF4B4B';
 
-    if (challengeStatus === 'correct') {
-        statusMessage = '¡Felicidades! Código Correcto. 🎉';
-        statusClass = 'bg-green-600 border-b-4 border-green-800';
-    } else if (challengeStatus === 'incorrect') {
-        statusMessage = '¡Error! Revisa el orden o los bloques seleccionados. ❌';
-        statusClass = 'bg-red-600 border-b-4 border-red-800';
-    }
-
-    // Adaptación del layout para web: usar grid para los bloques disponibles
     return (
-        <div className="min-h-full bg-white flex flex-col animate-fade-in">
+        <div className="min-h-full bg-[#F7F7F7] flex flex-col animate-fade-in">
             {/* Header */}
-            <div className="px-4 pt-4 flex justify-between items-center mb-3">
-                <button 
-                    onClick={() => goToMenu('Retos')}
-                    className="text-[#AFAFAF] hover:text-[#3C3C3C] transition flex items-center bg-white p-2.5 rounded-xl border-2 border-[#E5E5E5] active:scale-95"
-                >
-                    <ArrowLeft size={18} className="mr-1" />
-                    <span className="text-sm font-black">Retos</span>
-                </button>
-                <span className="text-xs font-black text-[#FF4B4B] bg-[#FF4B4B]/10 px-3 py-1.5 rounded-full">{currentChallenge.icon} {currentChallenge.name}</span>
+            <div className="sticky top-0 z-20 bg-white border-b-2 border-gray-100 px-4 py-3">
+                <div className="flex justify-between items-center max-w-2xl mx-auto">
+                    <button 
+                        onClick={() => goToMenu('Retos')}
+                        className="text-[#777] hover:text-[#3C3C3C] transition flex items-center bg-white p-2 rounded-xl border-2 border-[#E5E5E5] active:scale-95"
+                    >
+                        <ArrowLeft size={16} className="mr-1" />
+                        <span className="text-xs font-black">Retos</span>
+                    </button>
+                    <div className="flex items-center gap-2">
+                        <span className="text-xs font-black px-2.5 py-1 rounded-full text-white" style={{ backgroundColor: lc }}>{currentChallenge.icon} {currentChallenge.name}</span>
+                        <span className="text-xs font-bold text-[#AFAFAF]">{difficultyStars}</span>
+                    </div>
+                    <span className="text-xs font-black text-[#AFAFAF] bg-[#F7F7F7] px-2.5 py-1 rounded-full">{currentIdx + 1}/{CODE_CHALLENGES.length}</span>
+                </div>
             </div>
             
-            <div className="px-4 mb-3">
-                <h1 className="text-xl font-black text-[#3C3C3C] mb-1">{currentChallenge.title}</h1>
-                <p className="text-xs text-[#AFAFAF] font-bold">{currentChallenge.instructions}</p>
-            </div>
-            
-            {challengeStatus !== 'active' && (
-                <div className={`mx-4 text-white p-3 rounded-xl font-black text-sm text-center mb-3 animate-bounce-in border-b-4 ${challengeStatus === 'correct' ? 'bg-[#2563EB] border-[#1D4ED8]' : 'bg-[#FF4B4B] border-[#EA2B2B]'}`}>
-                    {statusMessage}
+            <div className="flex-grow overflow-y-auto pb-32">
+                <div className="max-w-2xl mx-auto px-4">
+                    {/* Title */}
+                    <div className="py-4">
+                        <h1 className="text-xl font-black text-[#3C3C3C] mb-1">{currentChallenge.title}</h1>
+                        <p className="text-xs text-[#777] font-bold leading-relaxed">{currentChallenge.instructions}</p>
+                    </div>
+                    
+                    {/* Concept toggle */}
+                    {currentChallenge.concept && (
+                        <button onClick={() => setShowConcept(!showConcept)}
+                            className="w-full mb-3 bg-white rounded-2xl border-2 border-[#FFC800]/30 overflow-hidden transition-all active:scale-[0.99]">
+                            <div className="px-4 py-3 flex items-center gap-2">
+                                <span className="text-lg">💡</span>
+                                <span className="text-sm font-black text-[#FF9600] flex-grow text-left">
+                                    {showConcept ? 'Ocultar explicación' : '¿Qué aprendo aquí? (Toca para ver)'}
+                                </span>
+                                <span className={`text-sm transition-transform ${showConcept ? 'rotate-180' : ''}`}>▼</span>
+                            </div>
+                            {showConcept && (
+                                <div className="px-4 pb-4 animate-fade-in">
+                                    <div className="bg-[#FFC800]/10 p-3 rounded-xl mb-2">
+                                        <p className="text-xs text-[#555] font-semibold leading-relaxed" dangerouslySetInnerHTML={{ __html: boldReplace(currentChallenge.concept) }} />
+                                    </div>
+                                    {currentChallenge.funFact && (
+                                        <div className="bg-[#CE82FF]/10 p-3 rounded-xl">
+                                            <p className="text-xs text-[#777] font-semibold leading-relaxed">{currentChallenge.funFact}</p>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </button>
+                    )}
+                    
+                    {/* Hints */}
+                    {currentChallenge.hints && currentChallenge.hints.length > 0 && challengeStatus !== 'correct' && (
+                        <div className="mb-3">
+                            <button onClick={() => setHintIndex(prev => Math.min(prev + 1, currentChallenge.hints.length - 1))}
+                                disabled={hintIndex >= currentChallenge.hints.length - 1}
+                                className={`w-full px-4 py-3 rounded-2xl border-2 text-left transition active:scale-[0.99] ${
+                                    hintIndex >= currentChallenge.hints.length - 1 
+                                        ? 'bg-[#F7F7F7] border-[#E5E5E5]' 
+                                        : 'bg-white border-[#1CB0F6]/30 hover:border-[#1CB0F6]'
+                                }`}>
+                                <div className="flex items-center gap-2">
+                                    <span className="text-lg">🔍</span>
+                                    <span className={`text-sm font-black flex-grow ${hintIndex >= currentChallenge.hints.length - 1 ? 'text-[#AFAFAF]' : 'text-[#1CB0F6]'}`}>
+                                        {hintIndex < 0 ? '¿Necesitas una pista? (Toca aquí)' : 
+                                         hintIndex < currentChallenge.hints.length - 1 ? `Ver siguiente pista (${hintIndex + 1}/${currentChallenge.hints.length})` :
+                                         `Todas las pistas mostradas ✓`}
+                                    </span>
+                                    {hintIndex < currentChallenge.hints.length - 1 && <span className="text-[#1CB0F6] text-xs font-bold">💡</span>}
+                                </div>
+                            </button>
+                            {hintIndex >= 0 && (
+                                <div className="mt-2 space-y-2 animate-fade-in">
+                                    {currentChallenge.hints.slice(0, hintIndex + 1).map((hint, i) => (
+                                        <div key={i} className="flex items-start gap-2 bg-[#1CB0F6]/5 border border-[#1CB0F6]/20 px-4 py-2.5 rounded-xl">
+                                            <span className="text-xs font-black text-[#1CB0F6] shrink-0 mt-0.5">💡{i + 1}.</span>
+                                            <p className="text-xs text-[#555] font-semibold leading-relaxed">{hint}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    )}
+                    
+                    {/* Status message */}
+                    {challengeStatus !== 'active' && (
+                        <div className={`p-4 rounded-2xl font-black text-sm text-center mb-3 animate-bounce-in border-2 ${
+                            challengeStatus === 'correct' 
+                                ? 'bg-[#58CC02]/10 text-[#58CC02] border-[#58CC02]/30' 
+                                : 'bg-[#FF4B4B]/10 text-[#FF4B4B] border-[#FF4B4B]/30'
+                        }`}>
+                            <span className="text-2xl block mb-1">{challengeStatus === 'correct' ? '🎉' : '🤔'}</span>
+                            {challengeStatus === 'correct' 
+                                ? '¡PERFECTO! ¡Código correcto!' 
+                                : '¡Casi! Revisa el orden de los bloques.'
+                            }
+                            {challengeStatus === 'correct' && (
+                                <p className="text-xs font-semibold text-[#777] mt-1">👇 Lee las explicaciones de cada línea abajo</p>
+                            )}
+                        </div>
+                    )}
+                    
+                    {/* Solution area */}
+                    <div className="bg-white p-4 rounded-2xl border-2 border-[#E5E5E5] mb-3 flex flex-col min-h-[160px] overflow-hidden">
+                        <h2 className="text-xs font-black text-[#1CB0F6] mb-2 flex items-center gap-1">
+                            <Target size={14}/> Tu Solución 
+                            <span className="text-[#AFAFAF] font-bold ml-1">({userSolution.length}/{currentChallenge.solution.length} bloques)</span>
+                        </h2>
+                        <div className="space-y-1.5 overflow-y-auto flex-grow">
+                            {userSolution.map(block => (
+                                <ChallengeBlock key={block.id} block={block} onClick={handleUnselectBlock} isSolutionBlock={true} challengeStatus={challengeStatus} showExplanation={showExplanations} />
+                            ))}
+                        </div>
+                        {userSolution.length === 0 && (
+                            <div className="flex flex-col items-center justify-center py-6 text-center">
+                                <span className="text-3xl mb-2">👆</span>
+                                <p className="text-[#CDCDCD] text-sm font-bold">Toca los bloques de abajo para agregarlos aquí</p>
+                                <p className="text-[#E5E5E5] text-xs font-semibold mt-1">¡El orden importa!</p>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Available blocks */}
+                    <div className="bg-white p-4 rounded-2xl border-2 border-[#E5E5E5] mb-3 overflow-y-auto min-h-[100px]">
+                        <h2 className="text-xs font-black text-[#777] mb-2 flex items-center gap-1">
+                            <Terminal size={14}/> Bloques Disponibles 
+                            <span className="text-[#AFAFAF] font-bold ml-1">({challengeBlocks.length})</span>
+                            {challengeBlocks.some(b => b.type === 'wrong') && challengeStatus === 'active' && (
+                                <span className="text-[10px] text-[#FF9600] bg-[#FF9600]/10 px-2 py-0.5 rounded-full ml-auto">⚠️ ¡Hay bloques trampa!</span>
+                            )}
+                        </h2>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                            {challengeBlocks.map(block => (
+                                <ChallengeBlock key={block.id} block={block} onClick={handleSelectBlock} isSolutionBlock={false} challengeStatus={challengeStatus} showExplanation={showExplanations} />
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Concept summary after completion */}
+                    {challengeStatus === 'correct' && currentChallenge.concept && (
+                        <div className="bg-gradient-to-br from-[#58CC02]/10 to-[#2563EB]/10 p-4 rounded-2xl border-2 border-[#58CC02]/20 mb-3 animate-scale-in">
+                            <h3 className="text-sm font-black text-[#58CC02] mb-2 flex items-center gap-2">🧠 ¿Qué aprendiste?</h3>
+                            <p className="text-xs text-[#555] font-semibold leading-relaxed" dangerouslySetInnerHTML={{ __html: boldReplace(currentChallenge.concept) }} />
+                        </div>
+                    )}
                 </div>
-            )}
-            
-            {/* Solution area */}
-            <div className="mx-4 bg-white p-4 rounded-2xl border-2 border-[#E5E5E5] mb-3 flex flex-col h-44 md:h-56 overflow-hidden">
-                <h2 className="text-xs font-black text-[#1CB0F6] mb-2 flex items-center"><Target size={14} className="mr-1"/> Tu Solución ({userSolution.length})</h2>
-                <div className="space-y-2 overflow-y-auto flex-grow">
-                    {userSolution.map(block => (
-                        <ChallengeBlock key={block.id} block={block} onClick={handleUnselectBlock} isSolutionBlock={true} challengeStatus={challengeStatus} />
-                    ))}
-                </div>
-                {userSolution.length === 0 && <p className="text-center text-[#E5E5E5] text-sm font-bold italic pt-6">Selecciona bloques de código...</p>}
             </div>
 
-            {/* Available blocks */}
-            <div className="mx-4 bg-[#F7F7F7] p-4 rounded-2xl border-2 border-[#E5E5E5] mb-3 overflow-y-auto flex-grow min-h-[120px]">
-                <h2 className="text-xs font-black text-[#AFAFAF] mb-2 flex items-center"><Terminal size={14} className="mr-1"/> Bloques Disponibles ({challengeBlocks.length})</h2>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                    {challengeBlocks.map(block => (
-                        <ChallengeBlock key={block.id} block={block} onClick={handleSelectBlock} isSolutionBlock={false} challengeStatus={challengeStatus} />
-                    ))}
+            {/* Action buttons - sticky bottom */}
+            <div className="sticky bottom-16 bg-white border-t-2 border-gray-100 px-4 py-3">
+                <div className="max-w-2xl mx-auto space-y-2">
+                    {challengeStatus === 'active' && (
+                        <button
+                            onClick={checkChallengeSolution}
+                            disabled={userSolution.length === 0}
+                            className={`w-full py-3.5 rounded-xl text-sm transition
+                                        ${userSolution.length > 0 ? 'btn-3d btn-3d-green' : 'bg-[#E5E5E5] text-[#AFAFAF] border-b-4 border-[#CDCDCD] cursor-not-allowed font-extrabold'}`}
+                        >
+                            {userSolution.length > 0 
+                                ? `✅ VERIFICAR CÓDIGO (${userSolution.length}/${currentChallenge.solution.length})` 
+                                : '👆 Selecciona bloques primero'}
+                        </button>
+                    )}
+                    {challengeStatus !== 'active' && (
+                        <div className="flex gap-2">
+                            <button
+                                onClick={() => startChallenge(currentChallengeId)}
+                                className="flex-1 py-3 btn-3d btn-3d-yellow rounded-xl text-sm"
+                            >
+                                🔄 Reintentar
+                            </button>
+                            {challengeStatus === 'correct' && nextChallenge && (
+                                <button
+                                    onClick={() => startChallenge(nextChallenge.id)}
+                                    className="flex-1 py-3 btn-3d btn-3d-green rounded-xl text-sm"
+                                >
+                                    ▶️ Siguiente Reto
+                                </button>
+                            )}
+                            {challengeStatus === 'incorrect' && (
+                                <button
+                                    onClick={() => {
+                                        if (currentChallenge.hints && hintIndex < currentChallenge.hints.length - 1) {
+                                            setHintIndex(prev => prev + 1);
+                                        } else {
+                                            setShowConcept(true);
+                                        }
+                                    }}
+                                    className="flex-1 py-3 bg-[#FFC800] text-white font-extrabold rounded-xl text-sm border-b-4 border-[#E5B800] active:scale-95 transition"
+                                >
+                                    {currentChallenge.hints && hintIndex < currentChallenge.hints.length - 1 ? '🔍 Ver Pista' : '💡 Ver Ayuda'}
+                                </button>
+                            )}
+                        </div>
+                    )}
                 </div>
-            </div>
-
-            {/* Action buttons */}
-            <div className="px-4 pb-4 space-y-2 max-w-md mx-auto w-full">
-                {challengeStatus === 'active' && (
-                    <button
-                        onClick={checkChallengeSolution}
-                        disabled={userSolution.length === 0}
-                        className={`w-full py-3.5 rounded-xl text-sm transition
-                                    ${userSolution.length > 0 ? 'btn-3d btn-3d-green' : 'bg-[#E5E5E5] text-[#AFAFAF] border-b-4 border-[#AFAFAF] cursor-not-allowed font-extrabold'}`}
-                    >
-                        Verificar Código
-                    </button>
-                )}
-                {challengeStatus !== 'active' && (
-                    <button
-                        onClick={() => startChallenge(currentChallengeId)}
-                        className="w-full py-3.5 btn-3d btn-3d-yellow rounded-xl text-sm"
-                    >
-                        Reintentar Reto
-                    </button>
-                )}
             </div>
         </div>
     );
@@ -1818,6 +2431,13 @@ export default function App() {
             aiCodesGenerated: 0,
             consecutiveNoErrors: 0,
             challengesCompleted: 0,
+            challengesPython: 0,
+            challengesArduino: 0,
+            challengesCpp: 0,
+            challengesLevel1: 0,
+            challengesLevel2: 0,
+            challengesLevel3: 0,
+            challengesLevel4: 0,
             ledGuideCompleted: false,
             classesAttended: 0,
             sectionsVisited: 1,
@@ -1939,7 +2559,11 @@ export default function App() {
         // Check if module is unlocked
         const moduleIdx = MODULOS_DE_ROBOTICA.findIndex(m => m.id === moduleId);
         if (moduleIdx > 0 && !isModuleUnlocked(userScores, moduleIdx, MODULOS_DE_ROBOTICA)) {
-            return; // Module is locked, don't open
+            // Show feedback instead of silently blocking
+            const prevModule = MODULOS_DE_ROBOTICA[moduleIdx - 1];
+            const prevName = prevModule?.titulo || 'el módulo anterior';
+            alert(`🔒 Este módulo está bloqueado.\n\nPrimero completa: "${prevName}"`);
+            return;
         }
         
         setCurrentModuleId(moduleId);
@@ -2003,13 +2627,19 @@ export default function App() {
                         />;
     } else if (viewMode === 'led_guide') {
         // Renderiza el nuevo componente de la guía de proyecto
-        ScreenContent = <InteractiveLEDGuide onBack={() => goToMenu('Biblioteca')} />;
+        ScreenContent = <InteractiveLEDGuide 
+                            onBack={() => goToMenu('Biblioteca')}
+                            onModuleComplete={handleModuleComplete}
+                            userProfile={userProfile}
+                            onShowLicenses={() => setViewMode('licenses')}
+                        />;
     } else if (viewMode === 'lesson_generic') {
         ScreenContent = <GenericLessonScreen 
                             currentModule={currentModule} 
                             goToMenu={() => goToMenu('Biblioteca')}
                             onModuleComplete={handleModuleComplete}
                             userProfile={userProfile}
+                            onShowLicenses={() => setViewMode('licenses')}
                         />;
     } else if (viewMode === 'quiz') {
         ScreenContent = <QuizScreen 
@@ -2029,11 +2659,22 @@ export default function App() {
                             currentChallengeId={currentChallengeId} 
                             startChallenge={startChallenge}
                             goToMenu={goToMenu}
+                            userScores={userScores}
+                            setUserScores={setUserScores}
+                            setUserStats={setUserStats}
+                            setUnlockedPopupAchievement={setUnlockedPopupAchievement}
                         />;
     } else if (viewMode === 'achievements') {
         ScreenContent = <AchievementsScreen 
                             onBack={() => goToMenu('Biblioteca')}
                             userStats={userStats}
+                        />;
+    } else if (viewMode === 'licenses') {
+        ScreenContent = <LicensesScreen 
+                            onBack={() => goToMenu('Biblioteca')}
+                            userScores={userScores}
+                            userProfile={userProfile}
+                            completedModules={completedModules}
                         />;
     } else { 
          // Modo 'menu'
@@ -2044,6 +2685,7 @@ export default function App() {
                     userId={userId} 
                     userScores={userScores}
                     onShowAchievements={() => setViewMode('achievements')}
+                    onShowLicenses={() => setViewMode('licenses')}
                     userStats={userStats}
                     userProfile={userProfile}
                 />;
@@ -2052,7 +2694,7 @@ export default function App() {
                 ScreenContent = <WorkshopScreen goToMenu={goToMenu} />; // <-- El taller de código
                 break;
             case 'Retos':
-                ScreenContent = <ChallengeListScreen startChallenge={startChallenge} />;
+                ScreenContent = <ChallengeListScreen startChallenge={startChallenge} userScores={userScores} userStats={userStats} />;
                 break;
             case 'Simulador':
                 ScreenContent = <RobotSimulator onBack={() => goToMenu('Biblioteca')} />;
@@ -2067,7 +2709,7 @@ export default function App() {
                 ScreenContent = <ClassroomScreen />;
                 break;
             default:
-                ScreenContent = <LibraryScreen startLesson={startLesson} userId={userId} userScores={userScores} userProfile={userProfile} />; 
+                ScreenContent = <LibraryScreen startLesson={startLesson} userId={userId} userScores={userScores} userProfile={userProfile} onShowLicenses={() => setViewMode('licenses')} />; 
         }
     }
 
