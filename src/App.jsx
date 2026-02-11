@@ -1687,6 +1687,7 @@ const BottomNavBar = ({ currentTab, onSelectTab, setViewMode }) => {
         { id: 'Biblioteca', icon: '🏠', label: 'Aprender' },
         { id: 'Retos', icon: '🧩', label: 'Retos' },
         { id: 'Circuitos', icon: '⚡', label: 'Circuitos' },
+        { id: 'Glosario', icon: '📖', label: 'Glosario' },
         { id: 'Simulador', icon: '🤖', label: 'Robot' },
         { id: 'Logros', icon: '🏆', label: 'Logros', isAchievements: true },
     ];
@@ -1954,7 +1955,7 @@ export default function App() {
                 ScreenContent = <CircuitBuilder onBack={() => goToMenu('Biblioteca')} />;
                 break;
             case 'Glosario':
-                ScreenContent = <GlossaryScreen />;
+                ScreenContent = <GlossaryScreen robotConfig={userProfile?.robotConfig} robotName={userProfile?.robotName} />;
                 break;
             case 'Clases':
                 ScreenContent = <ClassroomScreen />;
