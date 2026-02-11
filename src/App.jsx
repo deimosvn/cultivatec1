@@ -17,13 +17,34 @@ const initialAuthToken = null;
 const mockAuth = { currentUser: { uid: 'MOCK_USER' } };
 const mockSignIn = async () => mockAuth.currentUser.uid;
 const mockOnSnapshot = (ref, callback) => {
-    // Simula la recepción de los scores del usuario
-    const mockScores = {
-        'mod_electr': { score: 2, total: 2 },
-        'mod_python': { score: 1, total: 2 }
-    };
-    callback({ exists: () => true, data: () => mockScores });
+    // Cargar scores del usuario desde localStorage
+    try {
+        const saved = localStorage.getItem('cultivatec_userScores');
+        const savedScores = saved ? JSON.parse(saved) : {};
+        callback({ exists: () => true, data: () => savedScores });
+    } catch {
+        callback({ exists: () => true, data: () => ({}) });
+    }
     return () => {}; // Función de desuscripción
+};
+
+// Helper: guardar scores en localStorage
+const persistUserScores = (scores) => {
+    try { localStorage.setItem('cultivatec_userScores', JSON.stringify(scores)); } catch {}
+};
+
+// Helper: verificar si un módulo está completado en userScores
+const isModuleCompleted = (userScores, moduleId) => {
+    const s = userScores[moduleId];
+    return s && s.total > 0 && Math.round((s.score / s.total) * 100) >= 100;
+};
+
+// Helper: verificar si un módulo está desbloqueado (progression system)
+const isModuleUnlocked = (userScores, moduleIndex, allModules) => {
+    if (moduleIndex === 0) return true; // El primer módulo siempre está desbloqueado
+    // El módulo anterior debe estar completado
+    const prevModule = allModules[moduleIndex - 1];
+    return prevModule ? isModuleCompleted(userScores, prevModule.id) : false;
 };
 
 // 🟢 RUTA DE IMAGEN (Logo de la aplicación)
@@ -742,9 +763,16 @@ const LessonDetailView = ({ lesson, onBack }) => {
         </div>
     );
 };
-const Module1View = ({ module, onBack, startPractice }) => {
+const Module1View = ({ module, onBack, startPractice, onModuleComplete }) => {
     const [currentLessonId, setCurrentLessonId] = useState(null);
+    const [viewedLessons, setViewedLessons] = useState(new Set());
     const currentLesson = MODULO_1_LESSONS.find(l => l.id === currentLessonId);
+    const allLessonsViewed = viewedLessons.size >= MODULO_1_LESSONS.length;
+
+    const openLesson = (lessonId) => {
+        setCurrentLessonId(lessonId);
+        setViewedLessons(prev => { const n = new Set(prev); n.add(lessonId); return n; });
+    };
 
     if (currentLesson) {
         return <LessonDetailView 
@@ -769,13 +797,30 @@ const Module1View = ({ module, onBack, startPractice }) => {
                         <LessonCardComponent 
                             key={lesson.id} 
                             lesson={lesson} 
-                            onSelect={setCurrentLessonId} 
+                            onSelect={openLesson} 
                         />
                     ))}
                 </div>
             </div>
 
-            <div className="px-4 pb-4">
+            <div className="px-4 pb-4 space-y-2">
+                {/* Progress indicator */}
+                <div className="flex items-center gap-2 mb-1">
+                    <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                        <div className="h-full bg-[#2563EB] rounded-full transition-all duration-500" style={{ width: `${Math.round((viewedLessons.size / MODULO_1_LESSONS.length) * 100)}%` }}></div>
+                    </div>
+                    <span className="text-[10px] font-black text-[#2563EB]">{viewedLessons.size}/{MODULO_1_LESSONS.length}</span>
+                </div>
+
+                {allLessonsViewed && (
+                    <button
+                        onClick={() => { onModuleComplete?.(module?.id || 'mod_electr', 60); onBack(); }}
+                        className="w-full py-3.5 btn-3d btn-3d-green rounded-xl text-sm flex items-center justify-center gap-2 animate-scale-in"
+                    >
+                        ✅ ¡Módulo Completado! Volver
+                    </button>
+                )}
+
                 <button
                     onClick={startPractice}
                     className="w-full py-3.5 btn-3d btn-3d-blue rounded-xl text-sm flex items-center justify-center"
@@ -1161,14 +1206,15 @@ const LEARNING_SECTIONS = [
     { startIdx: 9, title: '🧠 Avanzado', subtitle: 'Control, diseño y más', color: '#CE82FF', colorLight: '#F0DEFF' },
 ];
 
-const ModuleCard = ({ module, onStart, userScores, index, totalModules, sectionColor }) => {
+const ModuleCard = ({ module, onStart, userScores, index, totalModules, sectionColor, allModules }) => {
     const scoreData = userScores[module.id];
-    const total = scoreData?.total || 2;
+    const total = scoreData?.total || 0;
     const score = scoreData?.score || 0;
-    const progress = Math.round((score / total) * 100);
-    const isCompleted = progress >= 100;
-    const isActive = index <= 2;
-    const isLocked = !isActive && !isCompleted;
+    const progress = total > 0 ? Math.round((score / total) * 100) : 0;
+    const isCompleted = isModuleCompleted(userScores, module.id);
+    const isUnlocked = isModuleUnlocked(userScores, index, allModules);
+    const isLocked = !isUnlocked && !isCompleted;
+    const isActive = isUnlocked && !isCompleted; // Next module to do
     
     const nodeColors = [
         { hex: '#2563EB', hexDark: '#1D4ED8', hexLight: '#DBEAFE' },
@@ -1223,8 +1269,8 @@ const ModuleCard = ({ module, onStart, userScores, index, totalModules, sectionC
                     >
                         {index + 1}
                     </div>
-                    {/* Play indicator for active */}
-                    {isActive && !isCompleted && !isLocked && (
+                    {/* Play indicator for active (next module to complete) */}
+                    {isActive && !isLocked && (
                         <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-white rounded-full border-2 flex items-center justify-center animate-pulse-soft"
                             style={{ borderColor: c.hex }}>
                             <span className="text-[8px] font-black" style={{ color: c.hex }}>▶</span>
@@ -1258,8 +1304,11 @@ const ModuleCard = ({ module, onStart, userScores, index, totalModules, sectionC
                                 <div className="h-full rounded-full transition-all duration-700" style={{ width: `${progress}%`, backgroundColor: c.hex }}></div>
                             </div>
                         )}
+                        {!isLocked && progress > 0 && (
+                            <span className="text-[10px] font-bold" style={{ color: c.hex }}>{progress}%</span>
+                        )}
                         {isLocked && (
-                            <span className="text-[10px] font-bold text-[#CDCDCD]">🔒 Bloqueado</span>
+                            <span className="text-[10px] font-bold text-[#CDCDCD]">🔒 Completa el anterior</span>
                         )}
                     </div>
                 </div>
@@ -1276,25 +1325,29 @@ const ModuleCard = ({ module, onStart, userScores, index, totalModules, sectionC
     );
 };
 
-const SectionBanner = ({ section, modulesInSection, userScores }) => {
-    const completedInSection = modulesInSection.filter(m => {
-        const s = userScores[m.id];
-        return s && Math.round((s.score / s.total) * 100) >= 100;
-    }).length;
+const SectionBanner = ({ section, modulesInSection, userScores, sectionIndex }) => {
+    const completedInSection = modulesInSection.filter(m => isModuleCompleted(userScores, m.id)).length;
     const totalInSection = modulesInSection.length;
+    // A section is locked if first module of section is locked
+    const firstModuleGlobalIdx = section.startIdx;
+    const isSectionLocked = firstModuleGlobalIdx > 0 && !isModuleUnlocked(userScores, firstModuleGlobalIdx, MODULOS_DE_ROBOTICA);
 
     return (
-        <div className="w-full rounded-2xl overflow-hidden border-2 border-[#E5E5E5]" 
-            style={{ borderColor: section.color + '40' }}>
+        <div className={`w-full rounded-2xl overflow-hidden border-2 transition-all ${isSectionLocked ? 'opacity-60' : ''}`}
+            style={{ borderColor: isSectionLocked ? '#E5E5E5' : section.color + '40' }}>
             <div className="px-5 py-4 flex items-center gap-3"
-                style={{ background: `linear-gradient(135deg, ${section.color}15, ${section.colorLight})` }}>
+                style={{ background: isSectionLocked ? '#F7F7F7' : `linear-gradient(135deg, ${section.color}15, ${section.colorLight})` }}>
                 <div className="flex-grow">
-                    <h3 className="text-base font-black" style={{ color: section.color }}>{section.title}</h3>
-                    <p className="text-[11px] font-bold text-[#AFAFAF] mt-0.5">{section.subtitle}</p>
+                    <h3 className="text-base font-black flex items-center gap-2" style={{ color: isSectionLocked ? '#AFAFAF' : section.color }}>
+                        {isSectionLocked && <span>🔒</span>} {section.title}
+                    </h3>
+                    <p className="text-[11px] font-bold text-[#AFAFAF] mt-0.5">
+                        {isSectionLocked ? 'Completa la sección anterior para desbloquear' : section.subtitle}
+                    </p>
                 </div>
                 <div className="flex flex-col items-center gap-1">
-                    <div className="w-10 h-10 rounded-xl flex items-center justify-center font-black text-sm text-white"
-                        style={{ backgroundColor: section.color, borderBottom: `3px solid ${section.color}CC` }}>
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-black text-sm text-white`}
+                        style={{ backgroundColor: isSectionLocked ? '#AFAFAF' : section.color, borderBottom: `3px solid ${isSectionLocked ? '#999' : section.color + 'CC'}` }}>
                         {completedInSection}/{totalInSection}
                     </div>
                 </div>
@@ -1311,8 +1364,8 @@ const SectionBanner = ({ section, modulesInSection, userScores }) => {
 
 const LibraryScreen = ({ startLesson, userId, userScores, onShowAchievements, userStats, userProfile }) => {
     const totalModules = MODULOS_DE_ROBOTICA.length;
-    const completedModules = Object.values(userScores).filter(s => s && Math.round((s.score / s.total) * 100) >= 100).length;
-    const overallProgress = Math.round((completedModules / totalModules) * 100);
+    const completedModulesCount = Object.values(userScores).filter(s => s && s.total > 0 && Math.round((s.score / s.total) * 100) >= 100).length;
+    const overallProgress = Math.round((completedModulesCount / totalModules) * 100);
 
     return (
     <div className="pb-24 min-h-full bg-[#F7F7F7] w-full">
@@ -1362,7 +1415,7 @@ const LibraryScreen = ({ startLesson, userId, userScores, onShowAchievements, us
                 <div className="flex items-center justify-between mb-3">
                     <div>
                         <h2 className="text-2xl font-black text-[#3C3C3C]">Ruta de Aprendizaje</h2>
-                        <p className="text-xs text-[#AFAFAF] font-bold mt-0.5">{totalModules} módulos · {completedModules} completados</p>
+                        <p className="text-xs text-[#AFAFAF] font-bold mt-0.5">{totalModules} módulos · {completedModulesCount} completados</p>
                     </div>
                     <div className="relative w-14 h-14">
                         {/* Circular progress indicator */}
@@ -1411,7 +1464,7 @@ const LibraryScreen = ({ startLesson, userId, userScores, onShowAchievements, us
                 return (
                     <div key={sIdx} className="animate-fade-in" style={{ animationDelay: `${sIdx * 100}ms` }}>
                         {/* Section banner */}
-                        <SectionBanner section={section} modulesInSection={sectionModules} userScores={userScores} />
+                        <SectionBanner section={section} modulesInSection={sectionModules} userScores={userScores} sectionIndex={sIdx} />
                         
                         {/* Module nodes within section */}
                         <div className="flex flex-col gap-3 items-center py-4 relative">
@@ -1434,6 +1487,7 @@ const LibraryScreen = ({ startLesson, userId, userScores, onShowAchievements, us
                                             index={globalIdx}
                                             totalModules={totalModules}
                                             sectionColor={section.color}
+                                            allModules={MODULOS_DE_ROBOTICA}
                                         />
                                     </div>
                                 );
@@ -1748,27 +1802,38 @@ export default function App() {
     
     // Estados para nuevas funcionalidades
     const [quizModuleId, setQuizModuleId] = useState(null);
-    const [userStats, setUserStats] = useState({
-        modulesCompleted: 2,
-        modulesVisited: 3,
-        quizzesCompleted: 0,
-        perfectQuizzes: 0,
-        maxStreak: 0,
-        fastestCorrectAnswer: 999,
-        codesExecuted: 0,
-        aiCodesGenerated: 0,
-        consecutiveNoErrors: 0,
-        challengesCompleted: 0,
-        ledGuideCompleted: false,
-        classesAttended: 8,
-        sectionsVisited: 1,
-        totalPoints: 0,
-        quizScores: {},
+    const [userStats, setUserStats] = useState(() => {
+        try {
+            const saved = localStorage.getItem('cultivatec_userStats');
+            if (saved) return JSON.parse(saved);
+        } catch {}
+        return {
+            modulesCompleted: 0,
+            modulesVisited: 0,
+            quizzesCompleted: 0,
+            perfectQuizzes: 0,
+            maxStreak: 0,
+            fastestCorrectAnswer: 999,
+            codesExecuted: 0,
+            aiCodesGenerated: 0,
+            consecutiveNoErrors: 0,
+            challengesCompleted: 0,
+            ledGuideCompleted: false,
+            classesAttended: 0,
+            sectionsVisited: 1,
+            totalPoints: 0,
+            quizScores: {},
+        };
     });
     const [achievementToast, setAchievementToast] = useState(null);
     const [unlockedPopupAchievement, setUnlockedPopupAchievement] = useState(null);
     const [completedModules, setCompletedModules] = useState(new Set());
     const [visitedSections, setVisitedSections] = useState(new Set(['Biblioteca'])); 
+
+    // Persist userStats to localStorage
+    useEffect(() => {
+        try { localStorage.setItem('cultivatec_userStats', JSON.stringify(userStats)); } catch {}
+    }, [userStats]);
 
     useEffect(() => {
         // Simulación de autenticación y carga de datos
@@ -1785,7 +1850,15 @@ export default function App() {
 
         const unsubscribe = mockOnSnapshot(null, (docSnap) => {
             if (docSnap.exists()) {
-                setUserScores(docSnap.data());
+                const scores = docSnap.data();
+                setUserScores(scores);
+                // Sync completedModules Set from saved scores
+                const completedIds = Object.entries(scores)
+                    .filter(([, s]) => s && s.total > 0 && Math.round((s.score / s.total) * 100) >= 100)
+                    .map(([id]) => id);
+                if (completedIds.length > 0) {
+                    setCompletedModules(new Set(completedIds));
+                }
             }
         });
         return () => unsubscribe(); 
@@ -1794,6 +1867,18 @@ export default function App() {
     // Handle module completion
     const handleModuleComplete = useCallback((moduleId, xpEarned = 0) => {
         if (completedModules.has(moduleId)) return;
+        
+        // Mark module as completed in userScores
+        setUserScores(prev => {
+            const moduleData = MODULOS_DE_ROBOTICA.find(m => m.id === moduleId);
+            const totalSteps = Array.isArray(moduleData?.contenidoTeorico) 
+                ? moduleData.contenidoTeorico.length 
+                : (moduleData?.contenidoTeorico === '__MODULO_1_REF__' ? 6 : 2);
+            const newScores = { ...prev, [moduleId]: { score: totalSteps, total: totalSteps } };
+            persistUserScores(newScores);
+            return newScores;
+        });
+
         setCompletedModules(prev => {
             const n = new Set(prev);
             n.add(moduleId);
@@ -1851,6 +1936,12 @@ export default function App() {
     };
     
     const startLesson = (moduleId) => {
+        // Check if module is unlocked
+        const moduleIdx = MODULOS_DE_ROBOTICA.findIndex(m => m.id === moduleId);
+        if (moduleIdx > 0 && !isModuleUnlocked(userScores, moduleIdx, MODULOS_DE_ROBOTICA)) {
+            return; // Module is locked, don't open
+        }
+        
         setCurrentModuleId(moduleId);
         const moduleData = MODULOS_DE_ROBOTICA.find(m => m.id === moduleId);
         
@@ -1876,6 +1967,20 @@ export default function App() {
 
     const handleQuizComplete = (moduleId, correct, total, score) => {
         const percentage = Math.round((correct / total) * 100);
+        
+        // Update userScores with quiz result
+        if (percentage >= 70) {
+            setUserScores(prev => {
+                const newScores = { ...prev, [moduleId]: { score: correct, total: total } };
+                persistUserScores(newScores);
+                return newScores;
+            });
+            // Also mark as completed if >= 100%
+            if (percentage >= 100) {
+                handleModuleComplete(moduleId, correct * 10);
+            }
+        }
+
         setUserStats(prev => ({
             ...prev,
             quizzesCompleted: prev.quizzesCompleted + 1,
@@ -1893,7 +1998,8 @@ export default function App() {
         ScreenContent = <Module1View 
                             module={currentModule} 
                             onBack={() => goToMenu('Biblioteca')} 
-                            startPractice={startPractice} 
+                            startPractice={startPractice}
+                            onModuleComplete={handleModuleComplete}
                         />;
     } else if (viewMode === 'led_guide') {
         // Renderiza el nuevo componente de la guía de proyecto
