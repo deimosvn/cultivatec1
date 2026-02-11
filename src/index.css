@@ -1,0 +1,214 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===== DUOLINGO-INSPIRED DESIGN SYSTEM ===== */
+:root {
+  --duo-green: #58CC02;
+  --duo-green-dark: #46A302;
+  --duo-green-light: #D7FFB8;
+  --duo-blue: #1CB0F6;
+  --duo-blue-dark: #1899D6;
+  --duo-red: #FF4B4B;
+  --duo-red-dark: #EA2B2B;
+  --duo-yellow: #FFC800;
+  --duo-yellow-dark: #E5B800;
+  --duo-purple: #CE82FF;
+  --duo-purple-dark: #A855F7;
+  --duo-orange: #FF9600;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.85); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes pulse-soft {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-5deg); }
+  75% { transform: rotate(5deg); }
+}
+@keyframes bounce-in {
+  0% { transform: scale(0); opacity: 0; }
+  50% { transform: scale(1.15); }
+  70% { transform: scale(0.95); }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-4px); }
+  40% { transform: translateX(4px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(3px); }
+}
+@keyframes pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 5px rgba(88,204,2,0.3); }
+  50% { box-shadow: 0 0 20px rgba(88,204,2,0.6), 0 0 40px rgba(88,204,2,0.2); }
+}
+
+.animate-float { animation: float 3s ease-in-out infinite; }
+.animate-slide-up { animation: slideUp 0.4s ease-out; }
+.animate-slide-down { animation: slideDown 0.4s ease-out; }
+.animate-fade-in { animation: fadeIn 0.3s ease-out; }
+.animate-scale-in { animation: scaleIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.animate-pulse-soft { animation: pulse-soft 2s ease-in-out infinite; }
+.animate-gradient { animation: gradient-shift 6s ease infinite; background-size: 200% 200%; }
+.animate-wiggle { animation: wiggle 0.6s ease-in-out; }
+.animate-bounce-in { animation: bounce-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.animate-shake { animation: shake 0.4s ease-in-out; }
+.animate-pop { animation: pop 0.3s ease-out; }
+.animate-glow { animation: glow-pulse 2s ease-in-out infinite; }
+
+/* Staggered children */
+.stagger-children > * { animation: slideUp 0.4s ease-out forwards; opacity: 0; }
+.stagger-children > *:nth-child(1) { animation-delay: 0ms; }
+.stagger-children > *:nth-child(2) { animation-delay: 50ms; }
+.stagger-children > *:nth-child(3) { animation-delay: 100ms; }
+.stagger-children > *:nth-child(4) { animation-delay: 150ms; }
+.stagger-children > *:nth-child(5) { animation-delay: 200ms; }
+.stagger-children > *:nth-child(6) { animation-delay: 250ms; }
+.stagger-children > *:nth-child(7) { animation-delay: 300ms; }
+.stagger-children > *:nth-child(8) { animation-delay: 350ms; }
+.stagger-children > *:nth-child(9) { animation-delay: 400ms; }
+.stagger-children > *:nth-child(10) { animation-delay: 450ms; }
+
+/* ===== GLOBAL STYLES ===== */
+* { -webkit-tap-highlight-color: transparent; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: #FFFFFF;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #E5E5E5; border-radius: 20px; }
+::-webkit-scrollbar-thumb:hover { background: #AFAFAF; }
+
+/* Glass morphism */
+.glass {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* Duolingo 3D button system */
+.btn-3d {
+  position: relative;
+  border-bottom: 4px solid;
+  transition: all 0.1s ease;
+  font-weight: 800;
+}
+.btn-3d:active {
+  border-bottom-width: 2px;
+  transform: translateY(2px);
+}
+.btn-3d-green { background: #58CC02; border-bottom-color: #46A302; color: white; }
+.btn-3d-green:hover { background: #61D404; }
+.btn-3d-blue { background: #1CB0F6; border-bottom-color: #1899D6; color: white; }
+.btn-3d-blue:hover { background: #2CBAF8; }
+.btn-3d-red { background: #FF4B4B; border-bottom-color: #EA2B2B; color: white; }
+.btn-3d-red:hover { background: #FF5E5E; }
+.btn-3d-yellow { background: #FFC800; border-bottom-color: #E5B800; color: #3C3C3C; }
+.btn-3d-purple { background: #CE82FF; border-bottom-color: #A855F7; color: white; }
+.btn-3d-white { background: white; border-bottom-color: #E5E5E5; color: #4B4B4B; }
+.btn-3d-white:hover { background: #F7F7F7; }
+.btn-3d-gray { background: #E5E5E5; border-bottom-color: #AFAFAF; color: #777; }
+
+/* Card shadows */
+.card-shadow {
+  box-shadow: 0 2px 4px rgba(0,0,0,0.04), 0 0 0 2px rgba(228,228,228,0.6);
+}
+.card-shadow-hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08), 0 0 0 2px rgba(200,200,200,0.8);
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #58CC02, #1CB0F6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Module node glow */
+.node-active {
+  box-shadow: 0 0 0 4px rgba(88,204,2,0.2), 0 4px 12px rgba(88,204,2,0.25);
+}
+.node-locked {
+  filter: grayscale(0.4);
+  opacity: 0.6;
+}
+
+/* Confetti animation */
+@keyframes confetti-fall {
+  0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+.animate-confetti-fall { animation: confetti-fall 2.5s ease-out forwards; }
+
+/* Shimmer slide for achievement cards */
+@keyframes shimmer-slide {
+  0% { transform: translateX(-100%) skewX(-12deg); }
+  100% { transform: translateX(200%) skewX(-12deg); }
+}
+.animate-shimmer-slide { animation: shimmer-slide 3s ease-in-out infinite; }
+
+/* Progress step animation */
+@keyframes step-complete {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+.animate-step-complete { animation: step-complete 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+/* Celebration sparkle */
+@keyframes sparkle {
+  0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
+  50% { opacity: 1; transform: scale(1) rotate(180deg); }
+}
+.animate-sparkle { animation: sparkle 1.5s ease-in-out infinite; }
+
+/* XP counter animation */
+@keyframes xp-pop {
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateY(-30px) scale(1.3); opacity: 0; }
+}
+.animate-xp-pop { animation: xp-pop 1s ease-out forwards; }
+
+/* Scrollbar hide for horizontal scrolls */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+

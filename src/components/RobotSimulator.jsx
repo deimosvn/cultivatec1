@@ -1,0 +1,2380 @@
+import React, { useState, useCallback, useRef, useEffect } from 'react';
+import { ArrowLeft, Play, RotateCcw, Trash2, Zap, Cpu, ChevronRight, Pause, ChevronUp, ChevronDown, X, Users, Gamepad2, Trophy, Upload, Wifi, Check, Monitor } from 'lucide-react';
+import RobotBuildGamesHub from './RobotBuildGames';
+
+/* ================================================================
+   IMÁGENES SVG INLINE DE PIEZAS REALES
+   ================================================================ */
+const PartSVG = ({ partId, size = 60 }) => {
+  const s = size;
+  const svgs = {
+    chassis_sumo: (
+      <svg width={s} height={s} viewBox="0 0 80 80">
+        <rect x="8" y="20" width="64" height="44" rx="6" fill="#374151" stroke="#111" strokeWidth="2"/>
+        <rect x="14" y="26" width="52" height="32" rx="3" fill="#4B5563" stroke="#6B7280" strokeWidth="1"/>
+        <rect x="20" y="60" width="16" height="6" rx="2" fill="#9CA3AF"/>
+        <rect x="44" y="60" width="16" height="6" rx="2" fill="#9CA3AF"/>
+        <circle cx="28" cy="38" r="3" fill="#F59E0B"/>
+        <circle cx="52" cy="38" r="3" fill="#F59E0B"/>
+        <rect x="30" y="18" width="20" height="6" rx="2" fill="#EF4444"/>
+        <text x="40" y="52" textAnchor="middle" fontSize="7" fill="#D1D5DB" fontWeight="bold">SUMO</text>
+      </svg>
+    ),
+    chassis_line: (
+      <svg width={s} height={s} viewBox="0 0 80 80">
+        <rect x="12" y="22" width="56" height="36" rx="8" fill="#DBEAFE" stroke="#3B82F6" strokeWidth="2"/>
+        <rect x="18" y="28" width="44" height="24" rx="4" fill="#EFF6FF" stroke="#93C5FD" strokeWidth="1"/>
+        <circle cx="28" cy="40" r="3" fill="#3B82F6"/>
+        <circle cx="52" cy="40" r="3" fill="#3B82F6"/>
+        <rect x="22" y="56" width="12" height="5" rx="2" fill="#60A5FA"/>
+        <rect x="46" y="56" width="12" height="5" rx="2" fill="#60A5FA"/>
+        <text x="40" y="70" textAnchor="middle" fontSize="6" fill="#3B82F6" fontWeight="bold">SPEED</text>
+      </svg>
+    ),
+    chassis_dog: (
+      <svg width={s} height={s} viewBox="0 0 80 80">
+        <ellipse cx="40" cy="35" rx="22" ry="14" fill="#FCD34D" stroke="#D97706" strokeWidth="2"/>
+        <circle cx="32" cy="28" r="3" fill="#1F2937"/><circle cx="48" cy="28" r="3" fill="#1F2937"/>
+        <ellipse cx="40" cy="24" rx="6" ry="3" fill="#F59E0B"/>
+        <rect x="18" y="42" width="5" height="20" rx="2" fill="#FBBF24" stroke="#D97706" strokeWidth="1"/>
+        <rect x="30" y="42" width="5" height="20" rx="2" fill="#FBBF24" stroke="#D97706" strokeWidth="1"/>
+        <rect x="45" y="42" width="5" height="20" rx="2" fill="#FBBF24" stroke="#D97706" strokeWidth="1"/>
+        <rect x="57" y="42" width="5" height="20" rx="2" fill="#FBBF24" stroke="#D97706" strokeWidth="1"/>
+        <path d="M60 30 Q68 20 64 30" fill="#FBBF24" stroke="#D97706" strokeWidth="1"/>
+        <circle cx="33" cy="28" r="1" fill="white"/><circle cx="49" cy="28" r="1" fill="white"/>
+        <text x="40" y="75" textAnchor="middle" fontSize="6" fill="#92400E" fontWeight="bold">DOG</text>
+      </svg>
+    ),
+    motor_dc: (
+      <svg width={s} height={s} viewBox="0 0 80 80">
+        <rect x="18" y="24" width="44" height="32" rx="4" fill="#D4D4D8" stroke="#71717A" strokeWidth="2"/>
+        <circle cx="40" cy="40" r="12" fill="#A1A1AA" stroke="#52525B" strokeWidth="2"/>
+        <circle cx="40" cy="40" r="4" fill="#52525B"/>
+        <rect x="60" y="34" width="12" height="12" rx="2" fill="#71717A" stroke="#52525B" strokeWidth="1"/>
+        <rect x="10" y="30" width="10" height="4" rx="1" fill="#EF4444"/>
+        <rect x="10" y="46" width="10" height="4" rx="1" fill="#1F2937"/>
+        <line x1="40" y1="40" x2="52" y2="40" stroke="#52525B" strokeWidth="1.5"/>
+        <text x="40" y="68" textAnchor="middle" fontSize="7" fill="#52525B" fontWeight="bold">DC Motor</text>
+      </svg>
+    ),
+    servo: (
+      <svg width={s} height={s} viewBox="0 0 80 80">
+        <rect x="16" y="26" width="48" height="30" rx="3" fill="#1E40AF" stroke="#1E3A8A" strokeWidth="2"/>
+        <rect x="38" y="18" width="14" height="10" rx="6" fill="#3B82F6" stroke="#1E40AF" strokeWidth="1.5"/>
+        <circle cx="45" cy="23" r="3" fill="white" stroke="#1E3A8A" strokeWidth="1"/>
+        <rect x="20" y="56" width="40" height="4" rx="1" fill="#93C5FD"/>
+        <rect x="18" y="32" width="3" height="4" fill="#F97316"/>
+        <rect x="18" y="38" width="3" height="4" fill="#EF4444"/>
+        <rect x="18" y="44" width="3" height="4" fill="#713F12"/>
+        <text x="40" y="70" textAnchor="middle" fontSize="7" fill="#1E3A8A" fontWeight="bold">Servo</text>
+      </svg>
+    ),
+    wheel: (
+      <svg width={s} height={s} viewBox="0 0 80 80">
+        <circle cx="40" cy="40" r="26" fill="#1F2937" stroke="#111827" strokeWidth="3"/>
+        <circle cx="40" cy="40" r="20" fill="#374151" stroke="#4B5563" strokeWidth="1"/>
+        <circle cx="40" cy="40" r="8" fill="#6B7280" stroke="#9CA3AF" strokeWidth="1"/>
+        <circle cx="40" cy="40" r="3" fill="#D1D5DB"/>
+        <line x1="40" y1="22" x2="40" y2="14" stroke="#4B5563" strokeWidth="2"/>
+        <line x1="40" y1="58" x2="40" y2="66" stroke="#4B5563" strokeWidth="2"/>
+        <line x1="22" y1="40" x2="14" y2="40" stroke="#4B5563" strokeWidth="2"/>
+        <line x1="58" y1="40" x2="66" y2="40" stroke="#4B5563" strokeWidth="2"/>
+        <text x="40" y="76" textAnchor="middle" fontSize="6" fill="#6B7280" fontWeight="bold">Rueda</text>
+      </svg>
+    ),
+    sensor_ultra: (
+      <svg width={s} height={s} viewBox="0 0 80 80">
+        <rect x="12" y="26" width="56" height="28" rx="4" fill="#0E7490" stroke="#155E75" strokeWidth="2"/>
+        <circle cx="28" cy="40" r="9" fill="#A5F3FC" stroke="#06B6D4" strokeWidth="2"/>
+        <circle cx="52" cy="40" r="9" fill="#A5F3FC" stroke="#06B6D4" strokeWidth="2"/>
+        <circle cx="28" cy="40" r="4" fill="#0891B2"/>
+        <circle cx="52" cy="40" r="4" fill="#0891B2"/>
+        <rect x="20" y="54" width="6" height="10" rx="1" fill="#67E8F9"/>
+        <rect x="30" y="54" width="6" height="10" rx="1" fill="#67E8F9"/>
+        <rect x="44" y="54" width="6" height="10" rx="1" fill="#67E8F9"/>
+        <rect x="54" y="54" width="6" height="10" rx="1" fill="#67E8F9"/>
+        <text x="40" y="22" textAnchor="middle" fontSize="6" fill="#06B6D4" fontWeight="bold">HC-SR04</text>
+      </svg>
+    ),
+    sensor_ir: (
+      <svg width={s} height={s} viewBox="0 0 80 80">
+        <rect x="18" y="24" width="44" height="22" rx="3" fill="#1C1917" stroke="#44403C" strokeWidth="1.5"/>
+        <circle cx="30" cy="35" r="6" fill="#0F172A" stroke="#334155" strokeWidth="1"/>
+        <rect cx="30" x="28" y="33" width="4" height="4" rx="1" fill="#EF4444"/>
+        <circle cx="50" cy="35" r="6" fill="#0F172A" stroke="#334155" strokeWidth="1"/>
+        <rect x="48" y="33" width="4" height="4" rx="1" fill="#1E293B"/>
+        <rect x="24" y="46" width="4" height="12" rx="1" fill="#78716C"/>
+        <rect x="36" y="46" width="4" height="12" rx="1" fill="#78716C"/>
+        <rect x="52" y="46" width="4" height="12" rx="1" fill="#78716C"/>
+        <circle cx="30" cy="35" r="2" fill="#FCA5A5" opacity="0.7"/>
+        <text x="40" y="70" textAnchor="middle" fontSize="6" fill="#EF4444" fontWeight="bold">IR Sensor</text>
+      </svg>
+    ),
+    arduino: (
+      <svg width={s} height={s} viewBox="0 0 80 80">
+        <rect x="10" y="18" width="60" height="44" rx="3" fill="#0D9488" stroke="#0F766E" strokeWidth="2"/>
+        <rect x="14" y="22" width="52" height="36" rx="2" fill="#115E59"/>
+        <rect x="30" y="12" width="20" height="10" rx="2" fill="#A1A1AA" stroke="#71717A" strokeWidth="1"/>
+        <rect x="34" y="14" width="12" height="6" fill="#374151"/>
+        <rect x="16" y="28" width="14" height="10" rx="1" fill="#1F2937" stroke="#374151" strokeWidth="0.5"/>
+        <text x="23" y="36" textAnchor="middle" fontSize="4" fill="#5EEAD4">ATmega</text>
+        {[0,1,2,3,4,5,6,7,8,9,10,11,12,13].map(i=>(
+          <rect key={`d${i}`} x={16+i*3.5} y="60" width="2" height="6" rx="0.5" fill="#FCD34D"/>
+        ))}
+        {[0,1,2,3,4,5].map(i=>(
+          <rect key={`a${i}`} x={18+i*6} y="16" width="2" height="5" rx="0.5" fill="#FCD34D"/>
+        ))}
+        <circle cx="60" cy="30" r="2" fill="#22C55E"/>
+        <text x="40" y="76" textAnchor="middle" fontSize="6" fill="#14B8A6" fontWeight="bold">Arduino UNO</text>
+      </svg>
+    ),
+    battery: (
+      <svg width={s} height={s} viewBox="0 0 80 80">
+        <rect x="16" y="22" width="48" height="36" rx="4" fill="#166534" stroke="#14532D" strokeWidth="2"/>
+        <rect x="58" y="32" width="8" height="16" rx="2" fill="#22C55E"/>
+        <text x="40" y="38" textAnchor="middle" fontSize="9" fill="#86EFAC" fontWeight="bold">9V</text>
+        <text x="40" y="48" textAnchor="middle" fontSize="6" fill="#4ADE80">+ −</text>
+        <rect x="22" y="58" width="8" height="8" rx="1" fill="#EF4444"/>
+        <rect x="50" y="58" width="8" height="8" rx="1" fill="#1F2937"/>
+        <text x="40" y="76" textAnchor="middle" fontSize="6" fill="#22C55E" fontWeight="bold">Batería</text>
+      </svg>
+    ),
+    sensor_sound: (
+      <svg width={s} height={s} viewBox="0 0 80 80">
+        <rect x="18" y="22" width="44" height="26" rx="3" fill="#312E81" stroke="#4338CA" strokeWidth="1.5"/>
+        <circle cx="40" cy="35" r="8" fill="#1E1B4B" stroke="#6366F1" strokeWidth="1.5"/>
+        <circle cx="40" cy="35" r="3" fill="#818CF8"/>
+        <rect x="28" y="48" width="4" height="10" rx="1" fill="#A5B4FC"/>
+        <rect x="38" y="48" width="4" height="10" rx="1" fill="#A5B4FC"/>
+        <rect x="48" y="48" width="4" height="10" rx="1" fill="#A5B4FC"/>
+        <path d="M50 28 Q55 22 58 28" fill="none" stroke="#818CF8" strokeWidth="1.5"/>
+        <path d="M52 28 Q58 18 62 28" fill="none" stroke="#818CF8" strokeWidth="1" opacity="0.5"/>
+        <text x="40" y="70" textAnchor="middle" fontSize="6" fill="#818CF8" fontWeight="bold">Micrófono</text>
+      </svg>
+    ),
+    buzzer: (
+      <svg width={s} height={s} viewBox="0 0 80 80">
+        <circle cx="40" cy="38" r="18" fill="#1F2937" stroke="#374151" strokeWidth="2"/>
+        <circle cx="40" cy="38" r="12" fill="#111827" stroke="#4B5563" strokeWidth="1"/>
+        <circle cx="40" cy="38" r="4" fill="#6B7280"/>
+        <rect x="34" y="56" width="4" height="10" rx="1" fill="#EF4444"/>
+        <rect x="42" y="56" width="4" height="10" rx="1" fill="#1F2937"/>
+        <path d="M54 26 L60 20" stroke="#F59E0B" strokeWidth="1.5"/>
+        <path d="M58 32 L66 30" stroke="#F59E0B" strokeWidth="1.5"/>
+        <path d="M56 38 L64 38" stroke="#F59E0B" strokeWidth="1.5"/>
+        <text x="40" y="76" textAnchor="middle" fontSize="6" fill="#F59E0B" fontWeight="bold">Buzzer</text>
+      </svg>
+    ),
+    blade: (
+      <svg width={s} height={s} viewBox="0 0 80 80">
+        <path d="M10 50 L15 24 L65 24 L70 50 Z" fill="#71717A" stroke="#52525B" strokeWidth="2"/>
+        <path d="M15 24 L65 24" stroke="#A1A1AA" strokeWidth="1"/>
+        <rect x="20" y="50" width="40" height="6" rx="2" fill="#52525B"/>
+        <rect x="26" y="30" width="28" height="3" rx="1" fill="#A1A1AA"/>
+        <text x="40" y="70" textAnchor="middle" fontSize="6" fill="#71717A" fontWeight="bold">Rampa</text>
+      </svg>
+    ),
+    led_rgb: (
+      <svg width={s} height={s} viewBox="0 0 80 80">
+        <ellipse cx="40" cy="32" rx="14" ry="16" fill="#FCA5A5" opacity="0.4"/>
+        <ellipse cx="34" cy="34" rx="10" ry="12" fill="#FCA5A5" opacity="0.3"/>
+        <ellipse cx="46" cy="34" rx="10" ry="12" fill="#93C5FD" opacity="0.3"/>
+        <ellipse cx="40" cy="30" rx="8" ry="10" fill="white" opacity="0.6"/>
+        <rect x="36" y="44" width="8" height="8" rx="2" fill="#E5E7EB" stroke="#9CA3AF" strokeWidth="1"/>
+        <rect x="34" y="52" width="3" height="10" rx="0.5" fill="#EF4444"/>
+        <rect x="38.5" y="52" width="3" height="12" rx="0.5" fill="#22C55E"/>
+        <rect x="43" y="52" width="3" height="10" rx="0.5" fill="#3B82F6"/>
+        <text x="40" y="76" textAnchor="middle" fontSize="6" fill="#6366F1" fontWeight="bold">LED RGB</text>
+      </svg>
+    ),
+    driver_l298n: (
+      <svg width={s} height={s} viewBox="0 0 80 80">
+        <rect x="10" y="18" width="60" height="44" rx="3" fill="#DC2626" stroke="#991B1B" strokeWidth="2"/>
+        <rect x="24" y="22" width="14" height="18" rx="1" fill="#1F2937" stroke="#374151" strokeWidth="1"/>
+        <rect x="42" y="22" width="14" height="18" rx="1" fill="#1F2937" stroke="#374151" strokeWidth="1"/>
+        <rect x="14" y="46" width="52" height="6" rx="1" fill="#7F1D1D"/>
+        {[0,1,2,3,4,5].map(i=>(
+          <rect key={i} x={16+i*8.5} y="54" width="3" height="8" rx="0.5" fill="#3B82F6"/>
+        ))}
+        <text x="40" y="76" textAnchor="middle" fontSize="6" fill="#DC2626" fontWeight="bold">L298N</text>
+      </svg>
+    ),
+  };
+  return svgs[partId] || (
+    <svg width={s} height={s} viewBox="0 0 80 80">
+      <rect x="15" y="15" width="50" height="50" rx="8" fill="#E5E7EB" stroke="#9CA3AF" strokeWidth="2"/>
+      <text x="40" y="44" textAnchor="middle" fontSize="10" fill="#6B7280">?</text>
+    </svg>
+  );
+};
+
+/* ================================================================
+   DATOS: ROBOTS, PIEZAS, BLOQUES
+   ================================================================ */
+const ROBOT_TEMPLATES = [
+  {
+    id: 'sumo', name: 'Robot Sumo', icon: '🤼',
+    color: 'from-red-500 to-orange-600',
+    desc: 'Robot de combate que empuja al oponente fuera del ring.',
+    parts: ['chassis_sumo','motor_dc','motor_dc','wheel','wheel','sensor_ultra','arduino','battery','driver_l298n','blade'],
+    program: ['repeat_forever','detect_enemy','if_enemy_near','move_forward_fast','else','turn_right','end_if','if_edge','turn_180','end_if'],
+    arena: 'sumo',
+  },
+  {
+    id: 'line', name: 'Sigue Líneas', icon: '〰️',
+    color: 'from-blue-500 to-cyan-600',
+    desc: 'Robot veloz que detecta y sigue una línea negra.',
+    parts: ['chassis_line','motor_dc','motor_dc','wheel','wheel','sensor_ir','sensor_ir','arduino','battery','driver_l298n'],
+    program: ['repeat_forever','read_sensors','if_line_left','turn_left','end_if','if_line_right','turn_right','end_if','if_line_center','move_forward','end_if'],
+    arena: 'line',
+  },
+  {
+    id: 'dog', name: 'Perro Robot', icon: '🐕',
+    color: 'from-amber-500 to-yellow-600',
+    desc: 'Robot cuadrúpedo que camina, se sienta y ladra.',
+    parts: ['chassis_dog','servo','servo','servo','servo','sensor_ultra','sensor_sound','arduino','battery','buzzer','led_rgb'],
+    program: ['repeat_forever','walk_forward','wait_1s','check_distance','if_obstacle','sit','bark','wait_1s','turn_left','end_if'],
+    arena: 'field',
+  },
+  {
+    id: 'free', name: 'Libre', icon: '🔧',
+    color: 'from-violet-500 to-purple-600',
+    desc: 'Diseña tu propio robot desde cero.',
+    parts: [],
+    program: [],
+    arena: 'field',
+  },
+];
+
+const ALL_PARTS = [
+  { id: 'chassis_sumo', name: 'Chasis Sumo', cat: 'Chasis', svg: 'chassis_sumo' },
+  { id: 'chassis_line', name: 'Chasis Veloz', cat: 'Chasis', svg: 'chassis_line' },
+  { id: 'chassis_dog', name: 'Cuerpo Perro', cat: 'Chasis', svg: 'chassis_dog' },
+  { id: 'motor_dc', name: 'Motor DC', cat: 'Motores', svg: 'motor_dc' },
+  { id: 'servo', name: 'Servo Motor', cat: 'Motores', svg: 'servo' },
+  { id: 'wheel', name: 'Rueda Goma', cat: 'Ruedas', svg: 'wheel' },
+  { id: 'sensor_ultra', name: 'Ultrasónico', cat: 'Sensores', svg: 'sensor_ultra' },
+  { id: 'sensor_ir', name: 'Infrarrojo', cat: 'Sensores', svg: 'sensor_ir' },
+  { id: 'sensor_sound', name: 'Micrófono', cat: 'Sensores', svg: 'sensor_sound' },
+  { id: 'arduino', name: 'Arduino UNO', cat: 'Control', svg: 'arduino' },
+  { id: 'battery', name: 'Batería 9V', cat: 'Energía', svg: 'battery' },
+  { id: 'driver_l298n', name: 'Driver L298N', cat: 'Control', svg: 'driver_l298n' },
+  { id: 'buzzer', name: 'Buzzer', cat: 'Otros', svg: 'buzzer' },
+  { id: 'led_rgb', name: 'LED RGB', cat: 'Otros', svg: 'led_rgb' },
+  { id: 'blade', name: 'Rampa Frontal', cat: 'Otros', svg: 'blade' },
+];
+
+const PROGRAM_BLOCKS = [
+  { id: 'move_forward', label: '⬆️ Avanzar', cat: 'Movimiento', color: 'bg-blue-500', code: 'avanzar(150);' },
+  { id: 'move_forward_fast', label: '⏩ Avanzar Rápido', cat: 'Movimiento', color: 'bg-blue-600', code: 'avanzar(255);' },
+  { id: 'move_backward', label: '⬇️ Retroceder', cat: 'Movimiento', color: 'bg-blue-400', code: 'retroceder(150);' },
+  { id: 'turn_left', label: '⬅️ Girar Izquierda', cat: 'Movimiento', color: 'bg-indigo-500', code: 'girarIzq();' },
+  { id: 'turn_right', label: '➡️ Girar Derecha', cat: 'Movimiento', color: 'bg-indigo-500', code: 'girarDer();' },
+  { id: 'turn_180', label: '🔄 Giro 180°', cat: 'Movimiento', color: 'bg-indigo-600', code: 'giro180();' },
+  { id: 'stop', label: '⏹️ Detener', cat: 'Movimiento', color: 'bg-gray-500', code: 'detener();' },
+  { id: 'walk_forward', label: '🐾 Caminar', cat: 'Movimiento', color: 'bg-amber-500', code: 'caminar(4);' },
+  { id: 'sit', label: '🐕 Sentarse', cat: 'Movimiento', color: 'bg-amber-400', code: 'sentarse();' },
+  { id: 'detect_enemy', label: '📡 Detectar Enemigo', cat: 'Sensores', color: 'bg-cyan-500', code: 'dist = ultrasonico.medir();' },
+  { id: 'read_sensors', label: '🔴 Leer Sensores IR', cat: 'Sensores', color: 'bg-cyan-500', code: 'sL=leerIR(A0); sR=leerIR(A1);' },
+  { id: 'check_distance', label: '📏 Medir Distancia', cat: 'Sensores', color: 'bg-cyan-400', code: 'dist = ultrasonico.medir();' },
+  { id: 'if_enemy_near', label: '🚨 Si Enemigo Cerca', cat: 'Condición', color: 'bg-amber-500', code: 'if (dist < 25) {' },
+  { id: 'if_obstacle', label: '🚧 Si Obstáculo', cat: 'Condición', color: 'bg-amber-500', code: 'if (dist < 20) {' },
+  { id: 'if_line_left', label: '↩️ Si Línea Izq.', cat: 'Condición', color: 'bg-amber-500', code: 'if (sL > umbral) {' },
+  { id: 'if_line_right', label: '↪️ Si Línea Der.', cat: 'Condición', color: 'bg-amber-500', code: 'if (sR > umbral) {' },
+  { id: 'if_line_center', label: '⬆️ Si Línea Centro', cat: 'Condición', color: 'bg-amber-400', code: 'if (sL<umbral && sR<umbral) {' },
+  { id: 'if_edge', label: '⚠️ Si Borde Ring', cat: 'Condición', color: 'bg-orange-500', code: 'if (sensorBorde == LOW) {' },
+  { id: 'else', label: '↔️ Si No...', cat: 'Condición', color: 'bg-yellow-500', code: '} else {' },
+  { id: 'end_if', label: '🔚 Fin Si', cat: 'Condición', color: 'bg-yellow-400', code: '}' },
+  { id: 'wait_1s', label: '⏱️ Esperar 1s', cat: 'Control', color: 'bg-purple-500', code: 'delay(1000);' },
+  { id: 'wait_half', label: '⏱️ Esperar 0.5s', cat: 'Control', color: 'bg-purple-400', code: 'delay(500);' },
+  { id: 'repeat_forever', label: '♾️ Repetir Siempre', cat: 'Control', color: 'bg-purple-600', code: 'while(true) {' },
+  { id: 'repeat_3', label: '🔁 Repetir 3x', cat: 'Control', color: 'bg-purple-500', code: 'for(int i=0;i<3;i++){' },
+  { id: 'bark', label: '🔊 Ladrar', cat: 'Acción', color: 'bg-rose-500', code: 'tone(BUZZER,1000,200);' },
+  { id: 'led_on', label: '💡 LED Encender', cat: 'Acción', color: 'bg-rose-400', code: 'digitalWrite(LED,HIGH);' },
+  { id: 'led_off', label: '🔌 LED Apagar', cat: 'Acción', color: 'bg-rose-300', code: 'digitalWrite(LED,LOW);' },
+];
+
+/* ================================================================
+   COMPONENT: Drag-and-drop workspace part
+   ================================================================ */
+const DraggablePart = ({ part, index, onRemove }) => {
+  return (
+    <div
+      className="relative group flex flex-col items-center animate-scale-in"
+      draggable
+      onDragStart={(e) => {
+        e.dataTransfer.setData('text/plain', JSON.stringify({ from: 'workspace', index }));
+      }}
+    >
+      <div className="w-[68px] h-[68px] bg-white rounded-xl border-2 border-dashed border-[#E5E5E5] flex items-center justify-center hover:border-[#CE82FF] transition cursor-grab active:cursor-grabbing">
+        <PartSVG partId={part.svg} size={56} />
+      </div>
+      <span className="text-[9px] font-bold text-gray-600 mt-0.5 text-center leading-tight max-w-[68px] truncate">{part.name}</span>
+      <button
+        onClick={() => onRemove(index)}
+        className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-500 text-white rounded-full text-[10px] font-bold flex items-center justify-center opacity-0 group-hover:opacity-100 transition shadow-md hover:bg-red-600 z-10"
+      >×</button>
+    </div>
+  );
+};
+
+/* ================================================================
+   COMPONENT: Catalog part (draggable from palette)
+   ================================================================ */
+const CatalogPart = ({ part, onAdd }) => (
+  <div
+    draggable
+    onDragStart={(e) => {
+      e.dataTransfer.setData('text/plain', JSON.stringify({ from: 'catalog', partId: part.id }));
+    }}
+    onClick={() => onAdd(part)}
+    className="flex flex-col items-center p-2 bg-white rounded-xl border border-gray-200 cursor-grab active:cursor-grabbing hover:border-violet-400 hover:shadow-md transition active:scale-95 group"
+  >
+    <PartSVG partId={part.svg} size={50} />
+    <span className="text-[9px] font-bold text-gray-700 mt-1 text-center leading-tight">{part.name}</span>
+  </div>
+);
+
+/* ================================================================
+   CHASSIS ASSEMBLY VIEW - Visual robot assembly on a workbench
+   ================================================================ */
+const CHASSIS_SLOTS = {
+  sumo: [
+    { id: 'chassis', label: 'Chasis', x: 50, y: 42, w: 44, h: 28, accepts: ['Chasis'], icon: '🏗️' },
+    { id: 'brain', label: 'Arduino', x: 50, y: 34, w: 18, h: 12, accepts: ['Control'], icon: '🧠' },
+    { id: 'motor_l', label: 'Motor Izq', x: 22, y: 50, w: 14, h: 14, accepts: ['Motores'], icon: '⚙️' },
+    { id: 'motor_r', label: 'Motor Der', x: 78, y: 50, w: 14, h: 14, accepts: ['Motores'], icon: '⚙️' },
+    { id: 'wheel_l', label: 'Rueda Izq', x: 14, y: 50, w: 12, h: 16, accepts: ['Ruedas'], icon: '⭕' },
+    { id: 'wheel_r', label: 'Rueda Der', x: 86, y: 50, w: 12, h: 16, accepts: ['Ruedas'], icon: '⭕' },
+    { id: 'sensor_f', label: 'Sensor', x: 50, y: 22, w: 16, h: 10, accepts: ['Sensores'], icon: '📡' },
+    { id: 'power', label: 'Batería', x: 50, y: 58, w: 14, h: 10, accepts: ['Energía'], icon: '🔋' },
+    { id: 'driver', label: 'Driver', x: 35, y: 50, w: 12, h: 10, accepts: ['Control'], icon: '🔌' },
+    { id: 'extra', label: 'Extra', x: 50, y: 68, w: 14, h: 10, accepts: ['Otros'], icon: '➕' },
+  ],
+  line: [
+    { id: 'chassis', label: 'Chasis', x: 50, y: 42, w: 40, h: 24, accepts: ['Chasis'], icon: '🏗️' },
+    { id: 'brain', label: 'Arduino', x: 50, y: 34, w: 18, h: 12, accepts: ['Control'], icon: '🧠' },
+    { id: 'motor_l', label: 'Motor Izq', x: 24, y: 48, w: 14, h: 14, accepts: ['Motores'], icon: '⚙️' },
+    { id: 'motor_r', label: 'Motor Der', x: 76, y: 48, w: 14, h: 14, accepts: ['Motores'], icon: '⚙️' },
+    { id: 'wheel_l', label: 'Rueda Izq', x: 16, y: 48, w: 12, h: 16, accepts: ['Ruedas'], icon: '⭕' },
+    { id: 'wheel_r', label: 'Rueda Der', x: 84, y: 48, w: 12, h: 16, accepts: ['Ruedas'], icon: '⭕' },
+    { id: 'sensor_l', label: 'IR Izq', x: 38, y: 22, w: 12, h: 10, accepts: ['Sensores'], icon: '🔴' },
+    { id: 'sensor_r', label: 'IR Der', x: 62, y: 22, w: 12, h: 10, accepts: ['Sensores'], icon: '🔴' },
+    { id: 'power', label: 'Batería', x: 50, y: 58, w: 14, h: 10, accepts: ['Energía'], icon: '🔋' },
+    { id: 'driver', label: 'Driver', x: 50, y: 50, w: 12, h: 10, accepts: ['Control'], icon: '🔌' },
+  ],
+  dog: [
+    { id: 'chassis', label: 'Cuerpo', x: 50, y: 38, w: 36, h: 22, accepts: ['Chasis'], icon: '🏗️' },
+    { id: 'brain', label: 'Arduino', x: 50, y: 32, w: 16, h: 10, accepts: ['Control'], icon: '🧠' },
+    { id: 'leg_fl', label: 'Pata FI', x: 26, y: 56, w: 12, h: 14, accepts: ['Motores'], icon: '🦿' },
+    { id: 'leg_fr', label: 'Pata FD', x: 74, y: 56, w: 12, h: 14, accepts: ['Motores'], icon: '🦿' },
+    { id: 'leg_bl', label: 'Pata TI', x: 30, y: 42, w: 12, h: 14, accepts: ['Motores'], icon: '🦿' },
+    { id: 'leg_br', label: 'Pata TD', x: 70, y: 42, w: 12, h: 14, accepts: ['Motores'], icon: '🦿' },
+    { id: 'sensor_f', label: 'Sensor', x: 50, y: 20, w: 14, h: 10, accepts: ['Sensores'], icon: '📡' },
+    { id: 'power', label: 'Batería', x: 50, y: 52, w: 14, h: 10, accepts: ['Energía'], icon: '🔋' },
+    { id: 'speaker', label: 'Buzzer', x: 38, y: 22, w: 10, h: 8, accepts: ['Otros'], icon: '🔊' },
+    { id: 'led', label: 'LED', x: 62, y: 22, w: 10, h: 8, accepts: ['Otros'], icon: '💡' },
+  ],
+  free: [
+    { id: 'chassis', label: 'Chasis', x: 50, y: 42, w: 44, h: 28, accepts: ['Chasis'], icon: '🏗️' },
+    { id: 'brain', label: 'Arduino', x: 50, y: 32, w: 18, h: 12, accepts: ['Control'], icon: '🧠' },
+    { id: 'motor_l', label: 'Motor Izq', x: 22, y: 50, w: 14, h: 14, accepts: ['Motores'], icon: '⚙️' },
+    { id: 'motor_r', label: 'Motor Der', x: 78, y: 50, w: 14, h: 14, accepts: ['Motores'], icon: '⚙️' },
+    { id: 'wheel_l', label: 'Rueda Izq', x: 14, y: 50, w: 12, h: 16, accepts: ['Ruedas'], icon: '⭕' },
+    { id: 'wheel_r', label: 'Rueda Der', x: 86, y: 50, w: 12, h: 16, accepts: ['Ruedas'], icon: '⭕' },
+    { id: 'sensor_f', label: 'Sensor', x: 50, y: 20, w: 16, h: 10, accepts: ['Sensores'], icon: '📡' },
+    { id: 'power', label: 'Batería', x: 50, y: 60, w: 14, h: 10, accepts: ['Energía'], icon: '🔋' },
+    { id: 'driver', label: 'Driver', x: 36, y: 50, w: 12, h: 10, accepts: ['Control'], icon: '🔌' },
+    { id: 'extra1', label: 'Extra 1', x: 34, y: 68, w: 12, h: 10, accepts: ['Otros'], icon: '➕' },
+    { id: 'extra2', label: 'Extra 2', x: 66, y: 68, w: 12, h: 10, accepts: ['Otros'], icon: '➕' },
+  ],
+};
+
+const ChassisAssemblyView = ({ template, workspace, slotAssignments, onSlotDrop, onSlotRemove }) => {
+  const robotId = template?.id || 'free';
+  const slots = CHASSIS_SLOTS[robotId] || CHASSIS_SLOTS.free;
+  const typeColors = {
+    sumo: { bg: 'from-gray-800 to-gray-900', accent: '#EF4444', grid: 'rgba(239,68,68,0.06)' },
+    line: { bg: 'from-slate-700 to-slate-900', accent: '#3B82F6', grid: 'rgba(59,130,246,0.06)' },
+    dog:  { bg: 'from-amber-900 to-stone-900', accent: '#F59E0B', grid: 'rgba(245,158,11,0.06)' },
+    free: { bg: 'from-violet-900 to-indigo-950', accent: '#8B5CF6', grid: 'rgba(139,92,246,0.06)' },
+  };
+  const colors = typeColors[robotId] || typeColors.free;
+
+  return (
+    <div className={`relative w-full rounded-2xl overflow-hidden border-2 border-gray-700/30`}
+      style={{ aspectRatio: '4/3.5', background: `linear-gradient(145deg, #1e293b 0%, #0f172a 50%, #1e293b 100%)` }}>
+      {/* Workbench surface */}
+      <div className="absolute inset-0" style={{
+        backgroundImage: `radial-gradient(circle, ${colors.grid} 1px, transparent 1px)`,
+        backgroundSize: '12px 12px',
+      }}/>
+      {/* Ambient glow */}
+      <div className="absolute inset-0 pointer-events-none" style={{
+        background: `radial-gradient(ellipse 50% 40% at 50% 45%, ${colors.accent}15 0%, transparent 70%)`,
+      }}/>
+
+      {/* Workbench label */}
+      <div className="absolute top-2 left-3 z-20">
+        <div className="backdrop-blur-md bg-black/40 rounded-lg px-2.5 py-1 border border-white/10">
+          <div className="text-[8px] text-gray-400 font-bold uppercase tracking-wider">Mesa de Trabajo</div>
+          <div className="text-[10px] font-bold text-white">{template?.name || 'Robot'}</div>
+        </div>
+      </div>
+      <div className="absolute top-2 right-3 z-20">
+        <div className="backdrop-blur-md bg-black/40 rounded-lg px-2.5 py-1 border border-white/10">
+          <div className="text-[8px] font-bold" style={{color: colors.accent}}>{Object.keys(slotAssignments).length}/{slots.length} slots</div>
+        </div>
+      </div>
+
+      {/* Connection lines between slots */}
+      <svg className="absolute inset-0 w-full h-full pointer-events-none z-0" viewBox="0 0 100 100" preserveAspectRatio="none">
+        {slots.filter(s => s.id !== 'chassis').map(slot => {
+          const chassis = slots.find(s => s.id === 'chassis');
+          if (!chassis) return null;
+          const filled = !!slotAssignments[slot.id];
+          return (
+            <line key={slot.id}
+              x1={chassis.x} y1={chassis.y} x2={slot.x} y2={slot.y}
+              stroke={filled ? colors.accent : '#334155'}
+              strokeWidth="0.4"
+              strokeDasharray={filled ? '0' : '1.5 1'}
+              opacity={filled ? 0.6 : 0.3}
+            />
+          );
+        })}
+      </svg>
+
+      {/* Slots */}
+      {slots.map(slot => {
+        const assigned = slotAssignments[slot.id];
+        const part = assigned ? workspace.find(p => p.uid === assigned) : null;
+        const isEmpty = !part;
+        return (
+          <div key={slot.id}
+            className="absolute z-10 flex flex-col items-center justify-center transition-all duration-300 cursor-pointer"
+            style={{
+              left: `${slot.x - slot.w/2}%`, top: `${slot.y - slot.h/2}%`,
+              width: `${slot.w}%`, height: `${slot.h}%`,
+            }}
+            onDragOver={(e) => e.preventDefault()}
+            onDrop={(e) => {
+              e.preventDefault();
+              try {
+                const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+                onSlotDrop(slot, data);
+              } catch(err) {}
+            }}
+            onClick={() => { if (!isEmpty) onSlotRemove(slot.id); }}
+          >
+            {isEmpty ? (
+              <div className="w-full h-full rounded-xl border-2 border-dashed flex flex-col items-center justify-center transition-all hover:scale-105 group"
+                style={{ borderColor: `${colors.accent}40`, background: `${colors.accent}08` }}>
+                <span className="text-sm opacity-60 group-hover:opacity-100 transition">{slot.icon}</span>
+                <span className="text-[7px] font-bold text-gray-500 mt-0.5 group-hover:text-gray-300 transition">{slot.label}</span>
+              </div>
+            ) : (
+              <div className="w-full h-full rounded-xl flex flex-col items-center justify-center animate-scale-in relative group"
+                style={{
+                  background: `linear-gradient(135deg, ${colors.accent}20, ${colors.accent}08)`,
+                  border: `2px solid ${colors.accent}60`,
+                  boxShadow: `0 0 12px ${colors.accent}20, inset 0 1px 4px rgba(255,255,255,0.05)`,
+                }}>
+                <PartSVG partId={part.svg} size={Math.min(slot.w * 2.5, 52)} />
+                <span className="text-[7px] font-bold text-gray-300 mt-0 leading-tight">{part.name}</span>
+                {/* Remove hint */}
+                <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white rounded-full text-[8px] font-bold flex items-center justify-center opacity-0 group-hover:opacity-100 transition shadow-md" style={{fontSize:'7px'}}>✕</div>
+                {/* Glow pulse */}
+                <div className="absolute inset-0 rounded-xl pointer-events-none" style={{
+                  boxShadow: `0 0 8px ${colors.accent}30`,
+                  animation: 'pulse-soft 2s ease-in-out infinite',
+                }}/>
+              </div>
+            )}
+          </div>
+        );
+      })}
+
+      {/* Bottom label */}
+      <div className="absolute bottom-2 left-1/2 -translate-x-1/2 z-20">
+        <div className="backdrop-blur-md bg-black/30 rounded-full px-3 py-1 border border-white/10">
+          <span className="text-[8px] text-gray-400 font-bold">Arrastra piezas a los slots · Toca para remover</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* ================================================================
+   FIRMWARE UPLOAD SIMULATOR
+   ================================================================ */
+const FirmwareUpload = ({ isUploading, uploadProgress, uploadStep, uploadLog }) => {
+  if (!isUploading && uploadProgress === 0) return null;
+  return (
+    <div className="bg-gray-900 rounded-2xl border-2 border-gray-700 overflow-hidden">
+      {/* Header */}
+      <div className="bg-[#58CC02] px-4 py-2.5 flex items-center justify-between border-b-2 border-[#46A302]">
+        <div className="flex items-center gap-2">
+          <div className={`w-2 h-2 rounded-full ${uploadProgress < 100 ? 'bg-yellow-400 animate-pulse' : 'bg-green-400'}`}/>
+          <span className="text-xs font-bold text-white flex items-center gap-1">
+            <Monitor size={12}/> Arduino IDE
+          </span>
+        </div>
+        <span className="text-[10px] font-mono text-gray-300">
+          {uploadProgress < 100 ? 'Compilando...' : '✅ Listo'}
+        </span>
+      </div>
+
+      {/* Progress bar */}
+      <div className="px-4 pt-3 pb-1">
+        <div className="flex justify-between items-center mb-1.5">
+          <span className="text-[10px] font-bold text-gray-400">{uploadStep}</span>
+          <span className="text-[10px] font-mono text-emerald-400 font-bold">{uploadProgress}%</span>
+        </div>
+        <div className="w-full h-2.5 bg-gray-800 rounded-full overflow-hidden border border-gray-700">
+          <div className="h-full rounded-full transition-all duration-500 ease-out"
+            style={{
+              width: `${uploadProgress}%`,
+              background: uploadProgress < 100
+                ? 'linear-gradient(90deg, #0D9488, #10B981, #34D399)'
+                : 'linear-gradient(90deg, #22C55E, #4ADE80)',
+              boxShadow: `0 0 8px rgba(16,185,129,0.4)`,
+            }}/>
+        </div>
+      </div>
+
+      {/* Terminal output */}
+      <div className="px-4 py-2 max-h-[120px] overflow-y-auto">
+        {uploadLog.map((line, i) => (
+          <div key={i} className={`text-[10px] font-mono py-0.5 animate-slide-up
+            ${line.type === 'info' ? 'text-gray-400' : ''}
+            ${line.type === 'ok' ? 'text-green-400' : ''}
+            ${line.type === 'warn' ? 'text-yellow-400' : ''}
+            ${line.type === 'error' ? 'text-red-400' : ''}
+            ${line.type === 'progress' ? 'text-cyan-400' : ''}
+          `}>{line.text}</div>
+        ))}
+      </div>
+
+      {/* USB connection visual */}
+      {uploadProgress > 0 && uploadProgress < 100 && (
+        <div className="px-4 pb-3 flex items-center gap-2">
+          <div className="flex items-center gap-1.5 bg-gray-800 rounded-lg px-2.5 py-1.5 border border-gray-700">
+            <Wifi size={10} className="text-green-400 animate-pulse"/>
+            <span className="text-[9px] font-bold text-gray-300">USB COM3</span>
+          </div>
+          <div className="flex gap-0.5">
+            {[0,1,2].map(i => (
+              <div key={i} className="w-1.5 h-1.5 rounded-full bg-emerald-400" style={{
+                animation: `pulse 0.6s ease-in-out ${i * 0.2}s infinite`,
+                opacity: 0.4 + (i * 0.2),
+              }}/>
+            ))}
+          </div>
+          <span className="text-[9px] text-gray-500 font-semibold">Transfiriendo datos...</span>
+        </div>
+      )}
+      
+      {/* Success banner */}
+      {uploadProgress >= 100 && (
+        <div className="mx-4 mb-3 bg-green-900/40 border border-green-600/30 rounded-xl px-3 py-2 flex items-center gap-2">
+          <Check size={14} className="text-green-400"/>
+          <div>
+            <div className="text-[10px] font-bold text-green-300">¡Programa cargado exitosamente!</div>
+            <div className="text-[9px] text-green-500">Robot listo para operar</div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+/* ================================================================
+   VIRTUAL D-PAD / JOYSTICK COMPONENT
+   ================================================================ */
+const VirtualDPad = ({ player, color, onMove, onStop, compact = false }) => {
+  const holdRef = useRef(null);
+  const sz = compact ? 'w-9 h-9 text-sm' : 'w-11 h-11 text-base';
+  const pad = compact ? 'p-1' : 'p-1.5';
+  const bg = player === 1 
+    ? 'from-blue-500 to-indigo-600' 
+    : 'from-red-500 to-orange-600';
+  const btnBase = `${sz} rounded-xl flex items-center justify-center font-bold text-white transition active:scale-90 select-none`;
+  const btnColor = player === 1
+    ? 'bg-blue-500/80 hover:bg-blue-400 active:bg-blue-300 border border-blue-400/50'
+    : 'bg-red-500/80 hover:bg-red-400 active:bg-red-300 border border-red-400/50';
+
+  const startHold = (dir) => {
+    onMove(dir);
+    holdRef.current = setInterval(() => onMove(dir), 100);
+  };
+  const stopHold = () => {
+    clearInterval(holdRef.current);
+    onStop();
+  };
+
+  return (
+    <div className={`flex flex-col items-center ${pad}`}>
+      <div className={`text-[9px] font-bold mb-1 px-2 py-0.5 rounded-full bg-gradient-to-r ${bg} text-white shadow-md`}>
+        {player === 1 ? '🔵 J1' : '🔴 J2'} {compact ? '' : `· ${player === 1 ? 'WASD' : '↑↓←→'}`}
+      </div>
+      <div className="grid grid-cols-3 gap-1">
+        <div/>
+        <button className={btnBase + ' ' + btnColor}
+          onPointerDown={() => startHold('up')} onPointerUp={stopHold} onPointerLeave={stopHold}>▲</button>
+        <div/>
+        <button className={btnBase + ' ' + btnColor}
+          onPointerDown={() => startHold('left')} onPointerUp={stopHold} onPointerLeave={stopHold}>◄</button>
+        <button className={`${sz} rounded-xl flex items-center justify-center font-bold text-xs transition active:scale-90 bg-gray-600/60 text-gray-300 border border-gray-500/30 select-none`}
+          onPointerDown={onStop}>⏹</button>
+        <button className={btnBase + ' ' + btnColor}
+          onPointerDown={() => startHold('right')} onPointerUp={stopHold} onPointerLeave={stopHold}>►</button>
+        <div/>
+        <button className={btnBase + ' ' + btnColor}
+          onPointerDown={() => startHold('down')} onPointerUp={stopHold} onPointerLeave={stopHold}>▼</button>
+        <div/>
+      </div>
+    </div>
+  );
+};
+
+/* ================================================================
+   BATTLE ARENA - 2 PLAYER MINI GAME (3D)
+   ================================================================ */
+const BattleArena = ({ robotType, arenaType, isActive, p1Pos, p2Pos, p1Trail, p2Trail, scores, countdown, winner, collisionFlash }) => {
+  return (
+    <div className="relative w-full mx-auto rounded-2xl overflow-hidden border-2 border-gray-700/30"
+      style={{
+        maxWidth: 400, aspectRatio: '4/3',
+        perspective: '800px',
+        background: 'linear-gradient(145deg, #0f172a 0%, #1e293b 50%, #0f172a 100%)',
+      }}>
+      {/* Ambient light */}
+      <div className="absolute inset-0 z-0 pointer-events-none" style={{
+        background: 'radial-gradient(ellipse 60% 50% at 50% 40%, rgba(168,85,247,0.1) 0%, transparent 70%)',
+      }}/>
+
+      {/* 3D Stage */}
+      <div className="absolute inset-0 flex items-center justify-center" style={{ transformStyle: 'preserve-3d' }}>
+        <div className="relative w-[88%] h-[82%]" style={{
+          transform: 'rotateX(50deg) rotateZ(-5deg)', transformStyle: 'preserve-3d',
+        }}>
+          {/* Arena floor */}
+          {arenaType === 'sumo' ? (
+            <div className="absolute inset-0 rounded-full" style={{
+              background: 'linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%)',
+              border: '3px solid #334155',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.6), inset 0 2px 8px rgba(255,255,255,0.05), 0 0 60px rgba(168,85,247,0.15)',
+              transform: 'translateZ(-2px)',
+            }}>
+              <div className="absolute inset-[12%] rounded-full" style={{ border: '2px solid rgba(168,85,247,0.3)', boxShadow: '0 0 20px rgba(168,85,247,0.1)' }}/>
+              <div className="absolute top-1/2 left-[20%] right-[20%] h-[1px]" style={{background:'linear-gradient(90deg,transparent,rgba(168,85,247,0.3),transparent)'}}/>
+              <div className="absolute left-1/2 top-[20%] bottom-[20%] w-[1px]" style={{background:'linear-gradient(180deg,transparent,rgba(168,85,247,0.3),transparent)'}}/>
+              <div className="absolute inset-0 rounded-full" style={{ border: '2px solid rgba(255,255,255,0.12)', boxShadow: 'inset 0 -4px 12px rgba(0,0,0,0.4)' }}/>
+              <div className="absolute top-[8%] left-1/2 -translate-x-1/2 w-8 h-1.5 rounded-full" style={{background:'linear-gradient(90deg,transparent,#3B82F6,transparent)', boxShadow:'0 0 8px rgba(59,130,246,0.5)'}}/>
+              <div className="absolute bottom-[8%] left-1/2 -translate-x-1/2 w-8 h-1.5 rounded-full" style={{background:'linear-gradient(90deg,transparent,#EF4444,transparent)', boxShadow:'0 0 8px rgba(239,68,68,0.5)'}}/>
+            </div>
+          ) : (
+            <div className="absolute inset-0 rounded-2xl" style={{
+              background: 'linear-gradient(135deg, #166534 0%, #15803d 30%, #166534 50%, #14532d 100%)',
+              border: '2px solid #065f46',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.4), inset 0 2px 8px rgba(255,255,255,0.1)',
+              transform: 'translateZ(-2px)',
+            }}>
+              <div className="absolute inset-0 rounded-2xl opacity-20" style={{ backgroundImage:'radial-gradient(circle, #4ade80 0.5px, transparent 0.5px)', backgroundSize:'8px 8px' }}/>
+              <svg className="absolute inset-0 w-full h-full opacity-20" viewBox="0 0 100 100">
+                <rect x="5" y="5" width="90" height="90" rx="2" fill="none" stroke="white" strokeWidth="0.8"/>
+                <line x1="50" y1="5" x2="50" y2="95" stroke="white" strokeWidth="0.5" strokeDasharray="2"/>
+                <circle cx="50" cy="50" r="12" fill="none" stroke="white" strokeWidth="0.5"/>
+              </svg>
+            </div>
+          )}
+
+          {/* P1 Trail (blue) */}
+          <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" style={{transform:'translateZ(1px)'}}>
+            {p1Trail.length > 1 && <path d={`M${p1Trail.map(p=>`${p.x} ${p.y}`).join(' L')}`} fill="none" stroke="rgba(59,130,246,0.4)" strokeWidth="1" strokeLinecap="round"/>}
+          </svg>
+          {/* P2 Trail (red) */}
+          <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" style={{transform:'translateZ(1px)'}}>
+            {p2Trail.length > 1 && <path d={`M${p2Trail.map(p=>`${p.x} ${p.y}`).join(' L')}`} fill="none" stroke="rgba(239,68,68,0.4)" strokeWidth="1" strokeLinecap="round"/>}
+          </svg>
+        </div>
+      </div>
+
+      {/* Robot P1 (Blue) */}
+      <div className="absolute inset-0 z-10 pointer-events-none">
+        <div className="absolute transition-all duration-150 ease-out" style={{
+          left: `${10 + p1Pos.x * 0.80}%`, top: `${8 + p1Pos.y * 0.76}%`,
+          transform: `translate(-50%,-50%) rotate(${p1Pos.rotation}deg)`,
+        }}>
+          <div className="relative">
+            <Robot3DSVG type={robotType?.id || 'sumo'} isFailed={false} isMoving={isActive} rotation={p1Pos.rotation} />
+            <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-blue-500 text-white text-[7px] font-black px-1.5 py-0.5 rounded-full shadow-lg border border-blue-300/50" style={{boxShadow:'0 0 8px rgba(59,130,246,0.5)'}}>P1</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Robot P2 (Red) */}
+      <div className="absolute inset-0 z-10 pointer-events-none">
+        <div className="absolute transition-all duration-150 ease-out" style={{
+          left: `${10 + p2Pos.x * 0.80}%`, top: `${8 + p2Pos.y * 0.76}%`,
+          transform: `translate(-50%,-50%) rotate(${p2Pos.rotation}deg)`,
+        }}>
+          <div className="relative">
+            <Robot3DSVG type={robotType?.id || 'sumo'} isFailed={false} isMoving={isActive} rotation={p2Pos.rotation} />
+            <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-red-500 text-white text-[7px] font-black px-1.5 py-0.5 rounded-full shadow-lg border border-red-300/50" style={{boxShadow:'0 0 8px rgba(239,68,68,0.5)'}}>P2</div>
+          </div>
+        </div>
+      </div>
+      
+      {/* Collision flash */}
+      {collisionFlash && (
+        <div className="absolute inset-0 z-20 pointer-events-none" style={{
+          background: 'radial-gradient(circle at 50% 50%, rgba(250,204,21,0.3) 0%, transparent 60%)',
+          animation: 'pulse 0.3s ease-out',
+        }}/>
+      )}
+
+      {/* HUD */}
+      <div className="absolute top-0 left-0 right-0 z-20 pointer-events-none">
+        <div className="flex justify-between items-start px-2 pt-2">
+          <div className="backdrop-blur-md bg-blue-900/60 rounded-lg px-2 py-1 border border-blue-400/30">
+            <div className="text-[7px] text-blue-300 font-bold uppercase">Jugador 1</div>
+            <div className="text-lg font-black text-white leading-none">{scores[0]}</div>
+          </div>
+          <div className="backdrop-blur-md bg-black/50 rounded-lg px-3 py-1 border border-white/10">
+            <div className="text-[8px] text-gray-400 font-bold tracking-wider">⚔️ BATALLA</div>
+            {isActive && <div className="text-[7px] text-purple-300 font-bold text-center">EN JUEGO</div>}
+          </div>
+          <div className="backdrop-blur-md bg-red-900/60 rounded-lg px-2 py-1 border border-red-400/30">
+            <div className="text-[7px] text-red-300 font-bold uppercase text-right">Jugador 2</div>
+            <div className="text-lg font-black text-white leading-none text-right">{scores[1]}</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Countdown */}
+      {countdown > 0 && (
+        <div className="absolute inset-0 z-30 flex items-center justify-center" style={{background:'rgba(0,0,0,0.5)'}}>
+          <div className="text-6xl font-black text-white animate-scale-in" style={{
+            textShadow: '0 0 40px rgba(168,85,247,0.8), 0 4px 20px rgba(0,0,0,0.5)',
+          }}>{countdown}</div>
+        </div>
+      )}
+
+      {/* Winner overlay */}
+      {winner && (
+        <div className="absolute inset-0 z-30 flex items-center justify-center" style={{
+          background: 'radial-gradient(circle, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.8) 100%)',
+        }}>
+          <div className="text-center animate-scale-in">
+            <div className="text-5xl mb-2">🏆</div>
+            <div className="px-6 py-3 rounded-2xl font-bold shadow-2xl" style={{
+              background: winner === 1 
+                ? 'linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%)' 
+                : 'linear-gradient(135deg, #EF4444 0%, #B91C1C 100%)',
+              color: 'white', border: '2px solid rgba(255,255,255,0.3)',
+              boxShadow: '0 8px 40px rgba(0,0,0,0.4)',
+            }}>
+              <div className="text-lg font-black">¡Jugador {winner} Gana!</div>
+              <div className="text-xs opacity-80 mt-0.5">
+                {winner === 1 ? '🔵' : '🔴'} Victoria por empuje
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+/* ================================================================
+   3D ROBOT SVG - Renders an isometric 3D robot in the arena
+   ================================================================ */
+const Robot3DSVG = ({ type, isFailed, isMoving, rotation }) => {
+  const colors = {
+    sumo: { body: '#374151', accent: '#EF4444', wheel: '#1F2937', detail: '#F59E0B' },
+    line: { body: '#DBEAFE', accent: '#3B82F6', wheel: '#1E3A8A', detail: '#06B6D4' },
+    dog:  { body: '#FCD34D', accent: '#D97706', wheel: '#92400E', detail: '#1F2937' },
+    free: { body: '#8B5CF6', accent: '#6D28D9', wheel: '#4C1D95', detail: '#A78BFA' },
+  };
+  const c = colors[type] || colors.free;
+
+  if (type === 'dog') {
+    return (
+      <svg width="56" height="56" viewBox="0 0 56 56" style={{ filter: isFailed ? 'saturate(0.3) brightness(0.7)' : 'drop-shadow(0 4px 8px rgba(0,0,0,0.4))' }}>
+        {/* shadow */}
+        <ellipse cx="28" cy="50" rx="18" ry="4" fill="rgba(0,0,0,0.2)"/>
+        {/* legs back */}
+        <rect x="12" y="30" width="5" height="16" rx="2" fill={c.accent} stroke={c.detail} strokeWidth="0.5"/>
+        <rect x="39" y="30" width="5" height="16" rx="2" fill={c.accent} stroke={c.detail} strokeWidth="0.5"/>
+        {/* body */}
+        <ellipse cx="28" cy="26" rx="16" ry="10" fill={c.body} stroke={c.accent} strokeWidth="1.5"/>
+        <ellipse cx="28" cy="24" rx="14" ry="8" fill="url(#dogShine3d)"/>
+        {/* legs front */}
+        <rect x="16" y="32" width="5" height="14" rx="2" fill={c.body} stroke={c.accent} strokeWidth="0.5"/>
+        <rect x="35" y="32" width="5" height="14" rx="2" fill={c.body} stroke={c.accent} strokeWidth="0.5"/>
+        {/* head */}
+        <ellipse cx="28" cy="14" rx="8" ry="7" fill={c.body} stroke={c.accent} strokeWidth="1"/>
+        <circle cx="24" cy="12" r="2.5" fill={c.detail}/><circle cx="32" cy="12" r="2.5" fill={c.detail}/>
+        <circle cx="25" cy="11.5" r="1" fill="white"/><circle cx="33" cy="11.5" r="1" fill="white"/>
+        <ellipse cx="28" cy="16" rx="3" ry="1.5" fill={c.detail}/>
+        {/* ears */}
+        <path d="M20 10 Q16 4 20 8" fill={c.accent} stroke={c.accent} strokeWidth="1"/>
+        <path d="M36 10 Q40 4 36 8" fill={c.accent} stroke={c.accent} strokeWidth="1"/>
+        {/* tail */}
+        <path d="M44 22 Q50 16 48 22" fill="none" stroke={c.accent} strokeWidth="2" strokeLinecap="round"/>
+        {/* LED eyes glow */}
+        {isMoving && <>
+          <circle cx="24" cy="12" r="3.5" fill="#22C55E" opacity="0.3"/>
+          <circle cx="32" cy="12" r="3.5" fill="#22C55E" opacity="0.3"/>
+        </>}
+        <defs>
+          <radialGradient id="dogShine3d" cx="40%" cy="30%"><stop offset="0%" stopColor="white" stopOpacity="0.3"/><stop offset="100%" stopColor="white" stopOpacity="0"/></radialGradient>
+        </defs>
+      </svg>
+    );
+  }
+
+  // Generic wheeled robot (sumo / line / free)
+  const isLine = type === 'line';
+  const isSumo = type === 'sumo';
+  return (
+    <svg width="56" height="56" viewBox="0 0 56 56" style={{ filter: isFailed ? 'saturate(0.3) brightness(0.7)' : 'drop-shadow(0 4px 8px rgba(0,0,0,0.4))' }}>
+      {/* Ground shadow */}
+      <ellipse cx="28" cy="50" rx="20" ry="5" fill="rgba(0,0,0,0.2)"/>
+      {/* Wheels back */}
+      <rect x="4" y="28" width="8" height="18" rx="4" fill={c.wheel} stroke="#000" strokeWidth="0.8"/>
+      <rect x="44" y="28" width="8" height="18" rx="4" fill={c.wheel} stroke="#000" strokeWidth="0.8"/>
+      {/* Wheel treads */}
+      {[0,1,2,3].map(i => <line key={`wl${i}`} x1="5" y1={31+i*4} x2="11" y2={31+i*4} stroke="#555" strokeWidth="0.5" opacity="0.6"/>)}
+      {[0,1,2,3].map(i => <line key={`wr${i}`} x1="45" y1={31+i*4} x2="51" y2={31+i*4} stroke="#555" strokeWidth="0.5" opacity="0.6"/>)}
+      {/* Chassis - 3D effect with layered rects */}
+      <rect x="10" y="16" width="36" height="28" rx="4" fill={c.body} stroke={c.accent} strokeWidth="1.5"/>
+      {/* Top surface highlight */}
+      <rect x="11" y="17" width="34" height="12" rx="3" fill="url(#bodyShine3d)" opacity="0.6"/>
+      {/* Circuit board lines */}
+      <line x1="16" y1="24" x2="22" y2="24" stroke={c.accent} strokeWidth="0.5" opacity="0.5"/>
+      <line x1="22" y1="24" x2="22" y2="30" stroke={c.accent} strokeWidth="0.5" opacity="0.5"/>
+      <line x1="34" y1="24" x2="40" y2="24" stroke={c.accent} strokeWidth="0.5" opacity="0.5"/>
+      <line x1="34" y1="24" x2="34" y2="32" stroke={c.accent} strokeWidth="0.5" opacity="0.5"/>
+      {/* Arduino chip */}
+      <rect x="22" y="26" width="12" height="8" rx="1" fill="#115E59" stroke="#0D9488" strokeWidth="0.8"/>
+      <text x="28" y="32" textAnchor="middle" fontSize="3.5" fill="#5EEAD4" fontWeight="bold">CPU</text>
+      {/* Sensor up front */}
+      {isSumo && <rect x="14" y="14" width="28" height="4" rx="2" fill={c.accent} stroke="#000" strokeWidth="0.5"/>}
+      {isLine && <>
+        <circle cx="20" cy="44" r="3" fill="#EF4444" stroke="#991B1B" strokeWidth="0.5"/>
+        <circle cx="36" cy="44" r="3" fill="#EF4444" stroke="#991B1B" strokeWidth="0.5"/>
+        <circle cx="20" cy="44" r="1.5" fill="#FCA5A5" opacity="0.8"/>
+        <circle cx="36" cy="44" r="1.5" fill="#FCA5A5" opacity="0.8"/>
+      </>}
+      {/* Ultrasonic sensor (eyes) */}
+      <circle cx="22" cy="20" r="3" fill="#A5F3FC" stroke="#0891B2" strokeWidth="1"/>
+      <circle cx="34" cy="20" r="3" fill="#A5F3FC" stroke="#0891B2" strokeWidth="1"/>
+      <circle cx="22" cy="20" r="1.2" fill="#06B6D4"/>
+      <circle cx="34" cy="20" r="1.2" fill="#06B6D4"/>
+      {/* Sensor glow when moving */}
+      {isMoving && !isFailed && <>
+        <circle cx="22" cy="20" r="5" fill="#06B6D4" opacity="0.15"/>
+        <circle cx="34" cy="20" r="5" fill="#06B6D4" opacity="0.15"/>
+      </>}
+      {/* Battery indicator */}
+      <rect x="38" y="34" width="6" height="4" rx="1" fill="#166534" stroke="#14532D" strokeWidth="0.5"/>
+      <rect x="39" y="35" width={isMoving ? 4 : 2} height="2" rx="0.5" fill="#22C55E"/>
+      {/* Status LED */}
+      <circle cx="16" cy="36" r="1.5" fill={isFailed ? '#EF4444' : isMoving ? '#22C55E' : '#6B7280'}/>
+      {isFailed && <circle cx="16" cy="36" r="3" fill="#EF4444" opacity="0.3"/>}
+      {isMoving && !isFailed && <circle cx="16" cy="36" r="3" fill="#22C55E" opacity="0.2"/>}
+      <defs>
+        <linearGradient id="bodyShine3d" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="white" stopOpacity="0.5"/>
+          <stop offset="100%" stopColor="white" stopOpacity="0"/>
+        </linearGradient>
+      </defs>
+    </svg>
+  );
+};
+
+/* ================================================================
+   SIMULATION ARENA COMPONENT — 3D PERSPECTIVE
+   ================================================================ */
+const SimulationArena = ({ robotType, isRunning, simStep, totalSteps, simAction, simFailed, workspace, manualPos, isManual }) => {
+  const [robotPos, setRobotPos] = useState({ x: 50, y: 50, rotation: 0 });
+  const [trail, setTrail] = useState([]);
+  const [particles, setParticles] = useState([]);
+  const [sensorBeam, setSensorBeam] = useState(false);
+  const particleId = useRef(0);
+
+  // Use manual position if in manual mode
+  const displayPos = isManual ? (manualPos || { x: 50, y: 50, rotation: 0 }) : robotPos;
+
+  useEffect(() => {
+    if (!isRunning) {
+      setRobotPos({ x: 50, y: 50, rotation: 0 });
+      setTrail([]);
+      setParticles([]);
+      return;
+    }
+  }, [isRunning]);
+
+  // Manual mode trail tracking
+  const prevManualPos = useRef(manualPos);
+  useEffect(() => {
+    if (!isManual || !manualPos) return;
+    const prev = prevManualPos.current;
+    if (!prev || prev.x !== manualPos.x || prev.y !== manualPos.y) {
+      setTrail(t => [...t.slice(-40), { x: manualPos.x, y: manualPos.y, time: Date.now() }]);
+    }
+    prevManualPos.current = manualPos;
+  }, [isManual, manualPos]);
+
+  // Spawn particles on movement
+  useEffect(() => {
+    const active = isRunning || isManual;
+    if (!active || simFailed) return;
+    const id = setInterval(() => {
+      setParticles(prev => {
+        const alive = prev.filter(p => Date.now() - p.born < 1200).slice(-15);
+        return [...alive, {
+          id: particleId.current++,
+          x: displayPos.x + (Math.random()-0.5)*6,
+          y: displayPos.y + (Math.random()-0.5)*6,
+          born: Date.now(),
+          size: Math.random()*1.5+0.5,
+          dx: (Math.random()-0.5)*2,
+          dy: (Math.random()-0.5)*2,
+        }];
+      });
+    }, 200);
+    return () => clearInterval(id);
+  }, [isRunning, isManual, simFailed, displayPos.x, displayPos.y]);
+
+  useEffect(() => {
+    if (!simAction || !isRunning) return;
+
+    // Show sensor beam on sensor reads
+    if (simAction === '' && isRunning) {
+      setSensorBeam(true);
+      setTimeout(() => setSensorBeam(false), 800);
+    }
+
+    setRobotPos(prev => {
+      let { x, y, rotation } = prev;
+      const speed = 4;
+      const act = simAction;
+
+      if (act.includes('Avanza') || act.includes('avanza') || act.includes('Camina') || act.includes('camina')) {
+        x += Math.cos(rotation * Math.PI / 180) * speed;
+        y += Math.sin(rotation * Math.PI / 180) * speed;
+      } else if (act.includes('Retrocede') || act.includes('retrocede')) {
+        x -= Math.cos(rotation * Math.PI / 180) * speed;
+        y -= Math.sin(rotation * Math.PI / 180) * speed;
+      } else if (act.includes('izquierda') || act.includes('Izq')) {
+        rotation -= 30;
+      } else if (act.includes('derecha') || act.includes('Der')) {
+        rotation += 30;
+      } else if (act.includes('180')) {
+        rotation += 180;
+      }
+      
+      x = Math.max(8, Math.min(92, x));
+      y = Math.max(8, Math.min(92, y));
+      
+      setTrail(t => [...t.slice(-40), { x, y, time: Date.now() }]);
+      return { x, y, rotation };
+    });
+  }, [simAction, isRunning]);
+
+  const arenaType = robotType?.arena || 'field';
+  const isMoving = (isRunning || isManual) && !simFailed;
+
+  return (
+    <div className="relative w-full mx-auto rounded-2xl overflow-hidden border-2 border-gray-700/30"
+      style={{ 
+        maxWidth: 380,
+        aspectRatio: '4/3',
+        perspective: '800px',
+        background: 'linear-gradient(145deg, #0f172a 0%, #1e293b 50%, #0f172a 100%)',
+      }}>
+      {/* Ambient lighting overlay */}
+      <div className="absolute inset-0 z-0 pointer-events-none" style={{
+        background: 'radial-gradient(ellipse 60% 50% at 50% 40%, rgba(99,102,241,0.08) 0%, transparent 70%)',
+      }}/>
+
+      {/* 3D Stage container - isometric tilt */}
+      <div className="absolute inset-0 flex items-center justify-center" style={{
+        transformStyle: 'preserve-3d',
+      }}>
+        <div className="relative w-[88%] h-[82%]" style={{
+          transform: 'rotateX(50deg) rotateZ(-5deg)',
+          transformStyle: 'preserve-3d',
+        }}>
+          {/* Arena floor with 3D depth */}
+          {arenaType === 'sumo' && (
+            <>
+              {/* Raised platform */}
+              <div className="absolute inset-0 rounded-full" style={{
+                background: 'linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%)',
+                border: '3px solid #334155',
+                boxShadow: '0 8px 32px rgba(0,0,0,0.6), inset 0 2px 8px rgba(255,255,255,0.05), 0 0 60px rgba(99,102,241,0.1)',
+                transform: 'translateZ(-2px)',
+              }}>
+                {/* Inner ring */}
+                <div className="absolute inset-[12%] rounded-full" style={{
+                  border: '2px solid rgba(239,68,68,0.4)',
+                  boxShadow: '0 0 20px rgba(239,68,68,0.15), inset 0 0 20px rgba(239,68,68,0.05)',
+                }}/>
+                {/* Center cross */}
+                <div className="absolute top-1/2 left-[20%] right-[20%] h-[1px]" style={{background:'linear-gradient(90deg,transparent,rgba(239,68,68,0.3),transparent)'}}/>
+                <div className="absolute left-1/2 top-[20%] bottom-[20%] w-[1px]" style={{background:'linear-gradient(180deg,transparent,rgba(239,68,68,0.3),transparent)'}}/>
+                {/* Edge glow */}
+                <div className="absolute inset-0 rounded-full" style={{
+                  border: '2px solid rgba(255,255,255,0.15)',
+                  boxShadow: 'inset 0 -4px 12px rgba(0,0,0,0.4)',
+                }}/>
+                {/* Start marks */}
+                <div className="absolute top-[8%] left-1/2 -translate-x-1/2 w-8 h-1.5 rounded-full" style={{background:'linear-gradient(90deg,transparent,#EF4444,transparent)', boxShadow:'0 0 8px rgba(239,68,68,0.5)'}}/>
+                <div className="absolute bottom-[8%] left-1/2 -translate-x-1/2 w-8 h-1.5 rounded-full" style={{background:'linear-gradient(90deg,transparent,#3B82F6,transparent)', boxShadow:'0 0 8px rgba(59,130,246,0.5)'}}/>
+              </div>
+            </>
+          )}
+          {arenaType === 'line' && (
+            <div className="absolute inset-0 rounded-2xl" style={{
+              background: 'linear-gradient(135deg, #e2e8f0 0%, #f1f5f9 30%, #e2e8f0 60%, #cbd5e1 100%)',
+              border: '2px solid #94a3b8',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.4), inset 0 2px 8px rgba(255,255,255,0.3)',
+              transform: 'translateZ(-2px)',
+            }}>
+              {/* Grid pattern */}
+              <svg className="absolute inset-0 w-full h-full opacity-10" viewBox="0 0 100 100">
+                {[10,20,30,40,50,60,70,80,90].map(v => (
+                  <React.Fragment key={v}>
+                    <line x1={v} y1="0" x2={v} y2="100" stroke="#64748b" strokeWidth="0.3"/>
+                    <line x1="0" y1={v} x2="100" y2={v} stroke="#64748b" strokeWidth="0.3"/>
+                  </React.Fragment>
+                ))}
+              </svg>
+              {/* Track line with glow */}
+              <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100">
+                <path d="M15 85 Q15 15 50 15 Q85 15 85 50 Q85 85 50 85 Q30 85 25 65 Q20 50 35 45 Q50 40 55 55 Q60 70 50 75 Q35 80 30 65" 
+                  fill="none" stroke="rgba(0,0,0,0.15)" strokeWidth="6" strokeLinecap="round"/>
+                <path d="M15 85 Q15 15 50 15 Q85 15 85 50 Q85 85 50 85 Q30 85 25 65 Q20 50 35 45 Q50 40 55 55 Q60 70 50 75 Q35 80 30 65" 
+                  fill="none" stroke="#1e293b" strokeWidth="3.5" strokeLinecap="round"/>
+              </svg>
+              {/* Start/finish marker */}
+              <div className="absolute bottom-[12%] left-[10%] px-1.5 py-0.5 bg-green-600 rounded text-[5px] font-bold text-white shadow" style={{transform:'rotateX(-50deg) rotateZ(5deg)'}}>START</div>
+            </div>
+          )}
+          {arenaType === 'field' && (
+            <div className="absolute inset-0 rounded-2xl" style={{
+              background: 'linear-gradient(135deg, #166534 0%, #15803d 30%, #166534 50%, #14532d 100%)',
+              border: '2px solid #065f46',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.4), inset 0 2px 8px rgba(255,255,255,0.1)',
+              transform: 'translateZ(-2px)',
+            }}>
+              {/* Grass texture */}
+              <div className="absolute inset-0 rounded-2xl opacity-20" style={{
+                backgroundImage: 'radial-gradient(circle, #4ade80 0.5px, transparent 0.5px)',
+                backgroundSize: '8px 8px',
+              }}/>
+              {/* Field lines */}
+              <svg className="absolute inset-0 w-full h-full opacity-20" viewBox="0 0 100 100">
+                <rect x="5" y="5" width="90" height="90" rx="2" fill="none" stroke="white" strokeWidth="0.8"/>
+                <line x1="50" y1="5" x2="50" y2="95" stroke="white" strokeWidth="0.5"/>
+                <circle cx="50" cy="50" r="15" fill="none" stroke="white" strokeWidth="0.5"/>
+                <circle cx="50" cy="50" r="1.5" fill="white" opacity="0.5"/>
+              </svg>
+              {/* Corner flags */}
+              {[[8,8],[92,8],[8,92],[92,92]].map(([cx,cy],i) => (
+                <div key={i} className="absolute w-1.5 h-3" style={{left:`${cx}%`,top:`${cy}%`,transform:'translate(-50%,-100%)'}}>
+                  <div className="w-full h-1 bg-yellow-400 rounded-sm" style={{boxShadow:'0 0 4px rgba(250,204,21,0.5)'}}/>
+                  <div className="w-[1px] h-2 bg-white mx-auto"/>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Trail with glow effect */}
+          <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" style={{ transform: 'translateZ(1px)' }}>
+            <defs>
+              <filter id="trailGlow"><feGaussianBlur stdDeviation="0.8" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            </defs>
+            {trail.length > 1 && (
+              <path 
+                d={`M${trail[0].x} ${trail[0].y} ${trail.slice(1).map(p => `L${p.x} ${p.y}`).join(' ')}`}
+                fill="none" 
+                stroke="url(#trailGrad)"
+                strokeWidth="1.2"
+                strokeLinecap="round"
+                filter="url(#trailGlow)"
+                opacity="0.7"
+              />
+            )}
+            {trail.map((p, i) => (
+              <circle key={i} cx={p.x} cy={p.y} r={0.4 + (i/trail.length)*0.8}
+                fill={`rgba(129,140,248,${0.1 + (i/trail.length)*0.5})`}/>
+            ))}
+            <linearGradient id="trailGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#818CF8" stopOpacity="0.1"/>
+              <stop offset="100%" stopColor="#818CF8" stopOpacity="0.8"/>
+            </linearGradient>
+          </svg>
+
+          {/* Energy particles */}
+          <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" style={{ transform: 'translateZ(3px)' }}>
+            {particles.map(p => {
+              const age = (Date.now() - p.born) / 1200;
+              const opacity = Math.max(0, 1 - age);
+              return (
+                <circle key={p.id}
+                  cx={p.x + p.dx * age * 10}
+                  cy={p.y + p.dy * age * 10 - age * 5}
+                  r={p.size * (1 - age * 0.5)}
+                  fill={simFailed ? '#EF4444' : '#818CF8'}
+                  opacity={opacity * 0.6}
+                />
+              );
+            })}
+          </svg>
+
+          {/* Sensor beam effect */}
+          {sensorBeam && isMoving && (
+            <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" style={{ transform: 'translateZ(2px)' }}>
+              <defs>
+                <radialGradient id="sensorGlow" cx="50%" cy="50%"><stop offset="0%" stopColor="#06B6D4" stopOpacity="0.4"/><stop offset="100%" stopColor="#06B6D4" stopOpacity="0"/></radialGradient>
+              </defs>
+              <circle cx={displayPos.x} cy={displayPos.y} r="12" fill="url(#sensorGlow)">
+                <animate attributeName="r" values="5;15;5" dur="0.8s" repeatCount="1"/>
+                <animate attributeName="opacity" values="0.6;0;0.6" dur="0.8s" repeatCount="1"/>
+              </circle>
+            </svg>
+          )}
+        </div>
+      </div>
+
+      {/* Robot layer - on top of the 3D stage, positioned in 2D to avoid transform issues */}
+      <div className="absolute inset-0 z-10 pointer-events-none">
+        {/* Coordinate mapped to the 3D stage area */}
+        <div
+          className={`absolute transition-all ${isMoving ? 'duration-700' : 'duration-300'} ease-out`}
+          style={{
+            // Map robot position to the visible tilted area
+            left: `${10 + displayPos.x * 0.80}%`,
+            top: `${8 + displayPos.y * 0.76}%`,
+            transform: `translate(-50%, -50%) rotate(${displayPos.rotation}deg)`,
+            transformStyle: 'preserve-3d',
+          }}
+        >
+          <Robot3DSVG type={robotType?.id || 'free'} isFailed={simFailed} isMoving={isMoving} rotation={robotPos.rotation} />
+          
+          {/* Direction arrow */}
+          {isMoving && (
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2" style={{filter:'drop-shadow(0 0 4px rgba(99,102,241,0.6))'}}>
+              <svg width="12" height="10" viewBox="0 0 12 10">
+                <polygon points="6,0 12,10 0,10" fill="#818CF8" opacity="0.9"/>
+              </svg>
+            </div>
+          )}
+
+          {/* Failure sparks */}
+          {simFailed && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <svg width="70" height="70" viewBox="0 0 70 70" className="absolute">
+                <text x="35" y="25" textAnchor="middle" fontSize="18" opacity="0.9">⚡</text>
+                <text x="50" y="45" textAnchor="middle" fontSize="12" opacity="0.7">💥</text>
+                <text x="18" y="40" textAnchor="middle" fontSize="10" opacity="0.6">💨</text>
+              </svg>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* HUD overlay */}
+      <div className="absolute top-0 left-0 right-0 z-20 pointer-events-none">
+        {/* Top bar */}
+        <div className="flex justify-between items-start px-3 pt-2">
+          <div className="backdrop-blur-md bg-black/40 rounded-lg px-2.5 py-1.5 border border-white/10">
+            <div className="text-[8px] text-gray-400 font-bold uppercase tracking-wider">Arena</div>
+            <div className="text-[10px] text-white font-bold">{
+              arenaType === 'sumo' ? '🥊 Ring Sumo' : arenaType === 'line' ? '〰️ Pista' : '🌿 Campo'
+            }</div>
+          </div>
+          {(isRunning || isManual) && (
+            <div className="backdrop-blur-md bg-black/40 rounded-lg px-2.5 py-1.5 border border-white/10">
+              <div className="text-[8px] text-gray-400 font-bold uppercase tracking-wider">Estado</div>
+              <div className={`text-[10px] font-bold flex items-center gap-1 ${simFailed ? 'text-red-400' : 'text-green-400'}`}>
+                <span className={`inline-block w-1.5 h-1.5 rounded-full ${simFailed ? 'bg-red-400' : 'bg-green-400'}`} style={{
+                  animation: simFailed ? 'none' : 'pulse 1.5s infinite',
+                }}/>
+                {simFailed ? 'ERROR' : isManual ? '🎮 Manual' : 'Activo'}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Speedometer / Step counter */}
+      {isRunning && (
+        <div className="absolute bottom-0 left-0 right-0 z-20 pointer-events-none px-3 pb-2">
+          <div className="backdrop-blur-md bg-black/50 rounded-xl px-3 py-2 border border-white/10">
+            <div className="flex justify-between items-center mb-1">
+              <span className="text-[9px] text-gray-400 font-bold">PROGRESO</span>
+              <span className="text-[10px] text-white font-mono font-bold">{simStep}/{totalSteps}</span>
+            </div>
+            <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+              <div className="h-full rounded-full transition-all duration-500" style={{
+                width: `${(simStep/Math.max(totalSteps,1))*100}%`,
+                background: simFailed 
+                  ? 'linear-gradient(90deg, #EF4444, #F87171)' 
+                  : 'linear-gradient(90deg, #6366F1, #818CF8, #A78BFA)',
+                boxShadow: simFailed ? '0 0 8px rgba(239,68,68,0.5)' : '0 0 8px rgba(99,102,241,0.5)',
+              }}/>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Failure overlay */}
+      {simFailed && (
+        <div className="absolute inset-0 z-30 flex items-center justify-center" style={{
+          background: 'radial-gradient(circle, rgba(239,68,68,0.15) 0%, rgba(0,0,0,0.3) 100%)',
+        }}>
+          <div className="px-5 py-3 rounded-xl font-bold text-sm shadow-2xl animate-scale-in text-center" style={{
+            background: 'linear-gradient(135deg, #DC2626 0%, #991B1B 100%)',
+            color: 'white',
+            border: '1px solid rgba(255,255,255,0.2)',
+            boxShadow: '0 8px 32px rgba(220,38,38,0.4)',
+          }}>
+            <span className="text-lg block mb-0.5">⚠️</span>
+            ¡Fallo en simulación!
+          </div>
+        </div>
+      )}
+
+      {/* Idle state - no simulation yet */}
+      {!isRunning && !isManual && trail.length === 0 && (
+        <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
+          <div className="text-center">
+            <div className="text-4xl mb-2" style={{animation: 'float 3s ease-in-out infinite'}}>{robotType?.icon || '🤖'}</div>
+            <div className="backdrop-blur-md bg-black/30 rounded-xl px-4 py-2 border border-white/10">
+              <p className="text-xs font-bold text-white/70">Listo para simular</p>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+/* ================================================================
+   MAIN COMPONENT
+   ================================================================ */
+export default function RobotSimulator({ onBack }) {
+  const [phase, setPhase] = useState('select'); // select | build | program | simulate | battle
+  const [template, setTemplate] = useState(null);
+  const [workspace, setWorkspace] = useState([]); // placed parts
+  const [program, setProgram] = useState([]); // program blocks sequence
+  const [partCat, setPartCat] = useState('Chasis');
+  const [blockCat, setBlockCat] = useState('Movimiento');
+  
+  // Simulation state
+  const [simRunning, setSimRunning] = useState(false);
+  const [simStep, setSimStep] = useState(0);
+  const [simLog, setSimLog] = useState([]);
+  const [simAction, setSimAction] = useState('');
+  const [simFailed, setSimFailed] = useState(false);
+  const simRef = useRef(null);
+  const logEndRef = useRef(null);
+
+  // Manual control state
+  const [manualMode, setManualMode] = useState(false);
+  const [manualPos, setManualPos] = useState({ x: 50, y: 50, rotation: 0 });
+
+  // Battle state
+  const [battleActive, setBattleActive] = useState(false);
+  const [p1Pos, setP1Pos] = useState({ x: 30, y: 50, rotation: 0 });
+  const [p2Pos, setP2Pos] = useState({ x: 70, y: 50, rotation: 180 });
+  const [p1Trail, setP1Trail] = useState([]);
+  const [p2Trail, setP2Trail] = useState([]);
+  const [scores, setScores] = useState([0, 0]);
+  const [countdown, setCountdown] = useState(0);
+  const [winner, setWinner] = useState(null);
+  const [collisionFlash, setCollisionFlash] = useState(false);
+  const [battleTimer, setBattleTimer] = useState(30);
+  const battleTimerRef = useRef(null);
+  const keysPressed = useRef(new Set());
+
+  // Chassis assembly slots
+  const [slotAssignments, setSlotAssignments] = useState({});
+
+  // Firmware upload state
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadStep, setUploadStep] = useState('');
+  const [uploadLog, setUploadLog] = useState([]);
+  const uploadRef = useRef(null);
+
+  useEffect(() => {
+    logEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [simLog]);
+
+  // ---- Keyboard handler for both manual and battle ----
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      keysPressed.current.add(e.key.toLowerCase());
+      
+      // Manual mode: WASD or Arrows
+      if (manualMode && !battleActive) {
+        const speed = 2.5;
+        setManualPos(prev => {
+          let { x, y, rotation } = prev;
+          const key = e.key.toLowerCase();
+          if (key === 'w' || key === 'arrowup') { y = Math.max(5, y - speed); rotation = -90; }
+          if (key === 's' || key === 'arrowdown') { y = Math.min(95, y + speed); rotation = 90; }
+          if (key === 'a' || key === 'arrowleft') { x = Math.max(5, x - speed); rotation = 180; }
+          if (key === 'd' || key === 'arrowright') { x = Math.min(95, x + speed); rotation = 0; }
+          return { x, y, rotation };
+        });
+      }
+    };
+    const handleKeyUp = (e) => {
+      keysPressed.current.delete(e.key.toLowerCase());
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+    };
+  }, [manualMode, battleActive]);
+
+  // ---- Battle keyboard game loop ----
+  useEffect(() => {
+    if (!battleActive || winner || countdown > 0) return;
+    
+    const speed = 2;
+    const gameLoop = setInterval(() => {
+      const keys = keysPressed.current;
+      
+      // P1: WASD
+      setP1Pos(prev => {
+        let { x, y, rotation } = prev;
+        if (keys.has('w')) { y = Math.max(5, y - speed); rotation = -90; }
+        if (keys.has('s')) { y = Math.min(95, y + speed); rotation = 90; }
+        if (keys.has('a')) { x = Math.max(5, x - speed); rotation = 180; }
+        if (keys.has('d')) { x = Math.min(95, x + speed); rotation = 0; }
+        // Diagonals
+        if (keys.has('w') && keys.has('d')) rotation = -45;
+        if (keys.has('w') && keys.has('a')) rotation = -135;
+        if (keys.has('s') && keys.has('d')) rotation = 45;
+        if (keys.has('s') && keys.has('a')) rotation = 135;
+        return { x, y, rotation };
+      });
+      
+      // P2: Arrow keys
+      setP2Pos(prev => {
+        let { x, y, rotation } = prev;
+        if (keys.has('arrowup')) { y = Math.max(5, y - speed); rotation = -90; }
+        if (keys.has('arrowdown')) { y = Math.min(95, y + speed); rotation = 90; }
+        if (keys.has('arrowleft')) { x = Math.max(5, x - speed); rotation = 180; }
+        if (keys.has('arrowright')) { x = Math.min(95, x + speed); rotation = 0; }
+        if (keys.has('arrowup') && keys.has('arrowright')) rotation = -45;
+        if (keys.has('arrowup') && keys.has('arrowleft')) rotation = -135;
+        if (keys.has('arrowdown') && keys.has('arrowright')) rotation = 45;
+        if (keys.has('arrowdown') && keys.has('arrowleft')) rotation = 135;
+        return { x, y, rotation };
+      });
+    }, 50);
+
+    return () => clearInterval(gameLoop);
+  }, [battleActive, winner, countdown]);
+
+  // ---- Battle trail tracking ----
+  useEffect(() => {
+    if (!battleActive) return;
+    const id = setInterval(() => {
+      setP1Trail(t => [...t.slice(-30), { x: p1Pos.x, y: p1Pos.y }]);
+      setP2Trail(t => [...t.slice(-30), { x: p2Pos.x, y: p2Pos.y }]);
+    }, 200);
+    return () => clearInterval(id);
+  }, [battleActive, p1Pos, p2Pos]);
+
+  // ---- Battle collision detection & scoring ----
+  useEffect(() => {
+    if (!battleActive || winner || countdown > 0) return;
+
+    const dx = p1Pos.x - p2Pos.x;
+    const dy = p1Pos.y - p2Pos.y;
+    const dist = Math.sqrt(dx*dx + dy*dy);
+
+    // Collision: push apart
+    if (dist < 8) {
+      setCollisionFlash(true);
+      setTimeout(() => setCollisionFlash(false), 200);
+      
+      const pushForce = 4;
+      const angle = Math.atan2(dy, dx);
+      setP1Pos(prev => ({
+        ...prev,
+        x: Math.max(5, Math.min(95, prev.x + Math.cos(angle) * pushForce)),
+        y: Math.max(5, Math.min(95, prev.y + Math.sin(angle) * pushForce)),
+      }));
+      setP2Pos(prev => ({
+        ...prev,
+        x: Math.max(5, Math.min(95, prev.x - Math.cos(angle) * pushForce)),
+        y: Math.max(5, Math.min(95, prev.y - Math.sin(angle) * pushForce)),
+      }));
+    }
+
+    // Out of bounds check (for sumo ring)
+    const arenaType = template?.arena || 'field';
+    if (arenaType === 'sumo') {
+      const p1Dist = Math.sqrt((p1Pos.x-50)**2 + (p1Pos.y-50)**2);
+      const p2Dist = Math.sqrt((p2Pos.x-50)**2 + (p2Pos.y-50)**2);
+      if (p1Dist > 42) {
+        setScores(s => [s[0], s[1]+1]);
+        setWinner(2);
+      }
+      if (p2Dist > 42) {
+        setScores(s => [s[0]+1, s[1]]);
+        setWinner(1);
+      }
+    } else {
+      // Field mode: push opponent to edge
+      if (p1Pos.x <= 5 || p1Pos.x >= 95 || p1Pos.y <= 5 || p1Pos.y >= 95) {
+        if (dist < 15) { // Was pushed
+          setScores(s => [s[0], s[1]+1]);
+          setWinner(2);
+        }
+      }
+      if (p2Pos.x <= 5 || p2Pos.x >= 95 || p2Pos.y <= 5 || p2Pos.y >= 95) {
+        if (dist < 15) {
+          setScores(s => [s[0]+1, s[1]]);
+          setWinner(1);
+        }
+      }
+    }
+  }, [battleActive, p1Pos, p2Pos, winner, countdown, template]);
+
+  // ---- Battle timer ----
+  useEffect(() => {
+    if (!battleActive || winner || countdown > 0) return;
+    battleTimerRef.current = setInterval(() => {
+      setBattleTimer(prev => {
+        if (prev <= 1) {
+          clearInterval(battleTimerRef.current);
+          // Time's up - closest to center wins
+          const d1 = Math.sqrt((p1Pos.x-50)**2 + (p1Pos.y-50)**2);
+          const d2 = Math.sqrt((p2Pos.x-50)**2 + (p2Pos.y-50)**2);
+          if (d1 < d2) { setScores(s => [s[0]+1, s[1]]); setWinner(1); }
+          else if (d2 < d1) { setScores(s => [s[0], s[1]+1]); setWinner(2); }
+          else { setWinner(0); } // tie
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(battleTimerRef.current);
+  }, [battleActive, winner, countdown, p1Pos, p2Pos]);
+
+  // -- Handlers --
+  const pickTemplate = (t) => {
+    setTemplate(t);
+    resetUpload();
+    if (t.id !== 'free') {
+      const newWorkspace = t.parts.map((pid, i) => {
+        const def = ALL_PARTS.find(p => p.id === pid);
+        return { ...def, uid: `${pid}_${i}` };
+      });
+      setWorkspace(newWorkspace);
+      setProgram(t.program.map((bid, i) => {
+        const def = PROGRAM_BLOCKS.find(b => b.id === bid);
+        return { ...def, uid: `${bid}_${i}` };
+      }));
+      // Auto-assign parts to chassis slots
+      const slots = CHASSIS_SLOTS[t.id] || CHASSIS_SLOTS.free;
+      const newAssignments = {};
+      const usedUids = new Set();
+      slots.forEach(slot => {
+        const match = newWorkspace.find(p => slot.accepts.includes(p.cat) && !usedUids.has(p.uid));
+        if (match) {
+          newAssignments[slot.id] = match.uid;
+          usedUids.add(match.uid);
+        }
+      });
+      setSlotAssignments(newAssignments);
+    } else {
+      setWorkspace([]);
+      setProgram([]);
+      setSlotAssignments({});
+    }
+    setPhase('build');
+  };
+
+  const addPartToWorkspace = (part) => {
+    setWorkspace(prev => [...prev, { ...part, uid: `${part.id}_${Date.now()}` }]);
+  };
+
+  const removePartFromWorkspace = (index) => {
+    setWorkspace(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    try {
+      const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+      if (data.from === 'catalog') {
+        const part = ALL_PARTS.find(p => p.id === data.partId);
+        if (part) addPartToWorkspace(part);
+      }
+    } catch(err) {}
+  };
+
+  const addBlockToProgram = (block) => {
+    setProgram(prev => [...prev, { ...block, uid: `${block.id}_${Date.now()}` }]);
+  };
+
+  const removeBlockFromProgram = (index) => {
+    setProgram(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const moveBlock = (index, dir) => {
+    setProgram(prev => {
+      const arr = [...prev];
+      const target = index + dir;
+      if (target < 0 || target >= arr.length) return arr;
+      [arr[index], arr[target]] = [arr[target], arr[index]];
+      return arr;
+    });
+  };
+
+  // -- Chassis slot handlers --
+  const handleSlotDrop = (slot, data) => {
+    let part = null;
+    if (data.from === 'catalog') {
+      part = ALL_PARTS.find(p => p.id === data.partId);
+      if (part && slot.accepts.includes(part.cat)) {
+        const newPart = { ...part, uid: `${part.id}_${Date.now()}` };
+        setWorkspace(prev => [...prev, newPart]);
+        setSlotAssignments(prev => ({ ...prev, [slot.id]: newPart.uid }));
+      }
+    } else if (data.from === 'workspace') {
+      const wp = workspace[data.index];
+      if (wp && slot.accepts.includes(wp.cat)) {
+        setSlotAssignments(prev => ({ ...prev, [slot.id]: wp.uid }));
+      }
+    }
+  };
+
+  const handleSlotRemove = (slotId) => {
+    const uid = slotAssignments[slotId];
+    if (uid) {
+      setWorkspace(prev => prev.filter(p => p.uid !== uid));
+      setSlotAssignments(prev => {
+        const next = { ...prev };
+        delete next[slotId];
+        return next;
+      });
+    }
+  };
+
+  // -- Firmware upload simulation --
+  const startUpload = () => {
+    if (isUploading) return;
+    setIsUploading(true);
+    setUploadProgress(0);
+    setUploadLog([]);
+    setUploadStep('Inicializando...');
+
+    const steps = [
+      { pct: 5, step: 'Conectando con Arduino...', log: { text: '> Detectando placa en COM3...', type: 'info' }, delay: 600 },
+      { pct: 10, step: 'Placa detectada', log: { text: '✓ Arduino UNO detectado en COM3 (ATmega328P)', type: 'ok' }, delay: 800 },
+      { pct: 15, step: 'Compilando sketch...', log: { text: '> Compilando sketch para Arduino UNO...', type: 'info' }, delay: 500 },
+      { pct: 25, step: 'Compilando...', log: { text: '  Incluyendo biblioteca: Servo.h', type: 'info' }, delay: 400 },
+      { pct: 35, step: 'Compilando...', log: { text: '  Incluyendo biblioteca: NewPing.h', type: 'info' }, delay: 300 },
+      { pct: 45, step: 'Compilando dependencias...', log: { text: `  Compilando ${program.length} bloques de programa...`, type: 'progress' }, delay: 600 },
+      { pct: 55, step: 'Verificando código...', log: { text: '✓ Compilación exitosa (0 errores, 0 warnings)', type: 'ok' }, delay: 700 },
+      { pct: 60, step: 'Preparando firmware...', log: { text: `> Tamaño del sketch: ${1024 + program.length * 128} bytes (${Math.min(98, 3 + program.length * 4)}% del máximo)`, type: 'progress' }, delay: 500 },
+      { pct: 65, step: 'Iniciando upload...', log: { text: '> Reseteando placa via DTR...', type: 'info' }, delay: 600 },
+      { pct: 70, step: 'Subiendo firmware...', log: { text: '> Cargando bootloader... OK', type: 'ok' }, delay: 500 },
+      { pct: 78, step: 'Transfiriendo datos...', log: { text: '██████████░░░░░ 70% - Escribiendo flash...', type: 'progress' }, delay: 700 },
+      { pct: 88, step: 'Transfiriendo datos...', log: { text: '████████████████░ 94% - Verificando...', type: 'progress' }, delay: 600 },
+      { pct: 95, step: 'Verificando firmware...', log: { text: '✓ Verificación de firmware: OK', type: 'ok' }, delay: 500 },
+      { pct: 100, step: '¡Upload completo!', log: { text: '✓ ¡Programa cargado exitosamente! Robot listo.', type: 'ok' }, delay: 400 },
+    ];
+
+    let i = 0;
+    const runStep = () => {
+      if (i >= steps.length) {
+        setIsUploading(false);
+        return;
+      }
+      const s = steps[i];
+      setUploadProgress(s.pct);
+      setUploadStep(s.step);
+      setUploadLog(prev => [...prev, s.log]);
+      i++;
+      uploadRef.current = setTimeout(runStep, s.delay);
+    };
+    uploadRef.current = setTimeout(runStep, 500);
+  };
+
+  const resetUpload = () => {
+    clearTimeout(uploadRef.current);
+    setIsUploading(false);
+    setUploadProgress(0);
+    setUploadLog([]);
+    setUploadStep('');
+  };
+
+  // Manual control handlers
+  const handleManualMove = (dir) => {
+    const speed = 2.5;
+    setManualPos(prev => {
+      let { x, y, rotation } = prev;
+      if (dir === 'up') { y = Math.max(5, y - speed); rotation = -90; }
+      if (dir === 'down') { y = Math.min(95, y + speed); rotation = 90; }
+      if (dir === 'left') { x = Math.max(5, x - speed); rotation = 180; }
+      if (dir === 'right') { x = Math.min(95, x + speed); rotation = 0; }
+      return { x, y, rotation };
+    });
+  };
+
+  const handleManualStop = () => {};
+
+  const startManualMode = () => {
+    setManualMode(true);
+    setManualPos({ x: 50, y: 50, rotation: 0 });
+    setSimRunning(false);
+    resetSim();
+  };
+
+  const stopManualMode = () => {
+    setManualMode(false);
+  };
+
+  // Battle handlers
+  const handleP1Move = (dir) => {
+    const speed = 3;
+    setP1Pos(prev => {
+      let { x, y, rotation } = prev;
+      if (dir === 'up') { y = Math.max(5, y - speed); rotation = -90; }
+      if (dir === 'down') { y = Math.min(95, y + speed); rotation = 90; }
+      if (dir === 'left') { x = Math.max(5, x - speed); rotation = 180; }
+      if (dir === 'right') { x = Math.min(95, x + speed); rotation = 0; }
+      return { x, y, rotation };
+    });
+  };
+
+  const handleP2Move = (dir) => {
+    const speed = 3;
+    setP2Pos(prev => {
+      let { x, y, rotation } = prev;
+      if (dir === 'up') { y = Math.max(5, y - speed); rotation = -90; }
+      if (dir === 'down') { y = Math.min(95, y + speed); rotation = 90; }
+      if (dir === 'left') { x = Math.max(5, x - speed); rotation = 180; }
+      if (dir === 'right') { x = Math.min(95, x + speed); rotation = 0; }
+      return { x, y, rotation };
+    });
+  };
+
+  const startBattle = () => {
+    setPhase('battle');
+    setWinner(null);
+    setP1Trail([]);
+    setP2Trail([]);
+    setCollisionFlash(false);
+    setP1Pos({ x: 25, y: 50, rotation: 0 });
+    setP2Pos({ x: 75, y: 50, rotation: 180 });
+    setBattleTimer(30);
+    setBattleActive(false);
+    
+    // Countdown
+    setCountdown(3);
+    let c = 3;
+    const cdInt = setInterval(() => {
+      c--;
+      setCountdown(c);
+      if (c === 0) {
+        clearInterval(cdInt);
+        setBattleActive(true);
+      }
+    }, 1000);
+  };
+
+  const resetBattle = () => {
+    clearInterval(battleTimerRef.current);
+    setBattleActive(false);
+    setWinner(null);
+    setP1Pos({ x: 25, y: 50, rotation: 0 });
+    setP2Pos({ x: 75, y: 50, rotation: 180 });
+    setP1Trail([]);
+    setP2Trail([]);
+    setCountdown(0);
+    setBattleTimer(30);
+  };
+
+  const rematch = () => {
+    resetBattle();
+    setTimeout(() => startBattle(), 100);
+  };
+
+  // -- Simulation --
+  const hasController = workspace.some(p => p.id === 'arduino');
+  const hasBattery = workspace.some(p => p.id === 'battery');
+  const hasMotor = workspace.some(p => p.cat === 'Motores');
+  const canSimulate = hasController && hasBattery && hasMotor && program.length > 0;
+
+  const runSimulation = useCallback(() => {
+    if (!canSimulate) return;
+    
+    // Check for failures
+    let willFail = false;
+    let failStep = -1;
+    let failReason = '';
+    
+    if (!hasBattery) { willFail = true; failStep = 0; failReason = 'Sin batería el robot no enciende.'; }
+    if (!hasController) { willFail = true; failStep = 0; failReason = 'Sin Arduino no puede procesar instrucciones.'; }
+    
+    // Check if sumo has blade
+    if (template?.id === 'sumo' && !workspace.some(p => p.id === 'blade')) {
+      // Not a failure, just weaker
+    }
+    
+    setSimRunning(true);
+    setSimStep(0);
+    setSimFailed(false);
+    setSimLog([{ text: '🚀 Cargando programa al Arduino...', type: 'system' }]);
+    
+    setTimeout(() => {
+      setSimLog(prev => [...prev, { text: '✅ Programa cargado exitosamente', type: 'system' },
+        { text: `🔋 Batería conectada: ${hasBattery ? '9V OK' : '❌ NO'}`, type: hasBattery ? 'ok' : 'error' },
+        { text: `🧠 Controlador: ${hasController ? 'Arduino UNO listo' : '❌ NO'}`, type: hasController ? 'ok' : 'error' },
+        { text: `⚙️ Motores: ${workspace.filter(p => p.cat === 'Motores').length} detectados`, type: 'ok' },
+        { text: '▶️ Iniciando ejecución...', type: 'system' },
+        { text: '─'.repeat(30), type: 'divider' },
+      ]);
+    }, 600);
+
+    let step = 0;
+    simRef.current = setInterval(() => {
+      if (willFail && step === failStep) {
+        setSimLog(prev => [...prev, { text: `❌ ERROR: ${failReason}`, type: 'error' }]);
+        setSimFailed(true);
+        setSimRunning(false);
+        clearInterval(simRef.current);
+        return;
+      }
+      
+      if (step >= program.length) {
+        setSimLog(prev => [...prev, 
+          { text: '─'.repeat(30), type: 'divider' },
+          { text: '🏁 ¡Programa ejecutado completamente!', type: 'success' }
+        ]);
+        setSimRunning(false);
+        clearInterval(simRef.current);
+        return;
+      }
+
+      const block = program[step];
+      const msg = getSimMessage(block, template, workspace);
+      setSimAction(msg.action);
+      setSimLog(prev => [...prev, { text: `[${step+1}] ${msg.log}`, type: msg.type }]);
+      setSimStep(step + 1);
+      step++;
+    }, 1400);
+  }, [canSimulate, program, template, workspace, hasBattery, hasController]);
+
+  const stopSim = () => {
+    clearInterval(simRef.current);
+    setSimRunning(false);
+    setSimAction('');
+    setSimLog(prev => [...prev, { text: '⏹️ Simulación detenida por usuario', type: 'system' }]);
+  };
+
+  const resetSim = () => {
+    clearInterval(simRef.current);
+    setSimRunning(false);
+    setSimStep(0);
+    setSimLog([]);
+    setSimAction('');
+    setSimFailed(false);
+  };
+
+  // -- Select screen --
+  if (phase === 'select') {
+    return (
+      <div className="min-h-full bg-white animate-fade-in">
+        <div className="bg-[#CE82FF] px-6 pt-6 pb-10 border-b-4 border-[#A855F7]">
+          <button onClick={onBack} className="text-white/70 hover:text-white mb-3 flex items-center text-sm font-black active:scale-95 transition">
+            <ArrowLeft size={18} className="mr-1" /> Menú
+          </button>
+          <div className="text-center">
+            <span className="text-5xl mb-2 block animate-float">🤖</span>
+            <h1 className="text-2xl font-black text-white">Simulador de Robots</h1>
+            <p className="text-white/80 text-sm font-bold mt-1">Arma con piezas reales, programa y mira cómo se mueve</p>
+          </div>
+        </div>
+        <div className="px-4 mt-6 pb-24 space-y-3 stagger-children">
+          {ROBOT_TEMPLATES.map(t => (
+            <div key={t.id} onClick={() => pickTemplate(t)}
+              className="bg-white rounded-2xl border-2 border-[#E5E5E5] overflow-hidden cursor-pointer hover:border-[#CE82FF] transition-all duration-300 active:scale-[0.97]">
+              <div className={`h-2 bg-gradient-to-r ${t.color}`}/>
+              <div className="p-4 flex items-center gap-4">
+                <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${t.color} flex items-center justify-center text-3xl flex-shrink-0 border-b-2 border-black/10`}>
+                  {t.icon}
+                </div>
+                <div className="flex-grow">
+                  <h3 className="text-base font-black text-[#3C3C3C]">{t.name}</h3>
+                  <p className="text-xs text-[#777] mt-0.5">{t.desc}</p>
+                  {t.parts.length > 0 && (
+                    <span className="text-[10px] font-black text-[#CE82FF] bg-[#F3E8FF] px-2 py-0.5 rounded-full mt-1.5 inline-block">
+                      {t.parts.length} piezas · {t.program.length} instrucciones
+                    </span>
+                  )}
+                </div>
+                <ChevronRight size={20} className="text-[#E5E5E5] flex-shrink-0" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // -- Main UI (build / program / simulate) --
+  const partCategories = [...new Set(ALL_PARTS.map(p => p.cat))];
+  const blockCategories = [...new Set(PROGRAM_BLOCKS.map(b => b.cat))];
+
+  return (
+    <div className="min-h-full bg-white flex flex-col animate-fade-in">
+      {/* Header */}
+      <div className="bg-[#CE82FF] px-5 pt-4 pb-5 border-b-4 border-[#A855F7]">
+        <div className="flex justify-between items-center mb-2">
+          <button onClick={() => { resetSim(); setPhase('select'); }} className="text-white/70 hover:text-white flex items-center text-sm font-black active:scale-95 transition">
+            <ArrowLeft size={18} className="mr-1" /> Robots
+          </button>
+          <div className="flex items-center bg-white/20 px-3 py-1 rounded-full">
+            <span className="mr-1.5">{template?.icon}</span>
+            <span className="text-xs font-black text-white">{template?.name}</span>
+          </div>
+        </div>
+        {/* Phase tabs */}
+        <div className="flex gap-1.5 mt-2">
+          {[
+            { id: 'build', label: '🔧 Armar' },
+            { id: 'program', label: '💻 Prog.' },
+            { id: 'simulate', label: '▶️ Simular' },
+            { id: 'battle', label: '⚔️ Batalla' },
+          ].map(tab => (
+            <button key={tab.id}
+              onClick={() => { setPhase(tab.id); if (tab.id !== 'simulate') { resetSim(); stopManualMode(); } if (tab.id !== 'battle') { resetBattle(); } }}
+              className={`flex-1 py-2 rounded-xl text-[11px] font-black transition active:scale-95
+                ${phase === tab.id ? 'bg-white text-[#CE82FF] shadow-md' : 'bg-white/20 text-white/80 hover:bg-white/30'}`}>
+              {tab.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="flex-grow overflow-y-auto px-4 pt-4 pb-28">
+
+        {/* ======= BUILD PHASE ======= */}
+        {phase === 'build' && (
+          <div className="space-y-4">
+            {/* Visual chassis assembly */}
+            <div className="bg-white rounded-2xl border-2 border-[#E5E5E5] p-3">
+              <div className="flex justify-between items-center mb-3">
+                <h3 className="text-sm font-black text-[#3C3C3C] flex items-center">
+                  🔧 Armado del Robot
+                  <span className="ml-2 text-[10px] font-black text-[#CE82FF] bg-[#F3E8FF] px-2 py-0.5 rounded-full">{workspace.length} piezas</span>
+                </h3>
+                {workspace.length > 0 && (
+                  <button onClick={() => { setWorkspace([]); setSlotAssignments({}); }} className="text-[10px] font-black text-[#FF4B4B] bg-[#FFE1E1] px-2 py-1 rounded-full hover:bg-[#FFD0D0] transition flex items-center">
+                    <Trash2 size={10} className="mr-0.5"/> Limpiar
+                  </button>
+                )}
+              </div>
+              
+              {/* Big chassis view */}
+              <ChassisAssemblyView
+                template={template}
+                workspace={workspace}
+                slotAssignments={slotAssignments}
+                onSlotDrop={handleSlotDrop}
+                onSlotRemove={handleSlotRemove}
+              />
+
+              {/* Component checklist */}
+              <div className="flex gap-2 mt-3 flex-wrap">
+                {[
+                  { ok: hasController, label: '🧠 Arduino' },
+                  { ok: hasBattery, label: '🔋 Batería' },
+                  { ok: hasMotor, label: '⚙️ Motor' },
+                ].map((c, i) => (
+                  <span key={i} className={`text-[10px] font-bold px-2 py-1 rounded-full ${c.ok ? 'bg-green-100 text-green-700' : 'bg-red-50 text-red-500'}`}>
+                    {c.ok ? '✅' : '❌'} {c.label}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Mini-Games Hub - personalized per robot */}
+            {template && template.id !== 'free' && (
+              <RobotBuildGamesHub robotType={template.id} onBack={() => {}} />
+            )}
+
+            {/* Parts catalog with drag */}
+            <div className="bg-white rounded-2xl border-2 border-[#E5E5E5] p-4">
+              <h3 className="text-sm font-black text-[#3C3C3C] mb-1">📦 Catálogo de Piezas</h3>
+              <p className="text-[10px] text-[#AFAFAF] font-bold mb-3">Toca o arrastra una pieza para instalarla en tu robot</p>
+              <div className="flex gap-1.5 overflow-x-auto pb-2 mb-3 -mx-1 px-1">
+                {partCategories.map(cat => (
+                  <button key={cat} onClick={() => setPartCat(cat)}
+                    className={`whitespace-nowrap px-3 py-1.5 rounded-full text-[10px] font-black transition active:scale-95
+                      ${partCat === cat ? 'bg-[#CE82FF] text-white border-b-2 border-[#A855F7]' : 'bg-[#F7F7F7] text-[#777] hover:bg-[#E5E5E5]'}`}>
+                    {cat}
+                  </button>
+                ))}
+              </div>
+              <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+                {ALL_PARTS.filter(p => p.cat === partCat).map(part => (
+                  <div key={part.id}
+                    draggable
+                    onDragStart={(e) => {
+                      e.dataTransfer.setData('text/plain', JSON.stringify({ from: 'catalog', partId: part.id }));
+                    }}
+                    onClick={() => {
+                      // Auto-assign to first empty matching slot
+                      const robotId = template?.id || 'free';
+                      const slots = CHASSIS_SLOTS[robotId] || CHASSIS_SLOTS.free;
+                      const emptySlot = slots.find(s => s.accepts.includes(part.cat) && !slotAssignments[s.id]);
+                      if (emptySlot) {
+                        const newPart = { ...part, uid: `${part.id}_${Date.now()}` };
+                        setWorkspace(prev => [...prev, newPart]);
+                        setSlotAssignments(prev => ({ ...prev, [emptySlot.id]: newPart.uid }));
+                      } else {
+                        addPartToWorkspace(part);
+                      }
+                    }}
+                    className="flex flex-col items-center p-2.5 bg-white rounded-xl border border-gray-200 cursor-grab active:cursor-grabbing hover:border-violet-400 hover:shadow-md transition active:scale-95 group"
+                  >
+                    <PartSVG partId={part.svg} size={54} />
+                    <span className="text-[9px] font-bold text-gray-700 mt-1 text-center leading-tight">{part.name}</span>
+                    <span className="text-[8px] text-gray-400 font-semibold">{part.cat}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ======= PROGRAM PHASE ======= */}
+        {phase === 'program' && (
+          <div className="space-y-4">
+            {/* Current program */}
+            <div className="bg-white rounded-2xl border-2 border-[#E5E5E5] p-4">
+              <div className="flex justify-between items-center mb-3">
+                <h3 className="text-sm font-black text-[#3C3C3C] flex items-center">
+                  <Cpu size={16} className="mr-1.5 text-[#CE82FF]"/> Programa
+                  <span className="ml-2 text-[10px] font-black text-[#CE82FF] bg-[#F3E8FF] px-2 py-0.5 rounded-full">{program.length} bloques</span>
+                </h3>
+                {program.length > 0 && (
+                  <button onClick={() => setProgram([])} className="text-[10px] font-black text-[#FF4B4B] bg-[#FFE1E1] px-2 py-1 rounded-full hover:bg-[#FFD0D0] transition flex items-center">
+                    <Trash2 size={10} className="mr-0.5"/> Limpiar
+                  </button>
+                )}
+              </div>
+              {program.length === 0 ? (
+                <div className="text-center py-6 text-[#AFAFAF]">
+                  <span className="text-3xl block mb-2">📝</span>
+                  <p className="text-xs font-semibold">Agrega bloques de instrucciones</p>
+                </div>
+              ) : (
+                <div className="space-y-1.5 max-h-[280px] overflow-y-auto pr-1">
+                  {program.map((block, idx) => (
+                    <div key={block.uid}
+                      className={`flex items-center gap-1.5 pl-2 pr-1 py-1.5 rounded-lg border text-white ${block.color} border-white/20 group transition`}>
+                      <span className="text-[10px] font-mono text-white/60 w-5 text-right">{idx+1}</span>
+                      <span className="text-xs font-bold flex-grow">{block.label}</span>
+                      <div className="flex gap-0.5 opacity-60 group-hover:opacity-100 transition">
+                        <button onClick={() => moveBlock(idx, -1)} className="w-5 h-5 bg-white/20 rounded text-[10px] hover:bg-white/40 flex items-center justify-center">
+                          <ChevronUp size={12}/>
+                        </button>
+                        <button onClick={() => moveBlock(idx, 1)} className="w-5 h-5 bg-white/20 rounded text-[10px] hover:bg-white/40 flex items-center justify-center">
+                          <ChevronDown size={12}/>
+                        </button>
+                        <button onClick={() => removeBlockFromProgram(idx)} className="w-5 h-5 bg-red-400/60 rounded text-[10px] hover:bg-red-400 flex items-center justify-center">
+                          <X size={12}/>
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Code preview */}
+            {program.length > 0 && (
+              <div className="bg-gray-900 p-4 rounded-2xl border-2 border-gray-700">
+                <h3 className="text-xs font-bold text-gray-400 mb-2 flex items-center">
+                  <Zap size={12} className="mr-1 text-green-400"/> Código Arduino Generado
+                </h3>
+                <pre className="text-[10px] text-green-400 font-mono overflow-x-auto leading-relaxed">
+{`void setup() {
+  Serial.begin(9600);
+  // Configurar pines...
+}
+
+void loop() {
+${program.map(b => `  ${b.code}`).join('\n')}
+}`}
+                </pre>
+              </div>
+            )}
+
+            {/* Upload program to robot */}
+            {program.length > 0 && (
+              <div className="space-y-3">
+                {/* Upload button */}
+                {!isUploading && uploadProgress === 0 && (
+                  <button onClick={startUpload}
+                    className="w-full py-3.5 btn-3d btn-3d-green rounded-xl text-sm flex items-center justify-center gap-2">
+                    <Upload size={18}/> Cargar Programa al Robot
+                  </button>
+                )}
+                {/* Upload progress */}
+                <FirmwareUpload
+                  isUploading={isUploading}
+                  uploadProgress={uploadProgress}
+                  uploadStep={uploadStep}
+                  uploadLog={uploadLog}
+                />
+                {/* Reset upload */}
+                {uploadProgress >= 100 && (
+                  <button onClick={resetUpload}
+                    className="w-full py-2.5 bg-gray-100 text-gray-600 text-xs font-bold rounded-xl hover:bg-gray-200 transition active:scale-[0.97] flex items-center justify-center gap-1.5">
+                    <RotateCcw size={14}/> Cargar de Nuevo
+                  </button>
+                )}
+              </div>
+            )}
+
+            {/* Block palette */}
+            <div className="bg-white rounded-2xl border-2 border-[#E5E5E5] p-4">
+              <h3 className="text-sm font-black text-[#3C3C3C] mb-3">🧩 Bloques de Instrucciones</h3>
+              <div className="flex gap-1.5 overflow-x-auto pb-2 mb-3 -mx-1 px-1">
+                {blockCategories.map(cat => (
+                  <button key={cat} onClick={() => setBlockCat(cat)}
+                    className={`whitespace-nowrap px-3 py-1.5 rounded-full text-[10px] font-black transition active:scale-95
+                      ${blockCat === cat ? 'bg-[#CE82FF] text-white border-b-2 border-[#A855F7]' : 'bg-[#F7F7F7] text-[#777] hover:bg-[#E5E5E5]'}`}>
+                    {cat}
+                  </button>
+                ))}
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                {PROGRAM_BLOCKS.filter(b => b.cat === blockCat).map(block => (
+                  <button key={block.id} onClick={() => addBlockToProgram(block)}
+                    className={`${block.color} text-white px-3 py-2.5 rounded-xl text-xs font-bold text-left transition active:scale-95 hover:shadow-md hover:brightness-110`}>
+                    {block.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ======= SIMULATE PHASE ======= */}
+        {phase === 'simulate' && (
+          <div className="space-y-4">
+            {/* Mode toggle */}
+            <div className="flex gap-2">
+              <button onClick={() => { stopManualMode(); }} 
+                className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition active:scale-95 flex items-center justify-center gap-1.5
+                  ${!manualMode ? 'bg-indigo-600 text-white shadow-md' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>
+                <Cpu size={14}/> Auto (Programa)
+              </button>
+              <button onClick={startManualMode}
+                className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition active:scale-95 flex items-center justify-center gap-1.5
+                  ${manualMode ? 'bg-emerald-600 text-white shadow-md' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>
+                <Gamepad2 size={14}/> Control Manual
+              </button>
+            </div>
+
+            {/* Arena */}
+            <SimulationArena
+              robotType={template}
+              isRunning={simRunning}
+              simStep={simStep}
+              totalSteps={program.length}
+              simAction={simAction}
+              simFailed={simFailed}
+              workspace={workspace}
+              manualPos={manualPos}
+              isManual={manualMode}
+            />
+
+            {/* Manual D-Pad */}
+            {manualMode && (
+              <div className="flex justify-center">
+                <div className="bg-gray-900 rounded-2xl p-3 border-2 border-gray-700">
+                  <VirtualDPad player={1} onMove={handleManualMove} onStop={handleManualStop} />
+                  <p className="text-[9px] text-gray-500 text-center mt-2 font-semibold">También usa WASD o flechas del teclado</p>
+                </div>
+              </div>
+            )}
+
+            {/* Checklist (before start) - only in auto mode */}
+            {!manualMode && !simRunning && simLog.length === 0 && (
+              <div className="bg-white p-4 rounded-2xl border-2 border-[#E5E5E5]">
+                <h3 className="text-sm font-black text-[#3C3C3C] mb-3">✅ Verificación Pre-Vuelo</h3>
+                <div className="space-y-2">
+                  {[
+                    { ok: hasController, label: 'Arduino instalado' },
+                    { ok: hasBattery, label: 'Batería conectada' },
+                    { ok: hasMotor, label: 'Motor(es) instalado(s)' },
+                    { ok: program.length > 0, label: `Programa cargado (${program.length} instrucciones)` },
+                  ].map((item, i) => (
+                    <div key={i} className={`flex items-center gap-2 p-2.5 rounded-xl text-xs font-bold ${item.ok ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-600'}`}>
+                      <span className="text-base">{item.ok ? '✅' : '❌'}</span>
+                      <span>{item.label}</span>
+                    </div>
+                  ))}
+                </div>
+                {!canSimulate && (
+                  <p className="text-[11px] text-red-500 font-semibold mt-3 text-center">
+                    ⚠️ Completa todos los requisitos para simular
+                  </p>
+                )}
+              </div>
+            )}
+
+            {/* Log */}
+            {!manualMode && simLog.length > 0 && (
+              <div className="bg-gray-900 rounded-2xl border-2 border-gray-700 overflow-hidden">
+                <div className="flex justify-between items-center px-4 py-2 bg-gray-800 border-b border-gray-700">
+                  <h3 className="text-xs font-bold text-gray-400 flex items-center">
+                    <Zap size={12} className="mr-1 text-green-400"/> Consola de Simulación
+                  </h3>
+                  <button onClick={resetSim} className="text-[10px] font-bold text-gray-500 bg-gray-700 px-2 py-1 rounded hover:bg-gray-600 transition flex items-center">
+                    <RotateCcw size={10} className="mr-0.5"/> Reset
+                  </button>
+                </div>
+                <div className="max-h-[200px] overflow-y-auto p-3 space-y-0.5">
+                  {simLog.map((log, i) => (
+                    <div key={i} className={`text-[11px] font-mono py-0.5 px-1 rounded animate-slide-up
+                      ${log.type === 'system' ? 'text-gray-400' : ''}
+                      ${log.type === 'ok' ? 'text-green-400' : ''}
+                      ${log.type === 'error' ? 'text-red-400 font-bold' : ''}
+                      ${log.type === 'success' ? 'text-green-400 font-bold' : ''}
+                      ${log.type === 'move' ? 'text-blue-300' : ''}
+                      ${log.type === 'sensor' ? 'text-cyan-300' : ''}
+                      ${log.type === 'condition' ? 'text-amber-300' : ''}
+                      ${log.type === 'control' ? 'text-purple-300' : ''}
+                      ${log.type === 'action' ? 'text-rose-300' : ''}
+                      ${log.type === 'divider' ? 'text-gray-600' : ''}
+                    `}>
+                      {log.text}
+                    </div>
+                  ))}
+                  <div ref={logEndRef}/>
+                </div>
+              </div>
+            )}
+
+            {/* Parts summary */}
+            <div className="bg-white p-4 rounded-2xl border-2 border-[#E5E5E5]">
+              <h3 className="text-xs font-black text-[#777] mb-2">Piezas instaladas:</h3>
+              <div className="flex flex-wrap gap-2">
+                {workspace.map((p, i) => (
+                  <div key={p.uid} className="flex items-center gap-1 bg-gray-50 border border-gray-200 rounded-lg px-2 py-1">
+                    <PartSVG partId={p.svg} size={20}/>
+                    <span className="text-[9px] font-bold text-gray-600">{p.name}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ======= BATTLE PHASE ======= */}
+        {phase === 'battle' && (
+          <div className="space-y-4">
+            {/* Battle info card */}
+            {!battleActive && !winner && countdown === 0 && (
+              <div className="bg-white border-2 border-[#E5E5E5] p-5 rounded-2xl text-center">
+                <div className="text-5xl mb-3">⚔️</div>
+                <h3 className="text-lg font-black text-[#3C3C3C]">Modo Batalla</h3>
+                <p className="text-xs text-[#777] mt-1 mb-4">2 robots iguales, 30 segundos, ¡empuja a tu rival fuera!</p>
+                <div className="grid grid-cols-2 gap-3 mb-4">
+                  <div className="bg-[#DDF4FF] border-2 border-[#1CB0F6] p-3 rounded-xl">
+                    <div className="text-2xl mb-1">🔵</div>
+                    <div className="text-xs font-black text-[#1CB0F6]">Jugador 1</div>
+                    <div className="text-[10px] text-blue-500 font-semibold mt-1">WASD / D-Pad izq.</div>
+                  </div>
+                  <div className="bg-[#FFE1E1] border-2 border-[#FF4B4B] p-3 rounded-xl">
+                    <div className="text-2xl mb-1">🔴</div>
+                    <div className="text-xs font-black text-[#FF4B4B]">Jugador 2</div>
+                    <div className="text-[10px] text-[#FF4B4B]/70 font-bold mt-1">Flechas / D-Pad der.</div>
+                  </div>
+                </div>
+                <div className="text-[10px] text-gray-500 font-semibold mb-3">
+                  🏟️ Arena: {template?.arena === 'sumo' ? 'Ring de Sumo - ¡Saca al rival del ring!' : 'Campo - ¡Empuja al rival al borde!'}
+                </div>
+                <div className="flex gap-2 items-center justify-center mb-2">
+                  <span className="text-sm font-black text-[#CE82FF] bg-[#F3E8FF] px-3 py-1 rounded-full">
+                    <Trophy size={14} className="inline mr-1 -mt-0.5"/> Marcador: {scores[0]} - {scores[1]}
+                  </span>
+                </div>
+              </div>
+            )}
+
+            {/* Battle Arena */}
+            {(battleActive || winner || countdown > 0) && (
+              <>
+                <BattleArena
+                  robotType={template}
+                  arenaType={template?.arena || 'field'}
+                  isActive={battleActive}
+                  p1Pos={p1Pos}
+                  p2Pos={p2Pos}
+                  p1Trail={p1Trail}
+                  p2Trail={p2Trail}
+                  scores={scores}
+                  countdown={countdown}
+                  winner={winner}
+                  collisionFlash={collisionFlash}
+                />
+
+                {/* Timer */}
+                {battleActive && !winner && (
+                  <div className="text-center">
+                    <span className={`inline-block text-lg font-black px-4 py-1 rounded-full ${battleTimer <= 5 ? 'bg-red-100 text-red-600 animate-pulse' : 'bg-gray-100 text-gray-700'}`}>
+                      ⏱️ {battleTimer}s
+                    </span>
+                  </div>
+                )}
+
+                {/* D-Pads for touch control */}
+                <div className="flex justify-between items-start gap-2 px-1">
+                  <VirtualDPad player={1} compact onMove={handleP1Move} onStop={() => {}} />
+                  <div className="flex flex-col items-center pt-4">
+                    <span className="text-2xl font-black text-gray-800">{scores[0]} - {scores[1]}</span>
+                    <span className="text-[9px] text-gray-400 font-bold mt-0.5">VS</span>
+                  </div>
+                  <VirtualDPad player={2} compact onMove={handleP2Move} onStop={() => {}} />
+                </div>
+              </>
+            )}
+
+            {/* Winner actions */}
+            {winner && (
+              <div className="flex gap-2">
+                <button onClick={rematch}
+                  className="flex-1 py-3 btn-3d btn-3d-purple rounded-xl text-sm flex items-center justify-center">
+                  <RotateCcw size={16} className="mr-1.5"/> Revancha
+                </button>
+                <button onClick={() => { resetBattle(); setScores([0,0]); }}
+                  className="flex-1 py-3 btn-3d btn-3d-gray rounded-xl text-sm flex items-center justify-center">
+                  <RotateCcw size={16} className="mr-1.5"/> Reiniciar
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Bottom action button */}
+      <div className="fixed bottom-20 left-0 right-0 px-4 z-20">
+        <div className="max-w-xl mx-auto">
+          {phase === 'build' && (
+            <button onClick={() => setPhase('program')}
+              className="w-full py-3.5 btn-3d btn-3d-purple rounded-xl text-sm flex items-center justify-center">
+              Siguiente: Programar <ChevronRight size={18} className="ml-1"/>
+            </button>
+          )}
+          {phase === 'program' && (
+            <button onClick={() => setPhase('simulate')}
+              className="w-full py-3.5 btn-3d btn-3d-green rounded-xl text-sm flex items-center justify-center">
+              Siguiente: Simular <ChevronRight size={18} className="ml-1"/>
+            </button>
+          )}
+          {phase === 'simulate' && !manualMode && !simRunning && (
+            <button onClick={runSimulation} disabled={!canSimulate}
+              className={`w-full py-3.5 rounded-xl text-sm flex items-center justify-center
+                ${canSimulate ? 'btn-3d btn-3d-green' : 'bg-[#E5E5E5] text-[#AFAFAF] cursor-not-allowed font-black'}`}>
+              <Play size={18} className="mr-1.5"/> Iniciar Simulación
+            </button>
+          )}
+          {phase === 'simulate' && !manualMode && simRunning && (
+            <button onClick={stopSim}
+              className="w-full py-3.5 btn-3d btn-3d-red rounded-xl text-sm flex items-center justify-center">
+              <Pause size={18} className="mr-1.5"/> Detener Simulación
+            </button>
+          )}
+          {phase === 'simulate' && manualMode && (
+            <div className="bg-emerald-50 border border-emerald-200 rounded-xl py-2.5 px-4 text-center">
+              <span className="text-xs font-bold text-emerald-700">🎮 Modo Manual Activo — Usa el D-Pad o teclado (WASD / Flechas)</span>
+            </div>
+          )}
+          {phase === 'battle' && !battleActive && !winner && countdown === 0 && (
+            <button onClick={startBattle}
+              className="w-full py-3.5 btn-3d btn-3d-purple rounded-xl text-sm flex items-center justify-center">
+              <Users size={18} className="mr-1.5"/> ¡Iniciar Batalla!
+            </button>
+          )}
+          {phase === 'battle' && battleActive && (
+            <button onClick={resetBattle}
+              className="w-full py-3.5 btn-3d btn-3d-red rounded-xl text-sm flex items-center justify-center">
+              <Pause size={18} className="mr-1.5"/> Detener Batalla
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ================================================================
+   HELPER: Generate simulation log messages
+   ================================================================ */
+function getSimMessage(block, template, workspace) {
+  const name = template?.name || 'Robot';
+  const hasSensor = workspace.some(p => p.cat === 'Sensores');
+  const randDist = Math.floor(Math.random() * 50 + 5);
+  const randIR = Math.floor(Math.random() * 1024);
+
+  const map = {
+    'move_forward':      { log: `⚙️ ${name} avanza a velocidad media`, action: 'Avanza medio', type: 'move' },
+    'move_forward_fast': { log: `⚡ ¡${name} avanza a MÁXIMA velocidad!`, action: 'Avanza rápido', type: 'move' },
+    'move_backward':     { log: `⚙️ ${name} retrocede`, action: 'Retrocede', type: 'move' },
+    'turn_left':         { log: `↩️ ${name} gira a la izquierda`, action: 'Gira izquierda', type: 'move' },
+    'turn_right':        { log: `↪️ ${name} gira a la derecha`, action: 'Gira derecha', type: 'move' },
+    'turn_180':          { log: `🔄 ¡${name} gira 180°!`, action: 'Giro 180', type: 'move' },
+    'stop':              { log: `⏹️ ${name} se detiene`, action: 'Detiene', type: 'move' },
+    'walk_forward':      { log: `🐾 ${name} camina (pata 1→2→3→4)`, action: 'Camina', type: 'move' },
+    'sit':               { log: `🐕 ${name} se sienta (servos a 90°)`, action: 'Sienta', type: 'move' },
+    'detect_enemy':      { log: `📡 Sensor ultrasónico: ${hasSensor ? `distancia = ${randDist}cm` : '⚠️ SIN SENSOR'}`, action: '', type: 'sensor' },
+    'read_sensors':      { log: `🔴 Sensores IR: izq=${randIR} der=${1024-randIR}`, action: '', type: 'sensor' },
+    'check_distance':    { log: `📏 Distancia medida: ${randDist}cm`, action: '', type: 'sensor' },
+    'if_enemy_near':     { log: `🚨 ¿Enemigo cerca (< 25cm)? → ${randDist < 25 ? 'SÍ' : 'NO'}`, action: '', type: 'condition' },
+    'if_obstacle':       { log: `🚧 ¿Obstáculo (< 20cm)? → ${randDist < 20 ? 'SÍ' : 'NO'}`, action: '', type: 'condition' },
+    'if_line_left':      { log: `↩️ ¿Línea izquierda? → ${randIR > 500 ? 'SÍ' : 'NO'}`, action: randIR > 500 ? 'Gira izquierda' : '', type: 'condition' },
+    'if_line_right':     { log: `↪️ ¿Línea derecha? → ${randIR < 500 ? 'SÍ' : 'NO'}`, action: randIR < 500 ? 'Gira derecha' : '', type: 'condition' },
+    'if_line_center':    { log: `⬆️ ¿Línea al centro? → ${Math.random()>0.4 ? 'SÍ' : 'NO'}`, action: 'Avanza', type: 'condition' },
+    'if_edge':           { log: `⚠️ ¿Borde del ring? → ${Math.random()>0.7 ? '¡SÍ!' : 'NO'}`, action: '', type: 'condition' },
+    'else':              { log: `↔️ Ejecutando bloque else...`, action: '', type: 'control' },
+    'end_if':            { log: `🔚 Fin del bloque condicional`, action: '', type: 'control' },
+    'wait_1s':           { log: `⏱️ Esperando 1 segundo...`, action: '', type: 'control' },
+    'wait_half':         { log: `⏱️ Esperando 0.5 segundos...`, action: '', type: 'control' },
+    'repeat_forever':    { log: `♾️ Inicio de bucle infinito`, action: '', type: 'control' },
+    'repeat_3':          { log: `🔁 Inicio de bucle (3 repeticiones)`, action: '', type: 'control' },
+    'bark':              { log: `🔊 ¡${name} ladra! BEEP-BEEP!`, action: 'Ladra', type: 'action' },
+    'led_on':            { log: `💡 LED encendido`, action: '', type: 'action' },
+    'led_off':           { log: `🔌 LED apagado`, action: '', type: 'action' },
+  };
+
+  return map[block.id] || { log: `▶️ Ejecutando: ${block.label}`, action: '', type: 'system' };
+}
