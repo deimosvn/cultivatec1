@@ -624,6 +624,7 @@ const ComponentInfoModal = ({ component, onClose }) => {
 const PlacedComponent = ({ component, onDrag, onPinClick, selectedPin, isActive, isError, onDelete, onShowInfo }) => {
   const compDef = COMPONENTS[component.type];
   const [isDragging, setIsDragging] = useState(false);
+  const [showActions, setShowActions] = useState(false);
 
   const handleMouseDown = (e) => {
     if (e.target.closest('.pin-hitbox') || e.target.closest('.comp-btn')) return;
@@ -637,23 +638,48 @@ const PlacedComponent = ({ component, onDrag, onPinClick, selectedPin, isActive,
     window.addEventListener('mouseup', handleUp);
   };
 
+  const handleTouchStart = (e) => {
+    if (e.target.closest('.pin-hitbox') || e.target.closest('.comp-btn')) return;
+    e.stopPropagation();
+    const touch = e.touches[0];
+    const startX = touch.clientX - component.x;
+    const startY = touch.clientY - component.y;
+    let moved = false;
+    const handleTouchMove = (ev) => {
+      ev.preventDefault();
+      moved = true;
+      setIsDragging(true);
+      const t = ev.touches[0];
+      onDrag(component.id, t.clientX - startX, t.clientY - startY);
+    };
+    const handleTouchEnd = () => {
+      setIsDragging(false);
+      if (!moved) setShowActions(prev => !prev);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleTouchEnd);
+    };
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
+    window.addEventListener('touchend', handleTouchEnd);
+  };
+
   return (
     <div
       className={`absolute select-none transition-shadow duration-150 group ${isDragging ? 'z-50' : 'z-10'}`}
       style={{ left: component.x, top: component.y, width: compDef.width, height: compDef.height }}
       onMouseDown={handleMouseDown}
+      onTouchStart={handleTouchStart}
     >
-      {/* Action buttons (show on hover) */}
-      <div className="absolute -top-8 left-1/2 -translate-x-1/2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity z-30">
-        <button className="comp-btn w-7 h-7 rounded-full bg-blue-500 text-white flex items-center justify-center shadow-md hover:bg-blue-600"
+      {/* Action buttons (hover on desktop, tap-toggle on mobile) */}
+      <div className={`absolute -top-9 left-1/2 -translate-x-1/2 flex gap-1.5 transition-opacity z-30 ${showActions ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
+        <button className="comp-btn w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center shadow-md hover:bg-blue-600 active:scale-90"
           onClick={(e) => { e.stopPropagation(); onShowInfo(component.type); }}
           title="Ver info">
-          <Info size={14} />
+          <Info size={15} />
         </button>
-        <button className="comp-btn w-7 h-7 rounded-full bg-red-500 text-white flex items-center justify-center shadow-md hover:bg-red-600"
-          onClick={(e) => { e.stopPropagation(); onDelete(component.id); }}
+        <button className="comp-btn w-8 h-8 rounded-full bg-red-500 text-white flex items-center justify-center shadow-md hover:bg-red-600 active:scale-90"
+          onClick={(e) => { e.stopPropagation(); onDelete(component.id); setShowActions(false); }}
           title="Eliminar">
-          <Trash2 size={14} />
+          <Trash2 size={15} />
         </button>
       </div>
 
@@ -683,16 +709,17 @@ const PlacedComponent = ({ component, onDrag, onPinClick, selectedPin, isActive,
         )}
       </div>
 
-      {/* Pins */}
+      {/* Pins - larger hit areas on mobile */}
       {compDef.pins.map(pin => {
         const pinId = `${component.id}-${pin.id}`;
         const isSelected = selectedPin === pinId;
         const isConnected = component.connections?.includes(pin.id);
         return (
           <div key={pin.id}
-            className="pin-hitbox absolute w-7 h-7 -translate-x-1/2 -translate-y-1/2 cursor-pointer group/pin z-20"
+            className="pin-hitbox absolute w-9 h-9 -translate-x-1/2 -translate-y-1/2 cursor-pointer group/pin z-20"
             style={{ left: pin.x, top: pin.y }}
-            onClick={(e) => { e.stopPropagation(); onPinClick(pinId, component, pin); }}>
+            onClick={(e) => { e.stopPropagation(); onPinClick(pinId, component, pin); }}
+            onTouchEnd={(e) => { e.stopPropagation(); onPinClick(pinId, component, pin); }}>
             <div className={`w-full h-full rounded-full border-[2.5px] flex items-center justify-center text-[8px] font-black
               transition-all duration-200 shadow-sm
               ${isSelected ? 'bg-yellow-300 border-yellow-500 scale-[1.3] shadow-yellow-300/50 shadow-md' : ''}
@@ -1095,11 +1122,12 @@ const CircuitBuilder = ({ onBack }) => {
 
   const canvasRef = useRef(null);
   const componentIdRef = useRef(0);
+  const [selectedComponentType, setSelectedComponentType] = useState(null); // for tap-to-place on mobile
 
   const resetCircuit = useCallback(() => {
     setPlacedComponents([]); setWires([]); setSelectedPin(null);
     setSelectedPinData(null); setIsSimulating(false); setShowSuccess(false);
-    setCircuitState({ components: [], activeWires: [] });
+    setCircuitState({ components: [], activeWires: [] }); setSelectedComponentType(null);
   }, []);
 
   const handleDragStart = (e, type) => e.dataTransfer.setData('componentType', type);
@@ -1115,6 +1143,29 @@ const CircuitBuilder = ({ onBack }) => {
     setPlacedComponents(prev => [...prev, {
       id: `comp-${componentIdRef.current++}`, type, x, y, connections: [], switchState: true
     }]);
+  };
+
+  // Tap on canvas to place selected component (mobile)
+  const handleCanvasTap = (e) => {
+    if (!selectedComponentType || !COMPONENTS[selectedComponentType]) return;
+    // Don't place if tapping on an existing component
+    if (e.target.closest('.pin-hitbox') || e.target.closest('.comp-btn') || e.target !== e.currentTarget) return;
+    const rect = canvasRef.current.getBoundingClientRect();
+    const comp = COMPONENTS[selectedComponentType];
+    let clientX, clientY;
+    if (e.type === 'touchend' && e.changedTouches?.length) {
+      clientX = e.changedTouches[0].clientX;
+      clientY = e.changedTouches[0].clientY;
+    } else {
+      clientX = e.clientX;
+      clientY = e.clientY;
+    }
+    const x = Math.max(10, Math.min(clientX - rect.left - comp.width / 2, rect.width - comp.width - 10));
+    const y = Math.max(10, Math.min(clientY - rect.top - comp.height / 2, rect.height - comp.height - 10));
+    setPlacedComponents(prev => [...prev, {
+      id: `comp-${componentIdRef.current++}`, type: selectedComponentType, x, y, connections: [], switchState: true
+    }]);
+    setSelectedComponentType(null);
   };
 
   const handleComponentDrag = (id, x, y) => {
@@ -1223,34 +1274,36 @@ const CircuitBuilder = ({ onBack }) => {
   return (
     <div className="h-screen bg-gradient-to-br from-slate-100 to-blue-100 flex flex-col">
       {/* Header */}
-      <div className="bg-white shadow-md px-4 py-2.5 flex items-center justify-between border-b-2 border-gray-100 flex-shrink-0">
-        <div className="flex items-center gap-3">
+      <div className="bg-white shadow-md px-3 md:px-4 py-2 md:py-2.5 flex items-center justify-between border-b-2 border-gray-100 flex-shrink-0">
+        <div className="flex items-center gap-2 md:gap-3 min-w-0">
           <button onClick={() => setView('challenges')}
-            className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors">
-            <ArrowLeft className="text-gray-600"/>
+            className="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors flex-shrink-0">
+            <ArrowLeft size={18} className="text-gray-600"/>
           </button>
-          <div>
-            <h2 className="font-black text-gray-800 text-sm">{currentChallenge?.title}</h2>
-            <p className="text-[11px] text-gray-500 flex items-center gap-1"><Target size={12}/> {currentChallenge?.goal}</p>
+          <div className="min-w-0">
+            <h2 className="font-black text-gray-800 text-xs md:text-sm truncate">{currentChallenge?.title}</h2>
+            <p className="text-[10px] md:text-[11px] text-gray-500 flex items-center gap-1 truncate"><Target size={11}/> {currentChallenge?.goal}</p>
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 md:gap-2 flex-shrink-0">
           <div className="hidden md:flex items-center gap-1 text-xs bg-blue-50 text-blue-700 px-3 py-1.5 rounded-lg font-semibold">
             <Zap size={14}/> {placedComponents.length} componentes · {wires.length} cables
           </div>
           <button onClick={resetCircuit}
-            className="px-3 py-2 rounded-xl bg-red-50 text-red-600 font-bold text-sm flex items-center gap-1.5 hover:bg-red-100 transition-colors border border-red-200">
-            <RotateCcw size={16}/> Reiniciar
+            className="px-2 md:px-3 py-2 rounded-xl bg-red-50 text-red-600 font-bold text-xs md:text-sm flex items-center gap-1 hover:bg-red-100 transition-colors border border-red-200">
+            <RotateCcw size={14}/>
+            <span className="hidden sm:inline">Reiniciar</span>
           </button>
           <button onClick={simulateCircuit}
-            className="px-5 py-2 rounded-xl bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold text-sm flex items-center gap-2 hover:from-green-600 hover:to-emerald-600 transition-colors shadow-lg shadow-green-500/30">
-            <Play size={16} fill="white"/> Probar
+            className="px-3 md:px-5 py-2 rounded-xl bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold text-xs md:text-sm flex items-center gap-1.5 hover:from-green-600 hover:to-emerald-600 transition-colors shadow-lg shadow-green-500/30">
+            <Play size={14} fill="white"/>
+            <span className="hidden sm:inline">Probar</span>
           </button>
         </div>
       </div>
 
       {/* Main content */}
-      <div className="flex-1 flex overflow-hidden p-3 gap-3">
+      <div className="flex-1 flex overflow-hidden p-2 md:p-3 gap-2 md:gap-3">
         {/* Left sidebar */}
         <div className="w-64 flex-shrink-0 overflow-y-auto hidden md:block">
           <ComponentPalette
@@ -1263,25 +1316,42 @@ const CircuitBuilder = ({ onBack }) => {
 
         {/* Canvas area */}
         <div className="flex-1 flex flex-col gap-2">
-          {/* Mobile component bar */}
-          <div className="md:hidden flex gap-2 overflow-x-auto pb-2">
-            {(currentChallenge?.isFreeMode ? Object.keys(COMPONENTS) : [...new Set(currentChallenge?.requiredComponents || [])])
-              .map(id => COMPONENTS[id]).filter(Boolean).map(comp => (
-              <div key={comp.id}
-                className="flex-shrink-0 w-16 h-16 rounded-xl border-2 flex flex-col items-center justify-center cursor-grab p-1"
-                style={{ borderColor: comp.color + '66', background: comp.color + '11' }}
-                draggable onDragStart={(e) => handleDragStart(e, comp.id)}>
-                {comp.renderSVG({ size: 32 })}
-                <span className="text-[8px] font-bold mt-0.5" style={{ color: comp.color }}>{comp.name.split(' ')[0]}</span>
+          {/* Mobile component bar - tap to select, then tap canvas to place */}
+          <div className="md:hidden">
+            {selectedComponentType && (
+              <div className="bg-blue-50 border border-blue-300 rounded-xl px-3 py-2 mb-2 flex items-center justify-between animate-fadeIn">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold text-blue-700">📍 Toca el lienzo para colocar:</span>
+                  <span className="text-xs font-black text-blue-900">{COMPONENTS[selectedComponentType]?.name}</span>
+                </div>
+                <button onClick={() => setSelectedComponentType(null)} className="w-7 h-7 rounded-full bg-blue-200 flex items-center justify-center active:scale-90">
+                  <X size={14} className="text-blue-700"/>
+                </button>
               </div>
-            ))}
+            )}
+            <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+              {(currentChallenge?.isFreeMode ? Object.keys(COMPONENTS) : [...new Set(currentChallenge?.requiredComponents || [])])
+                .map(id => COMPONENTS[id]).filter(Boolean).map(comp => (
+                <button key={comp.id}
+                  className={`flex-shrink-0 w-[68px] h-[68px] rounded-xl border-2 flex flex-col items-center justify-center p-1 transition-all active:scale-90
+                    ${selectedComponentType === comp.id ? 'ring-3 ring-blue-500 scale-105 shadow-lg shadow-blue-500/30 border-blue-500' : ''}`}
+                  style={{ borderColor: selectedComponentType === comp.id ? undefined : comp.color + '66', background: comp.color + '11' }}
+                  onClick={() => setSelectedComponentType(prev => prev === comp.id ? null : comp.id)}>
+                  {comp.renderSVG({ size: 34 })}
+                  <span className="text-[8px] font-bold mt-0.5 leading-tight" style={{ color: comp.color }}>{comp.name.split(' ')[0]}</span>
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Canvas */}
           <div ref={canvasRef}
-            className="flex-1 bg-white rounded-2xl shadow-lg border-2 border-gray-200 relative overflow-hidden"
-            style={{ backgroundImage: 'radial-gradient(circle, #e5e7eb 1.2px, transparent 1.2px)', backgroundSize: '24px 24px' }}
-            onDrop={handleDrop} onDragOver={(e) => e.preventDefault()}>
+            className={`flex-1 bg-white rounded-2xl shadow-lg border-2 relative overflow-hidden min-h-[250px]
+              ${selectedComponentType ? 'border-blue-400 border-dashed' : 'border-gray-200'}`}
+            style={{ backgroundImage: 'radial-gradient(circle, #e5e7eb 1.2px, transparent 1.2px)', backgroundSize: '24px 24px', touchAction: 'none' }}
+            onDrop={handleDrop} onDragOver={(e) => e.preventDefault()}
+            onClick={handleCanvasTap}
+            onTouchEnd={handleCanvasTap}>
 
             {/* SVG wires */}
             <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 5 }}>
@@ -1310,11 +1380,14 @@ const CircuitBuilder = ({ onBack }) => {
             {/* Empty state */}
             {placedComponents.length === 0 && (
               <div className="absolute inset-0 flex items-center justify-center text-gray-400 pointer-events-none">
-                <div className="text-center">
-                  <div className="text-6xl mb-4">⚡</div>
-                  <p className="text-lg font-bold">Arrastra componentes aquí</p>
-                  <p className="text-sm mt-1">Haz clic en los pines (●) para conectar cables</p>
-                  <div className="mt-4 flex items-center justify-center gap-3 text-xs">
+                <div className="text-center px-6">
+                  <div className="text-5xl md:text-6xl mb-3">⚡</div>
+                  <p className="text-base md:text-lg font-bold">
+                    {selectedComponentType ? '¡Toca aquí para colocar!' : 'Selecciona un componente'}
+                  </p>
+                  <p className="text-xs md:text-sm mt-1 hidden md:block">Arrastra componentes aquí · Haz clic en los pines (●) para conectar cables</p>
+                  <p className="text-xs mt-1 md:hidden">Toca un componente arriba, luego toca aquí para colocarlo</p>
+                  <div className="mt-3 flex items-center justify-center gap-2 flex-wrap text-[10px] md:text-xs">
                     <span className="bg-red-100 text-red-600 px-2 py-1 rounded-full font-bold">● Positivo (+)</span>
                     <span className="bg-gray-200 text-gray-600 px-2 py-1 rounded-full font-bold">● Negativo (−)</span>
                     <span className="bg-blue-100 text-blue-600 px-2 py-1 rounded-full font-bold">● Digital</span>
@@ -1326,10 +1399,12 @@ const CircuitBuilder = ({ onBack }) => {
 
           {/* Tip bar */}
           <div className="flex items-start gap-2 bg-amber-50 rounded-xl px-3 py-2 border border-amber-200 text-amber-800 text-xs">
-            <span className="text-base">💡</span>
+            <span className="text-base flex-shrink-0">💡</span>
             <div>
-              <strong>Tip:</strong> Arrastra componentes desde el panel izquierdo. Haz clic en un pin (●), luego en otro pin para conectarlos con un cable. 
-              Toca el botón <span className="inline-flex items-center"><Info size={12} className="mx-0.5"/></span> de cada componente para ver su descripción educativa.
+              <strong>Tip:</strong>
+              <span className="hidden md:inline"> Arrastra componentes desde el panel izquierdo. Haz clic en un pin (●), luego en otro pin para conectarlos con un cable. 
+              Toca el botón <span className="inline-flex items-center"><Info size={12} className="mx-0.5"/></span> de cada componente para ver su descripción.</span>
+              <span className="md:hidden"> Toca un componente para seleccionarlo, luego toca el lienzo para colocarlo. Toca los pines (●) para conectar cables. Arrastra un componente para moverlo.</span>
             </div>
           </div>
         </div>

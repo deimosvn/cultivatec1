@@ -1740,16 +1740,7 @@ export default function App() {
         } catch { return null; }
     });
 
-    const handleOnboardingComplete = (profile) => {
-        setUserProfile(profile);
-        localStorage.setItem('cultivatec_profile', JSON.stringify(profile));
-    };
-
-    // Show onboarding if no profile
-    if (!userProfile) {
-        return <OnboardingScreen onComplete={handleOnboardingComplete} />;
-    }
-
+    // ALL hooks MUST be declared before any conditional return
     // Estados de "Firebase" (usando mocks)
     const [userId, setUserId] = useState(null);
     const [userScores, setUserScores] = useState({});
@@ -1782,7 +1773,6 @@ export default function App() {
         // Simulación de autenticación y carga de datos
         const authenticateUser = async () => {
             try {
-                // Aquí iría la lógica de signInWithCustomToken o signInAnonymously
                 const uid = await mockSignIn();
                 setUserId(uid); 
             } catch (error) {
@@ -1792,7 +1782,6 @@ export default function App() {
         };
         authenticateUser();
 
-        // Simulación de escucha de datos (onSnapshot)
         const unsubscribe = mockOnSnapshot(null, (docSnap) => {
             if (docSnap.exists()) {
                 setUserScores(docSnap.data());
@@ -1800,47 +1789,6 @@ export default function App() {
         });
         return () => unsubscribe(); 
     }, []);
-
-    const goToMenu = (tab = currentTab) => {
-        setCurrentTab(tab);
-        setViewMode('menu'); 
-        setCurrentModuleId(null);
-        setCurrentChallengeId(null);
-    };
-    
-    const startLesson = (moduleId) => {
-        setCurrentModuleId(moduleId);
-        const moduleData = MODULOS_DE_ROBOTICA.find(m => m.id === moduleId);
-        
-        // --- LÓGICA DE VISTAS ESPECIALES ACTUALIZADA ---
-        if (moduleData?.specialView === 'Module1View') {
-            setViewMode('module1_view');
-        } else if (moduleData?.specialView === 'InteractiveLEDGuide') { // Nueva clave para la guía
-            setViewMode('led_guide'); 
-        } else {
-            setViewMode('lesson_generic');
-        }
-    };
-    
-    const startChallenge = (challengeId) => {
-        setCurrentChallengeId(challengeId);
-        setViewMode('challenge'); 
-    };
-    
-    const startPractice = (moduleId = 'mod_electr') => {
-        setQuizModuleId(moduleId || currentModuleId || 'mod_electr');
-        setViewMode('quiz');
-    };
-
-    const handleQuizComplete = (moduleId, correct, total, score) => {
-        const percentage = Math.round((correct / total) * 100);
-        setUserStats(prev => ({
-            ...prev,
-            quizzesCompleted: prev.quizzesCompleted + 1,
-            perfectQuizzes: percentage === 100 ? prev.perfectQuizzes + 1 : prev.perfectQuizzes,
-            quizScores: { ...prev.quizScores, [moduleId]: percentage },
-        }));
-    };
 
     // Handle module completion
     const handleModuleComplete = useCallback((moduleId, xpEarned = 0) => {
@@ -1883,6 +1831,57 @@ export default function App() {
         });
         setUserStats(prev => ({ ...prev, sectionsVisited: visitedSections.size }));
     }, [currentTab]);
+
+    const handleOnboardingComplete = (profile) => {
+        setUserProfile(profile);
+        localStorage.setItem('cultivatec_profile', JSON.stringify(profile));
+    };
+
+    // Show onboarding if no profile — AFTER all hooks
+    if (!userProfile) {
+        return <OnboardingScreen onComplete={handleOnboardingComplete} />;
+    }
+
+    const goToMenu = (tab = currentTab) => {
+        setCurrentTab(tab);
+        setViewMode('menu'); 
+        setCurrentModuleId(null);
+        setCurrentChallengeId(null);
+    };
+    
+    const startLesson = (moduleId) => {
+        setCurrentModuleId(moduleId);
+        const moduleData = MODULOS_DE_ROBOTICA.find(m => m.id === moduleId);
+        
+        // --- LÓGICA DE VISTAS ESPECIALES ACTUALIZADA ---
+        if (moduleData?.specialView === 'Module1View') {
+            setViewMode('module1_view');
+        } else if (moduleData?.specialView === 'InteractiveLEDGuide') { // Nueva clave para la guía
+            setViewMode('led_guide'); 
+        } else {
+            setViewMode('lesson_generic');
+        }
+    };
+    
+    const startChallenge = (challengeId) => {
+        setCurrentChallengeId(challengeId);
+        setViewMode('challenge'); 
+    };
+    
+    const startPractice = (moduleId = 'mod_electr') => {
+        setQuizModuleId(moduleId || currentModuleId || 'mod_electr');
+        setViewMode('quiz');
+    };
+
+    const handleQuizComplete = (moduleId, correct, total, score) => {
+        const percentage = Math.round((correct / total) * 100);
+        setUserStats(prev => ({
+            ...prev,
+            quizzesCompleted: prev.quizzesCompleted + 1,
+            perfectQuizzes: percentage === 100 ? prev.perfectQuizzes + 1 : prev.perfectQuizzes,
+            quizScores: { ...prev.quizScores, [moduleId]: percentage },
+        }));
+    };
 
 
     // --- RENDERIZADO PRINCIPAL (Control de Vistas) ---
