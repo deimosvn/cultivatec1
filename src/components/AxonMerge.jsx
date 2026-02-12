@@ -7,19 +7,27 @@ import { ArrowLeft, RotateCcw, Trophy, Volume2, VolumeX, Zap, Sparkles } from 'l
 // Suika-style merge game · Matter.js physics · Neon Cyber aesthetic
 // ================================================================
 
-// ---- Merge Tree (10 levels) — BIGGER radii for better gameplay ----
+// ---- Merge Tree (10 levels) — LARGER radii for increased difficulty ----
 const COMPONENTS = [
-  { level: 0, name: 'Resistor',           emoji: '🟫', radius: 20, color: '#D97706', glow: '#FDE68A', accent: '#92400E', desc: '¡Limito el paso de corriente!' },
-  { level: 1, name: 'LED',                emoji: '💡', radius: 24, color: '#EF4444', glow: '#FCA5A5', accent: '#991B1B', desc: '¡Convierto energía en luz!' },
-  { level: 2, name: 'Capacitor',          emoji: '🔵', radius: 28, color: '#3B82F6', glow: '#93C5FD', accent: '#1E40AF', desc: '¡Almaceno energía como una mini batería!' },
-  { level: 3, name: 'Transistor',         emoji: '🔺', radius: 33, color: '#8B5CF6', glow: '#C4B5FD', accent: '#5B21B6', desc: '¡Soy el interruptor electrónico!' },
-  { level: 4, name: 'ESP32-S3',           emoji: '🧠', radius: 38, color: '#10B981', glow: '#6EE7B7', accent: '#065F46', desc: '¡Soy el cerebro con WiFi y Bluetooth!' },
-  { level: 5, name: 'Sensor Ultrasónico', emoji: '👁️', radius: 43, color: '#06B6D4', glow: '#67E8F9', accent: '#155E75', desc: '¡Mido distancia como un murciélago!' },
-  { level: 6, name: 'Motor DC',           emoji: '⚙️', radius: 48, color: '#6366F1', glow: '#A5B4FC', accent: '#3730A3', desc: '¡Convierto electricidad en movimiento!' },
-  { level: 7, name: 'Batería LiPo',       emoji: '🔋', radius: 54, color: '#F59E0B', glow: '#FDE68A', accent: '#92400E', desc: '¡Soy la fuente de energía recargable!' },
-  { level: 8, name: 'Chasis',             emoji: '📦', radius: 60, color: '#64748B', glow: '#CBD5E1', accent: '#1E293B', desc: '¡Soy el esqueleto del robot!' },
-  { level: 9, name: 'CultivaTec Rover',   emoji: '🤖', radius: 66, color: '#2563EB', glow: '#60A5FA', accent: '#1E3A8A', desc: '¡Robot completo! ¡Eres un genio!' },
+  { level: 0, name: 'Resistor',           emoji: '🟫', radius: 28, color: '#D97706', glow: '#FDE68A', accent: '#92400E', desc: '¡Limito el paso de corriente!', img: '/icons/components/resistor.png' },
+  { level: 1, name: 'LED',                emoji: '💡', radius: 33, color: '#EF4444', glow: '#FCA5A5', accent: '#991B1B', desc: '¡Convierto energía en luz!', img: '/icons/components/led.png' },
+  { level: 2, name: 'Capacitor',          emoji: '🔵', radius: 38, color: '#3B82F6', glow: '#93C5FD', accent: '#1E40AF', desc: '¡Almaceno energía como una mini batería!', img: '/icons/components/capacitor.png' },
+  { level: 3, name: 'Transistor',         emoji: '🔺', radius: 44, color: '#8B5CF6', glow: '#C4B5FD', accent: '#5B21B6', desc: '¡Soy el interruptor electrónico!', img: '/icons/components/transistor.png' },
+  { level: 4, name: 'ESP32-S3',           emoji: '🧠', radius: 50, color: '#10B981', glow: '#6EE7B7', accent: '#065F46', desc: '¡Soy el cerebro con WiFi y Bluetooth!', img: '/icons/components/ESP32.png' },
+  { level: 5, name: 'Sensor Ultrasónico', emoji: '👁️', radius: 56, color: '#06B6D4', glow: '#67E8F9', accent: '#155E75', desc: '¡Mido distancia como un murciélago!', img: '/icons/components/sensor ultrasonico.png' },
+  { level: 6, name: 'Motor DC',           emoji: '⚙️', radius: 62, color: '#6366F1', glow: '#A5B4FC', accent: '#3730A3', desc: '¡Convierto electricidad en movimiento!', img: '/icons/components/motor DC.png' },
+  { level: 7, name: 'Batería LiPo',       emoji: '🔋', radius: 68, color: '#F59E0B', glow: '#FDE68A', accent: '#92400E', desc: '¡Soy la fuente de energía recargable!', img: '/icons/components/bateria lipo.png' },
+  { level: 8, name: 'Chasis',             emoji: '📦', radius: 74, color: '#64748B', glow: '#CBD5E1', accent: '#1E293B', desc: '¡Soy el esqueleto del robot!', img: '/icons/components/chasis.png' },
+  { level: 9, name: 'CultivaTec Rover',   emoji: '🤖', radius: 80, color: '#2563EB', glow: '#60A5FA', accent: '#1E3A8A', desc: '¡Robot completo! ¡Eres un genio!', img: '/icons/components/rover.png' },
 ];
+
+// ---- Preload component images ----
+const componentImages = {};
+COMPONENTS.forEach(c => {
+  const image = new Image();
+  image.src = c.img;
+  componentImages[c.level] = image;
+});
 
 const MAX_SPAWN_LEVEL = 3;
 const MERGE_POINTS = [10, 25, 50, 100, 200, 400, 800, 1500, 3000, 10000];
@@ -59,58 +67,61 @@ const drawComponent = (ctx, x, y, r, comp, time) => {
   ctx.arc(x + r * 0.1, y + r * 0.15, r * 1.1, 0, Math.PI * 2);
   ctx.fill();
 
-  // Main body — rich gradient sphere
-  const bodyGrad = ctx.createRadialGradient(x - r * 0.3, y - r * 0.35, r * 0.05, x, y + r * 0.1, r);
-  bodyGrad.addColorStop(0, glow + 'EE');
-  bodyGrad.addColorStop(0.35, color + 'FF');
-  bodyGrad.addColorStop(0.7, accent + 'EE');
-  bodyGrad.addColorStop(1, accent + 'CC');
-  ctx.fillStyle = bodyGrad;
+  // Base circle fill (dark background for the sphere)
+  ctx.fillStyle = accent;
+  ctx.beginPath();
+  ctx.arc(x, y, r, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Component image — PNG fills the entire sphere, stretched wider
+  const img = componentImages[comp.level];
+  if (img && img.complete && img.naturalWidth > 0) {
+    const imgW = r * 4.2;    // wider horizontal stretch
+    const imgH = r * 2.4;  // taller to fill more of the sphere
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.clip();
+    ctx.drawImage(img, x - imgW / 2, y - imgH / 2, imgW, imgH);
+    ctx.restore();
+  } else {
+    // Fallback emoji if image not loaded yet
+    const emojiSize = Math.max(r * 0.85, 14);
+    ctx.font = `${emojiSize}px "Segoe UI Emoji", "Apple Color Emoji", sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(comp.emoji, x, y + 1);
+  }
+
+  // Very thin color tint — just enough to unify, image is the star
+  const colorRgb = hexToRgb(color);
+  const overlayGrad = ctx.createRadialGradient(x, y, r * 0.5, x, y, r);
+  overlayGrad.addColorStop(0, `rgba(${colorRgb.r},${colorRgb.g},${colorRgb.b},0.03)`);
+  overlayGrad.addColorStop(0.8, `rgba(${colorRgb.r},${colorRgb.g},${colorRgb.b},0.08)`);
+  overlayGrad.addColorStop(1, `rgba(${colorRgb.r},${colorRgb.g},${colorRgb.b},0.2)`);
+  ctx.fillStyle = overlayGrad;
   ctx.beginPath();
   ctx.arc(x, y, r, 0, Math.PI * 2);
   ctx.fill();
 
   // Glass rim (outer ring)
-  ctx.strokeStyle = glow + '88';
+  ctx.strokeStyle = glow + '99';
   ctx.lineWidth = 2.5;
   ctx.beginPath();
   ctx.arc(x, y, r - 1, 0, Math.PI * 2);
   ctx.stroke();
 
-  // Inner ring accent
-  ctx.strokeStyle = color + '44';
-  ctx.lineWidth = 1;
+  // Top highlight (subtle specular shine)
+  ctx.fillStyle = 'rgba(255,255,255,0.18)';
   ctx.beginPath();
-  ctx.arc(x, y, r * 0.85, 0, Math.PI * 2);
-  ctx.stroke();
-
-  // Top highlight (specular shine — crescent)
-  ctx.fillStyle = 'rgba(255,255,255,0.35)';
-  ctx.beginPath();
-  ctx.ellipse(x - r * 0.15, y - r * 0.35, r * 0.55, r * 0.3, -0.3, 0, Math.PI * 2);
+  ctx.ellipse(x - r * 0.15, y - r * 0.35, r * 0.5, r * 0.25, -0.3, 0, Math.PI * 2);
   ctx.fill();
 
   // Small specular dot
-  ctx.fillStyle = 'rgba(255,255,255,0.55)';
+  ctx.fillStyle = 'rgba(255,255,255,0.35)';
   ctx.beginPath();
-  ctx.arc(x - r * 0.25, y - r * 0.45, r * 0.12, 0, Math.PI * 2);
+  ctx.arc(x - r * 0.25, y - r * 0.45, r * 0.1, 0, Math.PI * 2);
   ctx.fill();
-
-  // Bottom reflection
-  const btmGrad = ctx.createLinearGradient(x, y + r * 0.3, x, y + r);
-  btmGrad.addColorStop(0, 'rgba(255,255,255,0)');
-  btmGrad.addColorStop(1, 'rgba(255,255,255,0.1)');
-  ctx.fillStyle = btmGrad;
-  ctx.beginPath();
-  ctx.arc(x, y, r * 0.95, 0.1, Math.PI - 0.1);
-  ctx.fill();
-
-  // Emoji — larger, centered
-  const emojiSize = Math.max(r * 0.85, 14);
-  ctx.font = `${emojiSize}px "Segoe UI Emoji", "Apple Color Emoji", sans-serif`;
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText(comp.emoji, x, y + 1);
 
   // Level badge (neon style)
   if (comp.level > 0) {
@@ -999,12 +1010,13 @@ export default function AxonMerge({ onBack }) {
             <div className="grid grid-cols-5 gap-3">
               {COMPONENTS.map((c, i) => (
                 <div key={i} className="flex flex-col items-center">
-                  <div className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl relative" style={{
+                  <div className="w-12 h-12 rounded-xl flex items-center justify-center relative overflow-hidden" style={{
                     background: `linear-gradient(135deg, ${c.color}33, ${c.color}11)`,
                     border: `1.5px solid ${c.color}55`,
                     boxShadow: `0 0 10px ${c.color}22`,
                   }}>
-                    {c.emoji}
+                    <img src={c.img} alt={c.name} className="w-9 h-9 object-contain" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }} />
+                    <span style={{ display: 'none', fontSize: 24 }} className="items-center justify-center">{c.emoji}</span>
                     <span className="absolute -top-1.5 -right-1.5 text-[9px] font-black text-white rounded-full w-4 h-4 flex items-center justify-center" style={{ background: c.color }}>{i + 1}</span>
                   </div>
                   <span className="text-[9px] font-bold text-slate-400 mt-1 text-center leading-tight">{c.name}</span>
@@ -1085,14 +1097,14 @@ export default function AxonMerge({ onBack }) {
             border: `1.5px solid ${nextComp.color}44`,
             boxShadow: `0 0 8px ${nextComp.color}15`,
           }}>
-            <span className="text-base">{nextComp.emoji}</span>
+            <img src={nextComp.img} alt={nextComp.name} className="w-6 h-6 object-contain" />
             <span className="text-[11px] font-black" style={{ color: nextComp.glow }}>{nextComp.name}</span>
           </div>
         </div>
         {maxLevelReached > 0 && (
           <div className="flex items-center gap-1 text-[10px] font-bold text-slate-500">
             <span>Máx:</span>
-            <span>{COMPONENTS[maxLevelReached].emoji}</span>
+            <img src={COMPONENTS[maxLevelReached].img} alt={COMPONENTS[maxLevelReached].name} className="w-5 h-5 object-contain" />
             <span style={{ color: COMPONENTS[maxLevelReached].glow }}>{COMPONENTS[maxLevelReached].name}</span>
           </div>
         )}
@@ -1163,7 +1175,7 @@ export default function AxonMerge({ onBack }) {
                   background: `linear-gradient(135deg, ${COMPONENTS[maxLevelReached].color}15, ${COMPONENTS[maxLevelReached].color}08)`,
                   border: `1px solid ${COMPONENTS[maxLevelReached].color}33`,
                 }}>
-                  <span className="text-2xl">{COMPONENTS[maxLevelReached].emoji}</span>
+                  <img src={COMPONENTS[maxLevelReached].img} alt={COMPONENTS[maxLevelReached].name} className="w-10 h-10 object-contain" />
                   <div className="text-left">
                     <p className="text-xs font-black" style={{ color: COMPONENTS[maxLevelReached].glow }}>Mejor componente</p>
                     <p className="text-[10px] font-bold text-slate-400">{COMPONENTS[maxLevelReached].name}</p>
