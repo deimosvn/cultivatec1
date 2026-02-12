@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { ArrowLeft, Play, RotateCcw, Trash2, Zap, Cpu, ChevronRight, Pause, ChevronUp, ChevronDown, X, Users, Gamepad2, Trophy, Upload, Wifi, Check, Monitor, Volume2, VolumeX, BookOpen, Wrench, AlertTriangle, Lightbulb, Package, CheckCircle } from 'lucide-react';
 import RobotBuildGamesHub from './RobotBuildGames';
+import AxonMerge from './AxonMerge';
 import { RobotMini } from '../Onboarding';
 
 /* ================================================================
@@ -2496,6 +2497,11 @@ export default function RobotSimulator({ onBack }) {
     setSimFailed(false);
   };
 
+  // -- Axon Merge mini-game --
+  if (phase === 'axon_merge') {
+    return <AxonMerge onBack={() => setPhase('select')} />;
+  }
+
   // -- Select screen (kid-friendly) --
   if (phase === 'select') {
     return (
@@ -2530,6 +2536,42 @@ export default function RobotSimulator({ onBack }) {
             👇 Toca un robot para ver las instrucciones
           </p>
           
+          {/* Axon Merge mini-game card */}
+          <div onClick={() => setPhase('axon_merge')}
+            className="bg-white rounded-3xl border-3 border-[#E5E5E5] overflow-hidden cursor-pointer hover:border-[#0EA5E9] hover:shadow-xl transition-all duration-300 active:scale-[0.97] shadow-md">
+            <div className="h-3 bg-gradient-to-r from-sky-400 to-blue-600"/>
+            <div className="p-5">
+              <div className="flex items-center gap-4 mb-3">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-sky-400 to-blue-600 flex items-center justify-center text-4xl flex-shrink-0 border-b-4 border-black/10 shadow-lg">
+                  🧩
+                </div>
+                <div className="flex-grow">
+                  <h3 className="text-lg font-black text-[#3C3C3C]">Axon Merge</h3>
+                  <p className="text-sm text-[#666] mt-1">¡Fusiona componentes electrónicos y construye un robot!</p>
+                </div>
+              </div>
+              <div className="flex flex-wrap gap-2 mt-3">
+                <span className="text-xs font-black text-sky-600 bg-sky-100 px-3 py-1.5 rounded-full flex items-center gap-1">
+                  <span>🎮</span> Minijuego
+                </span>
+                <span className="text-xs font-black text-purple-600 bg-purple-100 px-3 py-1.5 rounded-full flex items-center gap-1">
+                  <span>🧠</span> Física real
+                </span>
+                <span className="text-xs font-black text-green-600 bg-green-100 px-3 py-1.5 rounded-full flex items-center gap-1">
+                  <span>🔗</span> 10 niveles
+                </span>
+              </div>
+              <div className="mt-4 flex items-center justify-between">
+                <span className="text-xs font-bold text-[#777]">
+                  🤖 Resistor → CultivaTec Rover
+                </span>
+                <div className="px-4 py-2 rounded-xl bg-gradient-to-r from-sky-400 to-blue-600 text-white text-xs font-black shadow-md">
+                  ¡Jugar! 🚀
+                </div>
+              </div>
+            </div>
+          </div>
+
           {ROBOT_TEMPLATES.map(t => {
             const instructions = ASSEMBLY_INSTRUCTIONS[t.id];
             return (
