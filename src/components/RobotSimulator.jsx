@@ -2,6 +2,7 @@ import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { ArrowLeft, Play, RotateCcw, Trash2, Zap, Cpu, ChevronRight, Pause, ChevronUp, ChevronDown, X, Users, Gamepad2, Trophy, Upload, Wifi, Check, Monitor, Volume2, VolumeX, BookOpen, Wrench, AlertTriangle, Lightbulb, Package, CheckCircle } from 'lucide-react';
 import RobotBuildGamesHub from './RobotBuildGames';
 import AxonMerge from './AxonMerge';
+import SumoBotPush from './SumoBotPush';
 import { RobotMini } from '../Onboarding';
 
 /* ================================================================
@@ -2502,6 +2503,11 @@ export default function RobotSimulator({ onBack }) {
     return <AxonMerge onBack={() => setPhase('select')} />;
   }
 
+  // -- SumoBot Push mini-game --
+  if (phase === 'sumo_push') {
+    return <SumoBotPush onBack={() => setPhase('select')} />;
+  }
+
   // -- Select screen (kid-friendly) --
   if (phase === 'select') {
     return (
@@ -2567,6 +2573,42 @@ export default function RobotSimulator({ onBack }) {
                 </span>
                 <div className="px-4 py-2 rounded-xl bg-gradient-to-r from-sky-400 to-blue-600 text-white text-xs font-black shadow-md">
                   ¡Jugar! 🚀
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* SumoBot Push mini-game card */}
+          <div onClick={() => setPhase('sumo_push')}
+            className="bg-white rounded-3xl border-3 border-[#E5E5E5] overflow-hidden cursor-pointer hover:border-[#EF4444] hover:shadow-xl transition-all duration-300 active:scale-[0.97] shadow-md">
+            <div className="h-3 bg-gradient-to-r from-blue-500 via-purple-500 to-red-500"/>
+            <div className="p-5">
+              <div className="flex items-center gap-4 mb-3">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 via-purple-500 to-red-500 flex items-center justify-center text-4xl flex-shrink-0 border-b-4 border-black/10 shadow-lg">
+                  🤼
+                </div>
+                <div className="flex-grow">
+                  <h3 className="text-lg font-black text-[#3C3C3C]">SumoBot Push</h3>
+                  <p className="text-sm text-[#666] mt-1">¡Pelea de robots sumo para 2 jugadores en el mismo celular!</p>
+                </div>
+              </div>
+              <div className="flex flex-wrap gap-2 mt-3">
+                <span className="text-xs font-black text-indigo-600 bg-indigo-100 px-3 py-1.5 rounded-full flex items-center gap-1">
+                  <span>🎮</span> Minijuego
+                </span>
+                <span className="text-xs font-black text-red-600 bg-red-100 px-3 py-1.5 rounded-full flex items-center gap-1">
+                  <span>👥</span> 2 Jugadores
+                </span>
+                <span className="text-xs font-black text-blue-600 bg-blue-100 px-3 py-1.5 rounded-full flex items-center gap-1">
+                  <span>🏆</span> Mejor de 3
+                </span>
+              </div>
+              <div className="mt-4 flex items-center justify-between">
+                <span className="text-xs font-bold text-[#777]">
+                  🔵 Azul vs Rojo 🔴
+                </span>
+                <div className="px-4 py-2 rounded-xl bg-gradient-to-r from-blue-500 via-purple-500 to-red-500 text-white text-xs font-black shadow-md">
+                  ¡Pelear! ⚔️
                 </div>
               </div>
             </div>
