@@ -51,94 +51,9 @@ const isModuleUnlocked = (userScores, moduleIndex, allModules) => {
 // 🟢 RUTA DE IMAGEN (Logo de la aplicación)
 const CULTIVATEC_LOGO_PATH = "/logo-v2.png"; // Color Indigo más fuerte
 
-// --- DATOS DEL MÓDULO 1: DISEÑO PARA NIÑOS (Metáforas y Colores) ---
-const MODULO_1_LESSONS = [
-    { 
-        id: 'l_1_q_es', 
-        titulo: "¿Qué es la Electricidad?", 
-        subtitulo: "La energía invisible que nos rodea",
-        icon: '✨',
-        color: 'bg-blue-600', // Color más intenso
-        detail: {
-            title: "Pequeños Magos Llamados Electrones",
-            body: "La electricidad es como una fuerza mágica, pero en realidad es un montón de piezas diminutas, llamadas **electrones**, moviéndose muy rápido. Cuando se mueven, crean **energía** que podemos usar para encender luces o hacer funcionar robots. ¡Es el motor secreto del mundo!",
-            keywords: ["Electrón", "Energía", "Movimiento"],
-            formula: ""
-        }
-    },
-    { 
-        id: 'l_2_de_donde', 
-        titulo: "¿De dónde Viene?", 
-        subtitulo: "Fuentes: Sol, Viento y Agua",
-        icon: '💡',
-        color: 'bg-green-600', // Color más intenso
-        detail: {
-            title: "Fábricas de Energía Amigables",
-            body: "La electricidad viene de 'fábricas' o fuentes. Puede ser producida por el **Sol** (paneles solares), el **Viento** (molinos gigantes) o el **Agua** (presas). También la guardamos en pequeñas 'cajas de almuerzo' portátiles llamadas **baterías**, listas para usar en tus juguetes o tu celular.",
-            keywords: ["Batería", "Sol", "Viento", "Generador"],
-            formula: ""
-        }
-    },
-    { 
-        id: 'l_3_como_mueve', 
-        titulo: "¿Cómo se Mueve?", 
-        subtitulo: "Conductores vs. Aislantes",
-        icon: '🚡',
-        color: 'bg-yellow-600', // Color más intenso
-        detail: {
-            title: "Cables: La Super Autopista de Cobre",
-            body: "La electricidad viaja por materiales que le permiten pasar, como los **metales** (cables de cobre). A estos los llamamos **conductores**. Los materiales que la detienen, como el plástico o la goma que cubre los cables, se llaman **aislantes**. ¡Así la mantenemos segura en su camino!",
-            keywords: ["Conductor", "Aislante", "Cobre", "Cable"],
-            formula: ""
-        }
-    },
-    { 
-        id: 'l_4_componentes', 
-        titulo: "El Circuito Básico", 
-        subtitulo: "Las 4 Piezas Clave del Rompecabezas",
-        icon: '🧩',
-        color: 'bg-indigo-600', // Color más intenso
-        detail: {
-            title: "El Camino Cerrado de la Electricidad",
-            body: "Un circuito es un camino cerrado por donde viaja la energía. Necesitas 4 cosas: 1. La **Fuente** (la pila o batería). 2. Los **Cables** (el camino). 3. El **Consumidor** (la bombilla o motor que usa la energía). 4. El **Interruptor** (el 'puente' que abres o cierras para detenerla o dejarla pasar).",
-            keywords: ["Fuente", "Cable", "Interruptor", "Consumidor"],
-            formula: ""
-        }
-    },
-    { 
-        id: 'l_5_v_i_r', 
-        titulo: "El Tráfico de la Electricidad", 
-        subtitulo: "Voltaje (V), Corriente (I) y Resistencia (R)",
-        icon: '🚗',
-        color: 'bg-red-600', // Color más intenso
-        detail: {
-            title: "La Versión para Niños de V = I × R (Ley de Ohm)",
-            body: "Imagina un tobogán de agua:\n\n1. **Voltaje (V):** Es la **altura del tobogán**. Cuanto más alto, más fuerza tiene el agua para bajar. El Voltaje es la 'fuerza' que empuja a los electrones.\n\n2. **Corriente (I):** Es la **cantidad de agua** que fluye por el tobogán. La Corriente es la cantidad de electrones que pasan por el cable.\n\n3. **Resistencia (R):** Son los **frenos o rocas en el camino** del tobogán. La Resistencia es lo que 'frena' el paso de los electrones. \n\nLa **Ley de Ohm** simplemente nos dice cómo se relacionan: ¡si empujas más (más **V**) o si hay menos frenos (menos **R**), más electrones pasan (**I**)!",
-            keywords: ["Voltio (V)", "Amperio (A)", "Ohmio (Ω)", "Ley de Ohm"],
-            formula: "V = I × R"
-        }
-    },
-    { 
-        id: 'l_6_safety', 
-        titulo: "¡Seguridad Eléctrica!", 
-        subtitulo: "Las Reglas de Oro para Jugar Seguro",
-        icon: '🚨',
-        color: 'bg-purple-600', // Color más intenso
-        detail: {
-            title: "Reglas para Ser un Súper Técnico",
-            body: "La electricidad es muy útil, pero debemos respetarla. **Regla 1:** ¡Nunca uses **agua** cerca de enchufes o aparatos eléctricos! **Regla 2:** Nunca metas dedos u objetos en un **enchufe**. **Regla 3:** Si un cable está roto o pelado, avisa a un **adulto**. ¡Seguridad primero!",
-            keywords: ["Agua", "Enchufe", "Cables rotos", "Adulto"],
-            formula: ""
-        }
-    },
-];
-
 // --- ESTRUCTURA DE CONTENIDO (IMPORTADA) ---
-const MODULOS_DE_ROBOTICA = MODULOS_DATA.map(m => 
-    m.contenidoTeorico === '__MODULO_1_REF__' 
-        ? { ...m, contenidoTeorico: MODULO_1_LESSONS } 
-        : m
-);
+const MODULOS_DE_ROBOTICA = MODULOS_DATA;
+const MODULO_1_LESSONS = []; // Legacy: Module1View ya no se usa, electricidad usa GenericLessonScreen
 
 const CODE_CHALLENGES = CODE_CHALLENGES_DATA;
 const shuffleArray = (array) => [...array].sort(() => Math.random() - 0.5);

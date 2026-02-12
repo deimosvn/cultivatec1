@@ -31,6 +31,7 @@ export const MODULOS_DATA = [
                 "**🐕 Robots Bio-inspirados:** Imitan animales. Boston Dynamics hace robots-perro que caminan y saltan.",
                 "**🤖 Robots Humanoides:** Parecidos a personas. Sophia puede hablar y hacer expresiones faciales."
             ]},
+            { titulo: "✅ Quiz: Tipos de Robots", tipo: 'mini_quiz', pregunta: "Un robot aspiradora como Roomba que se mueve por tu casa, ¿qué tipo de robot es?", opciones: ["Robot Móvil", "Brazo Robótico", "Robot Humanoide", "Robot Bio-inspirado"], respuestaCorrecta: 0, explicacion: "¡Correcto! El Roomba es un robot MÓVIL porque se desplaza con ruedas por el suelo. Los brazos robóticos se quedan fijos en un lugar. 🤖🏠" },
             { titulo: "✅ Mini-Quiz Rápido", tipo: 'mini_quiz', pregunta: "¿Cuáles son las 3 cosas que todo robot puede hacer?", opciones: ["Sentir, Pensar y Actuar", "Correr, Saltar y Volar", "Hablar, Cantar y Bailar"], respuestaCorrecta: 0, explicacion: "¡Exacto! Todo robot tiene sensores para SENTIR, un cerebro para PENSAR, y actuadores para ACTUAR. ¡Es la regla de oro de la robótica! 🌟" },
             { titulo: "4. ¿Por Qué Aprender Robótica?", tipo: 'texto', puntos: [
                 "**🧠 Desarrollas tu Cerebro:** Aprendes a resolver problemas paso a paso (pensamiento computacional).",
@@ -38,6 +39,8 @@ export const MODULOS_DATA = [
                 "**🚀 El Futuro es Robótico:** Los trabajos del futuro necesitarán personas que entiendan de robots e IA.",
                 "**🎮 ¡Es Divertido!** Programar un robot es como jugar un videojuego... ¡pero TÚ creas el juego!"
             ]},
+            { titulo: "🎮 Reto: Diseña tu Robot del Futuro", tipo: 'interactive_challenge', instruccion: "**Reto Creativo:** Imagina un robot que NO existe todavía pero que sería súper útil.\n\n1. ¿Qué problema resolvería? (ej: limpiar océanos, ayudar abuelitos)\n2. ¿Cómo se movería? (ruedas, patas, volando, nadando)\n3. ¿Qué sensores necesitaría?\n4. Dale un nombre genial\n\n¡Dibújalo en una hoja de papel!", recompensa: "🏅 Insignia: Inventor del Futuro" },
+            { titulo: "✅ Quiz Final: Robótica", tipo: 'mini_quiz', pregunta: "¿Qué es el 'pensamiento computacional' que aprendes con robótica?", opciones: ["Resolver problemas dividiéndolos en pasos ordenados", "Pensar como una computadora sin emociones", "Saber muchas fórmulas de matemáticas", "Hablar un lenguaje de programación fluidamente"], respuestaCorrecta: 0, explicacion: "¡Exacto! El pensamiento computacional es la habilidad de descomponer problemas complejos en pasos pequeños y lógicos. ¡Es una superpotencia para la vida! 🧠✨" },
             { titulo: "💡 Tip del Ingeniero", tipo: 'tip', texto: "**No necesitas ser un genio para construir robots.** Solo necesitas curiosidad, paciencia y ganas de experimentar. ¡Los mejores ingenieros aprendieron cometiendo errores! Cada error es un paso más cerca del éxito. 🎯" },
         ] 
     },
@@ -62,12 +65,14 @@ export const MODULOS_DATA = [
                 "**💡 Sensor de Luz (LDR):** Detecta si hay luz o oscuridad. ¡Para robots que buscan la luz como girasoles!"
             ]},
             { titulo: "🎮 Empareja el Sensor", tipo: 'interactive_challenge', instruccion: "**Juego Mental:** Relaciona cada sensor con su uso:\n\n🔊 Ultrasónico → ¿Medir distancia o detectar color?\n📏 Infrarrojo → ¿Seguir líneas o medir peso?\n🌡️ LM35 → ¿Temperatura o velocidad?\n💡 LDR → ¿Luz o sonido?\n\n¡Las respuestas están en las descripciones de arriba!", recompensa: "🏅 Insignia: Experto en Sensores" },
+            { titulo: "✅ Quiz: Sensores", tipo: 'mini_quiz', pregunta: "¿Cuántos centímetros puede medir el sensor ultrasónico HC-SR04?", opciones: ["De 2 a 400 cm", "De 0 a 10 cm", "De 100 a 1000 cm", "Solo 1 metro exacto"], respuestaCorrecta: 0, explicacion: "¡Correcto! El HC-SR04 tiene un rango de 2 a 400 centímetros (4 metros). ¡Usa ondas de sonido como un murciélago para medir distancia! 🦇📏" },
             { titulo: "3. Los Músculos: Actuadores", tipo: 'texto', puntos: [
                 "**⚙️ Motor DC:** Gira continuamente. Para ruedas y hélices. Rápido pero no preciso.",
                 "**🎯 Servo Motor:** Gira a un ángulo exacto (0°-180°). Para brazos, garras y cabezas de robot.",
                 "**🦶 Motor Paso a Paso:** Se mueve en 'pasos' precisos. Para impresoras 3D y CNC.",
                 "**💡 LEDs y Buzzer:** ¡Los robots también se expresan! Luces para indicar estado, buzzer para sonidos."
             ]},
+            { titulo: "✅ Quiz: Actuadores", tipo: 'mini_quiz', pregunta: "¿Qué tipo de motor usarías para una GARRA de robot que necesita abrirse a un ángulo exacto?", opciones: ["Servo Motor (ángulo preciso de 0° a 180°)", "Motor DC (giro continuo)", "Motor Paso a Paso (para impresoras 3D)"], respuestaCorrecta: 0, explicacion: "¡Exacto! El servo motor es perfecto para garras porque puedes decirle exactamente a qué ángulo abrirse. ¡Es como un brazo que obedece al grado exacto! 🦾🎯" },
             { titulo: "✅ Mini-Quiz Rápido", tipo: 'mini_quiz', pregunta: "¿Qué sensor usarías para que tu robot detecte una pared antes de chocar?", opciones: ["Sensor Ultrasónico (mide distancia)", "Sensor de Luz (detecta brillo)", "Sensor de Temperatura"], respuestaCorrecta: 0, explicacion: "¡El ultrasónico es perfecto! Envía ondas de sonido y mide cuánto tardan en rebotar. Si la distancia es corta, ¡hay una pared! 🦇" },
             { titulo: "4. La Energía: Alimentación", tipo: 'texto', puntos: [
                 "**🔋 Pilas AA/AAA:** Baratas y fáciles. 4 pilas AA = 6V, suficiente para motores pequeños.",
@@ -81,6 +86,8 @@ export const MODULOS_DATA = [
                 "**🪵 MDF/Madera:** Más resistente. Se puede cortar con láser para diseños pro.",
                 "**🖨️ Impresión 3D:** Diseñas en computadora y lo imprimes. ¡El futuro es ahora!"
             ]},
+            { titulo: "🎮 Arma tu Robot Mental", tipo: 'interactive_challenge', instruccion: "**Reto de Diseño:** Elige las partes para tu robot ideal:\n\n🧠 Cerebro: ¿Arduino o ESP32?\n👀 Sensor principal: ¿Ultrasónico, Infrarrojo o LDR?\n💪 Motor: ¿DC (ruedas) o Servo (brazo)?\n🔋 Energía: ¿Pilas AA o batería 9V?\n📦 Chasis: ¿Cartón, Lego o impresión 3D?\n\n¡Escribe tus elecciones y dibuja cómo se vería!", recompensa: "🏅 Insignia: Arquitecto de Robots" },
+            { titulo: "✅ Quiz Final: Partes del Robot", tipo: 'mini_quiz', pregunta: "¿Cuál es la mejor opción de chasis para tu PRIMER robot si tienes poco presupuesto?", opciones: ["Cartón reciclado", "Aluminio profesional", "Impresión 3D en titanio", "Fibra de carbono"], respuestaCorrecta: 0, explicacion: "¡Exacto! El cartón es perfecto para empezar: es gratis, fácil de cortar y puedes rediseñar sin gastar. ¡Los mejores inventos empezaron con materiales simples! ♻️📦" },
             { titulo: "💡 Tip del Ingeniero", tipo: 'tip', texto: "**Empieza simple.** Tu primer robot puede ser de cartón con un motor y un sensor. No necesitas comprar todo de una vez. ¡Los mejores inventos empezaron en un garaje con materiales simples! 🏠✨" },
         ] 
     },
@@ -104,6 +111,7 @@ export const MODULOS_DATA = [
                 "**💪 Músculos (Motores):** DC para ruedas, Servos para brazos, Steppers para precisión.",
                 "**🔋 Energía:** Pilas AA (simple), batería 9V (compacta), LiPo (potente)."
             ]},
+            { titulo: "✅ Quiz: Elige la Parte Correcta", tipo: 'mini_quiz', pregunta: "Si tu robot necesita conectarse a internet para enviar datos, ¿qué cerebro elegirías?", opciones: ["ESP32 (tiene WiFi y Bluetooth integrados)", "Arduino UNO (solo conexión USB)", "Una pila de 9V", "Un sensor ultrasónico"], respuestaCorrecta: 0, explicacion: "¡Correcto! El ESP32 tiene WiFi y Bluetooth integrados, lo que permite que tu robot se conecte a internet sin módulos extra. ¡Es el cerebro perfecto para proyectos IoT! 🌐🧠" },
             { titulo: "📝 Plantilla de Diseño", tipo: 'activity', instruccion: "**¡Dibuja tu Robot!** En una hoja de papel completa esta ficha:\n\n🤖 **Nombre del Robot:** _______________\n🎯 **Misión:** _______________\n🧠 **Cerebro:** Arduino UNO / ESP32\n👀 **Sensores:** _______________\n💪 **Motores:** _______________\n🔋 **Energía:** _______________\n📐 **Material del cuerpo:** _______________\n🎨 **Dibújalo aquí** (vista frontal y lateral)\n\n¡Guarda este dibujo, lo usarás más adelante!", materiales: ["Hoja de papel o cuaderno", "Lápices de colores", "Regla", "Mucha imaginación 🌈"] },
             { titulo: "3. Reglas del Buen Diseño", tipo: 'texto', puntos: [
                 "**📏 Tamaño:** No muy grande (difícil de mover) ni muy pequeño (difícil de armar). 15-25cm es ideal.",
@@ -111,6 +119,7 @@ export const MODULOS_DATA = [
                 "**🔧 Accesible:** Debe ser fácil cambiar pilas y llegar a los cables sin desarmar todo.",
                 "**🧩 Modular:** Piezas que se quitan y ponen. Si algo falla, solo cambias esa parte."
             ]},
+            { titulo: "✅ Quiz: Diseño Inteligente", tipo: 'mini_quiz', pregunta: "¿Dónde deberías colocar las baterías (lo más pesado) en tu robot para que sea más estable?", opciones: ["En la base (parte de abajo)", "En la parte de arriba", "A un lado del robot", "No importa la ubicación"], respuestaCorrecta: 0, explicacion: "¡Exacto! Centro de gravedad bajo = más estabilidad. Al poner lo más pesado abajo, el robot no se voltea fácilmente. ¡Es física en acción! ⚖️🤖" },
             { titulo: "✅ Mini-Quiz Rápido", tipo: 'mini_quiz', pregunta: "¿Qué sensor elegirías para un robot que debe esquivar obstáculos?", opciones: ["Sensor Ultrasónico (mide distancia a objetos)", "Sensor de Temperatura (mide calor)", "Sensor de Luz (mide brillo)"], respuestaCorrecta: 0, explicacion: "¡Correcto! El sensor ultrasónico mide la distancia a los objetos. Si detecta algo a menos de 20cm, el robot sabe que debe girar. 🦇✨" },
             { titulo: "4. Del Papel a la Realidad", tipo: 'texto', puntos: [
                 "**Paso 1:** Dibujar → Ya lo hiciste. ¡Genial! ✅",
@@ -119,6 +128,7 @@ export const MODULOS_DATA = [
                 "**Paso 4:** Conectar electrónica → Sensores + Arduino + Motores.",
                 "**Paso 5:** Programar → ¡Aquí es donde la magia sucede! 🧙‍♂️"
             ]},
+            { titulo: "✅ Quiz: Orden de Construcción", tipo: 'mini_quiz', pregunta: "¿Cuál es el orden CORRECTO para construir un robot?", opciones: ["Dibujar → Lista de materiales → Armar chasis → Electrónica → Programar", "Programar → Comprar materiales → Dibujar → Armar", "Comprar todo → Armar sin dibujar → Programar", "Conectar cables al azar → Ver si funciona"], respuestaCorrecta: 0, explicacion: "¡Correcto! Siempre empieza dibujando tu idea, luego haz la lista de materiales, arma el cuerpo, conecta la electrónica y por último programa. ¡Orden = éxito! 📝➡️🤖" },
             { titulo: "🎮 Reto Final: Presenta tu Robot", tipo: 'interactive_challenge', instruccion: "**Reto Creativo:** Imagina que estás en una feria de ciencias. Prepara una presentación de 1 minuto sobre tu robot:\n\n1. ¿Cómo se llama?\n2. ¿Qué problema resuelve?\n3. ¿Qué lo hace especial?\n\n¡Practícalo frente al espejo o con tu familia! Los ingenieros también necesitan saber explicar sus inventos. 🎤", recompensa: "🏅 Insignia: Ingeniero Diseñador" },
             { titulo: "💡 Tip del Ingeniero", tipo: 'tip', texto: "**El primer prototipo SIEMPRE se puede mejorar.** Los ingenieros hacen muchas versiones: v1, v2, v3... Cada versión es mejor que la anterior. ¡No busques la perfección, busca el progreso! 🚀" },
         ] 
@@ -129,8 +139,60 @@ export const MODULOS_DATA = [
         titulo: "Módulo 4: Electricidad Inicial", 
         icon: '⚡', 
         descripcion: "Aprende qué es la electricidad, voltaje, corriente y resistencia con analogías divertidas.", 
-        specialView: 'Module1View', 
-        contenidoTeorico: '__MODULO_1_REF__', 
+        contenidoTeorico: [
+            { titulo: "⚡ ¡Bienvenido al Mundo de la Electricidad!", tipo: 'intro_hero', texto: "La electricidad es como una fuerza mágica invisible que hace funcionar TODO: tu celular, las luces, los robots y ¡hasta tu cerebro usa señales eléctricas! Hoy descubrirás sus secretos y te convertirás en un maestro de la energía. 🔋✨" },
+            { titulo: "1. ¿Qué es la Electricidad?", tipo: 'texto', puntos: [
+                "**Electrones:** Partículas diminutas que viven dentro de los átomos. Cuando se mueven, crean electricidad. ¡Son los mensajeros de la energía! ⚛️",
+                "**Corriente Eléctrica:** Es el flujo ordenado de millones de electrones moviéndose por un cable. Como un río de energía invisible.",
+                "**Energía:** La electricidad se transforma en luz (focos), movimiento (motores), calor (estufas) y sonido (bocinas).",
+                "**Circuito:** Camino cerrado por donde viajan los electrones. Si el camino se corta, ¡todo se apaga!"
+            ]},
+            { titulo: "🤔 ¿Sabías que...?", tipo: 'fun_fact', texto: "¡Los **rayos** son electricidad natural! Un solo rayo tiene suficiente energía para tostar 100,000 rebanadas de pan. Viajan a **300,000 km/s** y alcanzan temperaturas de **30,000°C**, ¡5 veces más caliente que la superficie del Sol! ⚡🌩️" },
+            { titulo: "✅ Quiz: Conceptos Básicos", tipo: 'mini_quiz', pregunta: "¿Qué son los electrones?", opciones: ["Partículas diminutas que al moverse crean electricidad", "Tipos de cables eléctricos", "Unidades de medida de la luz", "Piezas de un motor"], respuestaCorrecta: 0, explicacion: "¡Correcto! Los electrones son partículas subatómicas con carga negativa. Cuando fluyen de forma ordenada por un conductor, generan corriente eléctrica. ⚛️⚡" },
+            { titulo: "2. ¿De Dónde Viene la Electricidad?", tipo: 'texto', puntos: [
+                "**☀️ Energía Solar:** Paneles solares convierten la luz del Sol en electricidad. ¡Energía limpia e infinita!",
+                "**💨 Energía Eólica:** Enormes molinos de viento (aerogeneradores) giran y generan electricidad.",
+                "**💧 Energía Hidroeléctrica:** El agua cayendo en presas mueve turbinas que generan electricidad.",
+                "**🔋 Baterías:** Almacenan energía química y la convierten en eléctrica. Las usas en tu celular, juguetes y robots.",
+                "**🔌 Red Eléctrica:** Cables que llevan la electricidad desde las plantas generadoras hasta tu casa."
+            ]},
+            { titulo: "🎮 Reto: Detective de Energía", tipo: 'interactive_challenge', instruccion: "**Misión Energética:** Investiga de dónde viene la electricidad de TU casa:\n\n1. Pregunta a un adulto: ¿Tienen paneles solares?\n2. Busca en internet: ¿Hay plantas hidroeléctricas cerca?\n3. Haz una lista de TODOS los aparatos que usan electricidad en tu cuarto\n4. ¿Cuáles usan batería y cuáles se enchufan a la pared?\n\n¡Anota cuántos aparatos encontraste!", recompensa: "🏅 Insignia: Detective de Energía" },
+            { titulo: "✅ Quiz: Fuentes de Energía", tipo: 'mini_quiz', pregunta: "¿Cuál de estas NO es una fuente de electricidad?", opciones: ["Arena de playa", "Paneles solares", "Molinos de viento", "Baterías"], respuestaCorrecta: 0, explicacion: "¡Exacto! La arena común no genera electricidad. Las fuentes reales son: solar (Sol), eólica (viento), hidroeléctrica (agua) y baterías (química). 🏖️❌⚡" },
+            { titulo: "3. ¿Cómo se Mueve? Conductores y Aislantes", tipo: 'texto', puntos: [
+                "**Conductores:** Materiales que DEJAN pasar la electricidad. Los metales como **cobre**, **aluminio** y **oro** son excelentes conductores.",
+                "**Aislantes:** Materiales que BLOQUEAN la electricidad. **Plástico**, **goma**, **madera** y **vidrio** son aislantes.",
+                "**Cables:** Tienen un conductor (cobre por dentro) cubierto por un aislante (plástico por fuera). ¡Así la electricidad va segura!",
+                "**Semiconductores:** Materiales especiales (como el silicio) que a veces conducen y a veces no. ¡Con ellos se hacen los chips de computadora!"
+            ]},
+            { titulo: "🎮 Clasifica los Materiales", tipo: 'interactive_challenge', instruccion: "**Juego Mental:** Clasifica estos materiales como CONDUCTOR o AISLANTE:\n\n🥄 Cuchara de metal → ¿?\n📎 Clip metálico → ¿?\n✏️ Borrador de goma → ¿?\n🪵 Palo de madera → ¿?\n🪙 Moneda → ¿?\n📏 Regla de plástico → ¿?\n\n**Pista:** Si es metal = conductor, si no es metal = probablemente aislante. ¡Verifica con las descripciones de arriba!", recompensa: "🏅 Insignia: Experto en Materiales" },
+            { titulo: "✅ Quiz: Conductores y Aislantes", tipo: 'mini_quiz', pregunta: "¿Por qué los cables tienen plástico por fuera y cobre por dentro?", opciones: ["El cobre conduce electricidad y el plástico la aísla para seguridad", "Porque el plástico es más bonito", "Para que el cable sea más pesado", "Porque el cobre es transparente"], respuestaCorrecta: 0, explicacion: "¡Perfecto! El cobre por dentro permite que la electricidad fluya, y el plástico por fuera evita que nos dé un toque eléctrico. ¡Trabajo en equipo! 🔌🛡️" },
+            { titulo: "4. El Circuito Básico: 4 Piezas Clave", tipo: 'texto', puntos: [
+                "**🔋 Fuente de Energía:** La pila o batería que empuja a los electrones. Es el 'corazón' del circuito.",
+                "**🔌 Cables (Conductores):** El camino por donde viajan los electrones. Como las carreteras.",
+                "**💡 Consumidor (Carga):** El componente que USA la energía: un LED, motor o bocina.",
+                "**🔘 Interruptor:** El 'puente' que abres (apagado) o cierras (encendido). Controla el flujo de electricidad."
+            ]},
+            { titulo: "💡 Analogía: El Circuito como una Fuente de Agua", tipo: 'fun_fact', texto: "Imagina una **fuente de agua**: la bomba (🔋 batería) empuja el agua, las tuberías (🔌 cables) la transportan, la fuente que lanza el agua (💡 LED) es el consumidor, y la llave de paso (🔘 interruptor) abre o cierra el flujo. ¡Si cortas una tubería, el agua deja de circular, igual que la electricidad! 💧➡️⚡" },
+            { titulo: "✅ Quiz: El Circuito Básico", tipo: 'mini_quiz', pregunta: "¿Qué pasa si abres (desconectas) el interruptor en un circuito?", opciones: ["La electricidad deja de fluir y todo se apaga", "La electricidad fluye más rápido", "El LED brilla más fuerte", "La batería se carga"], respuestaCorrecta: 0, explicacion: "¡Correcto! Abrir el interruptor ROMPE el camino cerrado. Sin camino completo, los electrones no pueden circular y todo se apaga. Es como levantar un puente: ¡los carros no pueden pasar! 🔘❌" },
+            { titulo: "5. Voltaje, Corriente y Resistencia", tipo: 'texto', puntos: [
+                "**⬆️ Voltaje (V):** La FUERZA que empuja a los electrones. Se mide en **Voltios**. Más voltaje = más empuje.",
+                "**🌊 Corriente (I):** La CANTIDAD de electrones que fluyen. Se mide en **Amperios**. Más corriente = más electrones.",
+                "**🧱 Resistencia (R):** Lo que FRENA a los electrones. Se mide en **Ohmios (Ω)**. Más resistencia = menos flujo.",
+                "**Analogía del Tobogán:** Voltaje = altura del tobogán, Corriente = cantidad de agua, Resistencia = rocas en el camino."
+            ]},
+            { titulo: "Fórmula: Ley de Ohm", tipo: 'formula', texto: "La Ley de Ohm relaciona Voltaje, Corriente y Resistencia:", formula: "V = I × R", explicacion: "Si empujas más (más V) o hay menos frenos (menos R), más electrones pasan (más I). Ejemplo: con 9V y resistencia de 450Ω, la corriente es I = 9÷450 = 0.02A (20mA)." },
+            { titulo: "🎮 Calcula con la Ley de Ohm", tipo: 'interactive_challenge', instruccion: "**Reto Matemático:** Usa V = I × R para resolver:\n\n1. Si V = 12V y R = 600Ω, ¿cuánta corriente (I) fluye?\n   Pista: I = V ÷ R = 12 ÷ 600 = ?\n\n2. Si I = 0.05A y R = 100Ω, ¿cuánto voltaje (V) necesitas?\n   Pista: V = I × R = 0.05 × 100 = ?\n\n3. Si V = 5V e I = 0.025A, ¿cuánta resistencia (R) hay?\n   Pista: R = V ÷ I = 5 ÷ 0.025 = ?\n\n¡Respuestas: 0.02A, 5V, 200Ω!", recompensa: "🏅 Insignia: Maestro de Ohm" },
+            { titulo: "✅ Quiz: Ley de Ohm", tipo: 'mini_quiz', pregunta: "Si aumentas el voltaje pero la resistencia se mantiene igual, ¿qué pasa con la corriente?", opciones: ["La corriente aumenta", "La corriente disminuye", "La corriente se mantiene igual", "El circuito explota"], respuestaCorrecta: 0, explicacion: "¡Exacto! Según V = I × R, si V sube y R es igual, entonces I sube. Más voltaje = más empuje = más corriente. ¡Como subir la altura del tobogán para que el agua baje más rápido! ⬆️🌊" },
+            { titulo: "6. ¡Seguridad Eléctrica!", tipo: 'texto', puntos: [
+                "**🚫 Regla 1:** Nunca toques enchufes, cables pelados o aparatos eléctricos con las manos MOJADAS. ¡El agua conduce electricidad!",
+                "**🚫 Regla 2:** Nunca metas objetos (dedos, cuchillos, clips) en enchufes o tomas de corriente.",
+                "**🚫 Regla 3:** Si ves un cable roto o pelado, NO lo toques. Avisa a un ADULTO inmediatamente.",
+                "**✅ Regla 4:** Para tus proyectos de robótica, usa PILAS (bajo voltaje, seguras). Nunca trabajes con electricidad de pared (110V-220V).",
+                "**✅ Regla 5:** Siempre desconecta la energía ANTES de hacer cambios en tu circuito."
+            ]},
+            { titulo: "✅ Quiz Final: Seguridad", tipo: 'mini_quiz', pregunta: "¿Por qué NUNCA debes tocar un enchufe con las manos mojadas?", opciones: ["Porque el agua es conductora y la electricidad pasaría por tu cuerpo", "Porque el enchufe se oxida", "Porque el agua apaga la electricidad", "Porque se moja el piso"], respuestaCorrecta: 0, explicacion: "¡Correcto! El agua es un conductor. Si tocas algo eléctrico con manos mojadas, la electricidad puede pasar por el agua hasta tu cuerpo y causarte un choque eléctrico. ¡SIEMPRE manos secas! 🖐️💧⚡" },
+            { titulo: "💡 Tip del Ingeniero", tipo: 'tip', texto: "**La electricidad no es peligrosa si la respetas.** Los ingenieros trabajan con ella todos los días de forma segura siguiendo reglas simples. Con pilas y componentes de bajo voltaje (como Arduino a 5V) puedes experimentar tranquilamente. ¡La clave es siempre aprender antes de tocar! 🔒🧠" },
+        ] 
     },
     { 
         id: 'mod_electon', 
@@ -151,12 +213,15 @@ export const MODULOS_DATA = [
                 "**Inductor (L):** Almacena energía en un campo magnético. Se usa en filtros y transformadores.",
                 "**Potenciómetro:** Resistencia variable. ¡Giras la perilla y cambia el valor! Se usa para controlar volumen o brillo."
             ]},
+            { titulo: "✅ Quiz: Componentes Pasivos", tipo: 'mini_quiz', pregunta: "¿Qué componente almacena energía temporalmente como una 'mini-batería rápida'?", opciones: ["Capacitor", "Resistencia", "Inductor", "Potenciómetro"], respuestaCorrecta: 0, explicacion: "¡Correcto! El capacitor almacena energía eléctrica y puede liberarla rápidamente. Se usa mucho para estabilizar circuitos y como filtros. ⚡📦" },
             { titulo: "3. Componentes Activos", tipo: 'texto', puntos: [
                 "**Diodo:** Permite que la corriente fluya en UNA sola dirección. Como una puerta de un solo sentido.",
                 "**LED (Diodo Emisor de Luz):** Un diodo especial que ¡brilla! Tiene pata larga (+) y corta (-).",
                 "**Transistor:** El componente más importante. Actúa como **interruptor** electrónico o **amplificador** de señales.",
                 "**Circuito Integrado (CI):** Miles de transistores en un chip diminuto. El Arduino usa un **ATmega328**."
             ]},
+            { titulo: "✅ Quiz: Componentes Activos", tipo: 'mini_quiz', pregunta: "¿Cuál es la diferencia entre la pata larga y la corta de un LED?", opciones: ["Pata larga = positivo (+), pata corta = negativo (-)", "Pata larga = negativo, pata corta = positivo", "No hay diferencia", "Ambas son para tierra"], respuestaCorrecta: 0, explicacion: "¡Exacto! La pata larga del LED es el ánodo (+) y la corta es el cátodo (-). Si lo conectas al revés, ¡no enciende! Es como una puerta de un solo sentido. 💡🔌" },
+            { titulo: "🎮 Reto: Identifica los Componentes", tipo: 'interactive_challenge', instruccion: "**Misión Detective:** Si tienes aparatos viejos en casa (con permiso de un adulto), ábrelos y busca estos componentes:\n\n🔍 ¿Ves resistencias? (cilindros pequeños con bandas de colores)\n🔍 ¿Ves capacitores? (cilindros o discos más grandes)\n🔍 ¿Ves LEDs? (bolitas transparentes o de color)\n🔍 ¿Ves circuitos integrados? (chips negros con muchas patitas)\n\n⚠️ ¡NUNCA desarmes algo que esté enchufado! Solo aparatos desconectados y con permiso.", recompensa: "🏅 Insignia: Arqueólogo Electrónico" },
             { titulo: "💡 Ejemplo: LED con Resistencia", tipo: 'code_example', lenguaje: 'Arduino', codigo: "// Encender un LED protegido con resistencia\nvoid setup() {\n  pinMode(9, OUTPUT);  // Pin 9 → Resistencia → LED\n}\n\nvoid loop() {\n  analogWrite(9, 128);  // Brillo al 50%\n  delay(2000);\n  analogWrite(9, 255);  // Brillo al 100%\n  delay(2000);\n}", explicacion: "Usamos analogWrite para controlar el brillo del LED a través de la resistencia. ¡Sin resistencia, el LED se quemaría!" },
             { titulo: "4. Circuitos Serie y Paralelo", tipo: 'texto', puntos: [
                 "**Circuito en Serie:** Los componentes van uno detrás del otro. Si uno falla, TODO se apaga.",
@@ -165,6 +230,7 @@ export const MODULOS_DATA = [
                 "**Voltaje en Paralelo:** Es *igual* para todos los componentes conectados."
             ]},
             { titulo: "✅ Mini-Quiz Rápido", tipo: 'mini_quiz', pregunta: "Si conectas 3 LEDs en serie y uno se funde, ¿qué pasa?", opciones: ["Se apagan todos", "Solo ese se apaga", "Los otros brillan más"], respuestaCorrecta: 0, explicacion: "¡Correcto! En serie, si uno falla, se rompe el circuito completo y todos se apagan." },
+            { titulo: "✅ Quiz: Serie vs Paralelo", tipo: 'mini_quiz', pregunta: "Las luces de tu casa están conectadas en PARALELO. ¿Qué pasa si se funde un foco de la cocina?", opciones: ["Solo se apaga el de la cocina, las demás luces siguen", "Se apagan TODAS las luces de la casa", "Los demás focos brillan más", "Salta el interruptor general"], respuestaCorrecta: 0, explicacion: "¡Correcto! En paralelo, cada foco tiene su propio camino. Si uno falla, los demás siguen funcionando. ¡Por eso las casas usan circuitos en paralelo! 💡🏠" },
             { titulo: "5. Herramientas del Electrónico", tipo: 'texto', puntos: [
                 "**Multímetro:** Mide voltaje, corriente y resistencia. ¡Tu mejor amigo para diagnosticar circuitos!",
                 "**Protoboard:** Tablero con agujeros conectados internamente para armar circuitos sin soldar.",
@@ -193,12 +259,14 @@ export const MODULOS_DATA = [
                 "**Plano Inclinado:** Una rampa. Es más fácil subir una caja por una rampa que levantarla directo.",
                 "**Rueda y Eje:** Reduce la fricción y permite mover cosas. ¡Los robots con ruedas la usan!"
             ]},
+            { titulo: "✅ Quiz: Máquinas Simples", tipo: 'mini_quiz', pregunta: "Un sube y baja en el parque es un ejemplo de:", opciones: ["Palanca", "Polea", "Plano inclinado", "Engranaje"], respuestaCorrecta: 0, explicacion: "¡Correcto! El sube y baja es una palanca clásica: una barra que gira sobre un punto fijo (fulcro) en el centro. ¡Las palancas multiplican tu fuerza! ⚖️" },
             { titulo: "3. Engranajes: Los Dientes Mágicos", tipo: 'texto', puntos: [
                 "**Engranaje:** Rueda dentada que transmite movimiento rotatorio a otra rueda dentada.",
                 "**Relación de Transmisión:** Engranaje grande moviendo uno pequeño = más velocidad, menos fuerza.",
                 "**Engranaje Reductor:** Engranaje pequeño moviendo uno grande = más fuerza, menos velocidad.",
                 "**Tipos:** Rectos (comunes), cónicos (cambian dirección 90°), cremallera (giro a línea recta)."
             ]},
+            { titulo: "🎮 Experimenta con Engranajes", tipo: 'interactive_challenge', instruccion: "**Reto Manual:** Consigue una bicicleta y observa sus engranajes:\n\n1. ¿Cuántos dientes tiene el engranaje grande (plato delantero)?\n2. ¿Cuántos dientes tiene el piñón trasero más pequeño?\n3. Calcula la relación: dientes_grande ÷ dientes_pequeño = ?\n4. ¿En qué marcha pedaleas más FÁCIL (subida)? ¿Y más RÁPIDO (bajada)?\n\n¡Los cambios de bicicleta son engranajes reductores en acción!", recompensa: "🏅 Insignia: Ingeniero de Engranajes" },
             { titulo: "✅ Mini-Quiz Rápido", tipo: 'mini_quiz', pregunta: "Si quieres que tu robot tenga MÁS FUERZA para subir una rampa, ¿qué relación de engranajes usas?", opciones: ["Engranaje pequeño → grande (reductor)", "Engranaje grande → pequeño (multiplicador)", "Sin engranajes"], respuestaCorrecta: 0, explicacion: "¡Exacto! Un engranaje reductor da más torque (fuerza de giro) a costa de menos velocidad." },
             { titulo: "4. Fuerza y Torque", tipo: 'texto', puntos: [
                 "**Fuerza:** Empujón o jalón que mueve, detiene o deforma un objeto. Se mide en **Newtons (N)**.",
@@ -206,6 +274,7 @@ export const MODULOS_DATA = [
                 "**Fricción:** Fuerza que se opone al movimiento. Útil para frenos, molesta para ruedas.",
                 "**Centro de Gravedad:** Punto de equilibrio del robot. Si está muy alto, ¡el robot se voltea!"
             ]},
+            { titulo: "✅ Quiz: Fuerza y Torque", tipo: 'mini_quiz', pregunta: "¿Qué es el TORQUE en un motor de robot?", opciones: ["La fuerza de giro que permite mover las ruedas", "La velocidad máxima del motor", "El peso del motor", "El color del motor"], respuestaCorrecta: 0, explicacion: "¡Exacto! El torque es la fuerza rotacional. Un motor con mucho torque puede mover cargas pesadas aunque sea lento. ¡Como un tractor vs un auto de carreras! ⚙️💪" },
             { titulo: "Fórmula: Relación de Engranajes", tipo: 'formula', texto: "La relación de transmisión se calcula así:", formula: "Relación = Dientes<sub>conducido</sub> ÷ Dientes<sub>conductor</sub>", explicacion: "Si el conductor tiene 10 dientes y el conducido 40, la relación es 4:1 (4x más fuerza, 4x menos velocidad)." },
             { titulo: "🎯 Actividad Práctica", tipo: 'activity', instruccion: "**Reto Lego:** Si tienes piezas Lego Technic, construye un tren de engranajes. Prueba cómo cambia la velocidad al intercambiar el engranaje grande con el pequeño.", materiales: ["Piezas Lego Technic o engranajes", "Cuaderno para dibujar observaciones"] }
         ] 
@@ -230,6 +299,7 @@ export const MODULOS_DATA = [
                 "**Asignación:** Guardar un valor: `velocidad = 100`. Puedes cambiarlo después.",
                 "**Constante:** Variable que NUNCA cambia. Ejemplo: `PI = 3.14159`."
             ]},
+            { titulo: "✅ Quiz: Variables", tipo: 'mini_quiz', pregunta: "¿Qué tipo de dato usarías para guardar si un sensor detectó obstáculo (sí o no)?", opciones: ["bool (verdadero/falso)", "int (número entero)", "String (texto)", "float (decimal)"], respuestaCorrecta: 0, explicacion: "¡Correcto! Un booleano (bool) es perfecto para estados de sí/no, verdadero/falso. `bool hayObstaculo = true;` Es el tipo de dato favorito de los robots para tomar decisiones. 🤖✅❌" },
             { titulo: "💡 Variables en un Robot", tipo: 'code_example', lenguaje: 'Arduino', codigo: "// Variables para controlar un robot\nint velocidad = 150;\nint distancia = 0;\nbool hayObstaculo = false;\n\nvoid loop() {\n  distancia = leerSensor();\n  hayObstaculo = (distancia < 20);\n  \n  if (hayObstaculo) {\n    velocidad = 0;  // ¡Frena!\n  } else {\n    velocidad = 150; // Sigue adelante\n  }\n}", explicacion: "Las variables guardan datos del robot: velocidad y distancia. El robot las actualiza constantemente para tomar decisiones." },
             { titulo: "3. Condiciones: El Robot Decide", tipo: 'texto', puntos: [
                 "**if (si):** Si una condición es verdadera, ejecuta un bloque de código.",
@@ -237,6 +307,7 @@ export const MODULOS_DATA = [
                 "**Ejemplo Robot:** `if (distancia < 20) { frenar(); } else { avanzar(); }`",
                 "**Operadores:** Mayor (>), Menor (<), Igual (==), Diferente (!=), Mayor o igual (>=)."
             ]},
+            { titulo: "🎮 Piensa como un Robot", tipo: 'interactive_challenge', instruccion: "**Reto de Lógica:** Escribe las condiciones (if/else) para estas situaciones:\n\n1. 🌧️ Si llueve → llevar paraguas, si no → usar lentes de sol\n2. 🔋 Si batería < 20% → ir a cargar, si no → seguir explorando\n3. 🌡️ Si temperatura > 30°C → encender ventilador, si no → apagarlo\n4. 🤖 Si hay obstáculo Y es grande → retroceder, si hay obstáculo Y es pequeño → esquivar\n\n¡Escríbelos en pseudocódigo o en Python!", recompensa: "🏅 Insignia: Programador Lógico" },
             { titulo: "✅ Mini-Quiz Rápido", tipo: 'mini_quiz', pregunta: "¿Qué imprime este código?\n\nedad = 12\nif edad >= 10:\n    print(\"Grande\")\nelse:\n    print(\"Pequeño\")", opciones: ["Grande", "Pequeño", "Error"], respuestaCorrecta: 0, explicacion: "Como edad es 12 y 12 >= 10 es verdadero, se ejecuta el bloque del if y se imprime 'Grande'." },
             { titulo: "4. Ciclos: Repetir sin Cansarse", tipo: 'texto', puntos: [
                 "**for:** Repite un número exacto de veces. `for (i = 0; i < 10; i++)` → repite 10 veces.",
@@ -244,6 +315,7 @@ export const MODULOS_DATA = [
                 "**Loop infinito:** En Arduino, `loop()` se repite para siempre.  ¡El robot nunca se aburre!",
                 "**Break:** Palabra mágica para salir de un ciclo antes de que termine."
             ]},
+            { titulo: "✅ Quiz: Ciclos", tipo: 'mini_quiz', pregunta: "¿Qué tipo de ciclo usarías si quieres que tu robot explore MIENTRAS tenga batería?", opciones: ["while (repite mientras la condición sea verdadera)", "for (repite un número exacto de veces)", "if (solo se ejecuta una vez)", "break (sale del ciclo)"], respuestaCorrecta: 0, explicacion: "¡Correcto! `while (bateria > 0) { explorar(); }` es perfecto porque no sabemos CUÁNTAS veces repetirá, solo que debe seguir mientras haya batería. ¡El for es para cuando sabes cuántas veces! 🔄🔋" },
             { titulo: "💡 Ciclo en Python", tipo: 'code_example', lenguaje: 'Python', codigo: "# Contar estrellas\nestrellas = \"\"\n\nfor i in range(1, 6):\n    estrellas = estrellas + \"⭐\"\n    print(f\"Nivel {i}: {estrellas}\")\n\nprint(\"¡Completaste los 5 niveles!\")", explicacion: "El ciclo for repite 5 veces. Cada vez agrega una estrella y muestra el nivel. ¡Es como subir de nivel en un juego!" },
             { titulo: "5. Funciones: Superpoderes Reutilizables", tipo: 'texto', puntos: [
                 "**Función:** Bloque de código con nombre que puedes reusar cuando quieras.",
@@ -273,6 +345,7 @@ export const MODULOS_DATA = [
                 "**Pines PWM (~3,5,6,9,10,11):** Simulan valores analógicos. Controlan velocidad de motores y brillo de LEDs.",
                 "**GND y 5V/3.3V:** Pines de alimentación. GND = tierra (negativo), 5V = energía para sensores."
             ]},
+            { titulo: "✅ Quiz: Pines de Arduino", tipo: 'mini_quiz', pregunta: "¿Qué rango de valores puede leer un pin analógico de Arduino?", opciones: ["0 a 1023", "0 a 255", "Solo HIGH o LOW", "0 a 100"], respuestaCorrecta: 0, explicacion: "¡Correcto! Los pines analógicos (A0-A5) usan 10 bits de resolución, lo que da 2¹⁰ = 1024 valores posibles (0 a 1023). ¡Esto permite detectar cambios muy sutiles en sensores! 📊" },
             { titulo: "💡 Mi Primer Sketch Arduino", tipo: 'code_example', lenguaje: 'Arduino', codigo: "// Parpadear LED + Monitor Serial\nvoid setup() {\n  pinMode(13, OUTPUT);\n  Serial.begin(9600);\n  Serial.println(\"Robot listo!\");\n}\n\nvoid loop() {\n  digitalWrite(13, HIGH);\n  Serial.println(\"LED: ON\");\n  delay(1000);\n  \n  digitalWrite(13, LOW);\n  Serial.println(\"LED: OFF\");\n  delay(1000);\n}", explicacion: "setup() configura el LED y el Serial. loop() enciende y apaga el LED cada segundo mientras muestra mensajes en el Monitor Serial." },
             { titulo: "3. Estructura de un Sketch", tipo: 'texto', puntos: [
                 "**setup():** Se ejecuta UNA sola vez al inicio. Configuras pines y comunicación serial.",
@@ -286,6 +359,7 @@ export const MODULOS_DATA = [
                 "**analogRead(pin):** Lee valor 0-1023. `int luz = analogRead(A0);`",
                 "**delay(ms):** Pausa el programa. `delay(1000)` → espera 1 segundo."
             ]},
+            { titulo: "🎮 Predice la Salida del Código", tipo: 'interactive_challenge', instruccion: "**Reto Mental:** ¿Qué hace este código? Piensa paso a paso:\n\n```\nvoid setup() {\n  pinMode(13, OUTPUT);\n  pinMode(12, OUTPUT);\n}\nvoid loop() {\n  digitalWrite(13, HIGH);\n  digitalWrite(12, LOW);\n  delay(500);\n  digitalWrite(13, LOW);\n  digitalWrite(12, HIGH);\n  delay(500);\n}\n```\n\n¿Los LEDs se encienden juntos o se alternan?\n¿Cada cuánto tiempo cambian?\n\n¡Respuesta: Se alternan cada 0.5 segundos, como un semáforo ferroviario! 🚂", recompensa: "🏅 Insignia: Lector de Código" },
             { titulo: "✅ Mini-Quiz Rápido", tipo: 'mini_quiz', pregunta: "¿Qué hace analogRead(A0) en Arduino?", opciones: ["Lee un valor entre 0 y 1023 del pin A0", "Escribe un valor analógico en el pin A0", "Enciende el pin A0"], respuestaCorrecta: 0, explicacion: "analogRead lee un valor analógico (0-1023) del pin. Un valor de 512 sería aproximadamente 2.5V." },
             { titulo: "5. Monitor Serial", tipo: 'texto', puntos: [
                 "**Serial.begin(9600):** Inicia comunicación con tu PC a 9600 baudios.",
@@ -316,6 +390,7 @@ export const MODULOS_DATA = [
                 "**NOT (!):** Invierte el valor. Si es verdadero → falso y viceversa.",
                 "**Combinaciones:** `if ((sensorIzq || sensorDer) && !botonStop)` = avanza si hay línea y no presionaron stop."
             ]},
+            { titulo: "✅ Quiz: AND u OR", tipo: 'mini_quiz', pregunta: "Un robot debe avanzar SOLO si el camino está libre Y la batería tiene carga. ¿Qué operador usas?", opciones: ["AND (&&) - ambas condiciones deben ser verdaderas", "OR (||) - al menos una debe ser verdadera", "NOT (!) - invierte el valor", "XOR - una u otra pero no ambas"], respuestaCorrecta: 0, explicacion: "¡Correcto! Necesitas AND porque AMBAS condiciones deben cumplirse: camino libre Y batería cargada. Si usaras OR, avanzaría con batería vacía mientras el camino esté libre. ¡Peligroso! 🤖&&" },
             { titulo: "💡 Lógica en Robot Seguidor de Línea", tipo: 'code_example', lenguaje: 'Arduino', codigo: "// Robot sigue-líneas con lógica booleana\nbool sensorIzq = digitalRead(2);\nbool sensorDer = digitalRead(3);\nbool botonStop = digitalRead(4);\n\nif (botonStop) {\n  detener();\n} else if (sensorIzq && sensorDer) {\n  avanzar();  // AND: ambos ven línea = recto\n} else if (sensorIzq || sensorDer) {\n  // OR: al menos uno ve línea = curva\n  if (sensorIzq) girarDerecha();\n  else girarIzquierda();\n} else {\n  buscarLinea();\n}", explicacion: "Este robot usa AND (&&), OR (||) y condiciones para seguir una línea negra. ¡La lógica booleana es el cerebro del robot!" },
             { titulo: "3. Tablas de Verdad", tipo: 'texto', puntos: [
                 "**Tabla AND:** F∧F=F, F∧V=F, V∧F=F, V∧V=V → solo verdadero si AMBOS lo son.",
@@ -323,6 +398,8 @@ export const MODULOS_DATA = [
                 "**Tabla NOT:** V→F, F→V → simplemente lo invierte.",
                 "**Uso en robots:** SigueLíneas usa AND para intersecciones y OR para detectar curvas."
             ]},
+            { titulo: "🎮 Completa la Tabla de Verdad", tipo: 'interactive_challenge', instruccion: "**Reto Lógico:** Completa las tablas en un papel:\n\n**AND (&&):**\nfalse && false = ?\nfalse && true = ?\ntrue && false = ?\ntrue && true = ?\n\n**OR (||):**\nfalse || false = ?\nfalse || true = ?\ntrue || false = ?\ntrue || true = ?\n\n**NOT (!):**\n!true = ?\n!false = ?\n\n¡Tip: AND es estricto (ambos deben ser V), OR es generoso (basta con uno)!", recompensa: "🏅 Insignia: Maestro de Lógica" },
+            { titulo: "✅ Quiz: Tablas de Verdad", tipo: 'mini_quiz', pregunta: "Si A = true y B = true, ¿cuánto vale (A AND B) OR (NOT A)?", opciones: ["true", "false", "Error", "Depende de C"], respuestaCorrecta: 0, explicacion: "Paso a paso: A AND B = true AND true = true. NOT A = NOT true = false. Luego: true OR false = true. ¡Cuando hay un true en OR, todo es true! 🧠✅" },
             { titulo: "✅ Mini-Quiz Rápido", tipo: 'mini_quiz', pregunta: "Si sensorIzq = true y sensorDer = false, ¿qué resultado da (sensorIzq AND sensorDer)?", opciones: ["false", "true", "Error"], respuestaCorrecta: 0, explicacion: "AND requiere que AMBOS sean verdaderos. Como sensorDer es false, el resultado es false." },
             { titulo: "4. Diagramas de Flujo", tipo: 'texto', puntos: [
                 "**Diagrama de Flujo:** Dibujo que muestra los pasos de un algoritmo con flechas y formas.",
@@ -359,6 +436,8 @@ export const MODULOS_DATA = [
                 "**LED:** Convierte energía eléctrica en luz. Solo funciona en una dirección (polarizado).",
                 "**Si no enciende:** Revisa orientación del LED y que las conexiones estén firmes."
             ]},
+            { titulo: "✅ Quiz: ¿Por qué la Resistencia?", tipo: 'mini_quiz', pregunta: "¿Qué pasa si conectas un LED directamente a una pila de 9V SIN resistencia?", opciones: ["El LED se quema por exceso de corriente", "El LED brilla más fuerte y dura más", "No pasa nada, funciona igual", "La pila se descarga más lento"], respuestaCorrecta: 0, explicacion: "¡Correcto! Sin resistencia, pasa demasiada corriente por el LED y se quema en segundos. La resistencia es como un cinturón de seguridad: ¡protege al LED! 🔥❌➡️🛡️✅" },
+            { titulo: "🎮 Reto: Calcula tu Resistencia", tipo: 'interactive_challenge', instruccion: "**Reto Matemático:** Usa la fórmula R = (Vfuente - VLED) ÷ ILED para calcular:\n\n1. Pila 9V, LED rojo (2V), corriente 20mA:\n   R = (9 - 2) ÷ 0.02 = ?\n\n2. Arduino 5V, LED azul (3.2V), corriente 20mA:\n   R = (5 - 3.2) ÷ 0.02 = ?\n\n3. Pila 3V (2xAA), LED verde (2.1V), corriente 15mA:\n   R = (3 - 2.1) ÷ 0.015 = ?\n\n¡Respuestas: 350Ω (usa 330Ω), 90Ω (usa 100Ω), 60Ω (usa 68Ω)!", recompensa: "🏅 Insignia: Calculador de Circuitos" },
             { titulo: "Fórmula: Calcular Resistencia", tipo: 'formula', texto: "Para saber qué resistencia necesitas:", formula: "R = (V<sub>fuente</sub> - V<sub>LED</sub>) ÷ I<sub>LED</sub>", explicacion: "Con pila de 9V, LED rojo (2V), corriente 20mA: R = (9-2) ÷ 0.02 = 350Ω. Usamos 330Ω o 470Ω." },
             { titulo: "💡 Tip de Seguridad", tipo: 'tip', texto: "**NUNCA conectes un LED directamente a una pila sin resistencia.** El LED se quemará en segundos. Piensa en la resistencia como un cinturón de seguridad. 🔒" }
         ] 
@@ -382,6 +461,7 @@ export const MODULOS_DATA = [
                 "**Semáforo:** 3 LEDs (rojo, amarillo, verde) programados como semáforo real.",
                 "**Botón + LED:** Agrega botón para encender/apagar con `digitalRead()`."
             ]},
+            { titulo: "🎮 Reto: Código Morse con LED", tipo: 'interactive_challenge', instruccion: "**Reto Creativo:** Programa tu LED para enviar mensajes en código Morse:\n\n• Punto (.) = LED encendido 200ms\n• Raya (-) = LED encendido 600ms\n• Espacio entre letras = 400ms apagado\n• Espacio entre palabras = 800ms apagado\n\n**Letras básicas:**\nS = • • • (punto punto punto)\nO = — — — (raya raya raya)\nS.O.S = • • • — — — • • •\n\n¡Programa S.O.S y muéstraselo a tu familia!", recompensa: "🏅 Insignia: Comunicador Morse" },
             { titulo: "💡 LED Fade (Efecto Respiración)", tipo: 'code_example', lenguaje: 'Arduino', codigo: "// LED que respira suavemente\nint brillo = 0;\nint paso = 5;\n\nvoid setup() {\n  pinMode(9, OUTPUT);\n}\n\nvoid loop() {\n  analogWrite(9, brillo);\n  brillo = brillo + paso;\n  \n  if (brillo <= 0 || brillo >= 255) {\n    paso = -paso;  // Invertir\n  }\n  delay(30);\n}", explicacion: "analogWrite envía un valor de 0 (apagado) a 255 (máximo brillo). Al incrementar y decrementar, el LED sube y baja suavemente." },
             { titulo: "✅ Mini-Quiz Rápido", tipo: 'mini_quiz', pregunta: "¿Qué función de Arduino usas para controlar el BRILLO del LED (no solo encender/apagar)?", opciones: ["analogWrite()", "digitalWrite()", "analogRead()"], respuestaCorrecta: 0, explicacion: "analogWrite() envía un valor PWM (0-255). digitalWrite solo puede hacer HIGH o LOW (encendido/apagado total)." },
             { titulo: "3. Solución de Problemas", tipo: 'texto', puntos: [
@@ -389,7 +469,8 @@ export const MODULOS_DATA = [
                 "**Error al compilar:** Revisa punto y coma (;), llaves {} y paréntesis ().",
                 "**Arduino no responde:** Verifica placa y puerto en menú Herramientas.",
                 "**Usa Serial.println():** Imprime mensajes para saber qué hace tu código."
-            ]}
+            ]},
+            { titulo: "✅ Quiz: Troubleshooting", tipo: 'mini_quiz', pregunta: "Tu LED no enciende con Arduino. ¿Cuál es lo PRIMERO que debes verificar?", opciones: ["La orientación del LED (pata larga al pin, corta a GND)", "Si la computadora tiene internet", "Si la mesa está nivelada", "El color del cable"], respuestaCorrecta: 0, explicacion: "¡Correcto! Lo más común es que el LED esté invertido. La pata larga (+) va al pin de salida y la corta (-) a GND. ¡Si está al revés, no enciende pero no se daña! 💡🔄" },
         ] 
     },
     { 
@@ -418,6 +499,8 @@ export const MODULOS_DATA = [
                 "**Frenar:** IN1=LOW, IN2=LOW → Motor se detiene.",
                 "**Girar:** Un motor adelante y otro atrás = ¡el robot gira sobre su eje!"
             ]},
+            { titulo: "✅ Quiz: Control de Motor", tipo: 'mini_quiz', pregunta: "Para que un robot gire SOBRE SU EJE (como un trompo), ¿qué deben hacer los motores?", opciones: ["Un motor adelante y el otro atrás", "Ambos motores adelante", "Ambos motores detenidos", "Un motor rápido y otro lento"], respuestaCorrecta: 0, explicacion: "¡Correcto! Cuando un motor va hacia adelante y el otro hacia atrás, el robot gira sobre su propio eje. ¡Si ambos van iguales, avanza recto! 🔄🤖" },
+            { titulo: "✅ Quiz: Velocidad PWM", tipo: 'mini_quiz', pregunta: "Si pones analogWrite(ENA, 127), ¿a qué porcentaje de velocidad va el motor?", opciones: ["Aproximadamente 50%", "100% (máxima velocidad)", "0% (detenido)", "127% (velocidad extra)"], respuestaCorrecta: 0, explicacion: "¡Correcto! El rango PWM es 0-255. 127 es aproximadamente la mitad (127÷255 ≈ 50%). Con 255 va al máximo y con 0 está detenido. ⚡50%" },
             { titulo: "🎯 Actividad: Coreografía Robot", tipo: 'activity', instruccion: "**Reto Divertido:** Programa una 'coreografía' para tu robot: adelante, gira derecha, adelante, gira izquierda, retrocede, gira en círculo. ¡Ponle música!", materiales: ["Robot con Arduino + L298N", "2 motores con ruedas", "Pila 9V"] }
         ] 
     },
@@ -440,6 +523,8 @@ export const MODULOS_DATA = [
                 "**Feedback:** Información del resultado que se usa para corregir el siguiente paso.",
                 "**¿Cuál es mejor?** Lazo cerrado es casi siempre superior para robots."
             ]},
+            { titulo: "🎮 Identifica el Tipo de Control", tipo: 'interactive_challenge', instruccion: "**Reto de Análisis:** Clasifica cada ejemplo como Lazo ABIERTO o CERRADO:\n\n1. Lavadora con temporizador fijo → ¿?\n2. Aire acondicionado que mide la temperatura → ¿?\n3. Horno con timer de 30 minutos → ¿?\n4. Robot siguelíneas con sensor infrarrojo → ¿?\n5. Riego automático que mide humedad del suelo → ¿?\n\n¡Pista: Si MIDE algo y AJUSTA = cerrado. Si solo ejecuta un tiempo fijo = abierto!\n\nRespuestas: 1-Abierto, 2-Cerrado, 3-Abierto, 4-Cerrado, 5-Cerrado", recompensa: "🏅 Insignia: Analista de Control" },
+            { titulo: "✅ Quiz: Lazo Cerrado", tipo: 'mini_quiz', pregunta: "El cruise control de un auto mide la velocidad actual y ajusta el motor. ¿Qué tipo de control es?", opciones: ["Lazo cerrado (mide y ajusta)", "Lazo abierto (no mide nada)", "Sin control", "Control manual"], respuestaCorrecta: 0, explicacion: "¡Correcto! El cruise control es lazo cerrado perfecto: mide la velocidad REAL, compara con la que quieres, y ajusta el motor para mantenerla. ¡Feedback constante! 🚗📊" },
             { titulo: "💡 Control Proporcional: Siguelíneas", tipo: 'code_example', lenguaje: 'Arduino', codigo: "// Robot siguelíneas con control proporcional\nint setpoint = 512;\n\nvoid loop() {\n  int lectura = analogRead(A0);\n  int error = setpoint - lectura;\n  \n  float Kp = 0.5;\n  int correccion = Kp * error;\n  \n  int velIzq = 150 + correccion;\n  int velDer = 150 - correccion;\n  \n  velIzq = constrain(velIzq, 0, 255);\n  velDer = constrain(velDer, 0, 255);\n  \n  moverMotores(velIzq, velDer);\n  delay(10);\n}", explicacion: "El sensor lee la posición, calcula el error, y aplica corrección proporcional a los motores. ¡El robot se autocorrige!" },
             { titulo: "3. Control PID", tipo: 'texto', puntos: [
                 "**P (Proporcional):** Corrección proporcional al error. Error grande = corrección grande.",
@@ -447,6 +532,7 @@ export const MODULOS_DATA = [
                 "**D (Derivativo):** Predice el error futuro. Evita oscilaciones.",
                 "**Aplicación:** Robot siguelíneas usa PID para seguir suavemente sin zigzaguear."
             ]},
+            { titulo: "✅ Quiz: PID", tipo: 'mini_quiz', pregunta: "Si tu robot siguelíneas zigzaguea mucho, ¿qué componente del PID ayuda a suavizar el movimiento?", opciones: ["D (Derivativo) - predice y suaviza el movimiento", "P (Proporcional) - solo corrige el error actual", "I (Integral) - acumula errores pasados", "Ninguno, el zigzag es normal"], respuestaCorrecta: 0, explicacion: "¡Correcto! La componente D (derivativa) mide qué tan rápido cambia el error y aplica un 'freno' para evitar que el robot se pase de la línea. ¡Es como anticipar una curva al conducir! 🏎️📐" },
             { titulo: "✅ Mini-Quiz Rápido", tipo: 'mini_quiz', pregunta: "Un tostador con temporizador fijo (sin medir si el pan está tostado) es un ejemplo de:", opciones: ["Control de Lazo Abierto", "Control de Lazo Cerrado", "Control PID"], respuestaCorrecta: 0, explicacion: "Es lazo abierto porque no mide el resultado. Un lazo cerrado mediría el color del pan y ajustaría." },
             { titulo: "Fórmula PID", tipo: 'formula', texto: "La ecuación del controlador PID:", formula: "Salida = Kp·e(t) + Ki·∫e(t)dt + Kd·de(t)/dt", explicacion: "e(t) = error (deseado - real). Kp, Ki, Kd son constantes que ajustas." }
         ] 
@@ -470,12 +556,15 @@ export const MODULOS_DATA = [
                 "**NewPing.h:** `sonar.ping_cm();` → distancia en centímetros.",
                 "**Wire.h:** Comunicación I2C para pantallas LCD y sensores avanzados."
             ]},
+            { titulo: "✅ Quiz: Librerías", tipo: 'mini_quiz', pregunta: "Quieres mover un servo motor a exactamente 90 grados. ¿Qué librería y función usas?", opciones: ["Servo.h con miServo.write(90)", "Wire.h con Wire.begin(90)", "NewPing.h con ping(90)", "Serial.h con print(90)"], respuestaCorrecta: 0, explicacion: "¡Correcto! La librería Servo.h te da la función write() que mueve el servo al ángulo exacto. ¡Es un superpoder pre-programado! #include <Servo.h> 🦾" },
             { titulo: "3. Comunicación Inalámbrica", tipo: 'texto', puntos: [
                 "**Bluetooth (HC-05):** Módulo para controlar Arduino desde el celular.",
                 "**WiFi (ESP32):** Conecta tu robot a internet. Control desde cualquier lugar.",
                 "**Protocolo:** Reglas para datos. 'A' = adelante, 'S' = parar.",
                 "**Serial.read():** Lee datos de la PC o del Bluetooth."
             ]},
+            { titulo: "🎮 Diseña tu Protocolo de Control", tipo: 'interactive_challenge', instruccion: "**Reto Creativo:** Diseña tu propio protocolo de comunicación para controlar un robot por Bluetooth:\n\n1. Elige una letra para cada acción:\n   - Avanzar = ?\n   - Retroceder = ?\n   - Girar izquierda = ?\n   - Girar derecha = ?\n   - Parar = ?\n   - Bocina = ?\n   - Luces ON/OFF = ?\n\n2. Escribe el código switch/case que procesaría cada comando\n3. ¿Qué pasaría si envías un comando que NO has definido? (pista: usa 'default:')\n\n¡Piensa en comandos fáciles de recordar!", recompensa: "🏅 Insignia: Diseñador de Protocolos" },
+            { titulo: "✅ Quiz: Bluetooth", tipo: 'mini_quiz', pregunta: "Si envías la letra 'F' por Bluetooth y el Arduino ejecuta adelante(), ¿qué función leyó el dato?", opciones: ["Serial.read()", "digitalWrite()", "analogRead()", "Serial.println()"], respuestaCorrecta: 0, explicacion: "¡Correcto! Serial.read() lee un byte (un carácter) del puerto serial. El módulo Bluetooth (HC-05) envía datos por serial, así que Serial.read() captura el comando. 📡📨" },
             { titulo: "💡 Control Bluetooth", tipo: 'code_example', lenguaje: 'Arduino', codigo: "// Control robot por Bluetooth\nvoid setup() {\n  Serial.begin(9600);\n}\n\nvoid loop() {\n  if (Serial.available()) {\n    char comando = Serial.read();\n    \n    switch(comando) {\n      case 'F': adelante(200);  break;\n      case 'B': atras(200);    break;\n      case 'L': girarIzq(150); break;\n      case 'R': girarDer(150); break;\n      case 'S': detener();     break;\n    }\n  }\n}", explicacion: "El módulo Bluetooth recibe letras y el switch ejecuta la acción. ¡Usa apps como 'Arduino Bluetooth Controller'!" },
             { titulo: "4. Buenas Prácticas", tipo: 'texto', puntos: [
                 "**Comentarios:** Usa `//` para explicar código. Tu yo del futuro te lo agradecerá.",
@@ -505,12 +594,15 @@ export const MODULOS_DATA = [
                 "**Archivo STL:** Formato para piezas 3D. Exportas del CAD a .STL para imprimir.",
                 "**Uso:** Chasis, soportes de sensores, engranajes y ruedas personalizadas."
             ]},
+            { titulo: "✅ Quiz: Impresión 3D", tipo: 'mini_quiz', pregunta: "¿Qué material de impresión 3D es biodegradable y el más fácil de usar para principiantes?", opciones: ["PLA", "ABS", "Nylon", "Titanio"], respuestaCorrecta: 0, explicacion: "¡Correcto! El PLA (Ácido Poliláctico) es biodegradable, hecho de maíz, fácil de imprimir y no necesita cama caliente. ¡El mejor amigo del principiante en 3D! 🌽🖨️" },
             { titulo: "3. Principios de Diseño", tipo: 'texto', puntos: [
                 "**Simetría:** Robot simétrico = más estable y movimientos rectos.",
                 "**Centro de Gravedad Bajo:** Peso cerca del suelo = no se voltea.",
                 "**Modularidad:** Piezas intercambiables. Si algo se rompe, solo reemplaza esa parte.",
                 "**Accesibilidad:** Poder acceder a baterías y cables sin desmontar todo."
             ]},
+            { titulo: "✅ Quiz: Principios de Diseño", tipo: 'mini_quiz', pregunta: "¿Por qué es importante que un robot sea MODULAR?", opciones: ["Para poder reemplazar solo la parte que falle sin desarmar todo", "Para que se vea más bonito", "Para que sea más pesado", "Para que use más energía"], respuestaCorrecta: 0, explicacion: "¡Exacto! La modularidad permite que si un sensor falla, solo cambies ese sensor sin tener que desarmar todo el robot. ¡Ahorra tiempo y dinero! 🧩🔧" },
+            { titulo: "🎮 Reto: Rediseña un Objeto", tipo: 'interactive_challenge', instruccion: "**Reto de Ingeniería:** Toma un objeto cotidiano (estuche, caja, juguete) y piensa cómo lo REDISEÑARÍAS aplicando los principios:\n\n1. 🔲 **Simetría:** ¿Es simétrico? ¿Debería serlo?\n2. ⚖️ **Estabilidad:** ¿Dónde está el peso? ¿Se cae fácil?\n3. 🧩 **Modularidad:** ¿Tiene partes reemplazables?\n4. 🔧 **Accesibilidad:** ¿Es fácil de abrir/limpiar/reparar?\n\n¡Dibuja tu versión mejorada y anota los cambios!", recompensa: "🏅 Insignia: Diseñador Industrial" },
             { titulo: "4. Materiales", tipo: 'texto', puntos: [
                 "**MDF/Madera:** Barato, fácil de cortar con láser. Excelente para prototipos.",
                 "**Acrílico:** Transparente y resistente. Se corta con láser.",
