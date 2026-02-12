@@ -717,6 +717,9 @@ export default function SumoBotPush({ onBack }) {
 
   // ---- Setup canvas and start ----
   useEffect(() => {
+    // Only setup canvas when in a canvas-rendering phase
+    if (phase === 'intro' || phase === 'match_end') return;
+
     const canvas = canvasRef.current;
     const container = containerRef.current;
     if (!canvas || !container) return;
@@ -724,6 +727,16 @@ export default function SumoBotPush({ onBack }) {
     const resize = () => {
       canvas.width = container.clientWidth;
       canvas.height = container.clientHeight;
+      // Update game state dimensions if needed
+      const gs = gameStateRef.current;
+      if (gs) {
+        gs.w = canvas.width;
+        gs.h = canvas.height;
+        gs.cx = canvas.width / 2;
+        gs.cy = canvas.height / 2;
+        gs.ringR = Math.min(canvas.width, canvas.height) * 0.32;
+        gs.robotR = gs.ringR * 0.22;
+      }
     };
     resize();
     window.addEventListener('resize', resize);
@@ -734,7 +747,7 @@ export default function SumoBotPush({ onBack }) {
       window.removeEventListener('resize', resize);
       if (frameRef.current) cancelAnimationFrame(frameRef.current);
     };
-  }, [startGameLoop]);
+  }, [startGameLoop, phase]);
 
   // ---- Start first round when entering from intro ----
   const startMatch = useCallback(() => {
@@ -872,8 +885,8 @@ export default function SumoBotPush({ onBack }) {
 
   // ============ GAME CANVAS SCREEN (countdown, playing, round_end) ============
   return (
-    <div ref={containerRef} className="min-h-full relative animate-fade-in select-none"
-      style={{ touchAction: 'none', background: '#0F172A' }}>
+    <div ref={containerRef} className="fixed inset-0 animate-fade-in select-none"
+      style={{ touchAction: 'none', background: '#0F172A', zIndex: 50 }}>
       <canvas
         ref={canvasRef}
         className="absolute inset-0 w-full h-full touch-none"
