@@ -369,6 +369,12 @@ export default function SumoBotPush({ onBack }) {
     ctx.font = 'bold 13px sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText('👆 ¡TOCA AQUÍ! — AZUL', 0, 0);
+    // P1 combo indicator (also rotated for player 1)
+    if (gs.p1Combo > 1) {
+      ctx.fillStyle = '#60A5FA';
+      ctx.font = 'bold 15px sans-serif';
+      ctx.fillText(`⚡ x${Math.floor(gs.p1Combo)}`, 0, 20);
+    }
     ctx.restore();
 
     // P2 tap zone label (bottom)
@@ -376,12 +382,18 @@ export default function SumoBotPush({ onBack }) {
     ctx.font = 'bold 13px sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText('👆 ¡TOCA AQUÍ! — ROJO', w / 2, h - 12);
+    // P2 combo indicator
+    if (gs.p2Combo > 1) {
+      ctx.fillStyle = '#FCA5A5';
+      ctx.font = 'bold 15px sans-serif';
+      ctx.fillText(`⚡ x${Math.floor(gs.p2Combo)}`, w / 2, h - 28);
+    }
 
     // Round indicator
     ctx.fillStyle = 'rgba(255,255,255,0.5)';
     ctx.font = 'bold 11px sans-serif';
     ctx.textAlign = 'left';
-    ctx.fillText(`Ronda ${gs.round}/3`, 10, h / 2 - 10);
+    ctx.fillText(`Ronda ${gs.round}/3`, 10, h / 2 - 14);
 
     // Score pips
     ctx.textAlign = 'right';
@@ -399,6 +411,30 @@ export default function SumoBotPush({ onBack }) {
     ctx.font = 'bold 12px sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText(pipsText, w / 2, h / 2 + 6);
+
+    // Battle position bar (horizontal bar showing who's winning)
+    const barW = w * 0.5;
+    const barH = 6;
+    const barX = (w - barW) / 2;
+    const barY = h / 2 + 16;
+    ctx.fillStyle = 'rgba(255,255,255,0.08)';
+    ctx.beginPath();
+    ctx.roundRect(barX, barY, barW, barH, 3);
+    ctx.fill();
+    // Fill based on battlePos
+    const normalizedPos = Math.max(-1, Math.min(1, gs.battlePos / 30));
+    const fillX = barX + barW / 2;
+    const fillW = (barW / 2) * normalizedPos;
+    if (fillW > 0) {
+      ctx.fillStyle = 'rgba(59,130,246,0.6)';
+      ctx.fillRect(fillX, barY, fillW, barH);
+    } else {
+      ctx.fillStyle = 'rgba(239,68,68,0.6)';
+      ctx.fillRect(fillX + fillW, barY, -fillW, barH);
+    }
+    // Center mark
+    ctx.fillStyle = 'rgba(255,255,255,0.4)';
+    ctx.fillRect(fillX - 1, barY - 1, 2, barH + 2);
 
     // Tap meters (energy bars on sides)
     const meterH = h * 0.25;
@@ -444,12 +480,12 @@ export default function SumoBotPush({ onBack }) {
       robotR,
       round,
       wins: [...wins],
-      // P1 (Blue — starts above center, faces down)
-      p1x: cx, p1y: cy - spacing,
-      p1Force: 0, p1TapIntensity: 0, p1TapDecay: 0,
-      // P2 (Red — starts below center, faces up)
-      p2x: cx, p2y: cy + spacing,
-      p2Force: 0, p2TapIntensity: 0, p2TapDecay: 0,
+      // Battle position: 0 = center, positive = P1 winning (pushing P2 down), negative = P2 winning
+      battlePos: 0,
+      battleVel: 0,
+      // Per-player tap tracking
+      p1TapIntensity: 0, p1TapDecay: 0, p1LastTap: 0, p1Combo: 0,
+      p2TapIntensity: 0, p2TapDecay: 0, p2LastTap: 0, p2Combo: 0,
       // Contact sparks
       sparkIntensity: 0,
       // Particles
@@ -489,15 +525,33 @@ export default function SumoBotPush({ onBack }) {
     const gs = gameStateRef.current;
     if (!gs || gs.ended) return;
 
-    const pushForce = 2.8;
+    const now = Date.now();
+    // Base push strength with random variance (±30%) so equal tapping still creates movement
+    const baseForce = 1.8;
+    const variance = 0.7 + Math.random() * 0.6; // 0.7 — 1.3
 
     if (player === 1) {
-      gs.p1Force += pushForce;
-      gs.p1TapIntensity = Math.min(gs.p1TapIntensity + 0.25, 1.2);
+      // Combo: rapid taps within 250ms build combo for bonus power
+      if (now - gs.p1LastTap < 250) {
+        gs.p1Combo = Math.min(gs.p1Combo + 1, 8);
+      } else {
+        gs.p1Combo = Math.max(0, gs.p1Combo - 2);
+      }
+      gs.p1LastTap = now;
+      const comboBonus = 1 + gs.p1Combo * 0.12; // up to 1.96x at max combo
+      gs.battleVel += baseForce * variance * comboBonus;
+      gs.p1TapIntensity = Math.min(gs.p1TapIntensity + 0.3, 1.5);
       gs.p1TapDecay = 0;
     } else {
-      gs.p2Force += pushForce;
-      gs.p2TapIntensity = Math.min(gs.p2TapIntensity + 0.25, 1.2);
+      if (now - gs.p2LastTap < 250) {
+        gs.p2Combo = Math.min(gs.p2Combo + 1, 8);
+      } else {
+        gs.p2Combo = Math.max(0, gs.p2Combo - 2);
+      }
+      gs.p2LastTap = now;
+      const comboBonus = 1 + gs.p2Combo * 0.12;
+      gs.battleVel -= baseForce * variance * comboBonus;
+      gs.p2TapIntensity = Math.min(gs.p2TapIntensity + 0.3, 1.5);
       gs.p2TapDecay = 0;
     }
 
@@ -550,39 +604,58 @@ export default function SumoBotPush({ onBack }) {
 
       // ---- Physics update ----
       if (!gs.ended) {
-        // Apply forces: P1 pushes downward, P2 pushes upward
-        const netForce = gs.p1Force - gs.p2Force;
-        gs.p1Force *= 0.7; // decay
-        gs.p2Force *= 0.7;
+        // --- Momentum-based battle position system ---
+        // Friction: velocity decays over time (keeps momentum but not forever)
+        gs.battleVel *= 0.92;
 
-        // Both robots are locked on Y axis (vertical push battle)
-        // The "battle position" tracks how far each is pushed
-        const pushSpeed = 0.6;
-        const delta = netForce * pushSpeed;
+        // Light spring tension: slight pull toward center so the battle oscillates
+        // (weaker when near center, stronger when far out — creates exciting near-edge tension)
+        const springForce = -gs.battlePos * 0.008;
+        gs.battleVel += springForce;
 
-        // Move both robots: positive netForce = P1 winning = robots move DOWN
-        gs.p1y += delta * 0.15;
-        gs.p2y += delta * 0.15;
-
-        // Keep robots together (collision): maintain spacing
-        const idealSpacing = robotR * 1.6;
-        const currentSpacing = gs.p2y - gs.p1y;
-        if (currentSpacing < idealSpacing) {
-          const correction = (idealSpacing - currentSpacing) / 2;
-          gs.p1y -= correction;
-          gs.p2y += correction;
+        // Random micro-wobble when both are tapping (makes it feel alive)
+        if (gs.p1TapIntensity > 0.2 && gs.p2TapIntensity > 0.2) {
+          gs.battleVel += (Math.random() - 0.5) * 0.3;
         }
 
-        // Keep on center X (slight wobble for visual interest)
-        const wobble = Math.sin(time / 150) * Math.max(gs.p1TapIntensity, gs.p2TapIntensity) * 3;
-        gs.p1x = cx + wobble;
-        gs.p2x = cx - wobble;
+        // Apply velocity to position
+        gs.battlePos += gs.battleVel * 0.04;
+
+        // Calculate robot positions from battlePos
+        // battlePos is normalized: the range of the ring on Y axis
+        const maxTravel = ringR - robotR * 0.5;
+        const centerOffset = gs.battlePos * 3; // amplify for visible movement
+        const spacing = robotR * 1.5;
+
+        const p1y = cy + centerOffset - spacing;
+        const p2y = cy + centerOffset + spacing;
+
+        // Keep on center X with wobble based on intensity
+        const wobbleAmt = Math.max(gs.p1TapIntensity, gs.p2TapIntensity);
+        const wobble = Math.sin(time / 120) * wobbleAmt * 4 + Math.sin(time / 73) * wobbleAmt * 2;
+        const p1x = cx + wobble;
+        const p2x = cx - wobble * 0.7;
+
+        // Store computed positions for rendering
+        gs.p1x = p1x;
+        gs.p1y = p1y;
+        gs.p2x = p2x;
+        gs.p2y = p2y;
+
+        // Screen shake when battle is intense
+        gs.shakeX = wobbleAmt > 0.5 ? (Math.random() - 0.5) * wobbleAmt * 3 : 0;
+        gs.shakeY = wobbleAmt > 0.5 ? (Math.random() - 0.5) * wobbleAmt * 3 : 0;
 
         // Tap intensity decay
         gs.p1TapDecay++;
         gs.p2TapDecay++;
-        if (gs.p1TapDecay > 5) gs.p1TapIntensity = Math.max(0, gs.p1TapIntensity - 0.03);
-        if (gs.p2TapDecay > 5) gs.p2TapIntensity = Math.max(0, gs.p2TapIntensity - 0.03);
+        if (gs.p1TapDecay > 4) gs.p1TapIntensity = Math.max(0, gs.p1TapIntensity - 0.035);
+        if (gs.p2TapDecay > 4) gs.p2TapIntensity = Math.max(0, gs.p2TapIntensity - 0.035);
+
+        // Combo decay when not tapping
+        const now = Date.now();
+        if (now - gs.p1LastTap > 400) gs.p1Combo = Math.max(0, gs.p1Combo - 0.05);
+        if (now - gs.p2LastTap > 400) gs.p2Combo = Math.max(0, gs.p2Combo - 0.05);
 
         // Spark intensity based on combined tap
         gs.sparkIntensity = (gs.p1TapIntensity + gs.p2TapIntensity) * 0.5;
@@ -610,7 +683,8 @@ export default function SumoBotPush({ onBack }) {
         const p1Dist = Math.sqrt((gs.p1x - cx) ** 2 + (gs.p1y - cy) ** 2);
         const p2Dist = Math.sqrt((gs.p2x - cx) ** 2 + (gs.p2y - cy) ** 2);
 
-        if (p1Dist + robotR * 0.5 > ringR) {
+        // P1 pushed out (too far UP = P2 won) or P2 pushed out (too far DOWN = P1 won)
+        if (p1Dist > ringR - robotR * 0.3) {
           // P1 pushed out → P2 wins
           gs.ended = true;
           gs.winner = 2;
@@ -627,7 +701,7 @@ export default function SumoBotPush({ onBack }) {
               setTimeout(() => startRound(gs.round + 1, gs.wins), 1500);
             }, 1200);
           }
-        } else if (p2Dist + robotR * 0.5 > ringR) {
+        } else if (p2Dist > ringR - robotR * 0.3) {
           // P2 pushed out → P1 wins
           gs.ended = true;
           gs.winner = 1;
@@ -648,7 +722,12 @@ export default function SumoBotPush({ onBack }) {
       }
 
       // ---- Render ----
-      ctx.clearRect(0, 0, w, h);
+      ctx.save();
+      // Apply screen shake
+      if (gs.shakeX || gs.shakeY) {
+        ctx.translate(gs.shakeX || 0, gs.shakeY || 0);
+      }
+      ctx.clearRect(-10, -10, w + 20, h + 20);
 
       // Background
       drawBackground(ctx, w, h, time);
@@ -708,6 +787,8 @@ export default function SumoBotPush({ onBack }) {
       if (countdown > 0 && !gs.ended) {
         // done via React overlay, but we also dim the canvas
       }
+
+      ctx.restore(); // end screen shake transform
 
       frameRef.current = requestAnimationFrame(loop);
     };
