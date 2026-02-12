@@ -92,13 +92,16 @@ Experiencia de bienvenida al entrar por primera vez:
 - Mensajes y dificultad adaptados al usuario
 
 ### 🤖 Creador de Robot Personalizado
-Construye tu propio compañero robot único que te acompañará en toda tu aventura:
-- **6 tipos de cabeza**: Redonda, Cuadrada, Triangular, Casco, Gatito, Alien
-- **6 tipos de ojos**: Redondos, Felices, Pantalla LED, Grandes, Valientes, Corazón
-- **6 tipos de boca**: Sonrisa, Abierta, Seria, Robot, Lengua, Dientes
-- **4 tipos de cuerpo**: Caja, Redondo, Delgado, Tanque
-- **5 accesorios**: Antena, Hélice, Corona, Moño, Audífonos
-- **10 colores** disponibles
+Construye tu propio compañero robot único que te acompañará en toda tu aventura (¡más de 63 millones de combinaciones!):
+- **12 tipos de cabeza**: Redonda, Cuadrada, Triangular, Casco, Gatito, Alien, Estrella, Octágono, Conejito, Osito, Escudo, Diamante
+- **12 tipos de ojos**: Redondos, Felices, Pantalla LED, Grandes, Valientes, Corazón, Estrellas, Mareados, Lentes, Guiño, Dormilón, Cíclope
+- **12 tipos de boca**: Sonrisa, Abierta, Seria, Robot, Lengua, Dientes, Colmillos, Gatuno, Silbido, Gruñón, Besito, Brackets
+- **8 tipos de cuerpo**: Caja, Redondo, Delgado, Tanque, Armadura, Hexagonal, Barril, Mech
+- **6 estilos de brazos**: Normal, Garras, Pinzas, Musculoso, Tentáculos, Alas
+- **6 estilos de piernas**: Normal, Ruedas, Orugas, Resortes, Flotador, Araña
+- **8 emblemas/patrones**: Estrella, Rayo, Corazón, Engranaje, Rayas, Puntos, Circuito
+- **10 accesorios**: Antena, Hélice, Corona, Moño, Audífonos, Cuernos, Aureola, Gorra, Flor, Goggles
+- **16 colores** disponibles
 - Botón de aleatorizar para inspiración
 - Nombre personalizado para tu robot
 - Tu robot aparece en la biblioteca, lecciones y celebraciones
