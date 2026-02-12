@@ -1344,7 +1344,7 @@ const CircuitBuilder = ({ onBack }) => {
 
   // ---- Builder View ----
   return (
-    <div className="h-screen bg-gradient-to-br from-slate-100 to-blue-100 flex flex-col">
+    <div className="bg-gradient-to-br from-slate-100 to-blue-100 flex flex-col" style={{ height: 'calc(100vh - var(--sat, 0px) - var(--sab, 0px))' }}>
       {/* Header */}
       <div className="bg-white shadow-md px-3 md:px-4 py-2 md:py-2.5 flex items-center justify-between border-b-2 border-gray-100 flex-shrink-0">
         <div className="flex items-center gap-2 md:gap-3 min-w-0">

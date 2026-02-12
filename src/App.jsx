@@ -2360,7 +2360,7 @@ const BottomNavBar = ({ currentTab, onSelectTab, setViewMode }) => {
     ];
 
     return (
-        <div className="fixed bottom-0 left-0 right-0 z-30 bg-white border-t-2 border-gray-100">
+        <div className="fixed bottom-0 left-0 right-0 z-30 bg-white border-t-2 border-gray-100" style={{ paddingBottom: 'var(--sab, 0px)' }}>
             <div className="max-w-xl mx-auto">
                 <div className="flex justify-around items-stretch">
                     {tabs.map(tab => {

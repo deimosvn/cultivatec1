@@ -2,6 +2,39 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ===== PWA SAFE AREA (status bar, notch) ===== */
+/* 
+ * On installed PWAs with viewport-fit=cover, content can go behind
+ * the system status bar. We add padding so buttons remain tappable.
+ */
+:root {
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+}
+
+/* Top safe area spacer — colored bar behind status bar */
+body::before {
+  content: '';
+  display: block;
+  width: 100%;
+  height: var(--sat);
+  background-color: #2563EB;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10000;
+  pointer-events: none;
+}
+
+/* Push all body content below the safe area */
+body {
+  padding-top: var(--sat) !important;
+  padding-bottom: var(--sab) !important;
+}
+
 /* ===== DUOLINGO-INSPIRED DESIGN SYSTEM ===== */
 :root {
   --duo-green: #2563EB;
