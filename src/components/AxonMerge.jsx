@@ -333,6 +333,11 @@ export default function AxonMerge({ onBack }) {
   const [soundOn, setSoundOn] = useState(true);
   const [showGuide, setShowGuide] = useState(true);
   const [roverAchieved, setRoverAchieved] = useState(false);
+  const [gameReady, setGameReady] = useState(false); // triggers initGame after canvas mounts
+
+  // Use ref for soundOn so audio callbacks stay stable (no dependency chain)
+  const soundOnRef = useRef(true);
+  useEffect(() => { soundOnRef.current = soundOn; }, [soundOn]);
 
   useEffect(() => {
     try {
@@ -341,7 +346,7 @@ export default function AxonMerge({ onBack }) {
     } catch {}
   }, []);
 
-  // ---- Audio ----
+  // ---- Audio (stable — no state in deps, uses refs) ----
   const audioCtxRef = useRef(null);
   const getAudioCtx = useCallback(() => {
     if (!audioCtxRef.current) audioCtxRef.current = new (window.AudioContext || window.webkitAudioContext)();
@@ -349,9 +354,10 @@ export default function AxonMerge({ onBack }) {
   }, []);
 
   const playSound = useCallback((freq, duration = 0.12, type = 'sine', vol = 0.15) => {
-    if (!soundOn) return;
+    if (!soundOnRef.current) return;
     try {
       const ctx = getAudioCtx();
+      if (ctx.state === 'suspended') ctx.resume();
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.type = type;
@@ -361,7 +367,7 @@ export default function AxonMerge({ onBack }) {
       osc.connect(gain); gain.connect(ctx.destination);
       osc.start(); osc.stop(ctx.currentTime + duration);
     } catch {}
-  }, [soundOn, getAudioCtx]);
+  }, [getAudioCtx]);
 
   const playMergeSound = useCallback((level, comboN) => {
     const baseFreq = 280 + level * 70;
@@ -376,6 +382,29 @@ export default function AxonMerge({ onBack }) {
     playSound(220, 0.3, 'sawtooth', 0.1);
     setTimeout(() => playSound(160, 0.4, 'sawtooth', 0.08), 180);
     setTimeout(() => playSound(110, 0.5, 'sawtooth', 0.06), 360);
+  }, [playSound]);
+
+  // ---- Collision / bounce sounds ----
+  const lastBounceTimeRef = useRef(0);
+  const playBounceSound = useCallback((speed, levelA, levelB) => {
+    const now = Date.now();
+    if (now - lastBounceTimeRef.current < 60) return; // throttle to avoid audio spam
+    lastBounceTimeRef.current = now;
+    const intensity = Math.min(speed / 8, 1);
+    if (intensity < 0.15) return; // ignore very soft taps
+    const avgLevel = ((levelA ?? 0) + (levelB ?? 0)) / 2;
+    const freq = 120 + avgLevel * 20 + intensity * 80;
+    const vol = 0.03 + intensity * 0.06;
+    playSound(freq, 0.04 + intensity * 0.04, 'triangle', vol);
+  }, [playSound]);
+
+  const playWallBounceSound = useCallback((speed) => {
+    const now = Date.now();
+    if (now - lastBounceTimeRef.current < 50) return;
+    lastBounceTimeRef.current = now;
+    const intensity = Math.min(speed / 6, 1);
+    if (intensity < 0.1) return;
+    playSound(90 + intensity * 60, 0.03 + intensity * 0.03, 'sine', 0.02 + intensity * 0.04);
   }, [playSound]);
 
   // ---- Particles (stars + sparks) ----
@@ -506,13 +535,33 @@ export default function AxonMerge({ onBack }) {
     };
     pickNextLevel();
 
-    // ---- COLLISION / MERGE ----
+    // ---- COLLISION / MERGE + BOUNCE SOUNDS ----
     Matter.Events.on(engine, 'collisionStart', (event) => {
       if (gameOverRef.current) return;
       for (const pair of event.pairs) {
         const { bodyA, bodyB } = pair;
         const levelA = bodiesMapRef.current.get(bodyA.id);
         const levelB = bodiesMapRef.current.get(bodyB.id);
+
+        // Bounce sound: component hitting a wall
+        if ((levelA !== undefined && levelB === undefined) || (levelB !== undefined && levelA === undefined)) {
+          const compBody = levelA !== undefined ? bodyA : bodyB;
+          const relSpeed = Math.sqrt(
+            Math.pow(bodyA.velocity.x - bodyB.velocity.x, 2) +
+            Math.pow(bodyA.velocity.y - bodyB.velocity.y, 2)
+          );
+          playWallBounceSound(relSpeed);
+        }
+
+        // Bounce sound: two different components colliding (not merging)
+        if (levelA !== undefined && levelB !== undefined && levelA !== levelB) {
+          const relSpeed = Math.sqrt(
+            Math.pow(bodyA.velocity.x - bodyB.velocity.x, 2) +
+            Math.pow(bodyA.velocity.y - bodyB.velocity.y, 2)
+          );
+          playBounceSound(relSpeed, levelA, levelB);
+        }
+
         if (levelA === undefined || levelB === undefined) continue;
         if (levelA !== levelB) continue;
         if (levelA >= COMPONENTS.length - 1) continue;
@@ -804,7 +853,7 @@ export default function AxonMerge({ onBack }) {
       Matter.Events.off(engine);
       Matter.Engine.clear(engine);
     };
-  }, [getGameDims, createComponentBody, spawnParticles, spawnShockwave, addToast, playMergeSound, playGameOverSound, triggerCombo, triggerShake]);
+  }, [getGameDims, createComponentBody, spawnParticles, spawnShockwave, addToast, playMergeSound, playGameOverSound, playBounceSound, playWallBounceSound, triggerCombo, triggerShake]);
 
   // ---- DROP ----
   const dropComponent = useCallback((clientX) => {
@@ -818,7 +867,7 @@ export default function AxonMerge({ onBack }) {
     const level = nextLevelRef.current;
     const comp = COMPONENTS[level];
 
-    const body = createComponentBody(x, comp.radius + 12);
+    const body = createComponentBody(x, comp.radius + 12, level);
     Matter.Composite.add(engineRef.current.world, body);
     playDropSound();
 
@@ -845,15 +894,26 @@ export default function AxonMerge({ onBack }) {
     dropComponent(clientX);
   }, [dropComponent]);
 
+  // ---- Game start: when gameReady becomes true AND canvas exists ----
   useEffect(() => {
-    const cleanup = initGame();
-    return () => { if (cleanup) cleanup(); };
-  }, [initGame]);
+    if (!gameReady) return;
+    // Small delay to ensure canvas is mounted in DOM
+    const timer = setTimeout(() => {
+      const cleanup = initGame();
+      return () => { if (cleanup) cleanup(); };
+    }, 50);
+    return () => clearTimeout(timer);
+  }, [gameReady, initGame]);
 
   const restart = useCallback(() => {
     setShowGuide(false);
-    initGame();
-  }, [initGame]);
+    // If already ready, re-init directly after a tick (canvas exists)
+    if (gameReady) {
+      setTimeout(() => initGame(), 30);
+    } else {
+      setGameReady(true); // triggers the useEffect above
+    }
+  }, [initGame, gameReady]);
 
   // ============ GUIDE SCREEN ============
   if (showGuide) {
