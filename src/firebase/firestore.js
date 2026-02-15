@@ -223,8 +223,14 @@ export const syncUserStats = async (uid, statsUpdate) => {
 
   const updateData = { lastActive: serverTimestamp() };
 
-  // Manejar incrementos
-  if (statsUpdate.addPoints) {
+  // Si se proporciona newTotalPoints, usar como valor absoluto (evita doble conteo)
+  if (statsUpdate.newTotalPoints !== undefined) {
+    updateData.totalPoints = statsUpdate.newTotalPoints;
+    const lv = calculateLevel(statsUpdate.newTotalPoints);
+    updateData.level = lv.level;
+    updateData.levelTitle = lv.title;
+  } else if (statsUpdate.addPoints) {
+    // Solo usar increment si NO hay valor absoluto
     updateData.totalPoints = increment(statsUpdate.addPoints);
   }
   if (statsUpdate.addModulesCompleted) {
@@ -246,13 +252,6 @@ export const syncUserStats = async (uid, statsUpdate) => {
   }
   if (statsUpdate.achievementId) {
     updateData.achievementsUnlocked = arrayUnion(statsUpdate.achievementId);
-  }
-
-  // Actualizar nivel basado en puntos actuales
-  if (statsUpdate.newTotalPoints !== undefined) {
-    const lv = calculateLevel(statsUpdate.newTotalPoints);
-    updateData.level = lv.level;
-    updateData.levelTitle = lv.title;
   }
 
   await updateDoc(userRef, updateData);

@@ -1707,7 +1707,7 @@ const LibraryScreen = ({ startLesson, userId, userScores, onShowAchievements, on
                     </div>
                     <div className="flex items-center gap-1 bg-[#FFC800]/10 px-2.5 py-1 rounded-xl">
                         <span className="text-lg">⚡</span>
-                        <span className="text-sm font-black text-[#FFC800]">{userStats?.totalPoints || 120}</span>
+                        <span className="text-sm font-black text-[#FFC800]">{firebaseProfile?.totalPoints ?? userStats?.totalPoints ?? 0}</span>
                     </div>
                 </div>
                 <div className="w-9 h-9 bg-white rounded-xl p-0.5 border-2 border-[#E5E5E5]">
@@ -2668,6 +2668,15 @@ export default function App() {
         // Listen to user profile
         const unsubProfile = onUserProfileChange(userId, (profile) => {
             setFirebaseProfile(profile);
+            // Sync Firestore totalPoints back to local userStats to avoid mismatch
+            if (profile && profile.totalPoints !== undefined) {
+                setUserStats(prev => {
+                    if (prev.totalPoints !== profile.totalPoints) {
+                        return { ...prev, totalPoints: profile.totalPoints, modulesCompleted: profile.modulesCompleted ?? prev.modulesCompleted };
+                    }
+                    return prev;
+                });
+            }
         });
 
         // Listen to user scores
