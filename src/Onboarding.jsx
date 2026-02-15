@@ -1,5 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronRight, ChevronLeft, Sparkles, Star, Zap, RotateCcw } from 'lucide-react';
+import { ChevronRight, ChevronLeft, Sparkles, Star, Zap, RotateCcw, Check } from 'lucide-react';
+
+// Lazy-imported after definition to avoid circular — using inline ROBOT_SKINS_ONBOARDING
+const ROBOT_SKINS_ONBOARDING = [
+  { id: 'chispitas', name: 'Chispitas', icon: '⚡', rarity: 'common', rarityColor: '#58CC02', config: { head: 'round', eyes: 'round', mouth: 'smile', body: 'box', accessory: 'antenna', color: 'blue', arms: 'normal', legs: 'normal', pattern: 'lightning' } },
+  { id: 'galaxia', name: 'Galaxia', icon: '🌌', rarity: 'rare', rarityColor: '#A855F7', config: { head: 'alien', eyes: 'star_eyes', mouth: 'open', body: 'rounded', accessory: 'halo', color: 'purple', arms: 'wings', legs: 'hover', pattern: 'dots' } },
+  { id: 'guerrero', name: 'Guerrero', icon: '⚔️', rarity: 'epic', rarityColor: '#FF4B4B', config: { head: 'shield', eyes: 'angry', mouth: 'grr', body: 'armor', accessory: 'horns', color: 'red', arms: 'claws', legs: 'treads', pattern: 'star_emblem' } },
+  { id: 'dulce', name: 'Dulce', icon: '💖', rarity: 'rare', rarityColor: '#A855F7', config: { head: 'bunny', eyes: 'heart', mouth: 'kiss', body: 'rounded', accessory: 'bow', color: 'pink', arms: 'normal', legs: 'springs', pattern: 'heart_emblem' } },
+  { id: 'ninja', name: 'Ninja', icon: '🥷', rarity: 'epic', rarityColor: '#FF4B4B', config: { head: 'square', eyes: 'angry', mouth: 'line', body: 'slim', accessory: 'goggles', color: 'gray', arms: 'claws', legs: 'spider', pattern: 'none' } },
+  { id: 'cientifico', name: 'Científico', icon: '🔬', rarity: 'rare', rarityColor: '#A855F7', config: { head: 'square', eyes: 'glasses', mouth: 'zigzag', body: 'mech', accessory: 'antenna', color: 'cyan', arms: 'pincers', legs: 'normal', pattern: 'circuit' } },
+  { id: 'naturaleza', name: 'Naturaleza', icon: '🌿', rarity: 'common', rarityColor: '#58CC02', config: { head: 'bear', eyes: 'happy', mouth: 'tongue', body: 'rounded', accessory: 'flower', color: 'green', arms: 'normal', legs: 'normal', pattern: 'dots' } },
+  { id: 'rey_dorado', name: 'Rey Dorado', icon: '👑', rarity: 'legendary', rarityColor: '#FFC800', config: { head: 'diamond', eyes: 'star_eyes', mouth: 'teeth', body: 'armor', accessory: 'crown', color: 'gold', arms: 'muscles', legs: 'hover', pattern: 'gear' } },
+  { id: 'mecanico', name: 'Mecánico', icon: '🔧', rarity: 'common', rarityColor: '#58CC02', config: { head: 'square', eyes: 'screen', mouth: 'line', body: 'tank', accessory: 'headphones', color: 'orange', arms: 'pincers', legs: 'wheels', pattern: 'gear' } },
+  { id: 'astronauta', name: 'Astronauta', icon: '🚀', rarity: 'epic', rarityColor: '#FF4B4B', config: { head: 'octagon', eyes: 'big', mouth: 'open', body: 'mech', accessory: 'propeller', color: 'sky', arms: 'wings', legs: 'hover', pattern: 'star_emblem' } },
+  { id: 'hada', name: 'Hada Digital', icon: '🧚', rarity: 'legendary', rarityColor: '#FFC800', config: { head: 'cat', eyes: 'heart', mouth: 'smile', body: 'slim', accessory: 'halo', color: 'pink', arms: 'wings', legs: 'hover', pattern: 'heart_emblem' } },
+  { id: 'explorador', name: 'Explorador', icon: '🧭', rarity: 'common', rarityColor: '#58CC02', config: { head: 'helmet', eyes: 'wink', mouth: 'smile', body: 'barrel', accessory: 'goggles', color: 'teal', arms: 'normal', legs: 'treads', pattern: 'stripes' } },
+];
 
 // ============================================
 // ROBOT CHARACTER PARTS - EXPANDED
@@ -239,6 +255,136 @@ const STORY_CHAPTERS = [
 ];
 
 // ============================================
+// Robot Welcome Story — Interactive dialogue
+// ============================================
+
+const ROBOT_DIALOGUE = [
+  {
+    id: 'wake',
+    emoji: '✨',
+    getText: (name, user) => `*bzzz... bip bip...* ¿Dónde... dónde estoy? Ah... ¡Hola! Mi nombre es ${name}. ¡Acabo de despertar en el Laboratorio de CultivaTec!`,
+  },
+  {
+    id: 'confused',
+    emoji: '🤔',
+    getText: (name, user) => `Mmm... parece que no sé mucho todavía. No entiendo qué es la electricidad, ni cómo funcionan los circuitos, ni nada de programación... ¡Necesito un maestro!`,
+  },
+  {
+    id: 'you',
+    emoji: '🌟',
+    getText: (name, user) => `¡Espera! ¿Tú eres ${user}? El profesor me dijo que vendrías. ¡Tú vas a ser mi maestro! Juntos vamos a aprender de todo.`,
+  },
+  {
+    id: 'mission',
+    emoji: '🎯',
+    getText: (name, user) => `Tu misión es completar las lecciones de la Biblioteca. Cada módulo que completes me enseñará algo nuevo: electricidad, circuitos, sensores, programación...`,
+  },
+  {
+    id: 'features',
+    emoji: '🛠️',
+    getText: (name, user) => `¡Hay mucho por explorar! Puedes practicar código en el Taller, resolver retos de programación, simular robots, construir circuitos virtuales y hasta ganar trofeos. ¡Ah, y puedes cambiar mi apariencia cuando quieras tocándome en la pantalla!`,
+  },
+  {
+    id: 'ready',
+    emoji: '🚀',
+    getText: (name, user) => `¡Estoy listo, ${user}! Con cada lección que completes, yo creceré y me haré más fuerte. ¿Empezamos esta aventura juntos? ¡Vamos a ser los mejores del laboratorio!`,
+  },
+];
+
+const RobotWelcomeStory = ({ robotConfig, robotName, userName, onComplete }) => {
+  const [dialogueIndex, setDialogueIndex] = useState(0);
+  const [isTyping, setIsTyping] = useState(true);
+  const [displayedText, setDisplayedText] = useState('');
+  
+  const currentDialogue = ROBOT_DIALOGUE[dialogueIndex];
+  const fullText = currentDialogue.getText(robotName, userName);
+  const isLast = dialogueIndex === ROBOT_DIALOGUE.length - 1;
+
+  // Typewriter effect
+  useEffect(() => {
+    setIsTyping(true);
+    setDisplayedText('');
+    let i = 0;
+    const interval = setInterval(() => {
+      i++;
+      setDisplayedText(fullText.slice(0, i));
+      if (i >= fullText.length) {
+        clearInterval(interval);
+        setIsTyping(false);
+      }
+    }, 25);
+    return () => clearInterval(interval);
+  }, [dialogueIndex, fullText]);
+
+  const handleNext = () => {
+    if (isTyping) {
+      // Skip typing animation
+      setDisplayedText(fullText);
+      setIsTyping(false);
+      return;
+    }
+    if (isLast) {
+      onComplete();
+    } else {
+      setDialogueIndex(prev => prev + 1);
+    }
+  };
+
+  return (
+    <div className="text-center max-w-md animate-scale-in w-full">
+      {/* Robot with speech bubble effect */}
+      <div className="relative mb-2">
+        <div className="w-36 h-36 mx-auto bg-white/10 backdrop-blur rounded-3xl border-2 border-cyan-400/50 flex items-center justify-center p-2">
+          <RobotAvatar config={robotConfig} size={120} animate />
+        </div>
+        {/* Animated particles around robot */}
+        <div className="absolute -top-2 -right-4 text-2xl animate-bounce" style={{ animationDelay: '0s' }}>✨</div>
+        <div className="absolute -top-1 -left-3 text-xl animate-bounce" style={{ animationDelay: '0.3s' }}>⚡</div>
+        <div className="absolute bottom-2 -right-3 text-lg animate-pulse" style={{ animationDelay: '0.6s' }}>💫</div>
+      </div>
+
+      {/* Robot name badge */}
+      <div className="inline-flex items-center gap-1.5 bg-cyan-500/20 border border-cyan-400/40 rounded-full px-4 py-1 mb-4">
+        <span className="text-lg">{currentDialogue.emoji}</span>
+        <span className="text-sm font-black text-cyan-300">{robotName} dice...</span>
+      </div>
+
+      {/* Speech bubble */}
+      <div className="relative bg-white/10 backdrop-blur rounded-2xl p-5 border border-white/20 mb-4 text-left min-h-[120px]">
+        {/* Speech triangle */}
+        <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white/10 border-l border-t border-white/20 transform rotate-45"></div>
+        
+        <p className="text-blue-100 leading-relaxed text-sm font-semibold">
+          {displayedText}
+          {isTyping && <span className="inline-block w-0.5 h-4 bg-cyan-400 ml-0.5 animate-pulse align-middle"></span>}
+        </p>
+      </div>
+
+      {/* Progress dots */}
+      <div className="flex justify-center gap-1.5 mb-4">
+        {ROBOT_DIALOGUE.map((_, i) => (
+          <div key={i} className={`h-1.5 rounded-full transition-all duration-300 ${
+            i === dialogueIndex ? 'w-6 bg-cyan-400' : i < dialogueIndex ? 'w-3 bg-blue-500' : 'w-3 bg-white/20'
+          }`}/>
+        ))}
+      </div>
+
+      {/* Action button */}
+      <button onClick={handleNext}
+        className="w-full py-4 rounded-2xl bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-black text-lg shadow-lg shadow-blue-500/30 active:scale-95 transition-all flex items-center justify-center gap-2">
+        {isTyping ? (
+          <>Saltar ▸▸</>
+        ) : isLast ? (
+          <><Sparkles size={22}/> ¡Comenzar la Aventura!</>
+        ) : (
+          <>Siguiente <ChevronRight size={22}/></>
+        )}
+      </button>
+    </div>
+  );
+};
+
+// ============================================
 // Onboarding Component
 // ============================================
 
@@ -251,7 +397,8 @@ const OnboardingScreen = ({ onComplete, firebaseProfile }) => {
     accessory: 'antenna', color: 'blue', arms: 'normal', legs: 'normal', pattern: 'none'
   });
   const [robotName, setRobotName] = useState('');
-  const [builderTab, setBuilderTab] = useState('head');
+  const [builderTab, setBuilderTab] = useState('skins');
+  const [selectedSkin, setSelectedSkin] = useState(null);
 
   const handleComplete = () => {
     onComplete({
@@ -278,6 +425,7 @@ const OnboardingScreen = ({ onComplete, firebaseProfile }) => {
   };
 
   const builderTabs = [
+    { id: 'skins', label: '🌟', fullLabel: 'Skins', items: [], key: 'skins' },
     { id: 'head', label: '🗣️', fullLabel: 'Cabeza', items: HEADS, key: 'head' },
     { id: 'eyes', label: '👀', fullLabel: 'Ojos', items: EYES, key: 'eyes' },
     { id: 'mouth', label: '👄', fullLabel: 'Boca', items: MOUTHS, key: 'mouth' },
@@ -303,7 +451,7 @@ const OnboardingScreen = ({ onComplete, firebaseProfile }) => {
   const totalCombinations = HEADS.length * EYES.length * MOUTHS.length * BODIES.length * ARMS.length * LEGS.length * PATTERNS.length * ACCESSORIES.length * COLORS.length;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#0F172A] via-[#1E3A5F] to-[#0F172A] text-white flex flex-col">
+    <div className="min-h-screen bg-gradient-to-b from-[#1E40AF] via-[#3B82F6] to-[#1E3A8A] text-white flex flex-col">
       {/* Stars background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         {[...Array(30)].map((_, i) => (
@@ -408,11 +556,45 @@ const OnboardingScreen = ({ onComplete, firebaseProfile }) => {
 
             {/* Part Options */}
             <div className="bg-white/5 rounded-2xl p-2.5 border border-white/10 mb-3" style={{ maxHeight: '200px', overflowY: 'auto' }}>
-              {builderTab === 'color' ? (
+              {builderTab === 'skins' ? (
+                /* PREDEFINED SKINS GRID */
+                <div className="grid grid-cols-3 gap-2">
+                  {ROBOT_SKINS_ONBOARDING.map(skin => {
+                    const isSkinSelected = selectedSkin === skin.id;
+                    return (
+                      <button key={skin.id}
+                        onClick={() => {
+                          setSelectedSkin(skin.id);
+                          setRobotConfig({ ...skin.config });
+                        }}
+                        className={`relative flex flex-col items-center py-2 px-1 rounded-xl transition-all
+                          ${isSkinSelected 
+                            ? 'bg-blue-500/30 ring-2 ring-cyan-400 scale-[1.03]' 
+                            : 'bg-white/5 hover:bg-white/10 active:scale-95'}`}>
+                        <div className="absolute top-0.5 right-0.5 text-[7px] font-black px-1 py-0.5 rounded-full text-white"
+                          style={{ backgroundColor: skin.rarityColor }}>
+                          {skin.rarity === 'legendary' ? '★★★' : skin.rarity === 'epic' ? '★★' : skin.rarity === 'rare' ? '★' : ''}
+                        </div>
+                        <div className="w-12 h-12 flex items-center justify-center">
+                          <RobotAvatar config={skin.config} size={45} />
+                        </div>
+                        <div className="flex items-center gap-0.5 mt-0.5">
+                          <span className="text-xs">{skin.icon}</span>
+                          <span className="text-[9px] font-bold leading-tight">{skin.name}</span>
+                        </div>
+                        {isSkinSelected && (
+                          <div className="absolute -top-1 -left-1 w-4 h-4 bg-cyan-400 rounded-full flex items-center justify-center">
+                            <Check size={10} className="text-white" />
+                          </div>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              ) : builderTab === 'color' ? (
                 <div className="grid grid-cols-4 gap-1.5">
                   {COLORS.map(c => (
-                    <button key={c.id} onClick={() => setRobotConfig(prev => ({ ...prev, color: c.id }))}
-                      className={`flex items-center gap-1.5 py-2 px-2 rounded-xl transition-all
+                    <button key={c.id} onClick={() => { setRobotConfig(prev => ({ ...prev, color: c.id })); setSelectedSkin(null); }}                      className={`flex items-center gap-1.5 py-2 px-2 rounded-xl transition-all
                         ${robotConfig.color === c.id ? 'bg-white/20 ring-2 ring-cyan-400 scale-[1.03]' : 'bg-white/5 hover:bg-white/10 active:scale-95'}`}>
                       <div className="w-6 h-6 rounded-full border-2 flex-shrink-0" 
                         style={{ backgroundColor: c.hex, borderColor: robotConfig.color === c.id ? '#22D3EE' : 'rgba(255,255,255,0.2)' }}/>
@@ -430,7 +612,7 @@ const OnboardingScreen = ({ onComplete, firebaseProfile }) => {
                     const viewBox = getPreviewViewBox(builderTab);
                     return (
                       <button key={item.id}
-                        onClick={() => setRobotConfig(prev => ({ ...prev, [builderTab]: item.id }))}
+                        onClick={() => { setRobotConfig(prev => ({ ...prev, [builderTab]: item.id })); setSelectedSkin(null); }}
                         className={`flex flex-col items-center py-2 px-1 rounded-xl transition-all
                           ${isSelected 
                             ? 'bg-blue-500/30 ring-2 ring-cyan-400 scale-[1.03]' 
@@ -465,36 +647,14 @@ const OnboardingScreen = ({ onComplete, firebaseProfile }) => {
           </div>
         )}
 
-        {/* Step 2: Story intro */}
+        {/* Step 2: Story intro — Robot speaks! */}
         {step === 2 && (
-          <div className="text-center max-w-md animate-scale-in">
-            <div className="w-32 h-32 mx-auto mb-4 bg-white/10 backdrop-blur rounded-3xl border-2 border-cyan-400/50 flex items-center justify-center p-2">
-              <RobotAvatar config={robotConfig} size={110} animate />
-            </div>
-            <div className="text-3xl mb-2">🌟</div>
-            <h2 className="text-2xl font-black mb-2">
-              ¡{robotName || 'Sparky'} ha despertado!
-            </h2>
-            <div className="bg-white/10 backdrop-blur rounded-2xl p-5 border border-white/20 mb-6 text-left">
-              <p className="text-blue-200 leading-relaxed mb-3">
-                En el Laboratorio de <span className="font-bold text-cyan-300">CultivaTec</span>, el profesor ha creado un robot especial: 
-                <span className="font-bold text-white"> {robotName || 'Sparky'}</span>.
-              </p>
-              <p className="text-blue-200 leading-relaxed mb-3">
-                Pero {robotName || 'Sparky'} acaba de nacer y no sabe nada del mundo. No sabe qué es la electricidad, 
-                cómo funcionan los circuitos, ni cómo programar.
-              </p>
-              <p className="text-blue-200 leading-relaxed">
-                <span className="font-bold text-white">{userName}</span>, tú serás su maestro. 
-                Cada lección que completes le enseñará algo nuevo a {robotName || 'Sparky'} y lo hará crecer. 
-                ¡Tu misión es convertirlo en un robot completo! 🚀
-              </p>
-            </div>
-            <button onClick={handleComplete}
-              className="w-full py-4 rounded-2xl bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-black text-lg shadow-lg shadow-blue-500/30 active:scale-95 transition-all flex items-center justify-center gap-2">
-              <Sparkles size={22}/> ¡Comenzar la Aventura!
-            </button>
-          </div>
+          <RobotWelcomeStory 
+            robotConfig={robotConfig} 
+            robotName={robotName || 'Sparky'} 
+            userName={userName} 
+            onComplete={handleComplete}
+          />
         )}
 
         {/* Step indicators */}
@@ -587,5 +747,5 @@ export const StoryProgress = ({ modulesCompleted = 0, robotConfig, robotName, us
   );
 };
 
-export { OnboardingScreen, STORY_CHAPTERS };
+export { OnboardingScreen, STORY_CHAPTERS, HEADS, EYES, MOUTHS, BODIES, ACCESSORIES, ARMS, LEGS, PATTERNS, COLORS };
 export default OnboardingScreen;

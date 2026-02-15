@@ -12,6 +12,7 @@ import { OnboardingScreen, RobotAvatar, RobotMini, StoryProgress } from './Onboa
 import AuthScreen from './components/AuthScreen';
 import RankingScreen from './components/RankingScreen';
 import FriendsScreen from './components/FriendsScreen';
+import RobotSkinEditor from './components/RobotSkinEditor';
 
 // --- FIREBASE REAL ---
 import { onAuthChange, loginUser, registerUser, logoutUser, getCurrentUser } from './firebase/auth';
@@ -1686,7 +1687,7 @@ const SectionBanner = ({ section, modulesInSection, userScores, sectionIndex }) 
     );
 };
 
-const LibraryScreen = ({ startLesson, userId, userScores, onShowAchievements, onShowLicenses, userStats, userProfile, onLogout, firebaseProfile }) => {
+const LibraryScreen = ({ startLesson, userId, userScores, onShowAchievements, onShowLicenses, userStats, userProfile, onLogout, firebaseProfile, onEditRobot }) => {
     const totalModules = MODULOS_DE_ROBOTICA.length;
     const completedModulesCount = Object.values(userScores).filter(s => s && s.total > 0 && Math.round((s.score / s.total) * 100) >= 100).length;
     const overallProgress = Math.round((completedModulesCount / totalModules) * 100);
@@ -1697,7 +1698,11 @@ const LibraryScreen = ({ startLesson, userId, userScores, onShowAchievements, on
         <div className="sticky top-0 z-20 bg-white border-b-2 border-gray-100 px-4 py-2.5">
             <div className="flex items-center justify-between max-w-xl mx-auto">
                 <div className="flex items-center gap-3">
-                    {userProfile && <RobotMini config={userProfile.robotConfig} size={34} />}
+                    {userProfile && (
+                      <button onClick={onEditRobot} className="active:scale-90 transition-transform hover:ring-2 hover:ring-[#2563EB]/40 rounded-full" title="Personalizar robot">
+                        <RobotMini config={userProfile.robotConfig} size={34} />
+                      </button>
+                    )}
                     {firebaseProfile?.username && (
                         <span className="text-[10px] font-black text-[#777] hidden sm:inline">@{firebaseProfile.username}</span>
                     )}
@@ -2636,7 +2641,8 @@ export default function App() {
     const [achievementToast, setAchievementToast] = useState(null);
     const [unlockedPopupAchievement, setUnlockedPopupAchievement] = useState(null);
     const [completedModules, setCompletedModules] = useState(new Set());
-    const [visitedSections, setVisitedSections] = useState(new Set(['Biblioteca'])); 
+    const [visitedSections, setVisitedSections] = useState(new Set(['Biblioteca']));
+    const [showRobotEditor, setShowRobotEditor] = useState(false);
 
     // Persist userStats to localStorage
     useEffect(() => {
@@ -2820,6 +2826,25 @@ export default function App() {
                 updateUserProfile(userId, {
                     robotConfig: profile.robotConfig,
                     robotName: profile.robotName,
+                });
+            } catch {}
+        }
+    };
+
+    const handleRobotSave = (newConfig, newName) => {
+        const updatedProfile = {
+            ...userProfile,
+            robotConfig: newConfig,
+            robotName: newName || userProfile?.robotName || 'Sparky',
+        };
+        setUserProfile(updatedProfile);
+        localStorage.setItem('cultivatec_profile', JSON.stringify(updatedProfile));
+        // Sync to Firebase
+        if (userId) {
+            try {
+                updateUserProfile(userId, {
+                    robotConfig: newConfig,
+                    robotName: newName || userProfile?.robotName || 'Sparky',
                 });
             } catch {}
         }
@@ -3032,6 +3057,7 @@ export default function App() {
                     userProfile={userProfile}
                     onLogout={handleLogout}
                     firebaseProfile={firebaseProfile}
+                    onEditRobot={() => setShowRobotEditor(true)}
                 />;
                 break;
             case 'Taller':
@@ -3053,7 +3079,7 @@ export default function App() {
                 ScreenContent = <ClassroomScreen />;
                 break;
             default:
-                ScreenContent = <LibraryScreen startLesson={startLesson} userId={userId} userScores={userScores} userProfile={userProfile} onShowLicenses={() => setViewMode('licenses')} onLogout={handleLogout} firebaseProfile={firebaseProfile} />; 
+                ScreenContent = <LibraryScreen startLesson={startLesson} userId={userId} userScores={userScores} userProfile={userProfile} onShowLicenses={() => setViewMode('licenses')} onLogout={handleLogout} firebaseProfile={firebaseProfile} onEditRobot={() => setShowRobotEditor(true)} />; 
         }
     }
 
@@ -3077,6 +3103,15 @@ export default function App() {
                     onDismiss={() => setUnlockedPopupAchievement(null)}
                 />
             )}
+            {/* Robot Skin Editor Modal */}
+            <RobotSkinEditor
+                isOpen={showRobotEditor}
+                onClose={() => setShowRobotEditor(false)}
+                currentConfig={userProfile?.robotConfig}
+                currentName={userProfile?.robotName}
+                onSave={handleRobotSave}
+                userName={userProfile?.userName || firebaseProfile?.username || 'Explorador'}
+            />
         </div>
     );
 }
