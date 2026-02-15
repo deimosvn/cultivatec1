@@ -283,6 +283,6 @@ Este proyecto está bajo la licencia MIT. Puedes usarlo, modificarlo y distribui
 ---
 
 <p align="center">
-  Hecho con 💙 por <strong>Diego Martínez</strong> y <strong>Abraham Doñate</strong><br/>
+  Hecho por <strong>Diego Martínez</strong> y <strong>Abraham Doñate</strong><br/>
   <strong>CultivaTec</strong> — Democratizando el conocimiento STEM 🚀
 </p>

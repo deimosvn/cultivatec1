@@ -242,11 +242,10 @@ const STORY_CHAPTERS = [
 // Onboarding Component
 // ============================================
 
-const OnboardingScreen = ({ onComplete }) => {
-  const [step, setStep] = useState(0); // 0=welcome, 1=name, 2=fullName, 3=age, 4=robot builder, 5=story intro
-  const [name, setName] = useState('');
-  const [fullName, setFullName] = useState('');
-  const [age, setAge] = useState('');
+const OnboardingScreen = ({ onComplete, firebaseProfile }) => {
+  const [step, setStep] = useState(0); // 0=welcome, 1=robot builder, 2=story intro
+  const userName = firebaseProfile?.username || 'Explorador';
+  const fullName = firebaseProfile?.fullName || userName;
   const [robotConfig, setRobotConfig] = useState({
     head: 'round', eyes: 'round', mouth: 'smile', body: 'box',
     accessory: 'antenna', color: 'blue', arms: 'normal', legs: 'normal', pattern: 'none'
@@ -254,13 +253,11 @@ const OnboardingScreen = ({ onComplete }) => {
   const [robotName, setRobotName] = useState('');
   const [builderTab, setBuilderTab] = useState('head');
 
-  const ages = ['6', '7', '8', '9', '10', '11', '12', '13', '14', '15+'];
-
   const handleComplete = () => {
     onComplete({
-      userName: name.trim() || 'Explorador',
-      fullName: fullName.trim() || name.trim() || 'Explorador',
-      userAge: age || '10',
+      userName,
+      fullName,
+      userAge: '10',
       robotConfig,
       robotName: robotName.trim() || 'Sparky'
     });
@@ -347,91 +344,12 @@ const OnboardingScreen = ({ onComplete }) => {
             </p>
             <button onClick={() => setStep(1)}
               className="w-full py-4 rounded-2xl bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-black text-lg shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all active:scale-95 flex items-center justify-center gap-2">
-              ¡Comenzar Aventura! <ChevronRight size={24}/>
+              ¡Crear mi Robot! <ChevronRight size={24}/>
             </button>
           </div>
         )}
-
-        {/* Step 1: Name */}
+        {/* Step 1: Robot Builder */}
         {step === 1 && (
-          <div className="text-center max-w-md w-full animate-scale-in">
-            <div className="text-6xl mb-4">👋</div>
-            <h2 className="text-3xl font-black mb-2">¿Cómo te llamas?</h2>
-            <p className="text-blue-300 mb-6">Así te llamaremos durante tu aventura</p>
-            <input
-              type="text" value={name} onChange={e => setName(e.target.value)}
-              placeholder="Escribe tu nombre..."
-              className="w-full py-4 px-6 rounded-2xl bg-white/10 border-2 border-white/20 text-white text-center text-xl font-bold placeholder-white/30 outline-none focus:border-cyan-400 transition-colors mb-6"
-              maxLength={20} autoFocus
-            />
-            <div className="flex gap-3">
-              <button onClick={() => setStep(0)}
-                className="flex-1 py-3 rounded-xl bg-white/10 border border-white/20 font-bold hover:bg-white/20 transition-colors flex items-center justify-center gap-1">
-                <ChevronLeft size={18}/> Atrás
-              </button>
-              <button onClick={() => setStep(2)}
-                className="flex-1 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 font-bold shadow-lg active:scale-95 transition-all flex items-center justify-center gap-1">
-                Siguiente <ChevronRight size={18}/>
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Step 2: Full Name for Certificate */}
-        {step === 2 && (
-          <div className="text-center max-w-md w-full animate-scale-in">
-            <div className="text-6xl mb-4">📜</div>
-            <h2 className="text-2xl font-black mb-2">Tu nombre completo</h2>
-            <p className="text-blue-300 mb-2 text-sm">Este nombre aparecerá en tu <b className="text-cyan-300">certificado oficial</b> de CultivaTec</p>
-            <p className="text-blue-400/60 mb-6 text-xs">Escribe tu nombre completo como quieres que aparezca</p>
-            <input
-              type="text" value={fullName} onChange={e => setFullName(e.target.value)}
-              placeholder="Ej: Juan Pablo García López"
-              className="w-full py-4 px-6 rounded-2xl bg-white/10 border-2 border-white/20 text-white text-center text-lg font-bold placeholder-white/30 outline-none focus:border-cyan-400 transition-colors mb-6"
-              maxLength={60} autoFocus
-            />
-            <div className="flex gap-3">
-              <button onClick={() => setStep(1)}
-                className="flex-1 py-3 rounded-xl bg-white/10 border border-white/20 font-bold hover:bg-white/20 transition-colors flex items-center justify-center gap-1">
-                <ChevronLeft size={18}/> Atrás
-              </button>
-              <button onClick={() => setStep(3)}
-                className="flex-1 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 font-bold shadow-lg active:scale-95 transition-all flex items-center justify-center gap-1">
-                Siguiente <ChevronRight size={18}/>
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Step 3: Age */}
-        {step === 3 && (
-          <div className="text-center max-w-md w-full animate-scale-in">
-            <div className="text-6xl mb-4">🎂</div>
-            <h2 className="text-3xl font-black mb-2">¿Cuántos años tienes{name ? `, ${name}` : ''}?</h2>
-            <p className="text-blue-300 mb-6">Para personalizar tu experiencia de aprendizaje</p>
-            <div className="grid grid-cols-5 gap-2 mb-6">
-              {ages.map(a => (
-                <button key={a} onClick={() => setAge(a)}
-                  className={`py-3 rounded-xl font-black text-lg transition-all active:scale-90
-                    ${age === a ? 'bg-gradient-to-r from-blue-500 to-cyan-500 shadow-lg shadow-blue-500/30 scale-105' : 'bg-white/10 border border-white/20 hover:bg-white/20'}`}>
-                  {a}
-                </button>
-              ))}
-            </div>
-            <div className="flex gap-3">
-              <button onClick={() => setStep(2)} className="flex-1 py-3 rounded-xl bg-white/10 border border-white/20 font-bold hover:bg-white/20 transition-colors flex items-center justify-center gap-1">
-                <ChevronLeft size={18}/> Atrás
-              </button>
-              <button onClick={() => setStep(4)}
-                className="flex-1 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 font-bold shadow-lg active:scale-95 transition-all flex items-center justify-center gap-1">
-                Siguiente <ChevronRight size={18}/>
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Step 4: Robot Builder */}
-        {step === 4 && (
           <div className="max-w-lg w-full animate-scale-in">
             {/* Header */}
             <div className="text-center mb-3">
@@ -536,10 +454,10 @@ const OnboardingScreen = ({ onComplete }) => {
 
             {/* Navigation */}
             <div className="flex gap-3">
-              <button onClick={() => setStep(3)} className="flex-1 py-3 rounded-xl bg-white/10 border border-white/20 font-bold hover:bg-white/20 transition-colors flex items-center justify-center gap-1">
+              <button onClick={() => setStep(0)} className="flex-1 py-3 rounded-xl bg-white/10 border border-white/20 font-bold hover:bg-white/20 transition-colors flex items-center justify-center gap-1">
                 <ChevronLeft size={18}/> Atrás
               </button>
-              <button onClick={() => setStep(5)}
+              <button onClick={() => setStep(2)}
                 className="flex-1 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 font-bold shadow-lg shadow-blue-500/30 active:scale-95 transition-all flex items-center justify-center gap-2">
                 <Sparkles size={16}/> ¡Listo!
               </button>
@@ -547,8 +465,8 @@ const OnboardingScreen = ({ onComplete }) => {
           </div>
         )}
 
-        {/* Step 5: Story intro */}
-        {step === 5 && (
+        {/* Step 2: Story intro */}
+        {step === 2 && (
           <div className="text-center max-w-md animate-scale-in">
             <div className="w-32 h-32 mx-auto mb-4 bg-white/10 backdrop-blur rounded-3xl border-2 border-cyan-400/50 flex items-center justify-center p-2">
               <RobotAvatar config={robotConfig} size={110} animate />
@@ -567,7 +485,7 @@ const OnboardingScreen = ({ onComplete }) => {
                 cómo funcionan los circuitos, ni cómo programar.
               </p>
               <p className="text-blue-200 leading-relaxed">
-                <span className="font-bold text-white">{name || 'Explorador'}</span>, tú serás su maestro. 
+                <span className="font-bold text-white">{userName}</span>, tú serás su maestro. 
                 Cada lección que completes le enseñará algo nuevo a {robotName || 'Sparky'} y lo hará crecer. 
                 ¡Tu misión es convertirlo en un robot completo! 🚀
               </p>
@@ -581,7 +499,7 @@ const OnboardingScreen = ({ onComplete }) => {
 
         {/* Step indicators */}
         <div className="flex gap-2 mt-8">
-          {[0,1,2,3,4].map(i => (
+          {[0,1,2].map(i => (
             <div key={i} className={`h-1.5 rounded-full transition-all duration-300 ${i === step ? 'w-8 bg-cyan-400' : i < step ? 'w-4 bg-blue-500' : 'w-4 bg-white/20'}`}/>
           ))}
         </div>

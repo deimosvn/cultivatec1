@@ -91,7 +91,7 @@ const AchievementCard = ({ achievement, isUnlocked, onCelebrate, animDelay }) =>
   );
 };
 
-const AchievementsScreen = ({ onBack, userStats }) => {
+const AchievementsScreen = ({ onBack, userStats, onShowRanking, onShowFriends, pendingFriendRequests = 0 }) => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [showUnlockedOnly, setShowUnlockedOnly] = useState(false);
   const [celebratingAchievement, setCelebratingAchievement] = useState(null);
@@ -155,7 +155,35 @@ const AchievementsScreen = ({ onBack, userStats }) => {
           </div>
         </div>
       </div>
-      <div className="px-4 pt-4 pb-2">
+      {/* Botones de Ranking y Amigos */}
+      <div className="px-4 pt-3 pb-1">
+        <div className="grid grid-cols-2 gap-2">
+          {onShowRanking && (
+            <button onClick={onShowRanking} className="bg-gradient-to-r from-[#2563EB] to-[#3B82F6] text-white rounded-2xl p-3.5 flex items-center gap-2.5 active:scale-[0.97] transition-all shadow-[0_4px_0_#1E40AF] border-b-0">
+              <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center text-xl">🏆</div>
+              <div className="text-left">
+                <p className="text-xs font-black">Ranking Global</p>
+                <p className="text-[9px] font-bold text-white/60">Compite con todos</p>
+              </div>
+            </button>
+          )}
+          {onShowFriends && (
+            <button onClick={onShowFriends} className="bg-gradient-to-r from-[#58CC02] to-[#6BD600] text-white rounded-2xl p-3.5 flex items-center gap-2.5 active:scale-[0.97] transition-all shadow-[0_4px_0_#46A302] border-b-0 relative">
+              <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center text-xl">👥</div>
+              <div className="text-left">
+                <p className="text-xs font-black">Amigos</p>
+                <p className="text-[9px] font-bold text-white/60">Agrega y compite</p>
+              </div>
+              {pendingFriendRequests > 0 && (
+                <div className="absolute -top-1.5 -right-1.5 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center shadow-lg">
+                  <span className="text-[10px] font-black text-white">{pendingFriendRequests}</span>
+                </div>
+              )}
+            </button>
+          )}
+        </div>
+      </div>
+      <div className="px-4 pt-2 pb-2">
         <div className="bg-white rounded-2xl p-4 border-2 border-[#E5E5E5]">
           <div className="flex items-center gap-3 mb-2"><Trophy size={18} className="text-[#FFC800]" /><span className="text-sm font-black text-[#3C3C3C]">Progreso Total</span><span className="ml-auto text-xs font-black text-[#AFAFAF]">{unlockedIds.length}/{ACHIEVEMENTS.length}</span></div>
           <div className="w-full bg-[#E5E5E5] rounded-full h-4 overflow-hidden"><div className="h-full bg-gradient-to-r from-[#58CC02] to-[#46A302] rounded-full transition-all duration-1000 relative" style={{ width: `${Math.max(progressPercent, 3)}%` }}><div className="absolute right-1 top-1/2 -translate-y-1/2 text-[8px]">🏃</div></div></div>

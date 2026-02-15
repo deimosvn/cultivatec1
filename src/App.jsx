@@ -9,27 +9,19 @@ import LicensesScreen from './components/LicensesScreen';
 import CircuitBuilder from './CircuitBuilder';
 import { MODULOS_DATA, CODE_CHALLENGES_DATA } from './data/modulesData';
 import { OnboardingScreen, RobotAvatar, RobotMini, StoryProgress } from './Onboarding';
+import AuthScreen from './components/AuthScreen';
+import RankingScreen from './components/RankingScreen';
+import FriendsScreen from './components/FriendsScreen';
 
-// --- CONFIGURACIÓN Y MOCK DATA DE FIREBASE ---
-const appId = 'default-app-id'; 
-const initialAuthToken = null; 
+// --- FIREBASE REAL ---
+import { onAuthChange, loginUser, registerUser, logoutUser, getCurrentUser } from './firebase/auth';
+import {
+  getUserProfile, onUserProfileChange, updateUserProfile, syncUserStats,
+  saveModuleScore, onUserScoresChange, createUserProfile, calculateLevel,
+  getPendingFriendRequests, onPendingRequestsChange, checkAndUpdateStreak
+} from './firebase/firestore';
 
-// Mock de funciones de Firebase para mantener la estructura pero simplificar el código
-const mockAuth = { currentUser: { uid: 'MOCK_USER' } };
-const mockSignIn = async () => mockAuth.currentUser.uid;
-const mockOnSnapshot = (ref, callback) => {
-    // Cargar scores del usuario desde localStorage
-    try {
-        const saved = localStorage.getItem('cultivatec_userScores');
-        const savedScores = saved ? JSON.parse(saved) : {};
-        callback({ exists: () => true, data: () => savedScores });
-    } catch {
-        callback({ exists: () => true, data: () => ({}) });
-    }
-    return () => {}; // Función de desuscripción
-};
-
-// Helper: guardar scores en localStorage
+// Helper: guardar scores en localStorage (fallback local)
 const persistUserScores = (scores) => {
     try { localStorage.setItem('cultivatec_userScores', JSON.stringify(scores)); } catch {}
 };
@@ -812,6 +804,162 @@ const Module1View = ({ module, onBack, startPractice, onModuleComplete }) => {
         </div>
     );
 };
+
+// --- Interactive sub-components (must be proper components for hooks) ---
+const MatchingGameSection = ({ section, setXpEarned, setShowXpPop, setMascotMood }) => {
+    const pairs = section.pairs || [];
+    const [matchState, setMatchState] = useState({});
+    const [selectedMatch, setSelectedMatch] = useState(null);
+    const [matchedPairs, setMatchedPairs] = useState(new Set());
+    const [shuffled] = useState(() => {
+        const leftItems = pairs.map((p, i) => ({ id: `left-${i}`, text: p.left, pairIdx: i, side: 'left' }));
+        const rightItems = pairs.map((p, i) => ({ id: `right-${i}`, text: p.right, pairIdx: i, side: 'right' }));
+        for (let i = rightItems.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [rightItems[i], rightItems[j]] = [rightItems[j], rightItems[i]];
+        }
+        return { left: leftItems, right: rightItems };
+    });
+    const handleMatchTap = (item) => {
+        if (matchedPairs.has(item.pairIdx + '-' + item.side)) return;
+        if (!selectedMatch) { setSelectedMatch(item); return; }
+        if (selectedMatch.side === item.side) { setSelectedMatch(item); return; }
+        if (selectedMatch.pairIdx === item.pairIdx) {
+            setMatchedPairs(prev => { const n = new Set(prev); n.add(item.pairIdx + '-left'); n.add(item.pairIdx + '-right'); return n; });
+            setSelectedMatch(null);
+            if (matchedPairs.size + 2 >= pairs.length * 2) {
+                setXpEarned(p => p + 20);
+                setShowXpPop(true);
+                setTimeout(() => setShowXpPop(false), 1000);
+                setMascotMood('celebrating');
+                setTimeout(() => setMascotMood('happy'), 2000);
+            }
+        } else {
+            setMatchState(prev => ({ ...prev, [selectedMatch.id]: 'wrong', [item.id]: 'wrong' }));
+            setTimeout(() => setMatchState(prev => { const n = { ...prev }; delete n[selectedMatch.id]; delete n[item.id]; return n; }), 600);
+            setSelectedMatch(null);
+        }
+    };
+    const allMatched = matchedPairs.size >= pairs.length * 2;
+    return (
+        <div className="bg-white rounded-2xl border-2 border-[#CE82FF]/40 overflow-hidden animate-scale-in">
+            <div className="bg-gradient-to-r from-[#CE82FF] to-[#9333EA] px-4 py-3">
+                <h3 className="text-sm font-black text-white flex items-center gap-2">🧩 {section.titulo}</h3>
+                <p className="text-[10px] text-white/70 font-bold mt-0.5">{section.instruccion || 'Toca un elemento de cada columna para relacionarlos'}</p>
+            </div>
+            <div className="p-4">
+                <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-2">
+                        <p className="text-[10px] font-black text-[#CE82FF] text-center mb-1">CONCEPTO</p>
+                        {shuffled.left.map(item => {
+                            const isMatched = matchedPairs.has(item.pairIdx + '-left');
+                            const isSelected = selectedMatch?.id === item.id;
+                            const isWrong = matchState[item.id] === 'wrong';
+                            return (
+                                <button key={item.id} onClick={() => handleMatchTap(item)} disabled={isMatched}
+                                    className={`w-full text-left p-2.5 rounded-xl text-xs font-bold transition-all active:scale-95 ${
+                                        isMatched ? 'bg-[#58CC02]/20 text-[#58CC02] border-2 border-[#58CC02]/40' :
+                                        isWrong ? 'bg-[#FF4B4B]/20 text-[#FF4B4B] border-2 border-[#FF4B4B]/40 animate-shake' :
+                                        isSelected ? 'bg-[#CE82FF]/20 text-[#CE82FF] border-2 border-[#CE82FF] scale-[1.02]' :
+                                        'bg-[#F7F7F7] text-[#3C3C3C] border-2 border-[#E5E5E5] hover:border-[#CE82FF]'
+                                    }`}>
+                                    {isMatched ? '✅ ' : ''}{item.text}
+                                </button>
+                            );
+                        })}
+                    </div>
+                    <div className="space-y-2">
+                        <p className="text-[10px] font-black text-[#9333EA] text-center mb-1">RESPUESTA</p>
+                        {shuffled.right.map(item => {
+                            const isMatched = matchedPairs.has(item.pairIdx + '-right');
+                            const isSelected = selectedMatch?.id === item.id;
+                            const isWrong = matchState[item.id] === 'wrong';
+                            return (
+                                <button key={item.id} onClick={() => handleMatchTap(item)} disabled={isMatched}
+                                    className={`w-full text-left p-2.5 rounded-xl text-xs font-bold transition-all active:scale-95 ${
+                                        isMatched ? 'bg-[#58CC02]/20 text-[#58CC02] border-2 border-[#58CC02]/40' :
+                                        isWrong ? 'bg-[#FF4B4B]/20 text-[#FF4B4B] border-2 border-[#FF4B4B]/40 animate-shake' :
+                                        isSelected ? 'bg-[#9333EA]/20 text-[#9333EA] border-2 border-[#9333EA] scale-[1.02]' :
+                                        'bg-[#F7F7F7] text-[#3C3C3C] border-2 border-[#E5E5E5] hover:border-[#9333EA]'
+                                    }`}>
+                                    {isMatched ? '✅ ' : ''}{item.text}
+                                </button>
+                            );
+                        })}
+                    </div>
+                </div>
+                {allMatched && (
+                    <div className="mt-3 bg-[#58CC02]/10 p-3 rounded-xl text-center animate-bounce-in border-2 border-[#58CC02]/30">
+                        <p className="text-sm font-black text-[#58CC02]">🎉 ¡Todas las parejas conectadas! +20 XP</p>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+};
+
+const TrueFalseSection = ({ section, setXpEarned, setShowXpPop, setMascotMood }) => {
+    const statements = section.statements || [];
+    const [tfAnswers, setTfAnswers] = useState({});
+    const handleTF = (idx, answer) => {
+        if (tfAnswers[idx] !== undefined) return;
+        const isCorrect = answer === statements[idx].correct;
+        setTfAnswers(prev => ({ ...prev, [idx]: isCorrect ? 'correct' : 'wrong' }));
+        if (isCorrect) {
+            setXpEarned(p => p + 10);
+            setShowXpPop(true);
+            setTimeout(() => setShowXpPop(false), 1000);
+            setMascotMood('celebrating');
+            setTimeout(() => setMascotMood('happy'), 2000);
+        } else {
+            setMascotMood('sad');
+            setTimeout(() => setMascotMood('thinking'), 1500);
+        }
+    };
+    return (
+        <div className="bg-white rounded-2xl border-2 border-[#1CB0F6]/40 overflow-hidden animate-scale-in">
+            <div className="bg-gradient-to-r from-[#1CB0F6] to-[#0D8ECF] px-4 py-3">
+                <h3 className="text-sm font-black text-white flex items-center gap-2">✅❌ {section.titulo}</h3>
+                <p className="text-[10px] text-white/70 font-bold mt-0.5">¿Verdadero o Falso? ¡Demuestra lo que aprendiste!</p>
+            </div>
+            <div className="p-4 space-y-3">
+                {statements.map((st, sIdx) => (
+                    <div key={sIdx} className={`p-3 rounded-xl border-2 transition-all ${
+                        tfAnswers[sIdx] === 'correct' ? 'bg-[#58CC02]/10 border-[#58CC02]/30' :
+                        tfAnswers[sIdx] === 'wrong' ? 'bg-[#FF4B4B]/10 border-[#FF4B4B]/30' :
+                        'bg-[#F7F7F7] border-[#E5E5E5]'
+                    }`}>
+                        <p className="text-xs font-bold text-[#3C3C3C] mb-2">{st.text}</p>
+                        <div className="flex gap-2">
+                            <button onClick={() => handleTF(sIdx, true)} disabled={tfAnswers[sIdx] !== undefined}
+                                className={`flex-1 py-2 rounded-lg text-xs font-black transition-all active:scale-95 ${
+                                    tfAnswers[sIdx] !== undefined && st.correct === true ? 'bg-[#58CC02] text-white' :
+                                    tfAnswers[sIdx] === 'wrong' && st.correct !== true ? 'bg-[#FF4B4B]/20 text-[#FF4B4B]' :
+                                    'bg-white border-2 border-[#58CC02]/40 text-[#58CC02] hover:bg-[#58CC02]/10'
+                                }`}>
+                                ✅ Verdadero
+                            </button>
+                            <button onClick={() => handleTF(sIdx, false)} disabled={tfAnswers[sIdx] !== undefined}
+                                className={`flex-1 py-2 rounded-lg text-xs font-black transition-all active:scale-95 ${
+                                    tfAnswers[sIdx] !== undefined && st.correct === false ? 'bg-[#58CC02] text-white' :
+                                    tfAnswers[sIdx] === 'wrong' && st.correct !== false ? 'bg-[#FF4B4B]/20 text-[#FF4B4B]' :
+                                    'bg-white border-2 border-[#FF4B4B]/40 text-[#FF4B4B] hover:bg-[#FF4B4B]/10'
+                                }`}>
+                                ❌ Falso
+                            </button>
+                        </div>
+                        {tfAnswers[sIdx] && (
+                            <p className={`text-[10px] font-bold mt-2 ${tfAnswers[sIdx] === 'correct' ? 'text-[#58CC02]' : 'text-[#FF4B4B]'}`}>
+                                {tfAnswers[sIdx] === 'correct' ? '🎉 ¡Correcto!' : `💡 Respuesta: ${st.correct ? 'Verdadero' : 'Falso'}`} — {st.explain}
+                            </p>
+                        )}
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+};
+
 const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete, userProfile, onShowLicenses }) => { 
     if (!currentModule || !currentModule.contenidoTeorico) return <PlaceholderScreen title="Contenido No Disponible" color="yellow" />;
 
@@ -825,7 +973,60 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete, userPr
     const [showCelebration, setShowCelebration] = useState(false);
     const [xpEarned, setXpEarned] = useState(0);
     const [showXpPop, setShowXpPop] = useState(false);
-    const [mascotMood, setMascotMood] = useState('happy'); // happy, thinking, celebrating, sad
+    const [mascotMood, setMascotMood] = useState('happy'); // happy, thinking, celebrating, sad, reading
+
+    // Text-to-Speech state
+    const [isSpeaking, setIsSpeaking] = useState(false);
+    const [ttsSupported] = useState(() => 'speechSynthesis' in window);
+
+    // Extract plain text from a section for TTS
+    const getSectionText = (section) => {
+        let text = '';
+        if (section.titulo) text += section.titulo.replace(/[^\wáéíóúñü\s.,!?¿¡]/gi, '') + '. ';
+        if (section.texto) text += section.texto.replace(/\*\*/g, '') + ' ';
+        if (section.puntos) text += section.puntos.map(p => p.replace(/\*\*/g, '')).join('. ') + ' ';
+        if (section.pregunta) text += 'Pregunta: ' + section.pregunta + '. ';
+        if (section.opciones) text += 'Opciones: ' + section.opciones.join(', ') + '. ';
+        if (section.instruccion) text += section.instruccion.replace(/\*\*/g, '') + ' ';
+        if (section.formula) text += 'Fórmula: ' + section.formula.replace(/<[^>]*>/g, '') + '. ';
+        if (section.explicacion && !section.opciones) text += section.explicacion + ' ';
+        if (section.caption) text += section.caption.replace(/\*\*/g, '') + ' ';
+        if (section.pairs) text += 'Juego de emparejar: ' + section.pairs.map(p => p.left + ' con ' + p.right).join('. ') + '. ';
+        if (section.statements) text += 'Verdadero o Falso: ' + section.statements.map(s => s.text).join('. ') + '. ';
+        return text.replace(/[#*_~`]/g, '').replace(/\n/g, '. ').trim();
+    };
+
+    const speakSection = () => {
+        if (!ttsSupported) return;
+        if (isSpeaking) {
+            window.speechSynthesis.cancel();
+            setIsSpeaking(false);
+            setMascotMood('happy');
+            return;
+        }
+        const text = getSectionText(content[currentStep]);
+        if (!text) return;
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'es-MX';
+        utterance.rate = 0.85;
+        utterance.pitch = 1.1;
+        // Try to find a Spanish voice
+        const voices = window.speechSynthesis.getVoices();
+        const esVoice = voices.find(v => v.lang.startsWith('es')) || voices[0];
+        if (esVoice) utterance.voice = esVoice;
+        utterance.onstart = () => { setIsSpeaking(true); setMascotMood('reading'); };
+        utterance.onend = () => { setIsSpeaking(false); setMascotMood('happy'); };
+        utterance.onerror = () => { setIsSpeaking(false); setMascotMood('happy'); };
+        window.speechSynthesis.speak(utterance);
+    };
+
+    // Stop TTS on step change or unmount
+    useEffect(() => {
+        return () => { if (ttsSupported) window.speechSynthesis.cancel(); };
+    }, []);
+    useEffect(() => {
+        if (ttsSupported) { window.speechSynthesis.cancel(); setIsSpeaking(false); }
+    }, [currentStep]);
 
     // Mini-Quiz State
     const [quizAnswers, setQuizAnswers] = useState({});
@@ -872,12 +1073,13 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete, userPr
     const goPrev = () => { if (currentStep > 0) setCurrentStep(currentStep - 1); };
     const progressPercent = Math.round(((completedSteps.size) / totalSteps) * 100);
 
-    const mascotEmojis = { happy: '😊', thinking: '🤔', celebrating: '🥳', sad: '😅' };
+    const mascotEmojis = { happy: '😊', thinking: '🤔', celebrating: '🥳', sad: '😅', reading: '📖' };
     const mascotMessages = {
         happy: ['¡Sigue así!', '¡Vas genial!', '¡Tú puedes!', '¡Qué buen estudiante!'],
         thinking: ['Piensa bien...', 'Hmm interesante...', 'Revisa de nuevo...'],
         celebrating: ['¡EXCELENTE!', '¡INCREÍBLE!', '¡WOW!', '¡GENIO!'],
         sad: ['¡Casi! Intenta otra vez', '¡No te rindas!', '¡La próxima será!'],
+        reading: ['Escucha con atención...', 'Te lo leo...', '¡Pon atención!', 'Leyendo para ti...'],
     };
     const randomMsg = (mood) => mascotMessages[mood][Math.floor(Math.random() * mascotMessages[mood].length)];
 
@@ -1039,6 +1241,46 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete, userPr
                 </div>
             );
         }
+        // Illustration: SVG inline diagram with labels
+        if (section.tipo === 'illustration') {
+            return (
+                <div className="bg-white rounded-2xl border-2 border-[#E5E5E5] overflow-hidden animate-img-reveal">
+                    <div className="bg-gradient-to-r from-[#2563EB]/10 to-[#1CB0F6]/10 px-4 py-3 border-b border-[#E5E5E5]">
+                        <h3 className="text-base font-black text-[#2563EB] flex items-center gap-2">
+                            🖼️ {section.titulo}
+                        </h3>
+                    </div>
+                    <div className="p-4 flex flex-col items-center">
+                        <div className="w-full max-w-sm bg-gradient-to-br from-[#F0F9FF] to-[#E0F2FE] rounded-xl p-4 border-2 border-[#BAE6FD] mb-3" 
+                            dangerouslySetInnerHTML={{ __html: section.svg }} />
+                        {section.caption && (
+                            <p className="text-xs font-bold text-[#777] text-center mt-2 leading-relaxed" dangerouslySetInnerHTML={{ __html: boldReplace(section.caption) }} />
+                        )}
+                        {section.labels && (
+                            <div className="grid grid-cols-2 gap-2 mt-3 w-full">
+                                {section.labels.map((label, lIdx) => (
+                                    <div key={lIdx} className="flex items-center gap-2 bg-[#F7F7F7] px-3 py-2 rounded-xl">
+                                        <span className="text-base">{label.icon}</span>
+                                        <div>
+                                            <p className="text-xs font-black text-[#3C3C3C]">{label.name}</p>
+                                            <p className="text-[10px] text-[#AFAFAF] font-semibold">{label.desc}</p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        }
+        // Matching game: tap pairs to match
+        if (section.tipo === 'matching_game') {
+            return <MatchingGameSection section={section} setXpEarned={setXpEarned} setShowXpPop={setShowXpPop} setMascotMood={setMascotMood} />;
+        }
+        // True/False quick game
+        if (section.tipo === 'true_false') {
+            return <TrueFalseSection section={section} setXpEarned={setXpEarned} setShowXpPop={setShowXpPop} setMascotMood={setMascotMood} />;
+        }
         // Default: texto / formula
         return (
             <div className="bg-white p-5 rounded-2xl border-2 border-[#E5E5E5] overflow-hidden animate-scale-in">
@@ -1199,20 +1441,34 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete, userPr
 
             {/* Mascot & Navigation */}
             <div className="bg-white border-t-2 border-[#E5E5E5] px-4 py-3">
-                {/* Mascot bubble */}
+                {/* Mascot bubble with reading animation */}
                 <div className="flex items-center gap-3 mb-3">
                     {userProfile ? (
-                        <div className="w-10 h-10 flex-shrink-0">
-                            <RobotMini config={userProfile.robotConfig} size={40} />
+                        <div className={`w-12 h-12 flex-shrink-0 transition-transform duration-300 ${isSpeaking ? 'animate-robot-read' : mascotMood === 'celebrating' ? 'animate-bounce' : ''}`}>
+                            <RobotAvatar config={userProfile.robotConfig} size={48} animate={isSpeaking} />
                         </div>
                     ) : (
-                        <div className="w-10 h-10 bg-[#F7F7F7] rounded-full flex items-center justify-center text-xl animate-pulse-soft border-2 border-[#E5E5E5]">
+                        <div className={`w-10 h-10 bg-[#F7F7F7] rounded-full flex items-center justify-center text-xl border-2 border-[#E5E5E5] ${isSpeaking ? 'animate-robot-read' : 'animate-pulse-soft'}`}>
                             {mascotEmojis[mascotMood]}
                         </div>
                     )}
-                    <div className="bg-[#F7F7F7] px-3 py-2 rounded-xl rounded-bl-none flex-grow">
-                        <p className="text-xs font-bold text-[#777]">{randomMsg(mascotMood)}</p>
+                    <div className={`px-3 py-2 rounded-xl rounded-bl-none flex-grow ${isSpeaking ? 'bg-gradient-to-r from-[#2563EB]/10 to-[#1CB0F6]/10 border border-[#2563EB]/20' : 'bg-[#F7F7F7]'}`}>
+                        <p className={`text-xs font-bold ${isSpeaking ? 'text-[#2563EB]' : 'text-[#777]'}`}>
+                            {isSpeaking ? '🔊 ' : ''}{randomMsg(mascotMood)}
+                        </p>
                     </div>
+                    {/* TTS Button */}
+                    {ttsSupported && (
+                        <button onClick={speakSection}
+                            className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all active:scale-90 flex-shrink-0 ${
+                                isSpeaking 
+                                    ? 'bg-[#FF4B4B] text-white shadow-lg shadow-[#FF4B4B]/30 animate-pulse' 
+                                    : 'bg-[#2563EB]/10 text-[#2563EB] hover:bg-[#2563EB]/20'
+                            }`}
+                            title={isSpeaking ? 'Detener lectura' : 'Leer en voz alta'}>
+                            <span className="text-lg">{isSpeaking ? '⏹️' : '🔊'}</span>
+                        </button>
+                    )}
                     <div className="flex items-center gap-1 bg-[#FFC800]/10 px-2.5 py-1.5 rounded-xl">
                         <span className="text-sm">⭐</span>
                         <span className="text-xs font-black text-[#FF9600]">{xpEarned}</span>
@@ -1430,7 +1686,7 @@ const SectionBanner = ({ section, modulesInSection, userScores, sectionIndex }) 
     );
 };
 
-const LibraryScreen = ({ startLesson, userId, userScores, onShowAchievements, onShowLicenses, userStats, userProfile }) => {
+const LibraryScreen = ({ startLesson, userId, userScores, onShowAchievements, onShowLicenses, userStats, userProfile, onLogout, firebaseProfile }) => {
     const totalModules = MODULOS_DE_ROBOTICA.length;
     const completedModulesCount = Object.values(userScores).filter(s => s && s.total > 0 && Math.round((s.score / s.total) * 100) >= 100).length;
     const overallProgress = Math.round((completedModulesCount / totalModules) * 100);
@@ -1442,9 +1698,12 @@ const LibraryScreen = ({ startLesson, userId, userScores, onShowAchievements, on
             <div className="flex items-center justify-between max-w-xl mx-auto">
                 <div className="flex items-center gap-3">
                     {userProfile && <RobotMini config={userProfile.robotConfig} size={34} />}
-                    <div className="flex items-center gap-1 bg-[#FF9600]/10 px-2.5 py-1 rounded-xl">
-                        <span className="text-lg">🔥</span>
-                        <span className="text-sm font-black text-[#FF9600]">{userStats?.modulesVisited || 3}</span>
+                    {firebaseProfile?.username && (
+                        <span className="text-[10px] font-black text-[#777] hidden sm:inline">@{firebaseProfile.username}</span>
+                    )}
+                    <div className="flex items-center gap-1 bg-[#3B82F6]/10 px-2.5 py-1 rounded-xl" title="Racha diaria">
+                        <span className="text-lg">🤖</span>
+                        <span className="text-sm font-black text-[#3B82F6]">{firebaseProfile?.currentStreak || 0}</span>
                     </div>
                     <div className="flex items-center gap-1 bg-[#FFC800]/10 px-2.5 py-1 rounded-xl">
                         <span className="text-lg">⚡</span>
@@ -1477,6 +1736,15 @@ const LibraryScreen = ({ startLesson, userId, userScores, onShowAchievements, on
                     >
                         <span className="text-lg">🏆</span>
                     </button>
+                    {onLogout && (
+                        <button 
+                            onClick={onLogout}
+                            className="flex items-center bg-red-50 p-2 rounded-xl hover:bg-red-100 transition active:scale-95"
+                            title="Cerrar sesión"
+                        >
+                            <span className="text-sm">🚪</span>
+                        </button>
+                    )}
                 </div>
             </div>
         </div>
@@ -2324,8 +2592,13 @@ export default function App() {
     });
 
     // ALL hooks MUST be declared before any conditional return
-    // Estados de "Firebase" (usando mocks)
+    // === FIREBASE AUTH STATE ===
     const [userId, setUserId] = useState(null);
+    const [authLoading, setAuthLoading] = useState(true);
+    const [authError, setAuthError] = useState('');
+    const [firebaseProfile, setFirebaseProfile] = useState(null);
+    const [pendingFriendRequests, setPendingFriendRequests] = useState(0);
+
     const [userScores, setUserScores] = useState({});
     
     // Estados para nuevas funcionalidades
@@ -2370,49 +2643,125 @@ export default function App() {
         try { localStorage.setItem('cultivatec_userStats', JSON.stringify(userStats)); } catch {}
     }, [userStats]);
 
+    // === FIREBASE AUTH LISTENER ===
     useEffect(() => {
-        // Simulación de autenticación y carga de datos
-        const authenticateUser = async () => {
-            try {
-                const uid = await mockSignIn();
-                setUserId(uid); 
-            } catch (error) {
-                console.error("Error simulando la autenticación:", error);
-                setUserId('AUTH_ERROR');
-            }
-        };
-        authenticateUser();
-
-        const unsubscribe = mockOnSnapshot(null, (docSnap) => {
-            if (docSnap.exists()) {
-                const scores = docSnap.data();
-                setUserScores(scores);
-                // Sync completedModules Set from saved scores
-                const completedIds = Object.entries(scores)
-                    .filter(([, s]) => s && s.total > 0 && Math.round((s.score / s.total) * 100) >= 100)
-                    .map(([id]) => id);
-                if (completedIds.length > 0) {
-                    setCompletedModules(new Set(completedIds));
-                }
+        const unsubscribeAuth = onAuthChange((user) => {
+            if (user) {
+                setUserId(user.uid);
+                setAuthLoading(false);
+            } else {
+                setUserId(null);
+                setFirebaseProfile(null);
+                setAuthLoading(false);
             }
         });
-        return () => unsubscribe(); 
+        return () => unsubscribeAuth();
     }, []);
+
+    // === FIREBASE PROFILE & SCORES SYNC ===
+    useEffect(() => {
+        if (!userId) return;
+
+        // Verificar y actualizar racha diaria
+        checkAndUpdateStreak(userId).catch(console.error);
+
+        // Listen to user profile
+        const unsubProfile = onUserProfileChange(userId, (profile) => {
+            setFirebaseProfile(profile);
+        });
+
+        // Listen to user scores
+        const unsubScores = onUserScoresChange(userId, (scores) => {
+            setUserScores(scores);
+            persistUserScores(scores); // Keep local backup
+            // Sync completedModules Set
+            const completedIds = Object.entries(scores)
+                .filter(([, s]) => s && s.total > 0 && Math.round((s.score / s.total) * 100) >= 100)
+                .map(([id]) => id);
+            if (completedIds.length > 0) {
+                setCompletedModules(new Set(completedIds));
+            }
+        });
+
+        // Listen to pending friend requests count
+        const unsubRequests = onPendingRequestsChange(userId, (requests) => {
+            setPendingFriendRequests(requests.length);
+        });
+
+        return () => {
+            unsubProfile();
+            unsubScores();
+            unsubRequests();
+        };
+    }, [userId]);
+
+    // === AUTH HANDLERS ===
+    const handleLogin = async (email, password) => {
+        setAuthError('');
+        setAuthLoading(true);
+        try {
+            await loginUser(email, password);
+        } catch (err) {
+            const msg = err.code === 'auth/user-not-found' ? 'Usuario no encontrado. Verifica tu email o nombre de usuario.'
+                : err.code === 'auth/wrong-password' ? 'Contraseña incorrecta.'
+                : err.code === 'auth/invalid-email' ? 'Email inválido.'
+                : err.code === 'auth/invalid-credential' ? 'Credenciales inválidas. Verifica tu email/usuario y contraseña.'
+                : err.message || 'Error al iniciar sesión.';
+            setAuthError(msg);
+            setAuthLoading(false);
+        }
+    };
+
+    const handleRegister = async (email, password, username, fullName) => {
+        setAuthError('');
+        setAuthLoading(true);
+        try {
+            await registerUser(email, password, username, fullName, userProfile?.robotConfig, userProfile?.robotName);
+        } catch (err) {
+            const msg = err.code === 'auth/email-already-in-use' ? 'Este email ya está registrado.'
+                : err.code === 'auth/weak-password' ? 'La contraseña es muy débil.'
+                : err.message || 'Error al registrarse.';
+            setAuthError(msg);
+            setAuthLoading(false);
+        }
+    };
+
+    const handleLogout = async () => {
+        try {
+            await logoutUser();
+            setUserId(null);
+            setFirebaseProfile(null);
+        } catch (err) {
+            console.error('Error logging out:', err);
+        }
+    };
 
     // Handle module completion
     const handleModuleComplete = useCallback((moduleId, xpEarned = 0) => {
         if (completedModules.has(moduleId)) return;
         
         // Mark module as completed in userScores
+        const moduleData = MODULOS_DE_ROBOTICA.find(m => m.id === moduleId);
+        const totalSteps = Array.isArray(moduleData?.contenidoTeorico) 
+            ? moduleData.contenidoTeorico.length 
+            : (moduleData?.contenidoTeorico === '__MODULO_1_REF__' ? 6 : 2);
+        const newScoreData = { score: totalSteps, total: totalSteps };
+
         setUserScores(prev => {
-            const moduleData = MODULOS_DE_ROBOTICA.find(m => m.id === moduleId);
-            const totalSteps = Array.isArray(moduleData?.contenidoTeorico) 
-                ? moduleData.contenidoTeorico.length 
-                : (moduleData?.contenidoTeorico === '__MODULO_1_REF__' ? 6 : 2);
-            const newScores = { ...prev, [moduleId]: { score: totalSteps, total: totalSteps } };
+            const newScores = { ...prev, [moduleId]: newScoreData };
             persistUserScores(newScores);
             return newScores;
         });
+
+        // Sync to Firebase
+        if (userId) {
+            saveModuleScore(userId, moduleId, newScoreData).catch(console.error);
+            syncUserStats(userId, {
+                addModulesCompleted: 1,
+                addPoints: xpEarned,
+                newTotalPoints: (userStats.totalPoints || 0) + xpEarned,
+            }).catch(console.error);
+        }
 
         setCompletedModules(prev => {
             const n = new Set(prev);
@@ -2456,11 +2805,50 @@ export default function App() {
     const handleOnboardingComplete = (profile) => {
         setUserProfile(profile);
         localStorage.setItem('cultivatec_profile', JSON.stringify(profile));
+        // Sync robot config to Firebase if logged in
+        if (userId) {
+            try {
+                updateUserProfile(userId, {
+                    robotConfig: profile.robotConfig,
+                    robotName: profile.robotName,
+                });
+            } catch {}
+        }
     };
 
-    // Show onboarding if no profile — AFTER all hooks
+    // Show loading screen while Firebase Auth initializes
+    if (authLoading) {
+        return (
+            <div className="flex items-center justify-center min-h-screen bg-[#2563EB] text-white font-sans">
+                <div className="text-center animate-scale-in">
+                    <div className="w-28 h-28 mx-auto mb-6 bg-white rounded-3xl p-4 shadow-xl animate-pulse-soft">
+                        <img src={CULTIVATEC_LOGO_PATH} alt="Logo" className="w-full h-full object-contain" onError={(e) => { e.target.style.display='none'; }} />
+                    </div>
+                    <h1 className="text-4xl font-black mb-1 tracking-tight">CultivaTec</h1>
+                    <p className="text-sm text-white/80 font-bold mb-6">¡Aprende Robótica Jugando!</p>
+                    <div className="flex items-center justify-center gap-2">
+                        <div className="w-3 h-3 bg-white rounded-full animate-bounce" style={{animationDelay:'0ms'}}></div>
+                        <div className="w-3 h-3 bg-white rounded-full animate-bounce" style={{animationDelay:'150ms'}}></div>
+                        <div className="w-3 h-3 bg-white rounded-full animate-bounce" style={{animationDelay:'300ms'}}></div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // Show auth screen FIRST if not logged in
+    if (!userId) {
+        return <AuthScreen
+            onLogin={handleLogin}
+            onRegister={handleRegister}
+            isLoading={false}
+            error={authError}
+        />;
+    }
+
+    // Show onboarding (robot customization) AFTER login if no profile yet
     if (!userProfile) {
-        return <OnboardingScreen onComplete={handleOnboardingComplete} />;
+        return <OnboardingScreen onComplete={handleOnboardingComplete} firebaseProfile={firebaseProfile} />;
     }
 
     const goToMenu = (tab = currentTab) => {
@@ -2509,15 +2897,30 @@ export default function App() {
         
         // Update userScores with quiz result
         if (percentage >= 70) {
+            const quizScoreData = { score: correct, total: total };
             setUserScores(prev => {
-                const newScores = { ...prev, [moduleId]: { score: correct, total: total } };
+                const newScores = { ...prev, [moduleId]: quizScoreData };
                 persistUserScores(newScores);
                 return newScores;
             });
+            // Sync to Firebase
+            if (userId) {
+                saveModuleScore(userId, moduleId, quizScoreData).catch(console.error);
+            }
             // Also mark as completed if >= 100%
             if (percentage >= 100) {
                 handleModuleComplete(moduleId, correct * 10);
             }
+        }
+
+        // Sync quiz stats to Firebase
+        if (userId) {
+            syncUserStats(userId, {
+                addQuizzesCompleted: 1,
+                addPerfectQuizzes: percentage === 100 ? 1 : 0,
+                newTotalPoints: userStats.totalPoints + (percentage >= 70 ? correct * 5 : 0),
+                addPoints: percentage >= 70 ? correct * 5 : 0,
+            }).catch(console.error);
         }
 
         setUserStats(prev => ({
@@ -2583,6 +2986,21 @@ export default function App() {
         ScreenContent = <AchievementsScreen 
                             onBack={() => goToMenu('Biblioteca')}
                             userStats={userStats}
+                            onShowRanking={() => setViewMode('ranking')}
+                            onShowFriends={() => setViewMode('friends')}
+                            pendingFriendRequests={pendingFriendRequests}
+                        />;
+    } else if (viewMode === 'ranking') {
+        ScreenContent = <RankingScreen
+                            onBack={() => setViewMode('achievements')}
+                            currentUserId={userId}
+                            currentUserProfile={firebaseProfile}
+                        />;
+    } else if (viewMode === 'friends') {
+        ScreenContent = <FriendsScreen
+                            onBack={() => setViewMode('achievements')}
+                            currentUserId={userId}
+                            currentUserProfile={firebaseProfile}
                         />;
     } else if (viewMode === 'licenses') {
         ScreenContent = <LicensesScreen 
@@ -2603,6 +3021,8 @@ export default function App() {
                     onShowLicenses={() => setViewMode('licenses')}
                     userStats={userStats}
                     userProfile={userProfile}
+                    onLogout={handleLogout}
+                    firebaseProfile={firebaseProfile}
                 />;
                 break;
             case 'Taller':
@@ -2624,29 +3044,10 @@ export default function App() {
                 ScreenContent = <ClassroomScreen />;
                 break;
             default:
-                ScreenContent = <LibraryScreen startLesson={startLesson} userId={userId} userScores={userScores} userProfile={userProfile} onShowLicenses={() => setViewMode('licenses')} />; 
+                ScreenContent = <LibraryScreen startLesson={startLesson} userId={userId} userScores={userScores} userProfile={userProfile} onShowLicenses={() => setViewMode('licenses')} onLogout={handleLogout} firebaseProfile={firebaseProfile} />; 
         }
     }
 
-
-    if (!userId) {
-        return (
-            <div className="flex items-center justify-center min-h-screen bg-[#2563EB] text-white font-sans">
-                <div className="text-center animate-scale-in">
-                    <div className="w-28 h-28 mx-auto mb-6 bg-white rounded-3xl p-4 shadow-xl animate-pulse-soft">
-                        <img src={CULTIVATEC_LOGO_PATH} alt="Logo" className="w-full h-full object-contain" onError={(e) => { e.target.style.display='none'; }} />
-                    </div>
-                    <h1 className="text-4xl font-black mb-1 tracking-tight">CultivaTec</h1>
-                    <p className="text-sm text-white/80 font-bold mb-6">¡Aprende Robótica Jugando!</p>
-                    <div className="flex items-center justify-center gap-2">
-                        <div className="w-3 h-3 bg-white rounded-full animate-bounce" style={{animationDelay:'0ms'}}></div>
-                        <div className="w-3 h-3 bg-white rounded-full animate-bounce" style={{animationDelay:'150ms'}}></div>
-                        <div className="w-3 h-3 bg-white rounded-full animate-bounce" style={{animationDelay:'300ms'}}></div>
-                    </div>
-                </div>
-            </div>
-        );
-    }
 
     return (
         <div className="font-sans min-h-screen bg-white w-full">
