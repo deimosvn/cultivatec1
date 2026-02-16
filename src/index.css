@@ -157,6 +157,18 @@ body {
   -webkit-backdrop-filter: blur(16px);
 }
 
+/* ===== FLOATING DOCK NAV ===== */
+.nav-dock {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow:
+    0 -4px 32px rgba(0, 0, 0, 0.08),
+    0 2px 12px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
 /* Duolingo 3D button system */
 .btn-3d {
   position: relative;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Zap, Home, BookOpen, Settings, Sun, Moon, ArrowLeft, Lightbulb, Play, Target, Code, Terminal, BatteryCharging, Power, RadioTower, Component, Link, Minus, Plus, Bot, Send, Trophy, ChevronDown, Map, Calendar, Puzzle, Cpu, Dumbbell, Monitor, GraduationCap, Wrench, Rocket } from 'lucide-react';
+import { Zap, Home, BookOpen, Settings, Sun, Moon, ArrowLeft, Lightbulb, Play, Target, Code, Terminal, BatteryCharging, Power, RadioTower, Component, Link, Minus, Plus, Bot, Send, Trophy, ChevronDown, Map, Calendar, Puzzle, Cpu, Dumbbell, Monitor, GraduationCap, Wrench, Rocket, Star } from 'lucide-react';
 import QuizScreen from './components/QuizScreen';
 import GlossaryScreen, { GLOSSARY_TERMS as GLOSSARY_TERMS_DATA } from './components/GlossaryScreen';
 import ClassroomScreen from './components/ClassroomScreen';
@@ -2763,39 +2763,48 @@ const WorldMapScreen = ({ userScores, onSelectWorld, userProfile, firebaseProfil
             </div>
 
             {/* Top Stats Bar */}
-            <div className="sticky top-0 z-20 bg-[#1E1B4B]/70 backdrop-blur-xl border-b border-purple-500/20 px-4 py-2.5">
+            <div className="sticky top-0 z-20 bg-[#1E1B4B]/60 backdrop-blur-2xl border-b border-purple-500/15 px-4 py-2.5">
                 <div className="flex items-center justify-between max-w-xl mx-auto">
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2.5">
                         {userProfile && (
-                            <button onClick={onEditRobot} className="active:scale-90 transition-transform hover:ring-2 hover:ring-[#3B82F6]/40 rounded-full">
-                                <RobotMini config={userProfile.robotConfig} size={34} />
+                            <button onClick={onEditRobot} className="active:scale-90 transition-transform hover:ring-2 hover:ring-purple-400/40 rounded-2xl p-0.5 bg-purple-500/10 border border-purple-400/15">
+                                <RobotMini config={userProfile.robotConfig} size={36} />
                             </button>
                         )}
-                        <div className="flex items-center gap-1 bg-purple-400/20 px-2.5 py-1 rounded-xl border border-purple-400/20">
-                            <span className="text-lg">🤖</span>
-                            <span className="text-sm font-black text-purple-200">{firebaseProfile?.currentStreak || 0}</span>
-                        </div>
-                        <div className="flex items-center gap-1 bg-yellow-400/15 px-2.5 py-1 rounded-xl border border-yellow-400/20">
-                            <span className="text-lg">⚡</span>
-                            <span className="text-sm font-black text-yellow-300">{firebaseProfile?.totalPoints ?? userStats?.totalPoints ?? 0}</span>
+                        <div className="flex flex-col">
+                            <span className="text-[11px] font-black text-white/90 leading-tight">{firebaseProfile?.username || 'Explorador'}</span>
+                            <span className="text-[9px] font-bold text-purple-300/60 leading-tight">
+                                {(() => { const lv = calculateLevel(firebaseProfile?.totalPoints ?? userStats?.totalPoints ?? 0); return `${lv.emoji} Nv.${lv.level} · ${lv.title}`; })()}
+                            </span>
                         </div>
                     </div>
-                    <div className="flex items-center gap-3">
-                        <button onClick={onShowLicenses} className="flex items-center bg-purple-500/20 p-2 rounded-xl hover:bg-purple-500/30 transition active:scale-95 border border-purple-400/20"><span className="text-lg">📜</span></button>
-                        <button onClick={onShowAchievements} className="flex items-center bg-yellow-500/15 p-2 rounded-xl hover:bg-yellow-500/25 transition active:scale-95 border border-yellow-400/20"><span className="text-lg">🏆</span></button>
+                    <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1 bg-purple-400/15 px-2.5 py-1.5 rounded-xl border border-purple-400/15">
+                            <Zap size={14} className="text-purple-300" />
+                            <span className="text-xs font-black text-purple-200">{firebaseProfile?.currentStreak || 0}</span>
+                        </div>
+                        <div className="flex items-center gap-1 bg-yellow-400/12 px-2.5 py-1.5 rounded-xl border border-yellow-400/15">
+                            <Star size={14} className="text-yellow-300" />
+                            <span className="text-xs font-black text-yellow-300">{(firebaseProfile?.totalPoints ?? userStats?.totalPoints ?? 0).toLocaleString()}</span>
+                        </div>
+                        <button onClick={onShowLicenses} className="flex items-center bg-purple-500/15 p-2 rounded-xl hover:bg-purple-500/25 transition active:scale-95 border border-purple-400/15">
+                            <GraduationCap size={16} className="text-purple-300" />
+                        </button>
                         {onLogout && (
-                            <button onClick={onLogout} className="flex items-center bg-red-500/20 p-2 rounded-xl hover:bg-red-500/30 transition active:scale-95 border border-red-400/20"><span className="text-sm">🚪</span></button>
+                            <button onClick={onLogout} className="flex items-center bg-red-500/15 p-2 rounded-xl hover:bg-red-500/25 transition active:scale-95 border border-red-400/15">
+                                <Settings size={14} className="text-red-300" />
+                            </button>
                         )}
                     </div>
                 </div>
             </div>
 
             {/* Header */}
-            <div className="text-center pt-8 pb-4 px-4 relative z-10">
-                <h1 className="text-3xl font-black text-white mb-1 tracking-tight drop-shadow-lg flex items-center justify-center gap-3">
-                    <Map size={28} className="text-purple-300" /> Mapa de Mundos
+            <div className="text-center pt-6 pb-3 px-4 relative z-10">
+                <h1 className="text-2xl font-black text-white mb-1 tracking-tight drop-shadow-lg flex items-center justify-center gap-2">
+                    <Rocket size={22} className="text-purple-300" /> Mapa Galáctico
                 </h1>
-                <p className="text-sm text-purple-200 font-bold">Elige tu destino robótico</p>
+                <p className="text-xs text-purple-200/60 font-bold">Elige tu destino y conquista los mundos</p>
             </div>
 
             {/* Station Ships */}
@@ -3257,33 +3266,35 @@ const LibraryScreen = ({ startLesson, userId, userScores, onShowAchievements, on
                 }}>{emoji}</div>
             ))}
         </div>
-        {/* Duolingo-style Top Stats Bar */}
-        <div className="sticky top-0 z-20 bg-white/90 backdrop-blur-md border-b-2 border-gray-100 px-4 py-2.5">
+        {/* Modern Top Bar */}
+        <div className="sticky top-0 z-20 bg-white/85 backdrop-blur-2xl border-b border-gray-200/60 px-4 py-2.5">
             <div className="flex items-center justify-between max-w-xl mx-auto">
-                <div className="flex items-center gap-3">
-                    {/* Back to worlds button */}
-                    <button onClick={onBackToWorlds} className="flex items-center bg-gray-100 p-2 rounded-xl hover:bg-gray-200 transition active:scale-95" title="Volver al mapa">
+                <div className="flex items-center gap-2.5">
+                    <button onClick={onBackToWorlds} className="flex items-center bg-gray-100/80 p-2 rounded-xl hover:bg-gray-200 transition active:scale-95" title="Volver al mapa">
                         <ArrowLeft size={16} className="text-[#3C3C3C]" />
                     </button>
                     {userProfile && (
-                      <button onClick={onEditRobot} className="active:scale-90 transition-transform hover:ring-2 hover:ring-[#2563EB]/40 rounded-full" title="Personalizar robot">
+                      <button onClick={onEditRobot} className="active:scale-90 transition-transform hover:ring-2 hover:ring-[#2563EB]/30 rounded-2xl p-0.5 bg-[#2563EB]/5 border border-[#2563EB]/10" title="Personalizar robot">
                         <RobotMini config={userProfile.robotConfig} size={34} />
                       </button>
                     )}
-                    <div className="flex items-center gap-1 bg-[#3B82F6]/10 px-2.5 py-1 rounded-xl" title="Racha diaria">
-                        <span className="text-lg">🤖</span>
-                        <span className="text-sm font-black text-[#3B82F6]">{firebaseProfile?.currentStreak || 0}</span>
+                    <div className="flex items-center gap-1 bg-[#3B82F6]/8 px-2.5 py-1.5 rounded-xl border border-[#3B82F6]/10" title="Racha diaria">
+                        <Zap size={14} className="text-[#3B82F6]" />
+                        <span className="text-xs font-black text-[#3B82F6]">{firebaseProfile?.currentStreak || 0}</span>
                     </div>
-                    <div className="flex items-center gap-1 bg-[#FFC800]/10 px-2.5 py-1 rounded-xl">
-                        <span className="text-lg">⚡</span>
-                        <span className="text-sm font-black text-[#FFC800]">{firebaseProfile?.totalPoints ?? userStats?.totalPoints ?? 0}</span>
+                    <div className="flex items-center gap-1 bg-[#FFC800]/8 px-2.5 py-1.5 rounded-xl border border-[#FFC800]/15">
+                        <Star size={14} className="text-[#FFC800]" />
+                        <span className="text-xs font-black text-[#D4A500]">{(firebaseProfile?.totalPoints ?? userStats?.totalPoints ?? 0).toLocaleString()}</span>
                     </div>
                 </div>
-                <div className="flex items-center gap-3">
-                    <button onClick={onShowLicenses} className="flex items-center bg-[#2563EB]/10 p-2 rounded-xl hover:bg-[#2563EB]/20 transition active:scale-95" title="Mis Licencias"><span className="text-lg">📜</span></button>
-                    <button onClick={onShowAchievements} className="flex items-center bg-[#FFC800]/10 p-2 rounded-xl hover:bg-[#FFC800]/20 transition active:scale-95"><span className="text-lg">🏆</span></button>
+                <div className="flex items-center gap-2">
+                    <button onClick={onShowLicenses} className="flex items-center bg-[#2563EB]/8 p-2 rounded-xl hover:bg-[#2563EB]/15 transition active:scale-95 border border-[#2563EB]/10" title="Mis Licencias">
+                        <GraduationCap size={16} className="text-[#2563EB]" />
+                    </button>
                     {onLogout && (
-                        <button onClick={onLogout} className="flex items-center bg-red-50 p-2 rounded-xl hover:bg-red-100 transition active:scale-95" title="Cerrar sesión"><span className="text-sm">🚪</span></button>
+                        <button onClick={onLogout} className="flex items-center bg-red-50 p-2 rounded-xl hover:bg-red-100 transition active:scale-95 border border-red-100" title="Cerrar sesión">
+                            <Settings size={14} className="text-red-400" />
+                        </button>
                     )}
                 </div>
             </div>
@@ -4173,36 +4184,68 @@ const ChallengeView = ({ currentChallengeId, startChallenge, goToMenu, userScore
 };
 const BottomNavBar = ({ currentTab, onSelectTab, setViewMode }) => {
     const tabs = [
-        { id: 'Biblioteca', icon: '🏠', label: 'Aprender' },
-        { id: 'Glosario', icon: '📖', label: 'Glosario' },
-        { id: 'Simulador', icon: '🤖', label: 'Robot' },
-        { id: 'Logros', icon: '🏆', label: 'Logros', isAchievements: true },
+        { id: 'Glosario', icon: BookOpen, label: 'Glosario' },
+        { id: 'Simulador', icon: Bot, label: 'Robot' },
+        { id: 'Biblioteca', icon: Map, label: 'Explorar', isCenter: true },
+        { id: 'Logros', icon: Trophy, label: 'Logros', isAchievements: true },
+        { id: 'Ranking', icon: Target, label: 'Ranking', isRanking: true },
     ];
 
     return (
-        <div className="fixed bottom-0 left-0 right-0 z-30 bg-white border-t-2 border-gray-100" style={{ paddingBottom: 'var(--sab, 0px)' }}>
-            <div className="max-w-xl mx-auto">
-                <div className="flex justify-around items-stretch">
+        <div className="fixed bottom-0 left-0 right-0 z-30 px-4 pb-2" style={{ paddingBottom: 'calc(var(--sab, 0px) + 8px)' }}>
+            <div className="max-w-md mx-auto">
+                <div className="nav-dock flex items-end justify-around rounded-2xl py-1">
                     {tabs.map(tab => {
-                        const isActive = currentTab === tab.id;
+                        const isActive = tab.isAchievements
+                            ? currentTab === 'Logros'
+                            : tab.isRanking
+                                ? currentTab === 'Ranking'
+                                : currentTab === tab.id;
+                        const Icon = tab.icon;
+                        
+                        if (tab.isCenter) {
+                            return (
+                                <button
+                                    key={tab.id}
+                                    onClick={() => { onSelectTab(tab.id); setViewMode('menu'); }}
+                                    className="relative -mt-5 group"
+                                >
+                                    <div className={`w-[56px] h-[56px] rounded-2xl flex items-center justify-center transition-all duration-300 shadow-lg
+                                        ${isActive 
+                                            ? 'bg-gradient-to-br from-[#2563EB] to-[#7C3AED] shadow-[#2563EB]/40 scale-105' 
+                                            : 'bg-gradient-to-br from-[#3B82F6] to-[#8B5CF6] shadow-[#3B82F6]/25 group-hover:scale-105 group-active:scale-95'}`}>
+                                        <Icon size={26} className="text-white" strokeWidth={2.5} />
+                                    </div>
+                                    {isActive && (
+                                        <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-5 h-1 bg-[#2563EB] rounded-full" />
+                                    )}
+                                    <span className={`block text-[9px] font-extrabold mt-1 text-center transition-colors duration-200 ${isActive ? 'text-[#2563EB]' : 'text-[#9CA3AF]'}`}>{tab.label}</span>
+                                </button>
+                            );
+                        }
+
                         return (
                             <button
                                 key={tab.id}
                                 onClick={() => {
                                     if (tab.isAchievements) {
                                         setViewMode('achievements');
+                                    } else if (tab.isRanking) {
+                                        setViewMode('ranking');
                                     } else {
                                         onSelectTab(tab.id);
                                         setViewMode('menu');
                                     }
                                 }}
-                                className={`flex flex-col items-center justify-center py-2.5 px-2 flex-1 transition-all duration-200 active:scale-90 relative border-t-[3px]
-                                    ${isActive 
-                                        ? 'border-[#2563EB] text-[#2563EB]' 
-                                        : 'border-transparent text-[#AFAFAF] hover:text-[#777]'}`}
+                                className="flex flex-col items-center justify-center py-2 px-1 flex-1 transition-all duration-200 group active:scale-90 relative"
                             >
-                                <span className={`text-[22px] mb-0.5 transition-transform duration-200 ${isActive ? 'scale-110' : ''}`}>{tab.icon}</span>
-                                <span className={`text-[10px] font-extrabold leading-tight tracking-wide`}>{tab.label}</span>
+                                <div className={`relative p-2 rounded-xl transition-all duration-300 ${isActive ? 'bg-[#2563EB]/10' : 'group-hover:bg-gray-100'}`}>
+                                    <Icon size={22} className={`transition-colors duration-200 ${isActive ? 'text-[#2563EB]' : 'text-[#9CA3AF] group-hover:text-[#6B7280]'}`} strokeWidth={isActive ? 2.5 : 2} />
+                                    {isActive && (
+                                        <div className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-[#2563EB] rounded-full border-2 border-white" />
+                                    )}
+                                </div>
+                                <span className={`text-[9px] font-extrabold leading-tight mt-0.5 transition-colors duration-200 ${isActive ? 'text-[#2563EB]' : 'text-[#9CA3AF]'}`}>{tab.label}</span>
                             </button>
                         );
                     })}
@@ -4662,7 +4705,7 @@ export default function App() {
                         />;
     } else if (viewMode === 'ranking') {
         ScreenContent = <RankingScreen
-                            onBack={() => setViewMode('achievements')}
+                            onBack={() => goToMenu('Biblioteca')}
                             currentUserId={userId}
                             currentUserProfile={firebaseProfile}
                         />;
@@ -4779,13 +4822,13 @@ export default function App() {
 
 
     return (
-        <div className="font-sans min-h-screen bg-white w-full">
+        <div className="font-sans min-h-screen bg-[#F8FAFC] w-full">
             <div className="w-full min-h-screen">
-                <div className="min-h-screen overflow-y-auto pb-20 animate-fade-in"> 
+                <div className="min-h-screen overflow-y-auto pb-24 animate-fade-in"> 
                     {ScreenContent}
                 </div>
                 <BottomNavBar 
-                    currentTab={viewMode === 'achievements' ? 'Logros' : currentTab} 
+                    currentTab={viewMode === 'achievements' ? 'Logros' : viewMode === 'ranking' ? 'Ranking' : currentTab} 
                     onSelectTab={setCurrentTab} 
                     setViewMode={setViewMode}
                 />
