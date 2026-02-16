@@ -433,26 +433,26 @@ const generateCertificatePDF = async (fullName, completedCount, totalCount) => {
   doc.setFontSize(10);
   doc.setTextColor(75, 75, 75);
   doc.setFont('helvetica', 'normal');
-  doc.text('Por haber completado satisfactoriamente la totalidad de los módulos', w / 2, descY, { align: 'center' });
-  doc.text('del programa educativo CultivaTec, demostrando conocimientos y competencias', w / 2, descY + 5.5, { align: 'center' });
-  doc.text(`destacadas en ${completedCount} áreas de robótica, electrónica y programación.`, w / 2, descY + 11, { align: 'center' });
+  doc.text('Por haber completado satisfactoriamente la totalidad de los 4 mundos', w / 2, descY, { align: 'center' });
+  doc.text(`y ${completedCount} módulos del programa educativo CultivaTec, demostrando conocimientos`, w / 2, descY + 5.5, { align: 'center' });
+  doc.text('y competencias destacadas en robótica, electrónica, programación e inteligencia artificial.', w / 2, descY + 11, { align: 'center' });
 
   // ═══════════════ COMPETENCY BADGES ═══════════════
   const badgeY = descY + 20;
-  const skills = ['Robótica', 'Arduino', 'Python', 'C++', 'Electrónica', 'Mecánica', 'Diseño'];
-  const bSpacing = 29;
+  const skills = ['Robótica', 'Electrónica', 'Arduino', 'Python', 'C++', 'IA', 'Biorobótica', 'Espacial'];
+  const bSpacing = Math.min(26, (w - 80) / skills.length);
   const bStartX = (w - skills.length * bSpacing) / 2;
   skills.forEach((skill, i) => {
     const bx = bStartX + i * bSpacing + bSpacing / 2;
     // Pill background
     doc.setFillColor(240, 245, 255);
-    doc.roundedRect(bx - 13, badgeY - 3.5, 26, 9, 2.5, 2.5, 'F');
+    doc.roundedRect(bx - 12, badgeY - 3.5, 24, 9, 2.5, 2.5, 'F');
     // Pill border
     doc.setDrawColor(37, 99, 235);
     doc.setLineWidth(0.2);
-    doc.roundedRect(bx - 13, badgeY - 3.5, 26, 9, 2.5, 2.5, 'S');
+    doc.roundedRect(bx - 12, badgeY - 3.5, 24, 9, 2.5, 2.5, 'S');
     // Text
-    doc.setFontSize(6);
+    doc.setFontSize(5.5);
     doc.setTextColor(37, 99, 235);
     doc.setFont('helvetica', 'bold');
     doc.text(skill, bx, badgeY + 2, { align: 'center' });
@@ -533,7 +533,7 @@ const generateCertificatePDF = async (fullName, completedCount, totalCount) => {
   doc.setFont('helvetica', 'normal');
   doc.text(`Folio: ${certId}`, w / 2, h - 15, { align: 'center' });
   doc.setFontSize(5.5);
-  doc.text('Este documento certifica la finalización exitosa del programa educativo CultivaTec.', w / 2, h - 12, { align: 'center' });
+  doc.text('Este documento certifica la finalización exitosa de los 4 mundos del programa educativo CultivaTec.', w / 2, h - 12, { align: 'center' });
 
   // ═══════════════ WATERMARK ═══════════════
   doc.setGState(new doc.GState({ opacity: 0.025 }));
@@ -544,7 +544,7 @@ const generateCertificatePDF = async (fullName, completedCount, totalCount) => {
   doc.setGState(new doc.GState({ opacity: 1 }));
 
   // ═══════════════ SAVE ═══════════════
-  doc.save(`Certificado_CultivaTec_${fullName.replace(/\s+/g, '_')}.pdf`);
+  doc.save(`Certificado_Oficial_CultivaTec_${fullName.replace(/\s+/g, '_')}.pdf`);
 };
 
 // ============================================================
@@ -884,10 +884,6 @@ const LicensesScreen = ({ onBack, userScores, userProfile, completedModules }) =
   }
   
   const unlockedLicenses = MODULE_LICENSES.filter(l => completedModuleIds.has(l.moduleId));
-  const totalModules = MODULE_LICENSES.length;
-  const completedCount = unlockedLicenses.length;
-  const allComplete = completedCount >= totalModules;
-  const progressPercent = Math.round((completedCount / totalModules) * 100);
 
   // Check world completion for world certificates
   const worldCertStatus = WORLD_CERTIFICATES.map(wc => {
@@ -897,9 +893,20 @@ const LicensesScreen = ({ onBack, userScores, userProfile, completedModules }) =
     return { ...wc, completedInWorld, totalInWorld, isWorldComplete };
   });
   const completedWorlds = worldCertStatus.filter(w => w.isWorldComplete).length;
+
+  // Official certificate: requires ALL worlds completed (all 64 modules)
+  const allModuleIds = WORLD_CERTIFICATES.flatMap(wc => wc.moduleIds);
+  const totalModulesAll = allModuleIds.length;
+  const completedModulesAll = allModuleIds.filter(id => completedModuleIds.has(id)).length;
+  const allWorldsComplete = completedWorlds >= WORLD_CERTIFICATES.length;
+  const officialProgressPercent = Math.round((completedModulesAll / totalModulesAll) * 100);
+
+  // World 1 license progress (for license cards section)
+  const totalW1Licenses = MODULE_LICENSES.length;
+  const completedW1Licenses = unlockedLicenses.length;
   
   const handleDownloadCertificate = async () => {
-    await generateCertificatePDF(fullName, completedCount, totalModules);
+    await generateCertificatePDF(fullName, completedModulesAll, totalModulesAll);
     setShowCertConfirm(false);
   };
 
@@ -926,10 +933,10 @@ const LicensesScreen = ({ onBack, userScores, userProfile, completedModules }) =
         
         <div className="mt-3 flex justify-center gap-3">
           <div className="bg-white/20 px-3 py-1.5 rounded-xl">
-            <span className="text-white text-xs font-black">{completedCount}/{totalModules} </span>
+            <span className="text-white text-xs font-black">{completedWorlds}/{WORLD_CERTIFICATES.length} Mundos</span>
           </div>
           <div className="bg-white/20 px-3 py-1.5 rounded-xl">
-            <span className="text-white text-xs font-black">{progressPercent}% Completado</span>
+            <span className="text-white text-xs font-black">{completedModulesAll}/{totalModulesAll} Módulos</span>
           </div>
         </div>
       </div>
@@ -941,28 +948,28 @@ const LicensesScreen = ({ onBack, userScores, userProfile, completedModules }) =
             <span className="text-xl">📊</span>
             <div className="flex-grow">
               <div className="flex justify-between items-center mb-1">
-                <p className="text-sm font-black text-[#3C3C3C]">Progreso hacia el Certificado</p>
-                <span className="text-xs font-black text-[#2563EB]">{completedCount}/{totalModules}</span>
+                <p className="text-sm font-black text-[#3C3C3C]">Progreso hacia el Certificado Oficial</p>
+                <span className="text-xs font-black text-[#2563EB]">{completedWorlds}/{WORLD_CERTIFICATES.length} mundos</span>
               </div>
               <div className="w-full h-4 bg-[#E5E5E5] rounded-full overflow-hidden">
                 <div className="h-full bg-gradient-to-r from-[#2563EB] to-[#1CB0F6] rounded-full transition-all duration-700"
-                  style={{ width: `${progressPercent}%` }}>
-                  {progressPercent > 10 && (
-                    <span className="flex items-center justify-end pr-2 h-full text-[10px] font-black text-white">{progressPercent}%</span>
+                  style={{ width: `${officialProgressPercent}%` }}>
+                  {officialProgressPercent > 10 && (
+                    <span className="flex items-center justify-end pr-2 h-full text-[10px] font-black text-white">{officialProgressPercent}%</span>
                   )}
                 </div>
               </div>
             </div>
           </div>
           
-          {allComplete ? (
+          {allWorldsComplete ? (
             <div className="bg-[#58CC02]/10 rounded-xl p-3 border border-[#58CC02]/20 mt-2">
-              <p className="text-sm font-black text-[#58CC02] text-center">🎉 ¡Completaste TODOS los módulos!</p>
-              <p className="text-xs text-[#777] text-center font-semibold mt-1">Ya puedes descargar tu certificado oficial</p>
+              <p className="text-sm font-black text-[#58CC02] text-center">🎉 ¡Completaste TODOS los mundos!</p>
+              <p className="text-xs text-[#777] text-center font-semibold mt-1">Ya puedes descargar tu certificado oficial de CultivaTec</p>
             </div>
           ) : (
             <p className="text-xs text-[#AFAFAF] font-semibold mt-1 text-center">
-              Completa todos los módulos para obtener tu certificado oficial de CultivaTec
+              Completa los 4 mundos ({totalModulesAll} módulos) para obtener tu certificado oficial
             </p>
           )}
         </div>
@@ -971,32 +978,32 @@ const LicensesScreen = ({ onBack, userScores, userProfile, completedModules }) =
       {/* Certificate download section */}
       <div className="px-4 max-w-2xl mx-auto mb-4">
         <div className={`rounded-2xl border-2 p-4 transition-all ${
-          allComplete 
+          allWorldsComplete 
             ? 'bg-gradient-to-br from-[#FFC800]/10 to-[#FF9600]/10 border-[#FFC800]/40 shadow-lg' 
             : 'bg-gray-50 border-[#E5E5E5]'
         }`}>
           <div className="flex items-center gap-4">
             <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-3xl ${
-              allComplete ? 'bg-[#FFC800]/20 shadow-inner' : 'bg-gray-100'
+              allWorldsComplete ? 'bg-[#FFC800]/20 shadow-inner' : 'bg-gray-100'
             }`}>
-              {allComplete ? '📜' : '🔒'}
+              {allWorldsComplete ? '📜' : '🔒'}
             </div>
             <div className="flex-grow">
-              <p className={`text-sm font-black ${allComplete ? 'text-[#FF9600]' : 'text-[#AFAFAF]'}`}>
+              <p className={`text-sm font-black ${allWorldsComplete ? 'text-[#FF9600]' : 'text-[#AFAFAF]'}`}>
                 Certificado Oficial CultivaTec
               </p>
-              <p className={`text-xs font-semibold ${allComplete ? 'text-[#777]' : 'text-[#CDCDCD]'}`}>
-                {allComplete 
+              <p className={`text-xs font-semibold ${allWorldsComplete ? 'text-[#777]' : 'text-[#CDCDCD]'}`}>
+                {allWorldsComplete 
                   ? 'Avalado por el Director Abraham Isaías Navarro Doñate' 
-                  : `Completa ${totalModules - completedCount} módulos más para desbloquearlo`}
+                  : `Completa ${WORLD_CERTIFICATES.length - completedWorlds} mundo${WORLD_CERTIFICATES.length - completedWorlds !== 1 ? 's' : ''} más para desbloquearlo`}
               </p>
-              <p className={`text-[10px] font-bold mt-0.5 ${allComplete ? 'text-[#FF9600]' : 'text-[#E5E5E5]'}`}>
+              <p className={`text-[10px] font-bold mt-0.5 ${allWorldsComplete ? 'text-[#FF9600]' : 'text-[#E5E5E5]'}`}>
                 A nombre de: {fullName}
               </p>
             </div>
           </div>
           
-          {allComplete && (
+          {allWorldsComplete && (
             <button onClick={() => setShowCertConfirm(true)}
               className="w-full mt-3 py-3 bg-gradient-to-r from-[#FFC800] to-[#FF9600] text-white font-black rounded-xl border-b-4 border-[#E5A000] active:scale-95 transition text-sm flex items-center justify-center gap-2 shadow-lg">
               <Download size={18} /> Descargar Certificado PDF
@@ -1131,7 +1138,7 @@ const LicensesScreen = ({ onBack, userScores, userProfile, completedModules }) =
               </div>
               <div className="flex items-center gap-2 text-xs text-[#777] font-semibold mt-1">
                 <span>📊</span>
-                <span>Módulos: <b className="text-[#3C3C3C]">{completedCount}/{totalModules} completados</b></span>
+                <span>Mundos: <b className="text-[#3C3C3C]">{WORLD_CERTIFICATES.length}/{WORLD_CERTIFICATES.length} completados ({completedModulesAll} módulos)</b></span>
               </div>
             </div>
             
