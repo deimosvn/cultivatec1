@@ -618,3 +618,213 @@ body {
   animation: galaxy-particles var(--particle-duration, 8s) linear infinite;
   animation-delay: var(--particle-delay, 0s);
 }
+
+/* ===== SPACE STATION / MECHANICAL BUTTON SYSTEM ===== */
+
+/* Station panel - dark metallic card */
+.station-panel {
+  background: linear-gradient(145deg, rgba(30,27,75,0.95), rgba(46,16,101,0.9));
+  border: 1px solid rgba(139,92,246,0.3);
+  border-radius: 16px;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.06),
+    0 4px 20px rgba(0,0,0,0.4),
+    0 0 0 1px rgba(0,0,0,0.3);
+  backdrop-filter: blur(12px);
+  position: relative;
+  overflow: hidden;
+}
+
+.station-panel::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, rgba(139,92,246,0.6), transparent);
+}
+
+/* Mechanical button - space station control */
+.mech-btn {
+  position: relative;
+  background: linear-gradient(180deg, rgba(55,48,107,0.9) 0%, rgba(30,27,75,0.95) 100%);
+  border: 1px solid rgba(139,92,246,0.35);
+  border-radius: 14px;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.08),
+    inset 0 -2px 0 rgba(0,0,0,0.3),
+    0 4px 12px rgba(0,0,0,0.4),
+    0 0 20px rgba(139,92,246,0.08);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+.mech-btn::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, transparent 50%);
+  border-radius: 14px;
+  pointer-events: none;
+}
+
+.mech-btn:hover {
+  border-color: rgba(139,92,246,0.6);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.1),
+    inset 0 -2px 0 rgba(0,0,0,0.3),
+    0 4px 20px rgba(139,92,246,0.2),
+    0 0 30px rgba(139,92,246,0.1);
+  transform: translateY(-1px);
+}
+
+.mech-btn:active {
+  transform: translateY(1px);
+  box-shadow:
+    inset 0 2px 4px rgba(0,0,0,0.4),
+    0 1px 4px rgba(0,0,0,0.3);
+}
+
+/* Glow variants */
+.mech-btn-cyan {
+  border-color: rgba(6,182,212,0.4);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.08),
+    inset 0 -2px 0 rgba(0,0,0,0.3),
+    0 4px 12px rgba(0,0,0,0.4),
+    0 0 20px rgba(6,182,212,0.1);
+}
+
+.mech-btn-cyan:hover {
+  border-color: rgba(6,182,212,0.7);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.1),
+    inset 0 -2px 0 rgba(0,0,0,0.3),
+    0 4px 20px rgba(6,182,212,0.25),
+    0 0 30px rgba(6,182,212,0.15);
+}
+
+.mech-btn-amber {
+  border-color: rgba(245,158,11,0.4);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.08),
+    inset 0 -2px 0 rgba(0,0,0,0.3),
+    0 4px 12px rgba(0,0,0,0.4),
+    0 0 20px rgba(245,158,11,0.1);
+}
+
+.mech-btn-amber:hover {
+  border-color: rgba(245,158,11,0.7);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.1),
+    inset 0 -2px 0 rgba(0,0,0,0.3),
+    0 4px 20px rgba(245,158,11,0.25),
+    0 0 30px rgba(245,158,11,0.15);
+}
+
+.mech-btn-red {
+  border-color: rgba(239,68,68,0.4);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.08),
+    inset 0 -2px 0 rgba(0,0,0,0.3),
+    0 4px 12px rgba(0,0,0,0.4),
+    0 0 20px rgba(239,68,68,0.1);
+}
+
+.mech-btn-red:hover {
+  border-color: rgba(239,68,68,0.7);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.1),
+    inset 0 -2px 0 rgba(0,0,0,0.3),
+    0 4px 20px rgba(239,68,68,0.25),
+    0 0 30px rgba(239,68,68,0.15);
+}
+
+.mech-btn-green {
+  border-color: rgba(34,197,94,0.4);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.08),
+    inset 0 -2px 0 rgba(0,0,0,0.3),
+    0 4px 12px rgba(0,0,0,0.4),
+    0 0 20px rgba(34,197,94,0.1);
+}
+
+.mech-btn-green:hover {
+  border-color: rgba(34,197,94,0.7);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.1),
+    inset 0 -2px 0 rgba(0,0,0,0.3),
+    0 4px 20px rgba(34,197,94,0.25),
+    0 0 30px rgba(34,197,94,0.15);
+}
+
+/* Station section header */
+.station-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  background: linear-gradient(90deg, rgba(139,92,246,0.15), transparent);
+  border-left: 3px solid rgba(139,92,246,0.7);
+  border-radius: 0 8px 8px 0;
+  margin-bottom: 12px;
+}
+
+.station-header-cyan {
+  background: linear-gradient(90deg, rgba(6,182,212,0.15), transparent);
+  border-left-color: rgba(6,182,212,0.7);
+}
+
+.station-header-amber {
+  background: linear-gradient(90deg, rgba(245,158,11,0.15), transparent);
+  border-left-color: rgba(245,158,11,0.7);
+}
+
+/* Indicator LED dot */
+.led-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 6px currentColor, 0 0 12px currentColor;
+  animation: led-pulse 2s ease-in-out infinite;
+}
+
+@keyframes led-pulse {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+/* Scan line overlay effect */
+.station-scanline::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(139,92,246,0.02) 2px,
+    rgba(139,92,246,0.02) 4px
+  );
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* Tag badge - small status indicator */
+.station-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 800;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.06);
+}
+
+/* Glow text */
+.glow-text-purple { text-shadow: 0 0 10px rgba(139,92,246,0.5); }
+.glow-text-cyan { text-shadow: 0 0 10px rgba(6,182,212,0.5); }
+.glow-text-amber { text-shadow: 0 0 10px rgba(245,158,11,0.5); }

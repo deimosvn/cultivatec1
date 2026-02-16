@@ -2508,161 +2508,166 @@ export default function RobotSimulator({ onBack }) {
     return <SumoBotPush onBack={() => setPhase('select')} />;
   }
 
-  // -- Select screen (kid-friendly) --
+  // -- Select screen (Space Station Hub) --
   if (phase === 'select') {
     return (
-      <div className="min-h-full bg-gradient-to-b from-purple-50 to-white animate-fade-in">
-        <div className="bg-gradient-to-r from-[#CE82FF] to-[#A855F7] px-6 pt-6 pb-12 border-b-4 border-[#9333EA]">
-          <button onClick={onBack} className="text-white/80 hover:text-white mb-4 flex items-center text-sm font-black active:scale-95 transition">
+      <div className="min-h-full galaxy-bg animate-fade-in relative overflow-hidden">
+        {/* Background stars */}
+        {[...Array(20)].map((_, i) => (
+          <div key={i} className="galaxy-star" style={{
+            width: `${Math.random() * 3 + 1}px`, height: `${Math.random() * 3 + 1}px`,
+            top: `${Math.random() * 100}%`, left: `${Math.random() * 100}%`,
+            '--twinkle-duration': `${Math.random() * 3 + 2}s`,
+            '--twinkle-delay': `${Math.random() * 3}s`,
+          }} />
+        ))}
+
+        {/* Header */}
+        <div className="relative z-10 px-5 pt-5 pb-6">
+          <button onClick={onBack} className="text-white/60 hover:text-white mb-5 flex items-center text-sm font-black active:scale-95 transition">
             <ArrowLeft size={18} className="mr-1" /> Volver
           </button>
           <div className="text-center">
             <div className="flex justify-center mb-3">
-              <div className="relative">
-                <span className="text-6xl block animate-bounce">🤖</span>
-                <span className="absolute -right-2 -top-1 text-2xl animate-pulse">✨</span>
+              <div className="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-violet-500/30 to-purple-600/30 border border-violet-400/30 flex items-center justify-center backdrop-blur-sm">
+                <span className="text-4xl">🤖</span>
+                <div className="absolute -right-1 -top-1 w-4 h-4 rounded-full bg-green-400 border-2 border-[#1E1B4B] led-dot" style={{ color: '#4ade80' }} />
               </div>
             </div>
-            <h1 className="text-2xl font-black text-white drop-shadow-lg">¡Construye tu Robot!</h1>
-            <p className="text-white/90 text-sm font-bold mt-2 max-w-[280px] mx-auto">
-              Elige un robot para aprender a armarlo de verdad 🔧
+            <h1 className="text-2xl font-black text-white glow-text-purple">Centro de Robótica</h1>
+            <p className="text-violet-300/80 text-sm font-bold mt-1.5">
+              Selecciona una estación para comenzar
             </p>
           </div>
         </div>
-        
-        {/* Robot avatar helper */}
-        <div className="flex justify-center -mt-6 mb-4">
-          <div className="bg-white rounded-full p-1 shadow-lg border-2 border-purple-200">
-            <RobotMini config={robotConfig} size={48} />
+
+        {/* Robot avatar */}
+        <div className="flex justify-center -mt-1 mb-4 relative z-10">
+          <div className="bg-[#1E1B4B]/80 rounded-full p-1.5 border border-violet-400/30 shadow-lg shadow-violet-500/10">
+            <RobotMini config={robotConfig} size={44} />
           </div>
         </div>
-        
-        <div className="px-4 pb-24 space-y-4">
-          <p className="text-center text-sm text-purple-600 font-bold mb-2">
-            👇 Toca un robot para ver las instrucciones
-          </p>
-          
-          {/* Axon Merge mini-game card */}
-          <div onClick={() => setPhase('axon_merge')}
-            className="bg-white rounded-3xl border-3 border-[#E5E5E5] overflow-hidden cursor-pointer hover:border-[#0EA5E9] hover:shadow-xl transition-all duration-300 active:scale-[0.97] shadow-md">
-            <div className="h-3 bg-gradient-to-r from-sky-400 to-blue-600"/>
-            <div className="p-5">
-              <div className="flex items-center gap-4 mb-3">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-sky-400 to-blue-600 flex items-center justify-center text-4xl flex-shrink-0 border-b-4 border-black/10 shadow-lg">
-                  🧩
+
+        <div className="px-4 pb-28 space-y-6 relative z-10">
+
+          {/* ====== JUEGOS SECTION ====== */}
+          <div>
+            <div className="station-header station-header-cyan mb-3">
+              <Gamepad2 size={18} className="text-cyan-400" />
+              <span className="text-sm font-black text-cyan-300 glow-text-cyan tracking-wide uppercase">Juegos</span>
+              <div className="led-dot ml-auto" style={{ color: '#22d3ee' }} />
+            </div>
+
+            <div className="space-y-3">
+              {/* Axon Merge */}
+              <div onClick={() => setPhase('axon_merge')}
+                className="mech-btn mech-btn-cyan p-4 station-scanline active:scale-[0.97] transition-transform">
+                <div className="flex items-center gap-4 relative z-10">
+                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-cyan-500/30 to-blue-600/30 border border-cyan-400/30 flex items-center justify-center text-3xl flex-shrink-0">
+                    🧩
+                  </div>
+                  <div className="flex-grow min-w-0">
+                    <h3 className="text-base font-black text-white">Axon Merge</h3>
+                    <p className="text-xs text-violet-300/70 mt-0.5">Fusiona componentes y construye un robot</p>
+                  </div>
+                  <div className="flex-shrink-0">
+                    <div className="w-10 h-10 rounded-xl bg-cyan-500/20 border border-cyan-400/30 flex items-center justify-center">
+                      <ChevronRight size={20} className="text-cyan-400" />
+                    </div>
+                  </div>
                 </div>
-                <div className="flex-grow">
-                  <h3 className="text-lg font-black text-[#3C3C3C]">Axon Merge</h3>
-                  <p className="text-sm text-[#666] mt-1">¡Fusiona componentes electrónicos y construye un robot!</p>
+                <div className="flex gap-2 mt-3 relative z-10">
+                  <span className="station-tag text-cyan-300"><Zap size={10} /> Física real</span>
+                  <span className="station-tag text-purple-300"><Cpu size={10} /> 10 niveles</span>
                 </div>
               </div>
-              <div className="flex flex-wrap gap-2 mt-3">
-                <span className="text-xs font-black text-sky-600 bg-sky-100 px-3 py-1.5 rounded-full flex items-center gap-1">
-                  <span>🎮</span> Minijuego
-                </span>
-                <span className="text-xs font-black text-purple-600 bg-purple-100 px-3 py-1.5 rounded-full flex items-center gap-1">
-                  <span>🧠</span> Física real
-                </span>
-                <span className="text-xs font-black text-green-600 bg-green-100 px-3 py-1.5 rounded-full flex items-center gap-1">
-                  <span>🔗</span> 10 niveles
-                </span>
-              </div>
-              <div className="mt-4 flex items-center justify-between">
-                <span className="text-xs font-bold text-[#777]">
-                  🤖 Resistor → CultivaTec Rover
-                </span>
-                <div className="px-4 py-2 rounded-xl bg-gradient-to-r from-sky-400 to-blue-600 text-white text-xs font-black shadow-md">
-                  ¡Jugar! 🚀
+
+              {/* SumoBot Push */}
+              <div onClick={() => setPhase('sumo_push')}
+                className="mech-btn mech-btn-red p-4 station-scanline active:scale-[0.97] transition-transform">
+                <div className="flex items-center gap-4 relative z-10">
+                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-red-500/30 to-orange-600/30 border border-red-400/30 flex items-center justify-center text-3xl flex-shrink-0">
+                    🤼
+                  </div>
+                  <div className="flex-grow min-w-0">
+                    <h3 className="text-base font-black text-white">SumoBot Push</h3>
+                    <p className="text-xs text-violet-300/70 mt-0.5">Pelea de robots sumo para 2 jugadores</p>
+                  </div>
+                  <div className="flex-shrink-0">
+                    <div className="w-10 h-10 rounded-xl bg-red-500/20 border border-red-400/30 flex items-center justify-center">
+                      <ChevronRight size={20} className="text-red-400" />
+                    </div>
+                  </div>
+                </div>
+                <div className="flex gap-2 mt-3 relative z-10">
+                  <span className="station-tag text-red-300"><Users size={10} /> 2 Jugadores</span>
+                  <span className="station-tag text-amber-300"><Trophy size={10} /> Mejor de 3</span>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* SumoBot Push mini-game card */}
-          <div onClick={() => setPhase('sumo_push')}
-            className="bg-white rounded-3xl border-3 border-[#E5E5E5] overflow-hidden cursor-pointer hover:border-[#EF4444] hover:shadow-xl transition-all duration-300 active:scale-[0.97] shadow-md">
-            <div className="h-3 bg-gradient-to-r from-blue-500 via-purple-500 to-red-500"/>
-            <div className="p-5">
-              <div className="flex items-center gap-4 mb-3">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 via-purple-500 to-red-500 flex items-center justify-center text-4xl flex-shrink-0 border-b-4 border-black/10 shadow-lg">
-                  🤼
-                </div>
-                <div className="flex-grow">
-                  <h3 className="text-lg font-black text-[#3C3C3C]">SumoBot Push</h3>
-                  <p className="text-sm text-[#666] mt-1">¡Pelea de robots sumo para 2 jugadores en el mismo celular!</p>
-                </div>
-              </div>
-              <div className="flex flex-wrap gap-2 mt-3">
-                <span className="text-xs font-black text-indigo-600 bg-indigo-100 px-3 py-1.5 rounded-full flex items-center gap-1">
-                  <span>🎮</span> Minijuego
-                </span>
-                <span className="text-xs font-black text-red-600 bg-red-100 px-3 py-1.5 rounded-full flex items-center gap-1">
-                  <span>👥</span> 2 Jugadores
-                </span>
-                <span className="text-xs font-black text-blue-600 bg-blue-100 px-3 py-1.5 rounded-full flex items-center gap-1">
-                  <span>🏆</span> Mejor de 3
-                </span>
-              </div>
-              <div className="mt-4 flex items-center justify-between">
-                <span className="text-xs font-bold text-[#777]">
-                  🔵 Azul vs Rojo 🔴
-                </span>
-                <div className="px-4 py-2 rounded-xl bg-gradient-to-r from-blue-500 via-purple-500 to-red-500 text-white text-xs font-black shadow-md">
-                  ¡Pelear! ⚔️
-                </div>
-              </div>
+          {/* ====== TALLER (Workshop) SECTION ====== */}
+          <div>
+            <div className="station-header station-header-amber mb-3">
+              <Wrench size={18} className="text-amber-400" />
+              <span className="text-sm font-black text-amber-300 glow-text-amber tracking-wide uppercase">Taller</span>
+              <span className="text-[10px] font-bold text-amber-400/50 ml-1">— Construcción de Robots</span>
+              <div className="led-dot ml-auto" style={{ color: '#fbbf24' }} />
+            </div>
+
+            <div className="space-y-3">
+              {ROBOT_TEMPLATES.map(t => {
+                const instructions = ASSEMBLY_INSTRUCTIONS[t.id];
+                const colorMap = {
+                  sumo: 'mech-btn-red',
+                  line: 'mech-btn-cyan',
+                  dog: 'mech-btn-amber',
+                  free: 'mech-btn-green',
+                };
+                const glowMap = {
+                  sumo: { border: 'border-red-400/30', bg: 'from-red-500/30 to-orange-600/30', chevron: 'text-red-400 bg-red-500/20 border-red-400/30' },
+                  line: { border: 'border-cyan-400/30', bg: 'from-cyan-500/30 to-blue-600/30', chevron: 'text-cyan-400 bg-cyan-500/20 border-cyan-400/30' },
+                  dog: { border: 'border-amber-400/30', bg: 'from-amber-500/30 to-yellow-600/30', chevron: 'text-amber-400 bg-amber-500/20 border-amber-400/30' },
+                  free: { border: 'border-green-400/30', bg: 'from-green-500/30 to-emerald-600/30', chevron: 'text-green-400 bg-green-500/20 border-green-400/30' },
+                };
+                const glow = glowMap[t.id] || glowMap.free;
+
+                return (
+                  <div key={t.id} onClick={() => pickTemplate(t)}
+                    className={`mech-btn ${colorMap[t.id] || ''} p-4 station-scanline active:scale-[0.97] transition-transform`}>
+                    <div className="flex items-center gap-4 relative z-10">
+                      <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${glow.bg} border ${glow.border} flex items-center justify-center text-3xl flex-shrink-0`}>
+                        {t.icon}
+                      </div>
+                      <div className="flex-grow min-w-0">
+                        <h3 className="text-base font-black text-white">{t.name}</h3>
+                        <p className="text-xs text-violet-300/70 mt-0.5">{t.desc}</p>
+                      </div>
+                      <div className="flex-shrink-0">
+                        <div className={`w-10 h-10 rounded-xl border flex items-center justify-center ${glow.chevron}`}>
+                          <ChevronRight size={20} />
+                        </div>
+                      </div>
+                    </div>
+                    {instructions && t.id !== 'free' ? (
+                      <div className="flex gap-2 mt-3 relative z-10 flex-wrap">
+                        <span className="station-tag text-purple-300">🎓 {instructions.difficulty}</span>
+                        <span className="station-tag text-cyan-300">⏱️ {instructions.time}</span>
+                        <span className="station-tag text-green-300">📦 {t.parts.length} piezas</span>
+                      </div>
+                    ) : t.id === 'free' ? (
+                      <div className="flex gap-2 mt-3 relative z-10">
+                        <span className="station-tag text-green-300">✨ Diseño libre</span>
+                        <span className="station-tag text-violet-300">♾️ Sin límites</span>
+                      </div>
+                    ) : null}
+                  </div>
+                );
+              })}
             </div>
           </div>
 
-          {ROBOT_TEMPLATES.map(t => {
-            const instructions = ASSEMBLY_INSTRUCTIONS[t.id];
-            return (
-              <div key={t.id} onClick={() => pickTemplate(t)}
-                className="bg-white rounded-3xl border-3 border-[#E5E5E5] overflow-hidden cursor-pointer hover:border-[#CE82FF] hover:shadow-xl transition-all duration-300 active:scale-[0.97] shadow-md">
-                <div className={`h-3 bg-gradient-to-r ${t.color}`}/>
-                <div className="p-5">
-                  <div className="flex items-center gap-4 mb-3">
-                    <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${t.color} flex items-center justify-center text-4xl flex-shrink-0 border-b-4 border-black/10 shadow-lg`}>
-                      {t.icon}
-                    </div>
-                    <div className="flex-grow">
-                      <h3 className="text-lg font-black text-[#3C3C3C]">{t.name}</h3>
-                      <p className="text-sm text-[#666] mt-1">{t.desc}</p>
-                    </div>
-                  </div>
-                  
-                  {instructions && t.id !== 'free' && (
-                    <div className="flex flex-wrap gap-2 mt-3">
-                      <span className="text-xs font-black text-purple-600 bg-purple-100 px-3 py-1.5 rounded-full flex items-center gap-1">
-                        <span>🎓</span> {instructions.difficulty}
-                      </span>
-                      <span className="text-xs font-black text-blue-600 bg-blue-100 px-3 py-1.5 rounded-full flex items-center gap-1">
-                        <span>⏱️</span> {instructions.time}
-                      </span>
-                      <span className="text-xs font-black text-green-600 bg-green-100 px-3 py-1.5 rounded-full flex items-center gap-1">
-                        <span>👦</span> {instructions.age}
-                      </span>
-                    </div>
-                  )}
-                  
-                  <div className="mt-4 flex items-center justify-between">
-                    {t.parts.length > 0 ? (
-                      <span className="text-xs font-bold text-[#777]">
-                        📦 {t.parts.length} piezas · 📝 {instructions?.steps?.length || 0} pasos
-                      </span>
-                    ) : (
-                      <span className="text-xs font-bold text-[#777]">
-                        ✨ ¡Crea lo que imagines!
-                      </span>
-                    )}
-                    <div className={`px-4 py-2 rounded-xl bg-gradient-to-r ${t.color} text-white text-xs font-black shadow-md`}>
-                      ¡Empezar! →
-                    </div>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
         </div>
       </div>
     );
@@ -2676,41 +2681,41 @@ export default function RobotSimulator({ onBack }) {
     const progress = steps.length > 0 ? ((currentStep + 1) / steps.length) * 100 : 0;
 
     return (
-      <div className="min-h-full bg-gradient-to-b from-purple-50 to-white animate-fade-in flex flex-col">
+      <div className="min-h-full galaxy-bg animate-fade-in flex flex-col relative">
         {/* Header */}
-        <div className="bg-gradient-to-r from-[#CE82FF] to-[#A855F7] px-5 pt-4 pb-5 border-b-4 border-[#9333EA]">
+        <div className="relative z-10 bg-gradient-to-b from-[#2E1065]/95 to-[#1E1B4B]/90 px-5 pt-4 pb-5 border-b border-violet-500/30">
           <div className="flex justify-between items-center mb-3">
             <button onClick={() => { stopSpeaking(); setPhase('select'); }} 
-              className="text-white/80 hover:text-white flex items-center text-sm font-black active:scale-95 transition">
-              <ArrowLeft size={18} className="mr-1" /> Cambiar Robot
+              className="text-violet-300/70 hover:text-white flex items-center text-sm font-black active:scale-95 transition">
+              <ArrowLeft size={18} className="mr-1" /> Taller
             </button>
             <div className="flex items-center gap-2">
-              <div className="bg-white/20 px-3 py-1.5 rounded-full flex items-center gap-1.5">
+              <div className="bg-violet-500/20 border border-violet-400/30 px-3 py-1.5 rounded-full flex items-center gap-1.5">
                 <span className="text-lg">{template.icon}</span>
-                <span className="text-xs font-black text-white">{template.name}</span>
+                <span className="text-xs font-black text-violet-200">{template.name}</span>
               </div>
             </div>
           </div>
           
-          <h2 className="text-xl font-black text-white text-center mb-2">{instructions?.title}</h2>
+          <h2 className="text-xl font-black text-white text-center mb-2 glow-text-purple">{instructions?.title}</h2>
           
           {/* Progress bar */}
-          <div className="bg-white/20 rounded-full h-3 overflow-hidden">
+          <div className="bg-white/10 rounded-full h-3 overflow-hidden border border-violet-400/20">
             <div 
-              className="bg-white h-full rounded-full transition-all duration-500"
+              className="bg-gradient-to-r from-violet-400 to-purple-500 h-full rounded-full transition-all duration-500"
               style={{ width: `${progress}%` }}
             />
           </div>
-          <p className="text-white/80 text-xs font-bold text-center mt-1">
+          <p className="text-violet-300/80 text-xs font-bold text-center mt-1">
             Paso {currentStep + 1} de {steps.length}
           </p>
         </div>
 
         {/* Robot Avatar with speech */}
-        <div className="flex justify-center py-4 bg-gradient-to-b from-purple-100 to-transparent">
+        <div className="flex justify-center py-4 bg-gradient-to-b from-[#1E1B4B]/60 to-transparent relative z-10">
           <div className="relative">
-            <div className={`rounded-full p-1 shadow-lg border-3 transition-all duration-300 ${
-              isSpeaking ? 'border-green-400 bg-green-50 animate-pulse' : 'border-purple-200 bg-white'
+            <div className={`rounded-full p-1 shadow-lg border-2 transition-all duration-300 ${
+              isSpeaking ? 'border-green-400 bg-green-900/30 animate-pulse shadow-green-400/20' : 'border-violet-400/30 bg-[#1E1B4B]/80'
             }`}>
               <RobotMini config={robotConfig} size={64} />
             </div>
@@ -2721,7 +2726,7 @@ export default function RobotSimulator({ onBack }) {
             )}
           </div>
           <div className="ml-3 flex flex-col justify-center">
-            <p className="text-sm font-black text-purple-700">
+            <p className="text-sm font-black text-violet-300">
               {isSpeaking ? '¡Escucha con atención!' : '¡Toca el botón para que te lea!'}
             </p>
             <button 
@@ -2738,27 +2743,33 @@ export default function RobotSimulator({ onBack }) {
         </div>
 
         {/* Tab navigation */}
-        <div className="flex gap-2 px-4 mb-3">
+        <div className="flex gap-2 px-4 mb-3 relative z-10">
           <button 
             onClick={() => { setShowMaterials(true); setShowCode(false); }}
-            className={`flex-1 py-2.5 rounded-xl text-xs font-black transition ${
-              showMaterials && !showCode ? 'bg-purple-600 text-white shadow-md' : 'bg-gray-100 text-gray-600'
+            className={`flex-1 py-2.5 rounded-xl text-xs font-black transition border ${
+              showMaterials && !showCode 
+                ? 'bg-violet-500/30 text-white border-violet-400/50 shadow-lg shadow-violet-500/10' 
+                : 'bg-white/5 text-violet-300/60 border-white/5 hover:bg-white/10'
             }`}
           >
             📦 Materiales
           </button>
           <button 
             onClick={() => { setShowMaterials(false); setShowCode(false); }}
-            className={`flex-1 py-2.5 rounded-xl text-xs font-black transition ${
-              !showMaterials && !showCode ? 'bg-purple-600 text-white shadow-md' : 'bg-gray-100 text-gray-600'
+            className={`flex-1 py-2.5 rounded-xl text-xs font-black transition border ${
+              !showMaterials && !showCode 
+                ? 'bg-violet-500/30 text-white border-violet-400/50 shadow-lg shadow-violet-500/10' 
+                : 'bg-white/5 text-violet-300/60 border-white/5 hover:bg-white/10'
             }`}
           >
             🔧 Pasos
           </button>
           <button 
             onClick={() => { setShowMaterials(false); setShowCode(true); }}
-            className={`flex-1 py-2.5 rounded-xl text-xs font-black transition ${
-              showCode ? 'bg-purple-600 text-white shadow-md' : 'bg-gray-100 text-gray-600'
+            className={`flex-1 py-2.5 rounded-xl text-xs font-black transition border ${
+              showCode 
+                ? 'bg-violet-500/30 text-white border-violet-400/50 shadow-lg shadow-violet-500/10' 
+                : 'bg-white/5 text-violet-300/60 border-white/5 hover:bg-white/10'
             }`}
           >
             💻 Código
@@ -2766,33 +2777,33 @@ export default function RobotSimulator({ onBack }) {
         </div>
 
         {/* Content */}
-        <div className="flex-grow overflow-y-auto px-4 pb-32">
+        <div className="flex-grow overflow-y-auto px-4 pb-32 relative z-10">
           
           {/* Materials tab */}
           {showMaterials && !showCode && (
             <div className="space-y-4 animate-fade-in">
-              <div className="bg-white rounded-2xl p-4 border-2 border-purple-100 shadow-md">
-                <h3 className="text-lg font-black text-purple-700 mb-3 flex items-center gap-2">
+              <div className="station-panel p-4">
+                <h3 className="text-lg font-black text-violet-300 mb-3 flex items-center gap-2">
                   <Package size={20}/> Lo que Necesitas
                 </h3>
-                <p className="text-sm text-gray-600 mb-4">{instructions?.intro}</p>
+                <p className="text-sm text-violet-300/70 mb-4">{instructions?.intro}</p>
                 
                 <div className="space-y-3">
                   {instructions?.materials?.map((mat, i) => (
-                    <div key={i} className="flex items-start gap-3 p-3 bg-purple-50 rounded-xl">
+                    <div key={i} className="flex items-start gap-3 p-3 bg-violet-500/10 border border-violet-400/20 rounded-xl">
                       <span className="text-2xl">{mat.emoji}</span>
                       <div className="flex-grow">
                         <div className="flex items-center justify-between">
-                          <span className="font-black text-sm text-gray-800">{mat.name}</span>
+                          <span className="font-black text-sm text-white">{mat.name}</span>
                           {mat.quantity > 0 && (
-                            <span className="text-xs font-bold text-purple-600 bg-purple-200 px-2 py-0.5 rounded-full">
+                            <span className="text-xs font-bold text-violet-300 bg-violet-500/20 px-2 py-0.5 rounded-full">
                               x{mat.quantity}
                             </span>
                           )}
                         </div>
-                        <p className="text-xs text-gray-500 mt-0.5">{mat.desc}</p>
+                        <p className="text-xs text-violet-300/60 mt-0.5">{mat.desc}</p>
                         {mat.buyTip && (
-                          <p className="text-xs text-purple-600 mt-1 flex items-center gap-1">
+                          <p className="text-xs text-cyan-400/80 mt-1 flex items-center gap-1">
                             <Lightbulb size={12}/> {mat.buyTip}
                           </p>
                         )}
@@ -2803,13 +2814,13 @@ export default function RobotSimulator({ onBack }) {
               </div>
 
               {/* Tools */}
-              <div className="bg-white rounded-2xl p-4 border-2 border-orange-100 shadow-md">
-                <h3 className="text-base font-black text-orange-700 mb-2 flex items-center gap-2">
+              <div className="station-panel p-4">
+                <h3 className="text-base font-black text-amber-300 mb-2 flex items-center gap-2">
                   <Wrench size={18}/> Herramientas
                 </h3>
                 <div className="flex flex-wrap gap-2">
                   {instructions?.tools?.map((tool, i) => (
-                    <span key={i} className="text-xs font-bold text-orange-700 bg-orange-100 px-3 py-1.5 rounded-full">
+                    <span key={i} className="station-tag text-amber-300">
                       🔧 {tool}
                     </span>
                   ))}
@@ -2817,13 +2828,13 @@ export default function RobotSimulator({ onBack }) {
               </div>
 
               {/* Tips */}
-              <div className="bg-white rounded-2xl p-4 border-2 border-yellow-100 shadow-md">
-                <h3 className="text-base font-black text-yellow-700 mb-2 flex items-center gap-2">
+              <div className="station-panel p-4">
+                <h3 className="text-base font-black text-cyan-300 mb-2 flex items-center gap-2">
                   <Lightbulb size={18}/> Consejos Útiles
                 </h3>
                 <div className="space-y-2">
                   {instructions?.tips?.map((tip, i) => (
-                    <p key={i} className="text-xs text-gray-600">{tip}</p>
+                    <p key={i} className="text-xs text-violet-300/70">{tip}</p>
                   ))}
                 </div>
               </div>
@@ -2835,34 +2846,34 @@ export default function RobotSimulator({ onBack }) {
             <div className="space-y-4 animate-fade-in">
               {/* Current step card */}
               {currentStepData && (
-                <div className="bg-white rounded-2xl p-4 border-3 border-purple-200 shadow-lg">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center text-2xl shadow-md">
+                <div className="station-panel p-4">
+                  <div className="flex items-center gap-3 mb-3 relative z-10">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500/40 to-purple-600/40 border border-violet-400/30 flex items-center justify-center text-2xl">
                       {currentStepData.emoji}
                     </div>
                     <div className="flex-grow">
-                      <h3 className="text-lg font-black text-gray-800">{currentStepData.title}</h3>
+                      <h3 className="text-lg font-black text-white">{currentStepData.title}</h3>
                       <button 
                         onClick={() => isSpeaking ? stopSpeaking() : speakStep(currentStepData)}
-                        className="text-xs text-purple-600 font-bold flex items-center gap-1 mt-0.5"
+                        className="text-xs text-cyan-400 font-bold flex items-center gap-1 mt-0.5"
                       >
                         {isSpeaking ? <VolumeX size={12}/> : <Volume2 size={12}/>}
                         {isSpeaking ? 'Detener' : 'Escuchar este paso'}
                       </button>
                     </div>
                     {completedSteps.includes(currentStep) && (
-                      <CheckCircle size={24} className="text-green-500"/>
+                      <CheckCircle size={24} className="text-green-400"/>
                     )}
                   </div>
                   
-                  <p className="text-sm text-gray-600 mb-4 font-medium">{currentStepData.description}</p>
+                  <p className="text-sm text-violet-300/80 mb-4 font-medium relative z-10">{currentStepData.description}</p>
                   
-                  <div className="bg-gray-50 rounded-xl p-3 mb-3">
-                    <h4 className="text-xs font-black text-gray-500 mb-2">📋 INSTRUCCIONES:</h4>
+                  <div className="bg-white/5 border border-violet-400/20 rounded-xl p-3 mb-3 relative z-10">
+                    <h4 className="text-xs font-black text-violet-400/70 mb-2">📋 INSTRUCCIONES:</h4>
                     <div className="space-y-2">
                       {currentStepData.details?.map((detail, i) => (
-                        <p key={i} className="text-sm text-gray-700 flex items-start gap-2">
-                          <span className="text-purple-500 mt-0.5">•</span>
+                        <p key={i} className="text-sm text-violet-200/90 flex items-start gap-2">
+                          <span className="text-cyan-400 mt-0.5">•</span>
                           {detail}
                         </p>
                       ))}
@@ -2870,11 +2881,11 @@ export default function RobotSimulator({ onBack }) {
                   </div>
                   
                   {currentStepData.safety && (
-                    <div className="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-3 flex items-start gap-2">
-                      <AlertTriangle size={18} className="text-yellow-600 flex-shrink-0 mt-0.5"/>
+                    <div className="bg-amber-500/10 border border-amber-400/30 rounded-xl p-3 flex items-start gap-2 relative z-10">
+                      <AlertTriangle size={18} className="text-amber-400 flex-shrink-0 mt-0.5"/>
                       <div>
-                        <span className="text-xs font-black text-yellow-700">⚠️ SEGURIDAD:</span>
-                        <p className="text-xs text-yellow-700 mt-0.5">{currentStepData.safety}</p>
+                        <span className="text-xs font-black text-amber-300">⚠️ SEGURIDAD:</span>
+                        <p className="text-xs text-amber-300/80 mt-0.5">{currentStepData.safety}</p>
                       </div>
                     </div>
                   )}
@@ -2886,10 +2897,10 @@ export default function RobotSimulator({ onBack }) {
                 <button
                   onClick={() => { stopSpeaking(); setCurrentStep(s => Math.max(0, s - 1)); }}
                   disabled={currentStep === 0}
-                  className={`flex-1 py-3 rounded-xl font-black text-sm flex items-center justify-center gap-1 transition ${
+                  className={`flex-1 py-3 rounded-xl font-black text-sm flex items-center justify-center gap-1 transition border ${
                     currentStep === 0 
-                      ? 'bg-gray-100 text-gray-400' 
-                      : 'bg-gray-200 text-gray-700 active:scale-95'
+                      ? 'bg-white/5 text-violet-400/30 border-white/5' 
+                      : 'bg-white/10 text-violet-200 border-violet-400/20 active:scale-95'
                   }`}
                 >
                   <ChevronUp size={16}/> Anterior
@@ -2903,10 +2914,10 @@ export default function RobotSimulator({ onBack }) {
                     setCurrentStep(s => Math.min(steps.length - 1, s + 1)); 
                   }}
                   disabled={currentStep >= steps.length - 1}
-                  className={`flex-1 py-3 rounded-xl font-black text-sm flex items-center justify-center gap-1 transition ${
+                  className={`flex-1 py-3 rounded-xl font-black text-sm flex items-center justify-center gap-1 transition border ${
                     currentStep >= steps.length - 1
-                      ? 'bg-gray-100 text-gray-400' 
-                      : 'bg-gradient-to-r from-purple-500 to-purple-600 text-white active:scale-95 shadow-md'
+                      ? 'bg-white/5 text-violet-400/30 border-white/5' 
+                      : 'bg-violet-500/30 text-white border-violet-400/50 active:scale-95 shadow-lg shadow-violet-500/20'
                   }`}
                 >
                   Siguiente <ChevronDown size={16}/>
@@ -2914,29 +2925,29 @@ export default function RobotSimulator({ onBack }) {
               </div>
 
               {/* All steps overview */}
-              <div className="bg-white rounded-2xl p-4 border-2 border-gray-100">
-                <h4 className="text-sm font-black text-gray-700 mb-3">📝 Todos los Pasos</h4>
-                <div className="space-y-2">
+              <div className="station-panel p-4">
+                <h4 className="text-sm font-black text-violet-300 mb-3 relative z-10">📝 Todos los Pasos</h4>
+                <div className="space-y-2 relative z-10">
                   {steps.map((step, i) => (
                     <button
                       key={i}
                       onClick={() => { stopSpeaking(); setCurrentStep(i); }}
-                      className={`w-full text-left p-3 rounded-xl flex items-center gap-3 transition ${
+                      className={`w-full text-left p-3 rounded-xl flex items-center gap-3 transition border ${
                         currentStep === i 
-                          ? 'bg-purple-100 border-2 border-purple-300' 
-                          : 'bg-gray-50 hover:bg-gray-100'
+                          ? 'bg-violet-500/20 border-violet-400/40' 
+                          : 'bg-white/5 border-white/5 hover:bg-white/10'
                       }`}
                     >
                       <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-lg ${
                         completedSteps.includes(i) 
-                          ? 'bg-green-500 text-white' 
+                          ? 'bg-green-500/30 text-green-300 border border-green-400/30' 
                           : currentStep === i 
-                            ? 'bg-purple-500 text-white' 
-                            : 'bg-gray-200 text-gray-600'
+                            ? 'bg-violet-500/30 text-white border border-violet-400/40' 
+                            : 'bg-white/5 text-violet-300/50 border border-white/10'
                       }`}>
                         {completedSteps.includes(i) ? <Check size={16}/> : step.emoji}
                       </div>
-                      <span className={`text-sm font-bold ${currentStep === i ? 'text-purple-700' : 'text-gray-700'}`}>
+                      <span className={`text-sm font-bold ${currentStep === i ? 'text-white' : 'text-violet-300/70'}`}>
                         {step.title}
                       </span>
                     </button>
@@ -2949,18 +2960,18 @@ export default function RobotSimulator({ onBack }) {
           {/* Code tab */}
           {showCode && (
             <div className="animate-fade-in">
-              <div className="bg-gray-900 rounded-2xl p-4 shadow-lg overflow-hidden">
-                <div className="flex items-center gap-2 mb-3">
+              <div className="station-panel p-4 overflow-hidden">
+                <div className="flex items-center gap-2 mb-3 relative z-10">
                   <div className="w-3 h-3 rounded-full bg-red-500"/>
                   <div className="w-3 h-3 rounded-full bg-yellow-500"/>
                   <div className="w-3 h-3 rounded-full bg-green-500"/>
-                  <span className="ml-auto text-xs text-gray-400 font-mono">Arduino IDE</span>
+                  <span className="ml-auto text-xs text-violet-400/60 font-mono">Arduino IDE</span>
                 </div>
-                <pre className="text-xs text-green-400 font-mono overflow-x-auto whitespace-pre-wrap">
+                <pre className="text-xs text-green-400 font-mono overflow-x-auto whitespace-pre-wrap relative z-10">
                   {instructions?.code}
                 </pre>
               </div>
-              <p className="text-xs text-gray-500 text-center mt-3">
+              <p className="text-xs text-violet-300/50 text-center mt-3">
                 💡 Copia este código y pégalo en Arduino IDE
               </p>
             </div>
@@ -2968,10 +2979,10 @@ export default function RobotSimulator({ onBack }) {
         </div>
 
         {/* Bottom action button */}
-        <div className="fixed bottom-20 left-0 right-0 px-4 pb-4 bg-gradient-to-t from-white via-white to-transparent pt-6">
+        <div className="fixed bottom-20 left-0 right-0 px-4 pb-4 bg-gradient-to-t from-[#1E1B4B] via-[#1E1B4B]/90 to-transparent pt-6 z-20">
           <button
             onClick={() => { stopSpeaking(); setPhase('build'); }}
-            className="w-full py-4 rounded-2xl bg-gradient-to-r from-green-500 to-emerald-600 text-white font-black text-lg shadow-xl active:scale-[0.98] transition flex items-center justify-center gap-2"
+            className="w-full py-4 rounded-2xl bg-gradient-to-r from-violet-500/40 to-purple-600/40 border border-violet-400/50 text-white font-black text-lg shadow-xl shadow-violet-500/20 active:scale-[0.98] transition flex items-center justify-center gap-2"
           >
             <Wrench size={20}/> Ir al Simulador Virtual →
           </button>
@@ -2985,16 +2996,16 @@ export default function RobotSimulator({ onBack }) {
   const blockCategories = [...new Set(PROGRAM_BLOCKS.map(b => b.cat))];
 
   return (
-    <div className="min-h-full bg-white flex flex-col animate-fade-in">
+    <div className="min-h-full galaxy-bg flex flex-col animate-fade-in relative">
       {/* Header */}
-      <div className="bg-[#CE82FF] px-5 pt-4 pb-5 border-b-4 border-[#A855F7]">
+      <div className="relative z-10 bg-gradient-to-b from-[#2E1065]/95 to-[#1E1B4B]/90 px-5 pt-4 pb-5 border-b border-violet-500/30">
         <div className="flex justify-between items-center mb-2">
-          <button onClick={() => { resetSim(); setPhase('select'); }} className="text-white/70 hover:text-white flex items-center text-sm font-black active:scale-95 transition">
-            <ArrowLeft size={18} className="mr-1" /> Robots
+          <button onClick={() => { resetSim(); setPhase('select'); }} className="text-violet-300/70 hover:text-white flex items-center text-sm font-black active:scale-95 transition">
+            <ArrowLeft size={18} className="mr-1" /> Taller
           </button>
-          <div className="flex items-center bg-white/20 px-3 py-1 rounded-full">
+          <div className="flex items-center bg-violet-500/20 border border-violet-400/30 px-3 py-1 rounded-full">
             <span className="mr-1.5">{template?.icon}</span>
-            <span className="text-xs font-black text-white">{template?.name}</span>
+            <span className="text-xs font-black text-violet-200">{template?.name}</span>
           </div>
         </div>
         {/* Phase tabs */}
@@ -3009,7 +3020,9 @@ export default function RobotSimulator({ onBack }) {
             <button key={tab.id}
               onClick={() => { setPhase(tab.id); if (tab.id !== 'simulate') { resetSim(); stopManualMode(); } if (tab.id !== 'battle') { resetBattle(); } if (tab.id === 'instructions') stopSpeaking(); }}
               className={`flex-1 py-2 rounded-xl text-[10px] font-black transition active:scale-95
-                ${phase === tab.id ? 'bg-white text-[#CE82FF] shadow-md' : 'bg-white/20 text-white/80 hover:bg-white/30'}`}>
+                ${phase === tab.id 
+                  ? 'bg-violet-500/30 text-white border border-violet-400/50 shadow-lg shadow-violet-500/20' 
+                  : 'bg-white/5 text-violet-300/70 border border-white/5 hover:bg-white/10'}`}>
               {tab.label}
             </button>
           ))}
@@ -3017,18 +3030,18 @@ export default function RobotSimulator({ onBack }) {
       </div>
 
       {/* Content */}
-      <div className="flex-grow overflow-y-auto px-4 pt-4 pb-28">
+      <div className="flex-grow overflow-y-auto px-4 pt-4 pb-28 relative z-10">
 
         {/* ======= BUILD PHASE ======= */}
         {phase === 'build' && (
           <div className="space-y-4">
             {/* Kid-friendly welcome tip */}
-            <div className="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-2xl p-4 border-2 border-purple-100">
-              <div className="flex items-start gap-3">
+            <div className="station-panel p-4">
+              <div className="flex items-start gap-3 relative z-10">
                 <div className="text-3xl animate-bounce">🔧</div>
                 <div>
-                  <h3 className="text-base font-black text-purple-700">¡Hora de Armar tu Robot!</h3>
-                  <p className="text-sm text-purple-600 mt-1">
+                  <h3 className="text-base font-black text-violet-200">¡Hora de Armar tu Robot!</h3>
+                  <p className="text-sm text-violet-300/70 mt-1">
                     {template?.id === 'sumo' && 'Coloca las piezas en tu robot de combate. ¡Necesita ser fuerte y rápido!'}
                     {template?.id === 'line' && 'Arma tu robot seguidor de líneas. ¡Debe tener buenos sensores para no perderse!'}
                     {template?.id === 'dog' && 'Construye tu perrito robot. ¡Necesita 4 patas, ojos y una voz para ladrar!'}
@@ -3039,20 +3052,21 @@ export default function RobotSimulator({ onBack }) {
             </div>
 
             {/* Visual chassis assembly */}
-            <div className="bg-white rounded-2xl border-2 border-[#E5E5E5] p-4">
-              <div className="flex justify-between items-center mb-3">
-                <h3 className="text-base font-black text-[#3C3C3C] flex items-center">
+            <div className="station-panel p-4">
+              <div className="flex justify-between items-center mb-3 relative z-10">
+                <h3 className="text-base font-black text-white flex items-center">
                   🤖 Tu Robot
-                  <span className="ml-2 text-xs font-black text-[#CE82FF] bg-[#F3E8FF] px-2.5 py-1 rounded-full">{workspace.length} piezas</span>
+                  <span className="ml-2 text-xs font-black text-violet-300 bg-violet-500/20 px-2.5 py-1 rounded-full border border-violet-400/20">{workspace.length} piezas</span>
                 </h3>
                 {workspace.length > 0 && (
-                  <button onClick={() => { setWorkspace([]); setSlotAssignments({}); }} className="text-xs font-black text-[#FF4B4B] bg-[#FFE1E1] px-3 py-1.5 rounded-full hover:bg-[#FFD0D0] transition flex items-center">
+                  <button onClick={() => { setWorkspace([]); setSlotAssignments({}); }} className="text-xs font-black text-red-400 bg-red-500/15 border border-red-400/30 px-3 py-1.5 rounded-full hover:bg-red-500/25 transition flex items-center">
                     <Trash2 size={12} className="mr-1"/> Quitar Todo
                   </button>
                 )}
               </div>
               
               {/* Big chassis view */}
+              <div className="relative z-10">
               <ChassisAssemblyView
                 template={template}
                 workspace={workspace}
@@ -3060,20 +3074,21 @@ export default function RobotSimulator({ onBack }) {
                 onSlotDrop={handleSlotDrop}
                 onSlotRemove={handleSlotRemove}
               />
+              </div>
 
               {/* Component checklist - more descriptive */}
-              <div className="mt-4 space-y-2">
-                <p className="text-xs font-black text-gray-500">📋 ¿Tu robot tiene todo lo necesario?</p>
+              <div className="mt-4 space-y-2 relative z-10">
+                <p className="text-xs font-black text-violet-400/70">📋 ¿Tu robot tiene todo lo necesario?</p>
                 {[
                   { ok: hasController, label: '🧠 Cerebro (Arduino)', desc: 'Piensa y toma decisiones' },
                   { ok: hasBattery, label: '🔋 Energía (Batería)', desc: 'Le da poder para moverse' },
                   { ok: hasMotor, label: '⚙️ Músculos (Motor)', desc: 'Lo hace caminar o rodar' },
                 ].map((c, i) => (
-                  <div key={i} className={`flex items-center gap-3 p-2.5 rounded-xl text-sm transition ${c.ok ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'}`}>
+                  <div key={i} className={`flex items-center gap-3 p-2.5 rounded-xl text-sm transition border ${c.ok ? 'bg-green-500/10 border-green-400/30' : 'bg-red-500/10 border-red-400/30'}`}>
                     <span className="text-lg">{c.ok ? '✅' : '❌'}</span>
                     <div>
-                      <span className={`font-black ${c.ok ? 'text-green-700' : 'text-red-600'}`}>{c.label}</span>
-                      <p className={`text-xs ${c.ok ? 'text-green-600' : 'text-red-500'}`}>{c.desc}</p>
+                      <span className={`font-black ${c.ok ? 'text-green-300' : 'text-red-400'}`}>{c.label}</span>
+                      <p className={`text-xs ${c.ok ? 'text-green-400/70' : 'text-red-400/70'}`}>{c.desc}</p>
                     </div>
                   </div>
                 ))}
@@ -3082,9 +3097,9 @@ export default function RobotSimulator({ onBack }) {
 
             {/* Kid-friendly build tips */}
             {template && BUILD_TIPS[template.id] && (
-              <div className="bg-yellow-50 rounded-2xl border-2 border-yellow-200 p-4">
-                <h4 className="text-sm font-black text-yellow-700 mb-2 flex items-center gap-1">💡 ¿Sabías que...?</h4>
-                <p className="text-sm text-yellow-700">
+              <div className="station-panel p-4">
+                <h4 className="text-sm font-black text-amber-300 mb-2 flex items-center gap-1 relative z-10">💡 ¿Sabías que...?</h4>
+                <p className="text-sm text-violet-300/70 relative z-10">
                   {BUILD_TIPS[template.id][Math.floor(Math.random() * BUILD_TIPS[template.id].length)]}
                 </p>
               </div>
@@ -3096,16 +3111,16 @@ export default function RobotSimulator({ onBack }) {
             )}
 
             {/* Parts catalog with drag */}
-            <div className="bg-white rounded-2xl border-2 border-[#E5E5E5] p-4">
-              <h3 className="text-base font-black text-[#3C3C3C] mb-1">📦 Piezas Disponibles</h3>
-              <p className="text-sm text-gray-500 font-medium mb-3">👆 Toca una pieza para agregarla a tu robot</p>
-              <div className="flex gap-2 overflow-x-auto pb-2 mb-3 -mx-1 px-1">
+            <div className="station-panel p-4">
+              <h3 className="text-base font-black text-white mb-1 relative z-10">📦 Piezas Disponibles</h3>
+              <p className="text-sm text-violet-300/60 font-medium mb-3 relative z-10">👆 Toca una pieza para agregarla a tu robot</p>
+              <div className="flex gap-2 overflow-x-auto pb-2 mb-3 -mx-1 px-1 relative z-10">
                 {partCategories.map(cat => {
                   const catEmoji = { 'Chasis': '📦', 'Motores': '⚙️', 'Ruedas': '🔵', 'Sensores': '👁️', 'Control': '🧠', 'Energía': '🔋', 'Otros': '🔧' };
                   return (
                     <button key={cat} onClick={() => setPartCat(cat)}
-                      className={`whitespace-nowrap px-3 py-2 rounded-full text-xs font-black transition active:scale-95 flex items-center gap-1
-                        ${partCat === cat ? 'bg-[#CE82FF] text-white shadow-md border-b-2 border-[#A855F7]' : 'bg-[#F7F7F7] text-[#777] hover:bg-[#E5E5E5]'}`}>
+                      className={`whitespace-nowrap px-3 py-2 rounded-full text-xs font-black transition active:scale-95 flex items-center gap-1 border
+                        ${partCat === cat ? 'bg-violet-500/30 text-white border-violet-400/50 shadow-lg shadow-violet-500/20' : 'bg-white/5 text-violet-300/60 border-white/10 hover:bg-white/10'}`}>
                       {catEmoji[cat] || '📦'} {cat}
                     </button>
                   );
@@ -3131,11 +3146,11 @@ export default function RobotSimulator({ onBack }) {
                         addPartToWorkspace(part);
                       }
                     }}
-                    className="flex flex-col items-center p-3 bg-white rounded-2xl border-2 border-gray-200 cursor-grab active:cursor-grabbing hover:border-violet-400 hover:shadow-lg transition active:scale-95 group"
+                    className="flex flex-col items-center p-3 bg-white/5 rounded-2xl border border-violet-400/20 cursor-grab active:cursor-grabbing hover:border-violet-400/50 hover:bg-violet-500/10 hover:shadow-lg hover:shadow-violet-500/10 transition active:scale-95 group"
                   >
                     <PartSVG partId={part.svg} size={60} />
-                    <span className="text-xs font-black text-gray-700 mt-2 text-center leading-tight">{part.name}</span>
-                    <span className="text-[10px] text-gray-400 font-bold mt-0.5">{part.cat}</span>
+                    <span className="text-xs font-black text-violet-200 mt-2 text-center leading-tight">{part.name}</span>
+                    <span className="text-[10px] text-violet-400/50 font-bold mt-0.5">{part.cat}</span>
                   </div>
                 ))}
               </div>
@@ -3147,12 +3162,12 @@ export default function RobotSimulator({ onBack }) {
         {phase === 'program' && (
           <div className="space-y-4">
             {/* Kid-friendly intro */}
-            <div className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-2xl p-4 border-2 border-blue-100">
-              <div className="flex items-start gap-3">
+            <div className="station-panel p-4">
+              <div className="flex items-start gap-3 relative z-10">
                 <div className="text-3xl animate-bounce">💻</div>
                 <div>
-                  <h3 className="text-base font-black text-blue-700">¡Programa tu Robot!</h3>
-                  <p className="text-sm text-blue-600 mt-1">
+                  <h3 className="text-base font-black text-cyan-300">¡Programa tu Robot!</h3>
+                  <p className="text-sm text-violet-300/70 mt-1">
                     Agrega instrucciones para decirle a tu robot qué hacer.
                     Es como darle una receta: primero haz esto, luego aquello...
                   </p>
@@ -3161,23 +3176,23 @@ export default function RobotSimulator({ onBack }) {
             </div>
 
             {/* Current program */}
-            <div className="bg-white rounded-2xl border-2 border-[#E5E5E5] p-4">
-              <div className="flex justify-between items-center mb-3">
-                <h3 className="text-base font-black text-[#3C3C3C] flex items-center">
+            <div className="station-panel p-4">
+              <div className="flex justify-between items-center mb-3 relative z-10">
+                <h3 className="text-base font-black text-white flex items-center">
                   📝 Instrucciones del Robot
-                  <span className="ml-2 text-xs font-black text-[#CE82FF] bg-[#F3E8FF] px-2.5 py-1 rounded-full">{program.length} pasos</span>
+                  <span className="ml-2 text-xs font-black text-violet-300 bg-violet-500/20 px-2.5 py-1 rounded-full border border-violet-400/20">{program.length} pasos</span>
                 </h3>
                 {program.length > 0 && (
-                  <button onClick={() => setProgram([])} className="text-xs font-black text-[#FF4B4B] bg-[#FFE1E1] px-3 py-1.5 rounded-full hover:bg-[#FFD0D0] transition flex items-center">
+                  <button onClick={() => setProgram([])} className="text-xs font-black text-red-400 bg-red-500/15 border border-red-400/30 px-3 py-1.5 rounded-full hover:bg-red-500/25 transition flex items-center">
                     <Trash2 size={12} className="mr-1"/> Borrar Todo
                   </button>
                 )}
               </div>
               {program.length === 0 ? (
-                <div className="text-center py-8 bg-gray-50 rounded-xl border-2 border-dashed border-gray-200">
+                <div className="text-center py-8 bg-white/5 rounded-xl border border-dashed border-violet-400/20 relative z-10">
                   <span className="text-5xl block mb-3">📝</span>
-                  <p className="text-sm font-bold text-gray-500">¡Tu robot no tiene instrucciones!</p>
-                  <p className="text-xs text-gray-400 mt-1">Agrega bloques de abajo para enseñarle qué hacer 👇</p>
+                  <p className="text-sm font-bold text-violet-300">¡Tu robot no tiene instrucciones!</p>
+                  <p className="text-xs text-violet-400/50 mt-1">Agrega bloques de abajo para enseñarle qué hacer 👇</p>
                 </div>
               ) : (
                 <div className="space-y-2 max-h-[300px] overflow-y-auto pr-1">
@@ -3207,21 +3222,21 @@ export default function RobotSimulator({ onBack }) {
             </div>
 
             {/* Programming tip */}
-            <div className="bg-yellow-50 rounded-2xl border-2 border-yellow-200 p-4">
-              <h4 className="text-sm font-black text-yellow-700 mb-1 flex items-center gap-1">💡 Consejo</h4>
-              <p className="text-sm text-yellow-700">
+            <div className="station-panel p-4">
+              <h4 className="text-sm font-black text-amber-300 mb-1 flex items-center gap-1 relative z-10">💡 Consejo</h4>
+              <p className="text-sm text-violet-300/70 relative z-10">
                 {PROGRAM_TIPS[program.length % PROGRAM_TIPS.length]}
               </p>
             </div>
 
             {/* Code preview */}
             {program.length > 0 && (
-              <div className="bg-gray-900 p-4 rounded-2xl border-2 border-gray-700">
-                <h3 className="text-sm font-bold text-gray-300 mb-2 flex items-center">
+              <div className="station-panel p-4 overflow-hidden">
+                <h3 className="text-sm font-bold text-green-300 mb-2 flex items-center relative z-10">
                   <Zap size={14} className="mr-1.5 text-green-400"/> Así se ve en código real
                 </h3>
-                <p className="text-xs text-gray-500 mb-3">Esto es lo que un programador escribe en su computadora:</p>
-                <pre className="text-xs text-green-400 font-mono overflow-x-auto leading-relaxed">
+                <p className="text-xs text-violet-400/50 mb-3 relative z-10">Esto es lo que un programador escribe en su computadora:</p>
+                <pre className="text-xs text-green-400 font-mono overflow-x-auto leading-relaxed relative z-10">
 {`void setup() {
   Serial.begin(9600);
   // Configurar pines...
@@ -3254,7 +3269,7 @@ ${program.map(b => `  ${b.code}`).join('\n')}
                 {/* Reset upload */}
                 {uploadProgress >= 100 && (
                   <button onClick={resetUpload}
-                    className="w-full py-3 bg-gray-100 text-gray-600 text-sm font-bold rounded-xl hover:bg-gray-200 transition active:scale-[0.97] flex items-center justify-center gap-1.5">
+                    className="w-full py-3 bg-white/5 border border-violet-400/20 text-violet-300 text-sm font-bold rounded-xl hover:bg-white/10 transition active:scale-[0.97] flex items-center justify-center gap-1.5">
                     <RotateCcw size={14}/> Cargar de Nuevo
                   </button>
                 )}
@@ -3262,16 +3277,16 @@ ${program.map(b => `  ${b.code}`).join('\n')}
             )}
 
             {/* Block palette */}
-            <div className="bg-white rounded-2xl border-2 border-[#E5E5E5] p-4">
-              <h3 className="text-base font-black text-[#3C3C3C] mb-1">🧩 Bloques de Instrucciones</h3>
-              <p className="text-sm text-gray-500 font-medium mb-3">👆 Toca un bloque para agregarlo al programa</p>
-              <div className="flex gap-2 overflow-x-auto pb-2 mb-3 -mx-1 px-1">
+            <div className="station-panel p-4">
+              <h3 className="text-base font-black text-white mb-1 relative z-10">🧩 Bloques de Instrucciones</h3>
+              <p className="text-sm text-violet-300/60 font-medium mb-3 relative z-10">👆 Toca un bloque para agregarlo al programa</p>
+              <div className="flex gap-2 overflow-x-auto pb-2 mb-3 -mx-1 px-1 relative z-10">
                 {blockCategories.map(cat => {
                   const catEmoji = { 'Movimiento': '🏃', 'Sensores': '👁️', 'Pregunta': '❓', 'Control': '🎮', 'Acción': '⚡' };
                   return (
                     <button key={cat} onClick={() => setBlockCat(cat)}
-                      className={`whitespace-nowrap px-3 py-2 rounded-full text-xs font-black transition active:scale-95 flex items-center gap-1
-                        ${blockCat === cat ? 'bg-[#CE82FF] text-white shadow-md border-b-2 border-[#A855F7]' : 'bg-[#F7F7F7] text-[#777] hover:bg-[#E5E5E5]'}`}>
+                      className={`whitespace-nowrap px-3 py-2 rounded-full text-xs font-black transition active:scale-95 flex items-center gap-1 border
+                        ${blockCat === cat ? 'bg-violet-500/30 text-white border-violet-400/50 shadow-lg shadow-violet-500/20' : 'bg-white/5 text-violet-300/60 border-white/10 hover:bg-white/10'}`}>
                       {catEmoji[cat] || '📦'} {cat}
                     </button>
                   );
@@ -3297,12 +3312,12 @@ ${program.map(b => `  ${b.code}`).join('\n')}
         {phase === 'simulate' && (
           <div className="space-y-4">
             {/* Kid-friendly intro */}
-            <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-4 border-2 border-green-100">
-              <div className="flex items-start gap-3">
+            <div className="station-panel p-4">
+              <div className="flex items-start gap-3 relative z-10">
                 <div className="text-3xl animate-bounce">▶️</div>
                 <div>
-                  <h3 className="text-base font-black text-green-700">¡Mira tu Robot en Acción!</h3>
-                  <p className="text-sm text-green-600 mt-1">
+                  <h3 className="text-base font-black text-green-300">¡Mira tu Robot en Acción!</h3>
+                  <p className="text-sm text-violet-300/70 mt-1">
                     {manualMode 
                       ? '🎮 ¡Tú controlas el robot! Usa los botones o el teclado para moverlo.' 
                       : '🤖 El robot sigue las instrucciones que le programaste. ¡Observa qué pasa!'}
@@ -3314,18 +3329,18 @@ ${program.map(b => `  ${b.code}`).join('\n')}
             {/* Mode toggle - bigger and clearer */}
             <div className="flex gap-3">
               <button onClick={() => { stopManualMode(); }} 
-                className={`flex-1 py-3.5 rounded-2xl text-sm font-black transition active:scale-95 flex flex-col items-center justify-center gap-1
-                  ${!manualMode ? 'bg-indigo-600 text-white shadow-lg border-b-4 border-indigo-800' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'}`}>
+                className={`flex-1 py-3.5 rounded-2xl text-sm font-black transition active:scale-95 flex flex-col items-center justify-center gap-1 border
+                  ${!manualMode ? 'bg-indigo-500/30 text-white border-indigo-400/50 shadow-lg shadow-indigo-500/20' : 'bg-white/5 text-violet-300/50 border-white/10 hover:bg-white/10'}`}>
                 <Cpu size={20}/>
                 <span>Automático</span>
-                <span className={`text-[10px] font-medium ${!manualMode ? 'text-indigo-200' : 'text-gray-400'}`}>El robot piensa solo</span>
+                <span className={`text-[10px] font-medium ${!manualMode ? 'text-indigo-300' : 'text-violet-400/40'}`}>El robot piensa solo</span>
               </button>
               <button onClick={startManualMode}
-                className={`flex-1 py-3.5 rounded-2xl text-sm font-black transition active:scale-95 flex flex-col items-center justify-center gap-1
-                  ${manualMode ? 'bg-emerald-600 text-white shadow-lg border-b-4 border-emerald-800' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'}`}>
+                className={`flex-1 py-3.5 rounded-2xl text-sm font-black transition active:scale-95 flex flex-col items-center justify-center gap-1 border
+                  ${manualMode ? 'bg-emerald-500/30 text-white border-emerald-400/50 shadow-lg shadow-emerald-500/20' : 'bg-white/5 text-violet-300/50 border-white/10 hover:bg-white/10'}`}>
                 <Gamepad2 size={20}/>
                 <span>Tú lo Controlas</span>
-                <span className={`text-[10px] font-medium ${manualMode ? 'text-emerald-200' : 'text-gray-400'}`}>Como un videojuego</span>
+                <span className={`text-[10px] font-medium ${manualMode ? 'text-emerald-300' : 'text-violet-400/40'}`}>Como un videojuego</span>
               </button>
             </div>
 
@@ -3345,43 +3360,45 @@ ${program.map(b => `  ${b.code}`).join('\n')}
             {/* Manual D-Pad */}
             {manualMode && (
               <div className="flex justify-center">
-                <div className="bg-gray-900 rounded-2xl p-4 border-2 border-gray-700">
+                <div className="station-panel p-4">
+                  <div className="relative z-10">
                   <VirtualDPad player={1} onMove={handleManualMove} onStop={handleManualStop} />
-                  <p className="text-xs text-gray-400 text-center mt-3 font-bold">
+                  <p className="text-xs text-violet-400/50 text-center mt-3 font-bold">
                     🎮 Toca las flechas o usa WASD en tu teclado
                   </p>
+                  </div>
                 </div>
               </div>
             )}
 
             {/* Checklist (before start) - only in auto mode - more kid-friendly */}
             {!manualMode && !simRunning && simLog.length === 0 && (
-              <div className="bg-white p-4 rounded-2xl border-2 border-[#E5E5E5]">
-                <h3 className="text-base font-black text-[#3C3C3C] mb-1">🚀 ¿Listo para Despegar?</h3>
-                <p className="text-sm text-gray-500 mb-3">Revisemos que tu robot tenga todo lo necesario:</p>
-                <div className="space-y-2.5">
+              <div className="station-panel p-4">
+                <h3 className="text-base font-black text-white mb-1 relative z-10">🚀 ¿Listo para Despegar?</h3>
+                <p className="text-sm text-violet-300/60 mb-3 relative z-10">Revisemos que tu robot tenga todo lo necesario:</p>
+                <div className="space-y-2.5 relative z-10">
                   {[
                     { ok: hasController, label: '🧠 Cerebro (Arduino)', desc: 'Para pensar y decidir', emoji: '🧠' },
                     { ok: hasBattery, label: '🔋 Energía (Batería)', desc: 'Para tener poder', emoji: '🔋' },
                     { ok: hasMotor, label: '⚙️ Músculos (Motor)', desc: 'Para moverse', emoji: '⚙️' },
                     { ok: program.length > 0, label: `📝 Instrucciones (${program.length} pasos)`, desc: 'Lo que el robot hará', emoji: '📝' },
                   ].map((item, i) => (
-                    <div key={i} className={`flex items-center gap-3 p-3 rounded-xl text-sm font-bold transition ${item.ok ? 'bg-green-50 border-2 border-green-200' : 'bg-red-50 border-2 border-red-200'}`}>
+                    <div key={i} className={`flex items-center gap-3 p-3 rounded-xl text-sm font-bold transition border ${item.ok ? 'bg-green-500/10 border-green-400/30' : 'bg-red-500/10 border-red-400/30'}`}>
                       <span className="text-xl">{item.ok ? '✅' : '❌'}</span>
                       <div>
-                        <span className={item.ok ? 'text-green-700' : 'text-red-600'}>{item.label}</span>
-                        <p className={`text-xs font-medium ${item.ok ? 'text-green-600' : 'text-red-500'}`}>{item.desc}</p>
+                        <span className={item.ok ? 'text-green-300' : 'text-red-400'}>{item.label}</span>
+                        <p className={`text-xs font-medium ${item.ok ? 'text-green-400/70' : 'text-red-400/70'}`}>{item.desc}</p>
                       </div>
                     </div>
                   ))}
                 </div>
                 {!canSimulate && (
-                  <div className="mt-4 bg-orange-50 border-2 border-orange-200 rounded-xl p-3 text-center">
+                  <div className="mt-4 bg-amber-500/10 border border-amber-400/30 rounded-xl p-3 text-center relative z-10">
                     <span className="text-2xl">🤔</span>
-                    <p className="text-sm text-orange-700 font-bold mt-1">
+                    <p className="text-sm text-amber-300 font-bold mt-1">
                       Tu robot necesita más cosas para funcionar
                     </p>
-                    <p className="text-xs text-orange-600 mt-0.5">
+                    <p className="text-xs text-amber-400/60 mt-0.5">
                       Regresa a "Armar" o "Programar" para completarlo
                     </p>
                   </div>
@@ -3391,12 +3408,12 @@ ${program.map(b => `  ${b.code}`).join('\n')}
 
             {/* Simulation Log - kid-friendly */}
             {!manualMode && simLog.length > 0 && (
-              <div className="bg-gray-900 rounded-2xl border-2 border-gray-700 overflow-hidden">
-                <div className="flex justify-between items-center px-4 py-3 bg-gray-800 border-b border-gray-700">
-                  <h3 className="text-sm font-bold text-gray-300 flex items-center">
+              <div className="station-panel overflow-hidden">
+                <div className="flex justify-between items-center px-4 py-3 bg-white/5 border-b border-violet-400/20 relative z-10">
+                  <h3 className="text-sm font-bold text-violet-300 flex items-center">
                     <Zap size={14} className="mr-1.5 text-green-400"/> 📺 Lo que hace tu Robot
                   </h3>
-                  <button onClick={resetSim} className="text-xs font-bold text-gray-400 bg-gray-700 px-3 py-1.5 rounded-lg hover:bg-gray-600 transition flex items-center">
+                  <button onClick={resetSim} className="text-xs font-bold text-violet-400/60 bg-white/5 border border-violet-400/20 px-3 py-1.5 rounded-lg hover:bg-white/10 transition flex items-center">
                     <RotateCcw size={12} className="mr-1"/> Reiniciar
                   </button>
                 </div>
@@ -3423,13 +3440,13 @@ ${program.map(b => `  ${b.code}`).join('\n')}
             )}
 
             {/* Parts summary - more visual */}
-            <div className="bg-white p-4 rounded-2xl border-2 border-[#E5E5E5]">
-              <h3 className="text-sm font-black text-gray-700 mb-2">🔧 Piezas de tu Robot:</h3>
-              <div className="flex flex-wrap gap-2">
+            <div className="station-panel p-4">
+              <h3 className="text-sm font-black text-violet-300 mb-2 relative z-10">🔧 Piezas de tu Robot:</h3>
+              <div className="flex flex-wrap gap-2 relative z-10">
                 {workspace.map((p) => (
-                  <div key={p.uid} className="flex items-center gap-2 bg-purple-50 border border-purple-200 rounded-xl px-3 py-1.5">
+                  <div key={p.uid} className="flex items-center gap-2 bg-violet-500/10 border border-violet-400/20 rounded-xl px-3 py-1.5">
                     <PartSVG partId={p.svg} size={24}/>
-                    <span className="text-xs font-bold text-purple-700">{p.name}</span>
+                    <span className="text-xs font-bold text-violet-200">{p.name}</span>
                   </div>
                 ))}
               </div>
@@ -3442,34 +3459,34 @@ ${program.map(b => `  ${b.code}`).join('\n')}
           <div className="space-y-4">
             {/* Battle info card - kid-friendly */}
             {!battleActive && !winner && countdown === 0 && (
-              <div className="bg-gradient-to-b from-purple-50 to-white border-2 border-purple-200 p-5 rounded-2xl text-center">
-                <div className="text-6xl mb-3 animate-bounce">⚔️</div>
-                <h3 className="text-xl font-black text-[#3C3C3C]">¡Modo Batalla!</h3>
-                <p className="text-sm text-gray-600 mt-2 mb-5">Juega con un amigo: ¡cada uno controla un robot y tiene que empujar al otro fuera!</p>
+              <div className="station-panel p-5 text-center">
+                <div className="text-6xl mb-3 animate-bounce relative z-10">⚔️</div>
+                <h3 className="text-xl font-black text-white relative z-10">¡Modo Batalla!</h3>
+                <p className="text-sm text-violet-300/70 mt-2 mb-5 relative z-10">Juega con un amigo: ¡cada uno controla un robot y tiene que empujar al otro fuera!</p>
                 
-                <div className="grid grid-cols-2 gap-4 mb-5">
-                  <div className="bg-blue-50 border-3 border-blue-400 p-4 rounded-2xl shadow-md">
+                <div className="grid grid-cols-2 gap-4 mb-5 relative z-10">
+                  <div className="bg-blue-500/15 border border-blue-400/30 p-4 rounded-2xl">
                     <div className="text-3xl mb-2">🔵</div>
-                    <div className="text-sm font-black text-blue-600">Jugador 1</div>
-                    <div className="bg-blue-100 rounded-lg p-2 mt-2">
-                      <p className="text-xs font-bold text-blue-700">🎮 Controles:</p>
-                      <p className="text-xs text-blue-600 mt-1">Teclas <span className="font-mono bg-blue-200 px-1 rounded">W</span> <span className="font-mono bg-blue-200 px-1 rounded">A</span> <span className="font-mono bg-blue-200 px-1 rounded">S</span> <span className="font-mono bg-blue-200 px-1 rounded">D</span></p>
-                      <p className="text-xs text-blue-600">o D-Pad izquierdo</p>
+                    <div className="text-sm font-black text-blue-300">Jugador 1</div>
+                    <div className="bg-blue-500/10 border border-blue-400/20 rounded-lg p-2 mt-2">
+                      <p className="text-xs font-bold text-blue-300">🎮 Controles:</p>
+                      <p className="text-xs text-blue-300/70 mt-1">Teclas <span className="font-mono bg-blue-500/20 px-1 rounded">W</span> <span className="font-mono bg-blue-500/20 px-1 rounded">A</span> <span className="font-mono bg-blue-500/20 px-1 rounded">S</span> <span className="font-mono bg-blue-500/20 px-1 rounded">D</span></p>
+                      <p className="text-xs text-blue-300/70">o D-Pad izquierdo</p>
                     </div>
                   </div>
-                  <div className="bg-red-50 border-3 border-red-400 p-4 rounded-2xl shadow-md">
+                  <div className="bg-red-500/15 border border-red-400/30 p-4 rounded-2xl">
                     <div className="text-3xl mb-2">🔴</div>
-                    <div className="text-sm font-black text-red-600">Jugador 2</div>
-                    <div className="bg-red-100 rounded-lg p-2 mt-2">
-                      <p className="text-xs font-bold text-red-700">🎮 Controles:</p>
-                      <p className="text-xs text-red-600 mt-1">Teclas <span className="font-mono bg-red-200 px-1 rounded">↑</span> <span className="font-mono bg-red-200 px-1 rounded">←</span> <span className="font-mono bg-red-200 px-1 rounded">↓</span> <span className="font-mono bg-red-200 px-1 rounded">→</span></p>
-                      <p className="text-xs text-red-600">o D-Pad derecho</p>
+                    <div className="text-sm font-black text-red-300">Jugador 2</div>
+                    <div className="bg-red-500/10 border border-red-400/20 rounded-lg p-2 mt-2">
+                      <p className="text-xs font-bold text-red-300">🎮 Controles:</p>
+                      <p className="text-xs text-red-300/70 mt-1">Teclas <span className="font-mono bg-red-500/20 px-1 rounded">↑</span> <span className="font-mono bg-red-500/20 px-1 rounded">←</span> <span className="font-mono bg-red-500/20 px-1 rounded">↓</span> <span className="font-mono bg-red-500/20 px-1 rounded">→</span></p>
+                      <p className="text-xs text-red-300/70">o D-Pad derecho</p>
                     </div>
                   </div>
                 </div>
                 
-                <div className="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-3 mb-4">
-                  <p className="text-sm text-yellow-700 font-bold flex items-center justify-center gap-1">
+                <div className="bg-amber-500/10 border border-amber-400/30 rounded-xl p-3 mb-4 relative z-10">
+                  <p className="text-sm text-amber-300 font-bold flex items-center justify-center gap-1">
                     🏟️ {template?.arena === 'sumo' ? '¡Saca al rival del ring para ganar!' : '¡Empuja al rival fuera del campo!'}
                   </p>
                   <p className="text-xs text-yellow-600 mt-1">⏱️ Tienes 30 segundos por ronda</p>
@@ -3544,49 +3561,49 @@ ${program.map(b => `  ${b.code}`).join('\n')}
         <div className="max-w-xl mx-auto">
           {phase === 'instructions' && (
             <button onClick={() => setPhase('build')}
-              className="w-full py-4 btn-3d btn-3d-purple rounded-2xl text-base font-black flex items-center justify-center gap-2 shadow-xl">
+              className="w-full py-4 rounded-2xl text-base font-black flex items-center justify-center gap-2 shadow-xl bg-violet-500/30 border border-violet-400/50 text-white shadow-violet-500/20 active:scale-[0.98] transition">
               🔧 Ir a Armar el Robot <ChevronRight size={20}/>
             </button>
           )}
           {phase === 'build' && (
             <button onClick={() => setPhase('program')}
-              className="w-full py-4 btn-3d btn-3d-purple rounded-2xl text-base font-black flex items-center justify-center gap-2 shadow-xl">
+              className="w-full py-4 rounded-2xl text-base font-black flex items-center justify-center gap-2 shadow-xl bg-violet-500/30 border border-violet-400/50 text-white shadow-violet-500/20 active:scale-[0.98] transition">
               💻 Siguiente: ¡Programar! <ChevronRight size={20}/>
             </button>
           )}
           {phase === 'program' && (
             <button onClick={() => setPhase('simulate')}
-              className="w-full py-4 btn-3d btn-3d-green rounded-2xl text-base font-black flex items-center justify-center gap-2 shadow-xl">
+              className="w-full py-4 rounded-2xl text-base font-black flex items-center justify-center gap-2 shadow-xl bg-green-500/30 border border-green-400/50 text-white shadow-green-500/20 active:scale-[0.98] transition">
               ▶️ Siguiente: ¡Ver en Acción! <ChevronRight size={20}/>
             </button>
           )}
           {phase === 'simulate' && !manualMode && !simRunning && (
             <button onClick={runSimulation} disabled={!canSimulate}
-              className={`w-full py-4 rounded-2xl text-base font-black flex items-center justify-center gap-2 shadow-xl
-                ${canSimulate ? 'btn-3d btn-3d-green' : 'bg-[#E5E5E5] text-[#AFAFAF] cursor-not-allowed'}`}>
+              className={`w-full py-4 rounded-2xl text-base font-black flex items-center justify-center gap-2 shadow-xl active:scale-[0.98] transition border
+                ${canSimulate ? 'bg-green-500/30 border-green-400/50 text-white shadow-green-500/20' : 'bg-white/5 border-white/10 text-violet-400/40 cursor-not-allowed'}`}>
               <Play size={20}/> {canSimulate ? '🚀 ¡Arrancar Robot!' : '⚠️ Falta completar el robot'}
             </button>
           )}
           {phase === 'simulate' && !manualMode && simRunning && (
             <button onClick={stopSim}
-              className="w-full py-4 btn-3d btn-3d-red rounded-2xl text-base font-black flex items-center justify-center gap-2 shadow-xl">
+              className="w-full py-4 rounded-2xl text-base font-black flex items-center justify-center gap-2 shadow-xl bg-red-500/30 border border-red-400/50 text-white shadow-red-500/20 active:scale-[0.98] transition">
               <Pause size={20}/> ⏹️ Detener Robot
             </button>
           )}
           {phase === 'simulate' && manualMode && (
-            <div className="bg-emerald-100 border-2 border-emerald-300 rounded-2xl py-3 px-4 text-center shadow-lg">
-              <span className="text-sm font-black text-emerald-700">🎮 ¡Estás controlando el robot! Usa las flechas del D-Pad</span>
+            <div className="bg-emerald-500/15 border border-emerald-400/40 rounded-2xl py-3 px-4 text-center shadow-lg">
+              <span className="text-sm font-black text-emerald-300">🎮 ¡Estás controlando el robot! Usa las flechas del D-Pad</span>
             </div>
           )}
           {phase === 'battle' && !battleActive && !winner && countdown === 0 && (
             <button onClick={startBattle}
-              className="w-full py-4 btn-3d btn-3d-purple rounded-2xl text-base font-black flex items-center justify-center gap-2 shadow-xl">
+              className="w-full py-4 rounded-2xl text-base font-black flex items-center justify-center gap-2 shadow-xl bg-violet-500/30 border border-violet-400/50 text-white shadow-violet-500/20 active:scale-[0.98] transition">
               <Users size={20}/> ⚔️ ¡Iniciar Batalla!
             </button>
           )}
           {phase === 'battle' && battleActive && (
             <button onClick={resetBattle}
-              className="w-full py-4 btn-3d btn-3d-red rounded-2xl text-base font-black flex items-center justify-center gap-2 shadow-xl">
+              className="w-full py-4 rounded-2xl text-base font-black flex items-center justify-center gap-2 shadow-xl bg-red-500/30 border border-red-400/50 text-white shadow-red-500/20 active:scale-[0.98] transition">
               <Pause size={20}/> ⏹️ Detener Batalla
             </button>
           )}
