@@ -3,7 +3,7 @@ import { Search, Volume2, VolumeX, Lightbulb, ChevronDown } from 'lucide-react';
 import { RobotAvatar } from '../Onboarding';
 
 // --- BASE DE DATOS DEL GLOSARIO (52 términos educativos) ---
-const GLOSSARY_TERMS = [
+export const GLOSSARY_TERMS = [
   // === ELECTRICIDAD ===
   { id: 'g1', term: 'Electrón', category: 'Electricidad', emoji: '⚡', definition: 'Partícula diminuta con carga negativa que se mueve por los cables y crea la electricidad. ¡Son como mini mensajeros de energía!', example: 'Cuando enciendes una linterna, millones de electrones se mueven por los cables desde la pila hasta el foco.' },
   { id: 'g2', term: 'Voltaje (V)', category: 'Electricidad', emoji: '🔋', definition: 'Es la "fuerza" o empuje que hace que los electrones se muevan. Se mide en Voltios (V). Es como la altura de un tobogán de agua.', example: 'Una pila AA tiene 1.5V, un enchufe de casa tiene 120V o 220V (¡mucho más fuerte y peligroso!).' },
@@ -423,5 +423,4 @@ const GlossaryScreen = ({ robotConfig, robotName = 'Robi' }) => {
   );
 };
 
-export { GlossaryScreen, GLOSSARY_TERMS };
 export default GlossaryScreen;

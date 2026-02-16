@@ -1129,9 +1129,14 @@ const ChallengeSelector = ({ challenges, completedChallenges, onSelect, onBack }
 // MAIN COMPONENT: Circuit Builder
 // ============================================
 
-const CircuitBuilder = ({ onBack }) => {
-  const [view, setView] = useState('challenges');
-  const [currentChallenge, setCurrentChallenge] = useState(null);
+const CircuitBuilder = ({ onBack, initialChallengeId }) => {
+  const [view, setView] = useState(() => initialChallengeId ? 'builder' : 'challenges');
+  const [currentChallenge, setCurrentChallenge] = useState(() => {
+    if (initialChallengeId) {
+      return CHALLENGES.find(c => c.id === initialChallengeId) || null;
+    }
+    return null;
+  });
   const [completedChallenges, setCompletedChallenges] = useState([1, 2]);
   const [placedComponents, setPlacedComponents] = useState([]);
   const [wires, setWires] = useState([]);
