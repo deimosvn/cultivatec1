@@ -4,9 +4,9 @@
 // ================================================================
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { ArrowLeft, Trophy, Medal, Crown, Users, Globe, RefreshCw, Star, Zap, ChevronUp, ChevronDown } from 'lucide-react';
+import { ArrowLeft, Trophy, Medal, Crown, Users, Globe, RefreshCw, Star, Zap, ChevronUp, ChevronDown, TrendingUp, Flame, Target } from 'lucide-react';
 import { getGlobalRanking, onRankingChange, getFriendsList } from '../firebase/firestore';
-import { calculateLevel } from '../firebase/firestore';
+import { calculateLevel, LEVEL_THRESHOLDS } from '../firebase/firestore';
 import { RobotMini, RobotAvatar } from '../Onboarding';
 
 // Robot avatar for ranking — uses the real personalized robot
@@ -67,7 +67,24 @@ const RankingEntry = ({ player, rank, isCurrentUser, index }) => {
           <div className="flex items-center gap-2 mt-0.5">
             <span className="text-[10px] font-bold text-[#AFAFAF]">{lv.emoji} Nv.{lv.level}</span>
             <span className="text-[10px] font-bold text-[#CDCDCD]">·</span>
-            <span className="text-[10px] font-bold text-[#AFAFAF]">📚 {player.modulesCompleted || 0} módulos</span>
+            <span className="text-[10px] font-bold text-[#AFAFAF] truncate">{lv.title}</span>
+          </div>
+          {/* XP Progress bar */}
+          <div className="mt-1 flex items-center gap-1.5">
+            <div className="flex-grow h-1.5 bg-[#E5E5E5] rounded-full overflow-hidden">
+              <div
+                className="h-full rounded-full transition-all duration-500"
+                style={{
+                  width: `${lv.progress * 100}%`,
+                  background: lv.isMaxLevel
+                    ? 'linear-gradient(90deg, #FFC800, #FF9600)'
+                    : 'linear-gradient(90deg, #3B82F6, #2563EB)',
+                }}
+              />
+            </div>
+            <span className="text-[8px] font-bold text-[#CDCDCD] flex-shrink-0">
+              {lv.isMaxLevel ? 'MAX' : `${Math.round(lv.progress * 100)}%`}
+            </span>
           </div>
         </div>
         <div className="text-right flex-shrink-0">
@@ -162,16 +179,22 @@ const RankingScreen = ({ onBack, currentUserId, currentUserProfile }) => {
         </div>
 
         {/* User rank card */}
-        {currentUserRank && (
+        {currentUserRank && (() => {
+          const myLv = calculateLevel(currentUserProfile?.totalPoints || 0);
+          return (
           <div className="px-4 -mt-6 relative z-10">
             <div className="bg-white rounded-2xl p-4 border-2 border-[#2563EB]/20 shadow-lg">
               <div className="flex items-center gap-3">
                 <RankBadge rank={currentUserRank.rank} />
-                <div className="flex-grow">
+                <div className="flex-grow min-w-0">
                   <p className="text-sm font-black text-[#3C3C3C]">{currentUserProfile?.username || 'Tú'}</p>
                   <p className="text-[10px] font-bold text-[#AFAFAF]">Posición #{currentUserRank.rank} de {currentRanking.length}</p>
+                  <div className="flex items-center gap-1.5 mt-1">
+                    <span className="text-[10px] font-bold text-[#2563EB]">{myLv.emoji} Nv.{myLv.level}</span>
+                    <span className="text-[10px] font-bold text-[#94A3B8]">{myLv.title}</span>
+                  </div>
                 </div>
-                <div className="text-right">
+                <div className="text-right flex-shrink-0">
                   <div className="flex items-center gap-1">
                     <Star size={14} className="text-[#FFC800]" />
                     <span className="text-lg font-black text-[#2563EB]">{(currentUserProfile?.totalPoints || 0).toLocaleString()}</span>
@@ -179,9 +202,38 @@ const RankingScreen = ({ onBack, currentUserId, currentUserProfile }) => {
                   <span className="text-[9px] font-bold text-[#AFAFAF]">XP Totales</span>
                 </div>
               </div>
+              {/* Level progress bar */}
+              <div className="mt-3 pt-3 border-t border-[#E5E5E5]">
+                <div className="flex items-center justify-between mb-1.5">
+                  <span className="text-[10px] font-bold text-[#777]">Nv.{myLv.level}</span>
+                  <span className="text-[10px] font-bold text-[#AFAFAF]">
+                    {myLv.isMaxLevel
+                      ? '¡Nivel máximo alcanzado!'
+                      : `${myLv.xpInLevel.toLocaleString()} / ${myLv.xpNeeded.toLocaleString()} XP`}
+                  </span>
+                  <span className="text-[10px] font-bold text-[#777]">{myLv.isMaxLevel ? `Nv.${myLv.level}` : `Nv.${myLv.level + 1}`}</span>
+                </div>
+                <div className="w-full h-2.5 bg-[#E5E5E5] rounded-full overflow-hidden">
+                  <div
+                    className="h-full rounded-full transition-all duration-700 ease-out"
+                    style={{
+                      width: `${myLv.progress * 100}%`,
+                      background: myLv.isMaxLevel
+                        ? 'linear-gradient(90deg, #FFC800, #FF9600, #FFC800)'
+                        : 'linear-gradient(90deg, #3B82F6, #2563EB, #1E40AF)',
+                    }}
+                  />
+                </div>
+                {!myLv.isMaxLevel && (
+                  <p className="text-[9px] font-bold text-[#CDCDCD] text-center mt-1">
+                    Faltan {(myLv.xpNeeded - myLv.xpInLevel).toLocaleString()} XP para Nv.{myLv.level + 1}
+                  </p>
+                )}
+              </div>
             </div>
           </div>
-        )}
+          );
+        })()}
       </div>
 
       {/* Tabs + Refresh */}

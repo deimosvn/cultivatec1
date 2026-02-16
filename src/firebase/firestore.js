@@ -172,20 +172,70 @@ export const checkAndUpdateStreak = async (uid) => {
 };
 
 /**
- * Calcular nivel basado en puntos
+ * Sistema de niveles mejorado — 25 niveles con escala exponencial.
+ * Cada nivel requiere progresivamente más XP, haciéndolo más difícil subir.
+ * Contempla: módulos, quizzes, retos, problemas diarios, circuitos y programación.
  */
+const LEVEL_THRESHOLDS = [
+  { level: 1,  xp: 0,     title: 'Cadete Espacial',          emoji: '🚀' },
+  { level: 2,  xp: 30,    title: 'Aprendiz Novato',          emoji: '🌱' },
+  { level: 3,  xp: 80,    title: 'Explorador Curioso',       emoji: '🔍' },
+  { level: 4,  xp: 160,   title: 'Técnico Básico',           emoji: '🔧' },
+  { level: 5,  xp: 280,   title: 'Constructor Inicial',      emoji: '🏗️' },
+  { level: 6,  xp: 450,   title: 'Ingeniero Junior',         emoji: '⚙️' },
+  { level: 7,  xp: 680,   title: 'Programador Espacial',     emoji: '💻' },
+  { level: 8,  xp: 980,   title: 'Inventor Avanzado',        emoji: '💡' },
+  { level: 9,  xp: 1350,  title: 'Científico Digital',       emoji: '🔬' },
+  { level: 10, xp: 1800,  title: 'Maestro Robótico',         emoji: '🤖' },
+  { level: 11, xp: 2400,  title: 'Estratega Técnico',        emoji: '🎯' },
+  { level: 12, xp: 3150,  title: 'Comandante de Circuitos',  emoji: '⚡' },
+  { level: 13, xp: 4100,  title: 'Arquitecto de Sistemas',   emoji: '🧩' },
+  { level: 14, xp: 5300,  title: 'Capitán Estelar',          emoji: '🛡️' },
+  { level: 15, xp: 6800,  title: 'Élite Robótica',           emoji: '🏅' },
+  { level: 16, xp: 8700,  title: 'Visionario Tecnológico',   emoji: '👁️' },
+  { level: 17, xp: 11000, title: 'Almirante Espacial',       emoji: '⭐' },
+  { level: 18, xp: 14000, title: 'Genio Cuántico',           emoji: '🧠' },
+  { level: 19, xp: 17500, title: 'Leyenda Robótica',         emoji: '🏆' },
+  { level: 20, xp: 22000, title: 'Maestro Galáctico',        emoji: '🌌' },
+  { level: 21, xp: 28000, title: 'Oráculo Cibernético',      emoji: '🔮' },
+  { level: 22, xp: 35000, title: 'Titán Tecnológico',        emoji: '⛰️' },
+  { level: 23, xp: 44000, title: 'Emperador Estelar',        emoji: '👑' },
+  { level: 24, xp: 55000, title: 'Trascendente Cósmico',     emoji: '✨' },
+  { level: 25, xp: 70000, title: 'Omnisciente Galáctico',    emoji: '🌟' },
+];
+
 export const calculateLevel = (totalPoints) => {
-  if (totalPoints >= 500) return { level: 10, title: 'Leyenda Robótica', emoji: '🌟' };
-  if (totalPoints >= 400) return { level: 9, title: 'Gran Maestro', emoji: '🏅' };
-  if (totalPoints >= 320) return { level: 8, title: 'Experto Robótico', emoji: '🎖️' };
-  if (totalPoints >= 250) return { level: 7, title: 'Científico Digital', emoji: '🔬' };
-  if (totalPoints >= 200) return { level: 6, title: 'Maestro Robótico', emoji: '🏆' };
-  if (totalPoints >= 150) return { level: 5, title: 'Inventor Junior', emoji: '🛠️' };
-  if (totalPoints >= 100) return { level: 4, title: 'Ingeniero Junior', emoji: '🔧' };
-  if (totalPoints >= 50) return { level: 3, title: 'Aprendiz Avanzado', emoji: '⭐' };
-  if (totalPoints >= 20) return { level: 2, title: 'Explorador Curioso', emoji: '🌱' };
-  return { level: 1, title: 'Principiante', emoji: '🐣' };
+  let current = LEVEL_THRESHOLDS[0];
+  for (let i = LEVEL_THRESHOLDS.length - 1; i >= 0; i--) {
+    if (totalPoints >= LEVEL_THRESHOLDS[i].xp) {
+      current = LEVEL_THRESHOLDS[i];
+      break;
+    }
+  }
+  const nextIdx = LEVEL_THRESHOLDS.findIndex(t => t.level === current.level + 1);
+  const next = nextIdx >= 0 ? LEVEL_THRESHOLDS[nextIdx] : null;
+  const prevXp = current.xp;
+  const nextXp = next ? next.xp : current.xp;
+  const xpInLevel = totalPoints - prevXp;
+  const xpNeeded = next ? next.xp - prevXp : 0;
+  const progress = next ? Math.min(xpInLevel / xpNeeded, 1) : 1; // 0-1
+
+  return {
+    level: current.level,
+    title: current.title,
+    emoji: current.emoji,
+    maxLevel: LEVEL_THRESHOLDS.length,
+    currentXp: totalPoints,
+    levelXp: prevXp,        // XP al inicio de este nivel
+    nextLevelXp: nextXp,    // XP necesario para siguiente nivel
+    xpInLevel,              // XP acumulado en este nivel
+    xpNeeded,               // XP total necesario para subir
+    progress,               // 0-1 fracción de progreso
+    isMaxLevel: !next,
+  };
 };
+
+export { LEVEL_THRESHOLDS };
 
 // ================================================================
 // PROGRESO Y SCORES

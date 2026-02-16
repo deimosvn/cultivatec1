@@ -395,7 +395,11 @@ const CIRCUIT_PROBLEMS = [
     { id: 'cp_6', title: '🔋 Baterías en Combinación', difficulty: 3, emoji: '🔋', description: 'Tienes 4 baterías de 3V/1A. Necesitas energizar un sistema de 6V/2A.', question: '¿Cómo combinas las baterías para obtener 6V y 2A?', options: ['Todas en serie', 'Todas en paralelo', '2 pares en serie, luego esos pares en paralelo', 'No es posible'], correct: 2, explanation: '2 en serie = 6V/1A. Pones 2 de esos pares en paralelo = 6V/2A. Serie suma voltaje, paralelo suma corriente. ¡Combinación perfecta!' },
 ];
 
-const CircuitLabScreen = ({ onBack, onOpenFreeCircuitBuilder }) => {
+const DAILY_CIRCUIT_XP = 15;
+const DAILY_PROG_XP = 20;
+const CIRCUIT_PROBLEM_XP = 10;
+
+const CircuitLabScreen = ({ onBack, onOpenFreeCircuitBuilder, userId, userStats, setUserStats, onAwardXp }) => {
     const [tab, setTab] = useState('learn'); // 'learn' | 'problems' | 'daily' | 'concept_detail'
     const [selectedConcept, setSelectedConcept] = useState(null);
     const [selectedProblem, setSelectedProblem] = useState(null);
@@ -406,19 +410,30 @@ const CircuitLabScreen = ({ onBack, onOpenFreeCircuitBuilder }) => {
     });
     const [dailyAnswer, setDailyAnswer] = useState(null);
     const [showDailyExplanation, setShowDailyExplanation] = useState(false);
+    const [solvedProblems, setSolvedProblems] = useState(new Set());
 
     const dailyProblem = DAILY_CIRCUIT_STORIES[getDailyIndex(DAILY_CIRCUIT_STORIES)];
 
-    const solveProblem = (answerIdx) => {
+    const solveProblem = (answerIdx, problemIdx) => {
         setSelectedAnswer(answerIdx);
         setShowExplanation(true);
+        // Award XP first time solving a non-daily problem correctly
+        if (answerIdx === CIRCUIT_PROBLEMS[problemIdx]?.correct && !solvedProblems.has(problemIdx) && onAwardXp) {
+            setSolvedProblems(prev => new Set(prev).add(problemIdx));
+            onAwardXp(CIRCUIT_PROBLEM_XP, 'circuitProblem');
+        }
     };
 
     const solveDailyProblem = (answerIdx) => {
         setDailyAnswer(answerIdx);
         setShowDailyExplanation(true);
         if (answerIdx === dailyProblem.correct) {
+            const wasAlreadySolved = dailySolved;
             try { localStorage.setItem('cultivatec_daily_circuit', getTodayKey()); setDailySolved(true); } catch {}
+            // Award XP for daily circuit problem (first time today)
+            if (!wasAlreadySolved && onAwardXp) {
+                onAwardXp(DAILY_CIRCUIT_XP, 'dailyCircuit');
+            }
         }
     };
 
@@ -466,6 +481,9 @@ const CircuitLabScreen = ({ onBack, onOpenFreeCircuitBuilder }) => {
                                 <div className="text-5xl">🎉</div>
                                 <h2 className="text-xl font-black text-[#22C55E]">¡Misión Completada!</h2>
                                 <p className="text-sm text-[#94A3B8] font-bold">Has resuelto el problema de circuitos de hoy.</p>
+                                <div className="flex items-center justify-center gap-2 mt-1">
+                                    <span className="px-3 py-1 bg-[#FFC800]/20 text-[#FFC800] text-xs font-black rounded-full border border-[#FFC800]/30">+{DAILY_CIRCUIT_XP} XP ganados</span>
+                                </div>
                                 <div className="bg-[#1E293B] rounded-xl p-4 border border-[#334155]">
                                     <p className="text-xs text-[#64748B] font-bold">🕐 Vuelve mañana para una nueva misión de la nave.</p>
                                     <p className="text-[10px] text-[#475569] font-semibold mt-1">Cada día hay un nuevo problema de circuitos de la nave CultivaTec-7</p>
@@ -617,7 +635,7 @@ const CircuitLabScreen = ({ onBack, onOpenFreeCircuitBuilder }) => {
                             </div>
                             <div className="space-y-2">
                                 {selectedProblem.options.map((opt, oi) => (
-                                    <button key={oi} onClick={() => !showExplanation && solveProblem(oi)}
+                                    <button key={oi} onClick={() => !showExplanation && solveProblem(oi, CIRCUIT_PROBLEMS.indexOf(selectedProblem))}
                                         disabled={showExplanation}
                                         className={`w-full text-left p-3.5 rounded-xl border-2 transition-all text-sm font-bold ${
                                             showExplanation
@@ -708,7 +726,7 @@ const PRACTICE_CHALLENGES = [
     { id: 'pc_6', title: 'Inventario de Robot', emoji: '📋', difficulty: 3, description: 'Gestiona el inventario de partes de un robot', starterCode: 'inventario = {\n    "motores": 4,\n    "sensores": 3,\n    "LEDs": 10,\n    "cables": 20\n}\n\nprint("=== Inventario del Robot ===")\nfor parte, cantidad in inventario.items():\n    print(f"  {parte}: {cantidad} unidades")\n\ntotal = sum(inventario.values())\nprint(f"\\nTotal de partes: {total}")' },
 ];
 
-const ProgrammingStationScreen = ({ onBack, startChallenge, userScores }) => {
+const ProgrammingStationScreen = ({ onBack, startChallenge, userScores, userId, userStats, setUserStats, onAwardXp }) => {
     const [tab, setTab] = useState('daily'); // 'daily' | 'tutorials' | 'practice' | 'free' | 'tutorial_detail'
     const [selectedTutorial, setSelectedTutorial] = useState(null);
     const [currentStep, setCurrentStep] = useState(0);
@@ -815,7 +833,12 @@ const ProgrammingStationScreen = ({ onBack, startChallenge, userScores }) => {
     const runDailyCode = () => {
         executeCode(code);
         setDailyProgRan(true);
+        const wasAlreadySolved = dailyProgSolved;
         try { localStorage.setItem('cultivatec_daily_prog', getTodayKey()); setDailyProgSolved(true); } catch {}
+        // Award XP for daily programming problem (first time today)
+        if (!wasAlreadySolved && onAwardXp) {
+            onAwardXp(DAILY_PROG_XP, 'dailyProg');
+        }
     };
 
     return (
@@ -863,6 +886,9 @@ const ProgrammingStationScreen = ({ onBack, startChallenge, userScores }) => {
                                 <div className="text-5xl">🎉</div>
                                 <h2 className="text-xl font-black text-[#22C55E]">¡Misión Completada!</h2>
                                 <p className="text-sm text-[#94A3B8] font-bold">Has resuelto el problema de programación de hoy.</p>
+                                <div className="flex items-center justify-center gap-2 mt-1">
+                                    <span className="px-3 py-1 bg-[#FFC800]/20 text-[#FFC800] text-xs font-black rounded-full border border-[#FFC800]/30">+{DAILY_PROG_XP} XP ganados</span>
+                                </div>
                                 <div className="bg-[#1E293B] rounded-xl p-4 border border-[#334155]">
                                     <p className="text-xs text-[#64748B] font-bold">🕐 Vuelve mañana para consultar si hay más problemas de la nave.</p>
                                     <p className="text-[10px] text-[#475569] font-semibold mt-1">Cada día hay un nuevo desafío de programación de la nave CultivaTec-7</p>
@@ -4712,12 +4738,26 @@ export default function App() {
                     onBack={() => { setCurrentTab('Biblioteca'); setCurrentWorldIndex(null); }}
                     startChallenge={startChallenge}
                     userScores={userScores}
+                    userId={userId}
+                    userStats={userStats}
+                    setUserStats={setUserStats}
+                    onAwardXp={(xp, source) => {
+                        setUserStats(prev => ({ ...prev, totalPoints: (prev.totalPoints || 0) + xp, [`${source}Count`]: (prev[`${source}Count`] || 0) + 1 }));
+                        if (userId) syncUserStats(userId, { addPoints: xp, newTotalPoints: (userStats?.totalPoints || 0) + xp }).catch(console.error);
+                    }}
                 />;
                 break;
             case 'CircuitLab':
                 ScreenContent = <CircuitLabScreen 
                     onBack={() => { setCurrentTab('Biblioteca'); setCurrentWorldIndex(null); }}
                     onOpenFreeCircuitBuilder={() => { setCircuitInitialId(null); setCurrentTab('Circuitos'); }}
+                    userId={userId}
+                    userStats={userStats}
+                    setUserStats={setUserStats}
+                    onAwardXp={(xp, source) => {
+                        setUserStats(prev => ({ ...prev, totalPoints: (prev.totalPoints || 0) + xp, [`${source}Count`]: (prev[`${source}Count`] || 0) + 1 }));
+                        if (userId) syncUserStats(userId, { addPoints: xp, newTotalPoints: (userStats?.totalPoints || 0) + xp }).catch(console.error);
+                    }}
                 />;
                 break;
             default:
