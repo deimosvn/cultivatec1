@@ -16,6 +16,7 @@ import AuthScreen from './components/AuthScreen';
 import RankingScreen from './components/RankingScreen';
 import FriendsScreen from './components/FriendsScreen';
 import RobotSkinEditor from './components/RobotSkinEditor';
+import SettingsScreen from './components/SettingsScreen';
 
 // --- FIREBASE REAL ---
 import { onAuthChange, loginUser, registerUser, logoutUser, getCurrentUser } from './firebase/auth';
@@ -2678,7 +2679,7 @@ const SectionBanner = ({ section, modulesInSection, userScores, sectionIndex, al
 };
 
 // --- WORLD MAP SCREEN (Selección de Mundos) ---
-const WorldMapScreen = ({ userScores, onSelectWorld, userProfile, firebaseProfile, onShowAchievements, onShowLicenses, onLogout, onEditRobot, userStats, onGoToCircuits, onGoToProgramming }) => {
+const WorldMapScreen = ({ userScores, onSelectWorld, userProfile, firebaseProfile, onShowAchievements, onShowLicenses, onLogout, onEditRobot, userStats, onGoToCircuits, onGoToProgramming, onShowSettings }) => {
     // Generate stars deterministically
     const stars = React.useMemo(() => 
         Array.from({ length: 80 }, (_, i) => ({
@@ -2790,9 +2791,9 @@ const WorldMapScreen = ({ userScores, onSelectWorld, userProfile, firebaseProfil
                         <button onClick={onShowLicenses} className="flex items-center bg-purple-500/15 p-2 rounded-xl hover:bg-purple-500/25 transition active:scale-95 border border-purple-400/15">
                             <GraduationCap size={16} className="text-purple-300" />
                         </button>
-                        {onLogout && (
-                            <button onClick={onLogout} className="flex items-center bg-red-500/15 p-2 rounded-xl hover:bg-red-500/25 transition active:scale-95 border border-red-400/15">
-                                <Settings size={14} className="text-red-300" />
+                        {onShowSettings && (
+                            <button onClick={onShowSettings} className="flex items-center bg-purple-500/15 p-2 rounded-xl hover:bg-purple-500/25 transition active:scale-95 border border-purple-400/15" title="Ajustes">
+                                <Settings size={14} className="text-purple-300" />
                             </button>
                         )}
                     </div>
@@ -3221,7 +3222,7 @@ const InlineCircuitNode = ({ circuitId, title, difficulty, onStart, isLocked }) 
     );
 };
 
-const LibraryScreen = ({ startLesson, userId, userScores, onShowAchievements, onShowLicenses, userStats, userProfile, onLogout, firebaseProfile, onEditRobot, currentWorld, onBackToWorlds, startChallenge, onGoToCircuitChallenge }) => {
+const LibraryScreen = ({ startLesson, userId, userScores, onShowAchievements, onShowLicenses, userStats, userProfile, onLogout, firebaseProfile, onEditRobot, currentWorld, onBackToWorlds, startChallenge, onGoToCircuitChallenge, onShowSettings }) => {
     const world = WORLDS_CONFIG[currentWorld] || WORLDS_CONFIG[0];
     const worldModules = world.modules;
     const worldSections = world.sections;
@@ -3291,9 +3292,9 @@ const LibraryScreen = ({ startLesson, userId, userScores, onShowAchievements, on
                     <button onClick={onShowLicenses} className="flex items-center bg-[#2563EB]/8 p-2 rounded-xl hover:bg-[#2563EB]/15 transition active:scale-95 border border-[#2563EB]/10" title="Mis Licencias">
                         <GraduationCap size={16} className="text-[#2563EB]" />
                     </button>
-                    {onLogout && (
-                        <button onClick={onLogout} className="flex items-center bg-red-50 p-2 rounded-xl hover:bg-red-100 transition active:scale-95 border border-red-100" title="Cerrar sesión">
-                            <Settings size={14} className="text-red-400" />
+                    {onShowSettings && (
+                        <button onClick={onShowSettings} className="flex items-center bg-[#2563EB]/8 p-2 rounded-xl hover:bg-[#2563EB]/15 transition active:scale-95 border border-[#2563EB]/10" title="Ajustes">
+                            <Settings size={14} className="text-[#2563EB]" />
                         </button>
                     )}
                 </div>
@@ -4722,6 +4723,25 @@ export default function App() {
                             userProfile={userProfile}
                             completedModules={completedModules}
                         />;
+    } else if (viewMode === 'settings') {
+        ScreenContent = <SettingsScreen
+                            onBack={() => goToMenu('Biblioteca')}
+                            firebaseProfile={firebaseProfile}
+                            userId={userId}
+                            onUpdateProfile={async (data) => {
+                                if (userId) {
+                                    await updateUserProfile(userId, data);
+                                }
+                                // Also update local profile
+                                if (data.fullName) {
+                                    setUserProfile(prev => ({ ...prev, fullName: data.fullName }));
+                                    const stored = JSON.parse(localStorage.getItem('cultivatec_profile') || '{}');
+                                    stored.fullName = data.fullName;
+                                    localStorage.setItem('cultivatec_profile', JSON.stringify(stored));
+                                }
+                            }}
+                            onLogout={handleLogout}
+                        />;
     } else { 
          // Modo 'menu'
          switch (currentTab) {
@@ -4740,6 +4760,7 @@ export default function App() {
                         userStats={userStats}
                         onGoToCircuits={() => setCurrentTab('CircuitLab')}
                         onGoToProgramming={() => setCurrentTab('ProgrammingStation')}
+                        onShowSettings={() => setViewMode('settings')}
                     />;
                 } else {
                     // Show Library for selected world
@@ -4758,6 +4779,7 @@ export default function App() {
                         onBackToWorlds={() => setCurrentWorldIndex(null)}
                         startChallenge={startChallenge}
                         onGoToCircuitChallenge={(circuitId) => { setCircuitInitialId(circuitId); setCurrentTab('Circuitos'); setViewMode('menu'); }}
+                        onShowSettings={() => setViewMode('settings')}
                     />;
                 }
                 break;
@@ -4816,6 +4838,7 @@ export default function App() {
                     userStats={userStats}
                     onGoToCircuits={() => setCurrentTab('CircuitLab')}
                     onGoToProgramming={() => setCurrentTab('ProgrammingStation')}
+                    onShowSettings={() => setViewMode('settings')}
                 />; 
         }
     }

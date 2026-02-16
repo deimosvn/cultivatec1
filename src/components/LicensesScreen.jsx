@@ -547,10 +547,325 @@ const generateCertificatePDF = async (fullName, completedCount, totalCount) => {
   doc.save(`Certificado_CultivaTec_${fullName.replace(/\s+/g, '_')}.pdf`);
 };
 
+// ============================================================
+// WORLD CERTIFICATES — Data & PDF Generator
+// ============================================================
+const WORLD_CERTIFICATES = [
+  {
+    worldId: 'world_1',
+    worldName: 'El Taller del Inventor',
+    emoji: '🔧',
+    color: '#2563EB',
+    colorDark: '#1D4ED8',
+    colorRgb: [37, 99, 235],
+    certificateTitle: 'Inventor Certificado',
+    description: 'Ha dominado los fundamentos de la robótica, electrónica y programación, completando satisfactoriamente todos los módulos del Taller del Inventor.',
+    skills: ['Fundamentos de Robótica', 'Electricidad Básica', 'Electrónica', 'Programación Básica', 'Mecánica', 'Arduino', 'Diseño Robótico'],
+    moduleIds: [
+      'mod_intro_robot', 'mod_partes_robot', 'mod_primer_proyecto', 'mod_electr',
+      'mod_electon', 'mod_prog_gen', 'mod_mecanica', 'mod_arduino',
+      'mod_cpp', 'mod_python', 'mod_robotica', 'mod_componentes',
+      'mod_control', 'mod_prog_avanzada', 'mod_diseno', 'mod_primer_led',
+    ],
+  },
+  {
+    worldId: 'world_2',
+    worldName: 'La Fábrica de Autómatas',
+    emoji: '🏭',
+    color: '#D97706',
+    colorDark: '#B45309',
+    colorRgb: [217, 119, 6],
+    certificateTitle: 'Maestro de Autómatas',
+    description: 'Ha completado la totalidad de los módulos de La Fábrica de Autómatas, demostrando habilidades avanzadas en construcción y automatización robótica.',
+    skills: ['Sensores y Actuadores', 'Motores y Servos', 'Comunicación Serial', 'Automatización', 'Robótica Móvil', 'Integración de Sistemas', 'IA Básica'],
+    moduleIds: [
+      'w2_mod1_ultrasonico', 'w2_mod2_infrarrojo', 'w2_mod3_temp_hum', 'w2_mod4_luz_color',
+      'w2_mod5_chasis', 'w2_mod6_motores_avanzado', 'w2_mod7_servo_garra', 'w2_mod8_evasion',
+      'w2_mod9_serial', 'w2_mod10_display', 'w2_mod11_bluetooth', 'w2_mod12_sonido',
+      'w2_mod13_maquina_estados', 'w2_mod14_energia', 'w2_mod15_integracion', 'w2_mod16_proyecto_final',
+    ],
+  },
+  {
+    worldId: 'world_3',
+    worldName: 'La Selva Cibernética',
+    emoji: '🌿',
+    color: '#059669',
+    colorDark: '#065F46',
+    colorRgb: [5, 150, 105],
+    certificateTitle: 'Explorador Cibernético',
+    description: 'Ha completado todos los módulos de La Selva Cibernética, dominando la biorobótica y la intersección entre naturaleza y tecnología.',
+    skills: ['Biorobótica', 'Biomimética', 'Robótica Blanda', 'Sensores Biológicos', 'Prótesis Robóticas', 'Enjambres IA', 'Robótica Ambiental'],
+    moduleIds: [
+      'w3_mod1_biomimetica', 'w3_mod2_locomocion', 'w3_mod3_musculos_artificiales', 'w3_mod4_sentidos_bio',
+      'w3_mod5_protesis_intro', 'w3_mod6_exoesqueletos', 'w3_mod7_wearables', 'w3_mod8_interfaz_cerebro',
+      'w3_mod9_robots_blandos', 'w3_mod10_bioimpresion', 'w3_mod11_ecosistemas', 'w3_mod12_enjambres',
+      'w3_mod13_micro_robots', 'w3_mod14_bioetica', 'w3_mod15_diseno_bio', 'w3_mod16_proyecto_bio_final',
+    ],
+  },
+  {
+    worldId: 'world_4',
+    worldName: 'La Estación Orbital',
+    emoji: '🛸',
+    color: '#6366F1',
+    colorDark: '#4338CA',
+    colorRgb: [99, 102, 241],
+    certificateTitle: 'Comandante Orbital',
+    description: 'Ha completado la totalidad de los módulos de La Estación Orbital, dominando la robótica espacial, rovers, satélites e inteligencia artificial avanzada.',
+    skills: ['Robótica Espacial', 'Rovers Planetarios', 'Satélites', 'IA Avanzada', 'Misiones Interplanetarias', 'Impresión 3D', 'Colonización Espacial'],
+    moduleIds: [
+      'w4_mod1_robots_espacio', 'w4_mod2_gravedad_cero', 'w4_mod3_comunicacion', 'w4_mod4_energia_espacial',
+      'w4_mod5_satelites', 'w4_mod6_estacion_espacial', 'w4_mod7_basura_espacial', 'w4_mod8_fabricacion_espacio',
+      'w4_mod9_ia_espacial', 'w4_mod10_autonomia', 'w4_mod11_telescopios', 'w4_mod12_colonias',
+      'w4_mod13_mision_luna', 'w4_mod14_mision_marte', 'w4_mod15_competencia_espacial', 'w4_mod16_proyecto_orbital_final',
+    ],
+  },
+];
+
+// ============================================================
+// WORLD CERTIFICATE PDF GENERATOR (same premium design)
+// ============================================================
+const generateWorldCertificatePDF = async (fullName, worldCert) => {
+  const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'letter' });
+  const w = doc.internal.pageSize.getWidth();
+  const h = doc.internal.pageSize.getHeight();
+  const m = 8;
+
+  const [logoData, firmaData] = await Promise.all([
+    loadImageAsBase64('./logo-v2.png'),
+    loadImageAsBase64('./firma.png'),
+  ]);
+
+  const [cr, cg, cb] = worldCert.colorRgb;
+
+  // ═══════════════ BACKGROUND ═══════════════
+  doc.setFillColor(253, 251, 244);
+  doc.rect(0, 0, w, h, 'F');
+
+  for (let i = 0; i < 12; i++) {
+    doc.setGState(new doc.GState({ opacity: 0.006 + i * 0.002 }));
+    doc.setFillColor(cr, cg, cb);
+    doc.rect(m + i * 5, m + i * 4, w - m * 2 - i * 10, h - m * 2 - i * 8, 'F');
+  }
+  doc.setGState(new doc.GState({ opacity: 1 }));
+
+  // ═══════════════ BORDER SYSTEM ═══════════════
+  doc.setDrawColor(180, 148, 35);
+  doc.setLineWidth(3);
+  doc.rect(m, m, w - m * 2, h - m * 2);
+
+  doc.setDrawColor(140, 115, 25);
+  doc.setLineWidth(0.3);
+  doc.rect(m + 2.5, m + 2.5, w - m * 2 - 5, h - m * 2 - 5);
+
+  doc.setDrawColor(cr, cg, cb);
+  doc.setLineWidth(1.2);
+  doc.rect(m + 5, m + 5, w - m * 2 - 10, h - m * 2 - 10);
+
+  doc.setDrawColor(cr, cg, cb);
+  doc.setLineWidth(0.25);
+  doc.rect(m + 7.5, m + 7.5, w - m * 2 - 15, h - m * 2 - 15);
+
+  doc.setDrawColor(210, 180, 60);
+  doc.setLineWidth(0.2);
+  doc.rect(m + 9, m + 9, w - m * 2 - 18, h - m * 2 - 18);
+
+  // ═══════════════ CORNER ORNAMENTS ═══════════════
+  const co = m + 9;
+  drawCornerOrnament(doc, co, co, 18, false, false);
+  drawCornerOrnament(doc, w - co, co, 18, true, false);
+  drawCornerOrnament(doc, co, h - co, 18, false, true);
+  drawCornerOrnament(doc, w - co, h - co, 18, true, true);
+
+  // ═══════════════ TOP DECORATIVE BAND ═══════════════
+  const topBandY = 26;
+  doc.setDrawColor(195, 160, 40);
+  doc.setLineWidth(0.5);
+  doc.line(40, topBandY, w / 2 - 35, topBandY);
+  doc.line(w / 2 + 35, topBandY, w - 40, topBandY);
+  drawGuillocheLine(doc, w / 2 - 34, w / 2 + 34, topBandY, [195, 160, 40]);
+  const drawMiniDiamond = (xx, yy, sz) => {
+    doc.setFillColor(195, 160, 40);
+    doc.triangle(xx, yy - sz, xx + sz, yy, xx, yy + sz, 'F');
+    doc.triangle(xx, yy - sz, xx - sz, yy, xx, yy + sz, 'F');
+  };
+  drawMiniDiamond(40, topBandY, 1.5);
+  drawMiniDiamond(w - 40, topBandY, 1.5);
+
+  // ═══════════════ LOGO ═══════════════
+  let contentTop = 30;
+  if (logoData) {
+    const logoW = 24, logoH = 24;
+    doc.addImage(logoData, 'PNG', w / 2 - logoW / 2, contentTop, logoW, logoH);
+    contentTop += logoH + 2;
+  }
+
+  doc.setFontSize(24);
+  doc.setTextColor(cr, cg, cb);
+  doc.setFont('helvetica', 'bold');
+  doc.text('CultivaTec', w / 2, contentTop + 4, { align: 'center' });
+
+  doc.setFontSize(7.5);
+  doc.setTextColor(150, 150, 150);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Programa Educativo de Robótica, Electrónica y Programación', w / 2, contentTop + 9, { align: 'center' });
+
+  // ═══════════════ CERTIFICATE TITLE ═══════════════
+  const titleY = contentTop + 20;
+
+  doc.setFontSize(8.5);
+  doc.setTextColor(195, 160, 40);
+  doc.setFont('helvetica', 'bold');
+  doc.text(`— — —    CERTIFICADO DE MUNDO: ${worldCert.worldName.toUpperCase()}    — — —`, w / 2, titleY - 2, { align: 'center' });
+
+  doc.setFontSize(26);
+  doc.setTextColor(25, 25, 45);
+  doc.setFont('times', 'bold');
+  doc.text(worldCert.certificateTitle.toUpperCase(), w / 2, titleY + 8, { align: 'center' });
+
+  // Decorative double lines
+  const tlY = titleY + 12;
+  doc.setDrawColor(195, 160, 40);
+  doc.setLineWidth(0.6);
+  doc.line(w / 2 - 80, tlY, w / 2 - 8, tlY);
+  doc.line(w / 2 + 8, tlY, w / 2 + 80, tlY);
+  doc.setLineWidth(0.2);
+  doc.line(w / 2 - 75, tlY + 1.5, w / 2 - 12, tlY + 1.5);
+  doc.line(w / 2 + 12, tlY + 1.5, w / 2 + 75, tlY + 1.5);
+  doc.setFillColor(cr, cg, cb);
+  doc.circle(w / 2, tlY + 0.75, 1.5, 'F');
+  doc.setFillColor(253, 251, 244);
+  doc.circle(w / 2, tlY + 0.75, 0.7, 'F');
+
+  // ═══════════════ "SE OTORGA A" ═══════════════
+  const otorgaY = titleY + 23;
+  doc.setFontSize(11);
+  doc.setTextColor(120, 120, 120);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Se otorga el presente certificado a:', w / 2, otorgaY, { align: 'center' });
+
+  // ═══════════════ STUDENT NAME ═══════════════
+  const nameY = otorgaY + 13;
+  doc.setFontSize(28);
+  doc.setTextColor(15, 15, 35);
+  doc.setFont('times', 'bolditalic');
+  doc.text(fullName, w / 2, nameY, { align: 'center' });
+
+  const nw = doc.getTextWidth(fullName);
+  doc.setDrawColor(cr, cg, cb);
+  doc.setLineWidth(0.7);
+  doc.line((w - nw) / 2 - 12, nameY + 3, (w + nw) / 2 + 12, nameY + 3);
+  doc.setDrawColor(195, 160, 40);
+  doc.setLineWidth(0.25);
+  doc.line((w - nw) / 2 - 8, nameY + 5.5, (w + nw) / 2 + 8, nameY + 5.5);
+
+  // ═══════════════ DESCRIPTION ═══════════════
+  const descY = nameY + 14;
+  doc.setFontSize(10);
+  doc.setTextColor(75, 75, 75);
+  doc.setFont('helvetica', 'normal');
+  const descLines = doc.splitTextToSize(worldCert.description, 200);
+  descLines.forEach((line, i) => {
+    doc.text(line, w / 2, descY + i * 5.5, { align: 'center' });
+  });
+
+  // ═══════════════ WORLD-SPECIFIC SKILL BADGES ═══════════════
+  const badgeY = descY + descLines.length * 5.5 + 8;
+  const skills = worldCert.skills;
+  const bSpacing = Math.min(29, (w - 80) / skills.length);
+  const bStartX = (w - skills.length * bSpacing) / 2;
+  skills.forEach((skill, i) => {
+    const bx = bStartX + i * bSpacing + bSpacing / 2;
+    doc.setFillColor(cr, cg, cb);
+    doc.setGState(new doc.GState({ opacity: 0.08 }));
+    doc.roundedRect(bx - 13, badgeY - 3.5, 26, 9, 2.5, 2.5, 'F');
+    doc.setGState(new doc.GState({ opacity: 1 }));
+    doc.setDrawColor(cr, cg, cb);
+    doc.setLineWidth(0.2);
+    doc.roundedRect(bx - 13, badgeY - 3.5, 26, 9, 2.5, 2.5, 'S');
+    doc.setFontSize(5.5);
+    doc.setTextColor(cr, cg, cb);
+    doc.setFont('helvetica', 'bold');
+    doc.text(skill, bx, badgeY + 2, { align: 'center' });
+  });
+
+  // ═══════════════ SEPARATOR ═══════════════
+  const sepY = badgeY + 14;
+  doc.setDrawColor(210, 210, 210);
+  doc.setLineWidth(0.15);
+  doc.line(50, sepY, w - 50, sepY);
+  [w * 0.33, w * 0.5, w * 0.67].forEach(dx => {
+    doc.setFillColor(195, 160, 40);
+    doc.circle(dx, sepY, 0.6, 'F');
+  });
+
+  // ═══════════════ SIGNATURE & SEAL ═══════════════
+  const sigBaseY = sepY + 4;
+  const colDate = w * 0.2;
+  const colSeal = w * 0.5;
+  const colSign = w * 0.8;
+
+  doc.setFontSize(9.5);
+  doc.setTextColor(80, 80, 80);
+  doc.setFont('helvetica', 'normal');
+  doc.text(getFormattedDate(), colDate, sigBaseY + 18, { align: 'center' });
+  doc.setDrawColor(70, 70, 70);
+  doc.setLineWidth(0.35);
+  doc.line(colDate - 32, sigBaseY + 20, colDate + 32, sigBaseY + 20);
+  doc.setFontSize(7.5);
+  doc.setTextColor(140, 140, 140);
+  doc.text('Fecha de expedición', colDate, sigBaseY + 25, { align: 'center' });
+
+  drawGoldSeal(doc, colSeal, sigBaseY + 14, 13);
+
+  if (firmaData) {
+    doc.addImage(firmaData, 'PNG', colSign - 27.5, sigBaseY + 1, 55, 22);
+  }
+  doc.setDrawColor(55, 55, 55);
+  doc.setLineWidth(0.4);
+  doc.line(colSign - 35, sigBaseY + 20, colSign + 35, sigBaseY + 20);
+  doc.setFontSize(9.5);
+  doc.setTextColor(25, 25, 25);
+  doc.setFont('helvetica', 'bold');
+  doc.text(DIRECTOR_NAME, colSign, sigBaseY + 25, { align: 'center' });
+  doc.setFontSize(7);
+  doc.setTextColor(120, 120, 120);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Director General de CultivaTec', colSign, sigBaseY + 29, { align: 'center' });
+
+  // ═══════════════ BOTTOM BAND ═══════════════
+  const botY = h - 20;
+  doc.setDrawColor(195, 160, 40);
+  doc.setLineWidth(0.5);
+  doc.line(40, botY, w / 2 - 18, botY);
+  doc.line(w / 2 + 18, botY, w - 40, botY);
+  drawGuillocheLine(doc, w / 2 - 17, w / 2 + 17, botY, [195, 160, 40]);
+  drawMiniDiamond(40, botY, 1.2);
+  drawMiniDiamond(w - 40, botY, 1.2);
+
+  const certId = `CT-${worldCert.worldId.toUpperCase()}-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
+  doc.setFontSize(6);
+  doc.setTextColor(175, 175, 175);
+  doc.setFont('helvetica', 'normal');
+  doc.text(`Folio: ${certId}`, w / 2, h - 15, { align: 'center' });
+  doc.setFontSize(5.5);
+  doc.text(`Certificado de finalización del mundo "${worldCert.worldName}" — Programa CultivaTec.`, w / 2, h - 12, { align: 'center' });
+
+  // ═══════════════ WATERMARK ═══════════════
+  doc.setGState(new doc.GState({ opacity: 0.025 }));
+  doc.setFontSize(65);
+  doc.setTextColor(cr, cg, cb);
+  doc.setFont('helvetica', 'bold');
+  doc.text('CultivaTec', w / 2, h / 2 + 5, { align: 'center', angle: 28 });
+  doc.setGState(new doc.GState({ opacity: 1 }));
+
+  doc.save(`Certificado_${worldCert.worldName.replace(/\s+/g, '_')}_${fullName.replace(/\s+/g, '_')}.pdf`);
+};
+
 // Main Licenses Screen
 const LicensesScreen = ({ onBack, userScores, userProfile, completedModules }) => {
   const [selectedLicense, setSelectedLicense] = useState(null);
   const [showCertConfirm, setShowCertConfirm] = useState(false);
+  const [showWorldCertConfirm, setShowWorldCertConfirm] = useState(null); // worldCert object or null
   
   const fullName = userProfile?.fullName || userProfile?.userName || 'Estudiante';
   
@@ -573,10 +888,24 @@ const LicensesScreen = ({ onBack, userScores, userProfile, completedModules }) =
   const completedCount = unlockedLicenses.length;
   const allComplete = completedCount >= totalModules;
   const progressPercent = Math.round((completedCount / totalModules) * 100);
+
+  // Check world completion for world certificates
+  const worldCertStatus = WORLD_CERTIFICATES.map(wc => {
+    const completedInWorld = wc.moduleIds.filter(id => completedModuleIds.has(id)).length;
+    const totalInWorld = wc.moduleIds.length;
+    const isWorldComplete = completedInWorld >= totalInWorld;
+    return { ...wc, completedInWorld, totalInWorld, isWorldComplete };
+  });
+  const completedWorlds = worldCertStatus.filter(w => w.isWorldComplete).length;
   
   const handleDownloadCertificate = async () => {
     await generateCertificatePDF(fullName, completedCount, totalModules);
     setShowCertConfirm(false);
+  };
+
+  const handleDownloadWorldCertificate = async (worldCert) => {
+    await generateWorldCertificatePDF(fullName, worldCert);
+    setShowWorldCertConfirm(null);
   };
 
   return (
@@ -675,6 +1004,84 @@ const LicensesScreen = ({ onBack, userScores, userProfile, completedModules }) =
           )}
         </div>
       </div>
+
+      {/* World Certificates Section */}
+      <div className="px-4 max-w-2xl mx-auto mb-4">
+        <h2 className="text-sm font-black text-[#3C3C3C] mb-3 flex items-center gap-2">
+          🌍 Certificados de Mundo <span className="text-[10px] font-bold text-[#AFAFAF] ml-1">{completedWorlds}/{WORLD_CERTIFICATES.length}</span>
+        </h2>
+        <div className="grid grid-cols-1 gap-3">
+          {worldCertStatus.map(wc => (
+            <div key={wc.worldId}
+              className={`rounded-2xl border-2 p-4 transition-all ${
+                wc.isWorldComplete
+                  ? 'bg-white border-opacity-30 shadow-md hover:shadow-lg cursor-pointer active:scale-[0.98]'
+                  : 'bg-gray-50 border-[#E5E5E5] opacity-60'
+              }`}
+              style={wc.isWorldComplete ? { borderColor: `${wc.color}50` } : {}}
+              onClick={wc.isWorldComplete ? () => setShowWorldCertConfirm(wc) : undefined}
+            >
+              <div className="flex items-center gap-3">
+                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl ${
+                  wc.isWorldComplete ? 'shadow-inner' : 'bg-gray-100'
+                }`} style={wc.isWorldComplete ? { 
+                  background: `linear-gradient(135deg, ${wc.color}15, ${wc.color}30)`, 
+                  border: `2px solid ${wc.color}40` 
+                } : {}}>
+                  {wc.isWorldComplete ? wc.emoji : <Lock size={20} className="text-gray-300" />}
+                </div>
+                <div className="flex-grow min-w-0">
+                  <div className="flex items-center gap-2">
+                    <p className={`text-sm font-black truncate ${wc.isWorldComplete ? 'text-[#3C3C3C]' : 'text-[#AFAFAF]'}`}>
+                      {wc.certificateTitle}
+                    </p>
+                    {wc.isWorldComplete && (
+                      <span className="inline-block px-2 py-0.5 rounded-full text-[9px] font-black text-white" style={{ backgroundColor: wc.color }}>
+                        DESBLOQUEADO
+                      </span>
+                    )}
+                  </div>
+                  <p className={`text-xs font-semibold truncate ${wc.isWorldComplete ? 'text-[#777]' : 'text-[#CDCDCD]'}`}>
+                    {wc.worldName}
+                  </p>
+                  {/* Progress bar */}
+                  <div className="mt-1.5 flex items-center gap-2">
+                    <div className="flex-grow h-2 bg-[#E5E5E5] rounded-full overflow-hidden">
+                      <div className="h-full rounded-full transition-all duration-500"
+                        style={{ 
+                          width: `${Math.round((wc.completedInWorld / wc.totalInWorld) * 100)}%`,
+                          backgroundColor: wc.isWorldComplete ? wc.color : '#CDCDCD'
+                        }} />
+                    </div>
+                    <span className={`text-[10px] font-black flex-shrink-0 ${wc.isWorldComplete ? '' : 'text-[#CDCDCD]'}`}
+                      style={wc.isWorldComplete ? { color: wc.color } : {}}>
+                      {wc.completedInWorld}/{wc.totalInWorld}
+                    </span>
+                  </div>
+                  {wc.isWorldComplete && (
+                    <div className="flex flex-wrap gap-1 mt-2">
+                      {wc.skills.slice(0, 4).map((skill, i) => (
+                        <span key={i} className="text-[8px] font-bold px-1.5 py-0.5 rounded-md"
+                          style={{ backgroundColor: `${wc.color}12`, color: wc.color }}>
+                          {skill}
+                        </span>
+                      ))}
+                      {wc.skills.length > 4 && (
+                        <span className="text-[8px] font-bold text-[#AFAFAF] px-1.5 py-0.5">+{wc.skills.length - 4} más</span>
+                      )}
+                    </div>
+                  )}
+                </div>
+                {wc.isWorldComplete && (
+                  <div className="flex-shrink-0">
+                    <Download size={16} style={{ color: wc.color }} />
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
       
       {/* Licenses grid */}
       <div className="px-4 max-w-2xl mx-auto">
@@ -735,6 +1142,61 @@ const LicensesScreen = ({ onBack, userScores, userProfile, completedModules }) =
               </button>
               <button onClick={handleDownloadCertificate}
                 className="flex-1 py-3 bg-gradient-to-r from-[#2563EB] to-[#1D4ED8] text-white font-black rounded-xl border-b-4 border-[#1a3fa0] active:scale-95 transition text-sm flex items-center justify-center gap-1">
+                <Download size={16} /> Descargar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* World Certificate download confirmation modal */}
+      {showWorldCertConfirm && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in" onClick={() => setShowWorldCertConfirm(null)}>
+          <div className="bg-white rounded-3xl max-w-sm w-full p-6 animate-scale-in shadow-2xl" onClick={e => e.stopPropagation()}>
+            <div className="text-center mb-4">
+              <div className="w-20 h-20 mx-auto rounded-2xl flex items-center justify-center text-4xl mb-3 shadow-lg"
+                style={{ background: `linear-gradient(135deg, ${showWorldCertConfirm.color}15, ${showWorldCertConfirm.color}30)`, border: `3px solid ${showWorldCertConfirm.color}40` }}>
+                {showWorldCertConfirm.emoji}
+              </div>
+              <div className="inline-block px-3 py-1 rounded-full text-xs font-black text-white mb-2" style={{ backgroundColor: showWorldCertConfirm.color }}>
+                CERTIFICADO DE MUNDO
+              </div>
+              <h2 className="text-xl font-black text-[#3C3C3C] mb-1">{showWorldCertConfirm.certificateTitle}</h2>
+              <p className="text-sm text-[#777] font-semibold">{showWorldCertConfirm.worldName}</p>
+              <p className="text-base font-black mt-2" style={{ color: showWorldCertConfirm.color }}>{fullName}</p>
+            </div>
+            
+            <div className="bg-[#F7F7F7] rounded-xl p-3 mb-3 border border-[#E5E5E5]">
+              <p className="text-[10px] font-black text-[#AFAFAF] mb-2">HABILIDADES ESPECIALES</p>
+              <div className="flex flex-wrap gap-1.5">
+                {showWorldCertConfirm.skills.map((skill, i) => (
+                  <span key={i} className="text-[10px] font-bold px-2 py-1 rounded-lg"
+                    style={{ backgroundColor: `${showWorldCertConfirm.color}12`, color: showWorldCertConfirm.color }}>
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="bg-[#F7F7F7] rounded-xl p-3 mb-4 border border-[#E5E5E5]">
+              <div className="flex items-center gap-2 text-xs text-[#777] font-semibold">
+                <span>📝</span>
+                <span>Avalado por: <b className="text-[#3C3C3C]">{DIRECTOR_NAME}</b></span>
+              </div>
+              <div className="flex items-center gap-2 text-xs text-[#777] font-semibold mt-1">
+                <span>📅</span>
+                <span>Fecha: <b className="text-[#3C3C3C]">{getFormattedDate()}</b></span>
+              </div>
+            </div>
+            
+            <div className="flex gap-2">
+              <button onClick={() => setShowWorldCertConfirm(null)}
+                className="flex-1 py-3 bg-[#F7F7F7] text-[#777] font-black rounded-xl border-2 border-[#E5E5E5] active:scale-95 transition text-sm">
+                Cancelar
+              </button>
+              <button onClick={() => handleDownloadWorldCertificate(showWorldCertConfirm)}
+                className="flex-1 py-3 text-white font-black rounded-xl border-b-4 active:scale-95 transition text-sm flex items-center justify-center gap-1"
+                style={{ background: `linear-gradient(to right, ${showWorldCertConfirm.color}, ${showWorldCertConfirm.colorDark})`, borderColor: showWorldCertConfirm.colorDark }}>
                 <Download size={16} /> Descargar
               </button>
             </div>
