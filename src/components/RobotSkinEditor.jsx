@@ -5,7 +5,7 @@
 // ================================================================
 
 import React, { useState, useEffect } from 'react';
-import { X, Sparkles, RotateCcw, ChevronLeft, ChevronRight, Check, Palette, Star, BookOpen } from 'lucide-react';
+import { X, Sparkles, RotateCcw, ChevronLeft, ChevronRight, Check, Palette, Star, BookOpen, Lock } from 'lucide-react';
 import { RobotAvatar } from '../Onboarding';
 
 // ============================================
@@ -219,6 +219,61 @@ export const ROBOT_SKINS = [
 ];
 
 // ============================================
+// SKIN UNLOCK REQUIREMENTS
+// ============================================
+// First 3 skins are free. The rest unlock by completing modules or worlds.
+// Admin-gifted skins (giftedSkins) are always unlocked regardless.
+
+export const SKIN_UNLOCK_REQUIREMENTS = {
+  'skin_default': { type: 'free' },
+  'skin_1':  { type: 'free' },
+  'skin_2':  { type: 'free' },
+  'skin_3':  { type: 'modules', count: 3,  label: 'Completa 3 módulos' },
+  'skin_4':  { type: 'modules', count: 6,  label: 'Completa 6 módulos' },
+  'skin_5':  { type: 'modules', count: 10, label: 'Completa 10 módulos' },
+  'skin_6':  { type: 'world',   worldIndex: 0, label: 'Completa el Mundo 1' },
+  'skin_7':  { type: 'modules', count: 20, label: 'Completa 20 módulos' },
+  'skin_8':  { type: 'modules', count: 25, label: 'Completa 25 módulos' },
+  'skin_9':  { type: 'world',   worldIndex: 1, label: 'Completa el Mundo 2' },
+  'skin_10': { type: 'modules', count: 35, label: 'Completa 35 módulos' },
+  'skin_11': { type: 'modules', count: 40, label: 'Completa 40 módulos' },
+  'skin_12': { type: 'world',   worldIndex: 2, label: 'Completa el Mundo 3' },
+  'skin_13': { type: 'modules', count: 50, label: 'Completa 50 módulos' },
+  'skin_14': { type: 'modules', count: 55, label: 'Completa 55 módulos' },
+  'skin_15': { type: 'world',   worldIndex: 3, label: 'Completa el Mundo 4' },
+  'skin_16': { type: 'modules', count: 65, label: 'Completa 65 módulos' },
+  'skin_17': { type: 'modules', count: 70, label: 'Completa 70 módulos' },
+  'skin_18': { type: 'world',   worldIndex: 4, label: 'Completa el Mundo 5' },
+};
+
+/**
+ * Compute the set of unlocked skin IDs based on progress and gifts.
+ * @param {number} completedModulesCount - Total number of completed modules across all worlds
+ * @param {number[]} completedWorldIndices - Array of world indices (0-4) that are fully completed
+ * @param {string[]} giftedSkinIds - Array of skin IDs gifted by admin
+ * @param {boolean} isAdmin - Whether the user is an admin (admins unlock all)
+ * @returns {Set<string>} Set of unlocked skin IDs
+ */
+export const getUnlockedSkinIds = (completedModulesCount = 0, completedWorldIndices = [], giftedSkinIds = [], isAdmin = false) => {
+  const unlocked = new Set();
+  for (const skin of ROBOT_SKINS) {
+    const req = SKIN_UNLOCK_REQUIREMENTS[skin.id];
+    if (!req) continue;
+    // Admin override
+    if (isAdmin) { unlocked.add(skin.id); continue; }
+    // Gifted by admin
+    if (giftedSkinIds.includes(skin.id)) { unlocked.add(skin.id); continue; }
+    // Free skins
+    if (req.type === 'free') { unlocked.add(skin.id); continue; }
+    // Module count milestone
+    if (req.type === 'modules' && completedModulesCount >= req.count) { unlocked.add(skin.id); continue; }
+    // World completion milestone
+    if (req.type === 'world' && completedWorldIndices.includes(req.worldIndex)) { unlocked.add(skin.id); continue; }
+  }
+  return unlocked;
+};
+
+// ============================================
 // ROBOT STORY TAB COMPONENT
 // ============================================
 
@@ -316,7 +371,7 @@ const RobotStoryTab = ({ robotConfig, robotName, userName, storyIndex, setStoryI
 // ROBOT SKIN EDITOR MODAL COMPONENT
 // ============================================
 
-const RobotSkinEditor = ({ isOpen, onClose, currentConfig, currentName, onSave, userName }) => {
+const RobotSkinEditor = ({ isOpen, onClose, currentConfig, currentName, onSave, userName, unlockedSkinIds }) => {
   const [mode, setMode] = useState('skins'); // 'skins' | 'story'
   const [storyIndex, setStoryIndex] = useState(0);
   const [storyTyping, setStoryTyping] = useState(false);
@@ -342,6 +397,8 @@ const RobotSkinEditor = ({ isOpen, onClose, currentConfig, currentName, onSave, 
   if (!isOpen) return null;
 
   const handleSelectSkin = (skin) => {
+    // Prevent selecting locked skins
+    if (unlockedSkinIds && !unlockedSkinIds.has(skin.id)) return;
     setSelectedSkin(skin.id);
     setRobotConfig({ ...skin.config });
   };
@@ -356,7 +413,10 @@ const RobotSkinEditor = ({ isOpen, onClose, currentConfig, currentName, onSave, 
   };
 
   const randomize = () => {
-    const randomSkin = ROBOT_SKINS[Math.floor(Math.random() * ROBOT_SKINS.length)];
+    const available = unlockedSkinIds
+      ? ROBOT_SKINS.filter(s => unlockedSkinIds.has(s.id))
+      : ROBOT_SKINS;
+    const randomSkin = available[Math.floor(Math.random() * available.length)];
     setSelectedSkin(randomSkin.id);
     setRobotConfig({ ...randomSkin.config });
   };
@@ -455,35 +515,53 @@ const RobotSkinEditor = ({ isOpen, onClose, currentConfig, currentName, onSave, 
             <div className="p-4 grid grid-cols-2 gap-2.5">
               {ROBOT_SKINS.map(skin => {
                 const isSelected = selectedSkin === skin.id;
+                const isLocked = unlockedSkinIds && !unlockedSkinIds.has(skin.id);
+                const requirement = SKIN_UNLOCK_REQUIREMENTS[skin.id];
                 return (
                   <button key={skin.id}
                     onClick={() => handleSelectSkin(skin)}
-                    className={`relative rounded-2xl border-2 p-3 transition-all active:scale-95 text-left ${
-                      isSelected 
-                        ? 'border-[#2563EB] ring-2 ring-[#2563EB]/30 bg-[#2563EB]/5 scale-[1.02]' 
-                        : getRarityBorder(skin.rarity)
+                    className={`relative rounded-2xl border-2 p-3 transition-all text-left ${
+                      isLocked
+                        ? 'border-[#E5E5E5] bg-[#F7F7F7] opacity-70 cursor-not-allowed'
+                        : isSelected 
+                          ? 'border-[#2563EB] ring-2 ring-[#2563EB]/30 bg-[#2563EB]/5 scale-[1.02] active:scale-95' 
+                          : `${getRarityBorder(skin.rarity)} active:scale-95`
                     }`}>
                     {/* Rarity badge */}
                     <div className="absolute top-1.5 right-1.5 text-[8px] font-black px-1.5 py-0.5 rounded-full text-white"
-                      style={{ backgroundColor: skin.rarityColor }}>
+                      style={{ backgroundColor: isLocked ? '#AFAFAF' : skin.rarityColor }}>
                       {skin.rarityLabel}
                     </div>
                     {/* Robot Preview */}
-                    <div className="flex justify-center mb-2">
-                      <div className="w-16 h-16 bg-white rounded-xl flex items-center justify-center border border-[#E5E5E5]/50">
+                    <div className="flex justify-center mb-2 relative">
+                      <div className={`w-16 h-16 bg-white rounded-xl flex items-center justify-center border border-[#E5E5E5]/50 ${isLocked ? 'grayscale' : ''}`}>
                         <RobotAvatar config={skin.config} size={55} />
                       </div>
+                      {/* Lock overlay */}
+                      {isLocked && (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="w-8 h-8 bg-[#3C3C3C]/80 rounded-full flex items-center justify-center shadow-lg">
+                            <Lock size={16} className="text-white" />
+                          </div>
+                        </div>
+                      )}
                     </div>
                     {/* Info */}
                     <div className="text-center">
                       <div className="flex items-center justify-center gap-1">
                         <span className="text-sm">{skin.icon}</span>
-                        <span className="text-xs font-black text-[#3C3C3C]">{skin.name}</span>
+                        <span className={`text-xs font-black ${isLocked ? 'text-[#AFAFAF]' : 'text-[#3C3C3C]'}`}>{skin.name}</span>
                       </div>
-                      <p className="text-[9px] text-[#AFAFAF] font-semibold mt-0.5 leading-tight">{skin.description}</p>
+                      {isLocked && requirement ? (
+                        <p className="text-[9px] text-[#FF9600] font-bold mt-0.5 leading-tight flex items-center justify-center gap-0.5">
+                          🔒 {requirement.label}
+                        </p>
+                      ) : (
+                        <p className="text-[9px] text-[#AFAFAF] font-semibold mt-0.5 leading-tight">{skin.description}</p>
+                      )}
                     </div>
                     {/* Selected check */}
-                    {isSelected && (
+                    {isSelected && !isLocked && (
                       <div className="absolute -top-1 -left-1 w-5 h-5 bg-[#2563EB] rounded-full flex items-center justify-center">
                         <Check size={12} className="text-white" />
                       </div>

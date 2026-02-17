@@ -16,7 +16,7 @@ import { OnboardingScreen, RobotAvatar, RobotMini } from './Onboarding';
 import AuthScreen from './components/AuthScreen';
 import RankingScreen from './components/RankingScreen';
 import FriendsScreen from './components/FriendsScreen';
-import RobotSkinEditor from './components/RobotSkinEditor';
+import RobotSkinEditor, { getUnlockedSkinIds, ROBOT_SKINS } from './components/RobotSkinEditor';
 import SettingsScreen from './components/SettingsScreen';
 import BahiaChatarraScreen from './components/BahiaChatarraScreen';
 
@@ -5951,6 +5951,7 @@ export default function App() {
     const [completedModules, setCompletedModules] = useState(new Set());
     const [visitedSections, setVisitedSections] = useState(new Set(['Biblioteca']));
     const [showRobotEditor, setShowRobotEditor] = useState(false);
+    const [skinGiftNotification, setSkinGiftNotification] = useState(null); // { id, name, config }
 
     // Persist userStats to localStorage
     useEffect(() => {
@@ -5994,6 +5995,27 @@ export default function App() {
                     }
                     return prev;
                 });
+            }
+            // Detect new gifted skins and show notification
+            if (profile?.giftedSkins?.length > 0) {
+                try {
+                    const seenIds = JSON.parse(localStorage.getItem('cultivatec_seenGiftedSkins') || '[]');
+                    const newGifts = profile.giftedSkins.filter(g => !seenIds.includes(g.id));
+                    if (newGifts.length > 0) {
+                        // Find full skin data from ROBOT_SKINS
+                        const giftSkin = ROBOT_SKINS.find(s => s.id === newGifts[0].id);
+                        setSkinGiftNotification({
+                            id: newGifts[0].id,
+                            name: newGifts[0].name || giftSkin?.name || 'Skin',
+                            config: giftSkin?.config || null,
+                            icon: giftSkin?.icon || '🎁',
+                            rarityLabel: giftSkin?.rarityLabel || '',
+                            rarityColor: giftSkin?.rarityColor || '#58CC02',
+                        });
+                        // Mark all current gifted skins as seen
+                        localStorage.setItem('cultivatec_seenGiftedSkins', JSON.stringify(profile.giftedSkins.map(g => g.id)));
+                    }
+                } catch {}
             }
         });
 
@@ -6165,6 +6187,20 @@ export default function App() {
             } catch {}
         }
     };
+
+    // === COMPUTE UNLOCKED SKIN IDS ===
+    const computedUnlockedSkinIds = React.useMemo(() => {
+        const completedModulesCount = completedModules.size;
+        // Determine which worlds are fully completed
+        const completedWorldIndices = WORLDS_CONFIG
+            .map((w, i) => w.modules.every(m => isModuleCompleted(userScores, m.id)) ? i : -1)
+            .filter(i => i >= 0);
+        // Get gifted skin IDs from firebase profile
+        const giftedSkinIds = (firebaseProfile?.giftedSkins || []).map(g => g.id);
+        // Admin check
+        const admin = isAdminEmail(firebaseProfile?.email);
+        return getUnlockedSkinIds(completedModulesCount, completedWorldIndices, giftedSkinIds, admin);
+    }, [completedModules, userScores, firebaseProfile]);
 
     // Show loading screen while Firebase Auth initializes
     if (authLoading) {
@@ -6517,6 +6553,41 @@ export default function App() {
                     onDismiss={() => setUnlockedPopupAchievement(null)}
                 />
             )}
+            {/* Skin Gift Notification Popup */}
+            {skinGiftNotification && (
+                <div className="fixed inset-0 z-[60] bg-black/70 backdrop-blur-sm flex items-center justify-center p-6 animate-fade-in" onClick={() => setSkinGiftNotification(null)}>
+                    <div className="bg-white rounded-3xl p-6 max-w-sm w-full animate-scale-in shadow-2xl text-center" onClick={e => e.stopPropagation()}>
+                        {/* Gift icon */}
+                        <div className="text-6xl mb-3 animate-bounce">🎁</div>
+                        <h3 className="text-xl font-black text-[#3C3C3C] mb-1">¡Te regalaron una skin!</h3>
+                        <p className="text-sm text-[#777] font-bold mb-4">El administrador te ha enviado una skin especial</p>
+                        {/* Skin preview */}
+                        <div className="mx-auto w-28 h-28 bg-gradient-to-br from-[#DBEAFE] to-[#EFF6FF] rounded-3xl border-2 border-[#93C5FD] flex items-center justify-center p-2 shadow-inner mb-3">
+                            {skinGiftNotification.config ? (
+                                <RobotAvatar config={skinGiftNotification.config} size={95} animate />
+                            ) : (
+                                <span className="text-5xl">{skinGiftNotification.icon}</span>
+                            )}
+                        </div>
+                        {/* Skin name and rarity */}
+                        <div className="flex items-center justify-center gap-2 mb-1">
+                            <span className="text-lg">{skinGiftNotification.icon}</span>
+                            <span className="text-lg font-black text-[#3C3C3C]">{skinGiftNotification.name}</span>
+                        </div>
+                        {skinGiftNotification.rarityLabel && (
+                            <span className="inline-block text-[10px] font-black px-2.5 py-1 rounded-full text-white mb-4"
+                                style={{ backgroundColor: skinGiftNotification.rarityColor }}>
+                                {skinGiftNotification.rarityLabel}
+                            </span>
+                        )}
+                        {/* Dismiss button */}
+                        <button onClick={() => setSkinGiftNotification(null)}
+                            className="w-full py-3 rounded-2xl bg-gradient-to-r from-[#2563EB] to-[#3B82F6] text-white font-black text-sm shadow-lg shadow-[#2563EB]/30 active:scale-95 transition-all border-b-4 border-[#1D4ED8]">
+                            ¡Genial! 🎉
+                        </button>
+                    </div>
+                </div>
+            )}
             {/* Robot Skin Editor Modal */}
             <RobotSkinEditor
                 isOpen={showRobotEditor}
@@ -6525,6 +6596,7 @@ export default function App() {
                 currentName={userProfile?.robotName}
                 onSave={handleRobotSave}
                 userName={userProfile?.userName || firebaseProfile?.username || 'Explorador'}
+                unlockedSkinIds={computedUnlockedSkinIds}
             />
         </div>
     );

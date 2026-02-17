@@ -1,27 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronRight, ChevronLeft, Sparkles, Star, Zap, RotateCcw, Check } from 'lucide-react';
 
-// PNG-based robot skins for onboarding
+// PNG-based robot skins for onboarding (only free skins shown during onboarding)
 const ROBOT_SKINS_ONBOARDING = [
   { id: 'skin_default', name: 'Original', icon: '🤖', rarity: 'common', rarityColor: '#58CC02', config: { skinImage: '/skin.png' } },
   { id: 'skin_1', name: 'Explorador', icon: '🧭', rarity: 'common', rarityColor: '#58CC02', config: { skinImage: '/skin1.png' } },
   { id: 'skin_2', name: 'Guerrero', icon: '⚔️', rarity: 'rare', rarityColor: '#3B82F6', config: { skinImage: '/skin2.png' } },
-  { id: 'skin_3', name: 'Científico', icon: '🔬', rarity: 'rare', rarityColor: '#3B82F6', config: { skinImage: '/skin3.png' } },
-  { id: 'skin_4', name: 'Galaxia', icon: '🌌', rarity: 'epic', rarityColor: '#FF4B4B', config: { skinImage: '/skin4.png' } },
-  { id: 'skin_5', name: 'Ninja', icon: '🥷', rarity: 'epic', rarityColor: '#FF4B4B', config: { skinImage: '/skin5.png' } },
-  { id: 'skin_6', name: 'Naturaleza', icon: '🌿', rarity: 'common', rarityColor: '#58CC02', config: { skinImage: '/skin6.png' } },
-  { id: 'skin_7', name: 'Rey Dorado', icon: '👑', rarity: 'legendary', rarityColor: '#FFC800', config: { skinImage: '/skin7.png' } },
-  { id: 'skin_8', name: 'Mecánico', icon: '🔧', rarity: 'common', rarityColor: '#58CC02', config: { skinImage: '/skin8.png' } },
-  { id: 'skin_9', name: 'Astronauta', icon: '🚀', rarity: 'epic', rarityColor: '#FF4B4B', config: { skinImage: '/skin9.png' } },
-  { id: 'skin_10', name: 'Fantasma', icon: '👻', rarity: 'rare', rarityColor: '#3B82F6', config: { skinImage: '/skin10.png' } },
-  { id: 'skin_11', name: 'Rockero', icon: '🎸', rarity: 'epic', rarityColor: '#FF4B4B', config: { skinImage: '/skin11.png' } },
-  { id: 'skin_12', name: 'Pirata', icon: '🏴‍☠️', rarity: 'rare', rarityColor: '#3B82F6', config: { skinImage: '/skin12.png' } },
-  { id: 'skin_13', name: 'Samurai', icon: '🏯', rarity: 'legendary', rarityColor: '#FFC800', config: { skinImage: '/skin13.png' } },
-  { id: 'skin_14', name: 'Hada Digital', icon: '🧚', rarity: 'legendary', rarityColor: '#FFC800', config: { skinImage: '/skin14.png' } },
-  { id: 'skin_15', name: 'Polar', icon: '❄️', rarity: 'rare', rarityColor: '#3B82F6', config: { skinImage: '/skin15.png' } },
-  { id: 'skin_16', name: 'Capitán', icon: '🎖️', rarity: 'epic', rarityColor: '#FF4B4B', config: { skinImage: '/skin16.png' } },
-  { id: 'skin_17', name: 'Dulce', icon: '💖', rarity: 'rare', rarityColor: '#3B82F6', config: { skinImage: '/skin17.png' } },
-  { id: 'skin_18', name: 'Volcánico', icon: '🌋', rarity: 'legendary', rarityColor: '#FFC800', config: { skinImage: '/skin18.png' } },
 ];
 
 // ============================================
