@@ -619,6 +619,23 @@ const WORLD_CERTIFICATES = [
       'w4_mod13_mision_luna', 'w4_mod14_mision_marte', 'w4_mod15_competencia_espacial', 'w4_mod16_proyecto_orbital_final',
     ],
   },
+  {
+    worldId: 'world_5',
+    worldName: 'El Desierto de los Rovers',
+    emoji: '🏜️',
+    color: '#D97706',
+    colorDark: '#92400E',
+    colorRgb: [217, 119, 6],
+    certificateTitle: 'Ingeniero de Rovers',
+    description: 'Ha completado todos los módulos de El Desierto de los Rovers, dominando la robótica autónoma, navegación, IA, sistemas de energía y proyectos tipo NASA/SpaceX.',
+    skills: ['Rovers Autónomos', 'Navegación Autónoma', 'Visión por Computadora', 'Machine Learning', 'Sistemas de Energía', 'Enjambres Robóticos', 'ISRU y Construcción'],
+    moduleIds: [
+      'w5_mod1_intro_rovers', 'w5_mod2_navegacion_autonoma', 'w5_mod3_percepcion_entorno', 'w5_mod4_toma_decisiones',
+      'w5_mod5_chasis_movilidad', 'w5_mod6_sensores_rover', 'w5_mod7_energia_autonomia', 'w5_mod8_comunicacion_rover',
+      'w5_mod9_planificacion_rutas', 'w5_mod10_ml_rovers', 'w5_mod11_sistemas_seguridad', 'w5_mod12_simulacion_testing',
+      'w5_mod13_swarm_rovers', 'w5_mod14_construccion_isru', 'w5_mod15_competencias_rovers', 'w5_mod16_proyecto_rover_final',
+    ],
+  },
 ];
 
 // ============================================================
@@ -969,7 +986,7 @@ const LicensesScreen = ({ onBack, userScores, userProfile, completedModules }) =
             </div>
           ) : (
             <p className="text-xs text-[#AFAFAF] font-semibold mt-1 text-center">
-              Completa los 4 mundos ({totalModulesAll} módulos) para obtener tu certificado oficial
+              Completa los 5 mundos ({totalModulesAll} módulos) para obtener tu certificado oficial
             </p>
           )}
         </div>

@@ -11,6 +11,7 @@ import { MODULOS_DATA, CODE_CHALLENGES_DATA } from './data/modulesData';
 import { WORLD_2_MODULES, WORLD_2_SECTIONS } from './data/world2Data';
 import { WORLD_3_MODULES, WORLD_3_SECTIONS } from './data/world3Data';
 import { WORLD_4_MODULES, WORLD_4_SECTIONS } from './data/world4Data';
+import { WORLD_5_MODULES, WORLD_5_SECTIONS } from './data/world5Data';
 import { OnboardingScreen, RobotAvatar, RobotMini } from './Onboarding';
 import AuthScreen from './components/AuthScreen';
 import RankingScreen from './components/RankingScreen';
@@ -136,6 +137,26 @@ const WORLDS_CONFIG = [
         challengeIds: ['ard_robot_obstaculo', 'py_diccionario', 'ard_motor_control', 'cpp_hola_mundo', 'cpp_if_else', 'py_try_except'],
         circuitIds: [7, 8],
         glossaryTermIds: ['g30','g31','g32','g43','g44','g45','g46','g47','g48','g49','g50','g51','g52'],
+    },
+    {
+        id: 'world_5',
+        name: 'El Desierto de los Rovers',
+        emoji: '🏜️',
+        description: 'Robótica autónoma: diseña rovers como los de NASA y SpaceX.',
+        bgGradient: 'from-[#92400E] via-[#B45309] to-[#D97706]',
+        bgCard: 'from-[#FEF3C7] to-[#FFFBEB]',
+        bgClass: 'bg-world-desierto',
+        worldImage: '/mundo5.png',
+        accentColor: '#D97706',
+        accentDark: '#92400E',
+        modules: WORLD_5_MODULES,
+        sections: WORLD_5_SECTIONS,
+        bgPattern: '🏜️🧭👁️🧠🛞📡⚡📻🗺️🤖🛡️🧪🐜🏗️🏁🏆',
+        unlockType: 'friends',
+        unlockRequirement: 15,
+        challengeIds: ['py_clase_rover', 'py_a_star', 'py_clasificador', 'py_fsm_rover', 'py_sensor_fusion', 'py_energy_manager'],
+        circuitIds: [9, 10],
+        glossaryTermIds: ['g53','g54','g55','g56','g57','g58','g59','g60','g61','g62','g63','g64','g65'],
     },
 ];
 
@@ -2875,7 +2896,7 @@ const WorldMapScreen = ({ userScores, onSelectWorld, userProfile, firebaseProfil
                     const totalCount = world.modules.length;
                     const progress = Math.round((completedCount / totalCount) * 100);
                     const isComplete = completedCount === totalCount;
-                    const glowColors = ['rgba(59,130,246,0.5)', 'rgba(245,158,11,0.5)', 'rgba(16,185,129,0.5)', 'rgba(99,102,241,0.5)'];
+                    const glowColors = ['rgba(59,130,246,0.5)', 'rgba(245,158,11,0.5)', 'rgba(16,185,129,0.5)', 'rgba(99,102,241,0.5)', 'rgba(217,119,6,0.5)'];
                     const glowColor = glowColors[idx] || glowColors[0];
 
                     return (
