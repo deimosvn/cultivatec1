@@ -6235,33 +6235,38 @@ export default function App() {
     }, [completedModules, userScores, firebaseProfile]);
 
     // === SKIN UNLOCK ANIMATION ===
-    const skinUnlockInitRef = useRef(false);
+    const knownSkinsRef = useRef(new Set());
+    const [skinAnimReady, setSkinAnimReady] = useState(false);
     const [skinUnlockPopup, setSkinUnlockPopup] = useState(null);
     const [skinUnlockQueue, setSkinUnlockQueue] = useState([]);
 
+    // Wait 3 seconds after mount before enabling skin unlock animations
+    // This lets all Firebase data settle so we don't animate existing skins
+    useEffect(() => {
+        const timer = setTimeout(() => setSkinAnimReady(true), 3000);
+        return () => clearTimeout(timer);
+    }, []);
+
+    // Track unlocked skins and animate only truly new ones
     useEffect(() => {
         if (!computedUnlockedSkinIds || computedUnlockedSkinIds.size === 0) return;
         const currentIds = [...computedUnlockedSkinIds];
-        // Read previously known skins from localStorage
-        let knownIds = [];
-        try { knownIds = JSON.parse(localStorage.getItem('cultivatec_knownUnlockedSkins') || '[]'); } catch {}
-        // Always persist the current set
-        localStorage.setItem('cultivatec_knownUnlockedSkins', JSON.stringify(currentIds));
-        // Skip animation on first mount / initial load
-        if (!skinUnlockInitRef.current) {
-            skinUnlockInitRef.current = true;
-            // If localStorage was empty (first ever session), don't animate
-            if (knownIds.length === 0) return;
-        }
-        // Find truly new skins (not previously known)
-        const newIds = currentIds.filter(id => !knownIds.includes(id));
-        if (newIds.length > 0) {
-            const newSkins = newIds.map(id => ROBOT_SKINS.find(s => s.id === id)).filter(Boolean);
-            if (newSkins.length > 0) {
-                setSkinUnlockQueue(prev => [...prev, ...newSkins]);
+        const prevKnown = knownSkinsRef.current;
+
+        // Only animate if ready AND we have a non-empty baseline
+        if (skinAnimReady && prevKnown.size > 0) {
+            const newIds = currentIds.filter(id => !prevKnown.has(id));
+            if (newIds.length > 0) {
+                const newSkins = newIds.map(id => ROBOT_SKINS.find(s => s.id === id)).filter(Boolean);
+                if (newSkins.length > 0) {
+                    setSkinUnlockQueue(prev => [...prev, ...newSkins]);
+                }
             }
         }
-    }, [computedUnlockedSkinIds]);
+
+        // Always update the known set
+        knownSkinsRef.current = new Set(currentIds);
+    }, [computedUnlockedSkinIds, skinAnimReady]);
 
     useEffect(() => {
         if (!skinUnlockPopup && skinUnlockQueue.length > 0) {
