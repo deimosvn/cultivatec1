@@ -10,17 +10,28 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    // ---- Función helper: ¿es admin? ----
+    function isAdmin() {
+      return request.auth.token.email in [
+        'diego.martinez111213@gmail.com',
+        'ing.abrahamdonate@gmail.com'
+      ];
+    }
+
     // --- Perfiles de usuario ---
     match /users/{userId} {
       // Cualquiera autenticado puede leer perfiles (para ranking/amigos)
       allow read: if request.auth != null;
-      // Solo el propio usuario puede escribir su perfil
+      // Solo el propio usuario puede crear su perfil
       allow create: if request.auth != null && request.auth.uid == userId;
-      // El propio usuario puede actualizar todo; otros solo friendsCount
+      // Actualizar: propio usuario, admin, o solo friendsCount (para aceptar/eliminar amigos)
       allow update: if request.auth != null && (
         request.auth.uid == userId ||
+        isAdmin() ||
         request.resource.data.diff(resource.data).affectedKeys().hasOnly(['friendsCount'])
       );
+      // Eliminar: solo admin
+      allow delete: if request.auth != null && isAdmin();
     }
 
     // --- Usernames (unicidad) ---
@@ -28,34 +39,51 @@ service cloud.firestore {
       // Lectura pública: necesario para verificar disponibilidad ANTES de crear cuenta
       allow read: if true;
       allow create: if request.auth != null;
-      // No se permite actualizar ni borrar usernames
+      // Solo admin puede borrar usernames (al eliminar cuentas)
+      allow delete: if request.auth != null && isAdmin();
     }
 
     // --- Scores de usuario ---
     match /userScores/{userId} {
       // Cualquier autenticado puede leer (para ranking global)
       allow read: if request.auth != null;
-      allow write: if request.auth != null && request.auth.uid == userId;
+      // Propio usuario o admin puede escribir/eliminar
+      allow write: if request.auth != null && (
+        request.auth.uid == userId || isAdmin()
+      );
     }
 
     // --- Solicitudes de amistad ---
     match /friendRequests/{requestId} {
-      // Leer: el remitente o el destinatario
+      // Leer: el remitente, el destinatario, o admin
       allow read: if request.auth != null && (
         resource.data.fromUid == request.auth.uid ||
-        resource.data.toUid == request.auth.uid
+        resource.data.toUid == request.auth.uid ||
+        isAdmin()
       );
-      // Crear: cualquier usuario autenticado
+      // Crear: cualquier usuario autenticado (como remitente)
       allow create: if request.auth != null && request.resource.data.fromUid == request.auth.uid;
       // Actualizar: solo el destinatario (para aceptar/rechazar)
       allow update: if request.auth != null && resource.data.toUid == request.auth.uid;
+      // Eliminar: remitente, destinatario, o admin
+      allow delete: if request.auth != null && (
+        resource.data.fromUid == request.auth.uid ||
+        resource.data.toUid == request.auth.uid ||
+        isAdmin()
+      );
     }
 
     // --- Lista de amigos ---
     match /friends/{userId}/list/{friendId} {
-      allow read: if request.auth != null && request.auth.uid == userId;
+      // Leer: propio usuario o admin
+      allow read: if request.auth != null && (
+        request.auth.uid == userId || isAdmin()
+      );
+      // Escribir: propio usuario, el amigo, o admin
       allow write: if request.auth != null && (
-        request.auth.uid == userId || request.auth.uid == friendId
+        request.auth.uid == userId ||
+        request.auth.uid == friendId ||
+        isAdmin()
       );
     }
   }

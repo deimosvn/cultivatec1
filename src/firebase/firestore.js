@@ -674,9 +674,9 @@ export const adminDeleteUser = async (targetUid) => {
 
     // Eliminar solicitudes de amistad
     try {
-      const sentReqs = await getDocs(query(collection(db, 'friendRequests'), where('from', '==', targetUid)));
+      const sentReqs = await getDocs(query(collection(db, 'friendRequests'), where('fromUid', '==', targetUid)));
       for (const d of sentReqs.docs) await deleteDoc(d.ref);
-      const recvReqs = await getDocs(query(collection(db, 'friendRequests'), where('to', '==', targetUid)));
+      const recvReqs = await getDocs(query(collection(db, 'friendRequests'), where('toUid', '==', targetUid)));
       for (const d of recvReqs.docs) await deleteDoc(d.ref);
     } catch (e) {
       console.warn('Error limpiando solicitudes:', e.message);
