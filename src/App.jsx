@@ -377,23 +377,23 @@ const getDailyIndex = (pool) => {
 };
 
 const DAILY_CIRCUIT_STORIES = [
-    { id: 'dc_1', title: '🚀 Luces de Emergencia', story: 'La nave CultivaTec-7 atraviesa un campo de asteroides. ¡El sistema de luces de emergencia falló! El capitán necesita que conectes 3 LEDs rojos en paralelo con una resistencia de protección cada uno a una batería de 9V para alertar a la tripulación.', question: '¿Qué pasa si conectas los 3 LEDs en serie en vez de paralelo?', options: ['Brillan igual', 'Brillan menos porque el voltaje se divide entre los 3', 'Brillan más', 'No cambia nada'], correct: 1, explanation: 'En serie el voltaje se divide entre los LEDs, así que cada uno recibe menos voltaje y brilla menos. En paralelo, cada LED recibe el voltaje completo.' },
-    { id: 'dc_2', title: '🛸 Sensor de Proximidad', story: 'Un satélite de rescate necesita detectar basura espacial. Su sensor ultrasónico envía una señal y mide el tiempo que tarda en regresar. El circuito necesita: sensor ultrasónico, Arduino, un buzzer que suene cuando detecte algo a menos de 30cm.', question: '¿Por qué necesitamos una resistencia entre el Arduino y el buzzer?', options: ['Para que suene más fuerte', 'Para proteger el pin del Arduino limitando la corriente', 'No se necesita resistencia', 'Para que no suene'], correct: 1, explanation: 'Los pines del Arduino solo soportan ~20mA. Sin resistencia la corriente podría ser mayor y dañar el pin. La resistencia limita la corriente a un nivel seguro.' },
-    { id: 'dc_3', title: '🌟 Panel Solar de la Estación', story: 'La estación espacial necesita energía. Tienes 4 paneles solares que generan 3V cada uno. Necesitas alimentar un sistema que requiere 12V. ¿Cómo los conectas?', question: '¿Cómo debes conectar los 4 paneles de 3V para obtener 12V?', options: ['Todos en paralelo', 'Todos en serie', '2 en serie y 2 en paralelo', 'No es posible con solo 4 paneles'], correct: 1, explanation: 'En serie los voltajes se suman: 3V + 3V + 3V + 3V = 12V. En paralelo se mantienen los 3V pero aumenta la corriente disponible.' },
-    { id: 'dc_4', title: '🔧 Motor del Brazo Robótico', story: 'El brazo robótico de la nave necesita reparación. El motor DC funciona con 6V pero la batería de la nave es de 12V. Necesitas reducir el voltaje sin desperdiciar energía.', question: '¿Cuál es la mejor forma de reducir 12V a 6V para el motor?', options: ['Conectar una resistencia grande en serie', 'Usar un regulador de voltaje o divisor de voltaje', 'Desconectar cables', 'Usar un LED para absorber voltaje'], correct: 1, explanation: 'Un regulador de voltaje convierte eficientemente 12V a 6V. Un divisor de voltaje con resistencias también funciona pero desperdicia energía en forma de calor.' },
-    { id: 'dc_5', title: '💡 Sistema de Iluminación por Zonas', story: 'La nave tiene 3 zonas: cabina (LED blanco), motor (LED rojo), carga (LED azul). Cada zona necesita encenderse independientemente con su propio interruptor.', question: '¿Cómo se deben conectar los 3 LEDs con sus interruptores?', options: ['Todos en serie con un solo interruptor', 'Cada LED en paralelo con su propio interruptor en serie', 'Todos en paralelo con un solo interruptor', 'En serie con 3 interruptores en paralelo'], correct: 1, explanation: 'Cada LED se conecta en paralelo a la fuente, con su interruptor en serie. Así cada interruptor controla solo su zona sin afectar las demás.' },
-    { id: 'dc_6', title: '⚡ Carga de Baterías de Respaldo', story: 'La nave necesita cargar 2 baterías de respaldo de 5V/2A cada una. El generador produce 5V/3A máximo. No puedes cargar las dos al mismo tiempo.', question: '¿Por qué no puedes cargar ambas baterías simultáneamente en paralelo?', options: ['Porque explotarían', 'Porque necesitarían 4A y el generador solo da 3A', 'Porque en paralelo no cargan', 'Sí se puede sin problema'], correct: 1, explanation: 'Cada batería necesita 2A. En paralelo pedirían 4A total, pero el generador solo da 3A. Se sobrecargaría. Debes cargarlas una a la vez o conseguir un generador más potente.' },
-    { id: 'dc_7', title: '🛰️ Comunicaciones de Radio', story: 'El transmisor de radio de la nave necesita una antena conectada a un circuito amplificador. El amplificador necesita exactamente 5V, pero la fuente da 9V.', question: '¿Qué componente usarías para bajar de 9V a 5V de forma estable?', options: ['Un fusible', 'Un regulador de voltaje 7805', 'Un condensador', 'Un diodo simple'], correct: 1, explanation: 'El regulador 7805 convierte cualquier voltaje entre 7-35V a una salida estable de 5V. Es el componente estándar para esta tarea. Un condensador no regula voltaje y un diodo solo baja ~0.7V.' },
+    { id: 'dc_1', title: '🚀 ¡Las Luces de Emergencia!', story: '¡Oh no! La nave CultivaTec-7 está cruzando un campo de asteroides y las luces de emergencia se apagaron. El capitán necesita TU ayuda para conectar 3 LEDs rojos. Hay que ponerlos en paralelo con una resistencia cada uno, usando una batería de 9V.', question: '¿Qué pasaría si pones los 3 LEDs en fila (serie) en vez de en paralelo?', options: ['Brillan igual de fuerte', 'Brillan menos porque el voltaje se reparte entre los 3', 'Brillan más fuerte', 'No cambia nada'], correct: 1, explanation: '¡Correcto! 🎉 En serie el voltaje se reparte: cada LED recibe menos energía y brilla poquito. En paralelo cada uno recibe TODA la energía. ¡Por eso paralelo es mejor!' },
+    { id: 'dc_2', title: '🛸 ¡Detector de Basura Espacial!', story: '¡Un satélite necesita detectar basura espacial! Su sensor ultrasónico manda un "sonido" y escucha cuánto tarda en regresar. Si algo está a menos de 30cm, un buzzer (bocina) debe sonar. Necesitamos: sensor, Arduino y buzzer.', question: '¿Por qué ponemos una resistencia entre el Arduino y el buzzer?', options: ['Para que suene más fuerte', 'Para proteger al Arduino, ¡que no pase demasiada electricidad!', 'No se necesita', 'Para que no suene'], correct: 1, explanation: '¡Bien pensado! 🛡️ El Arduino es delicado y solo aguanta poquita electricidad (20mA). La resistencia es como un guardaespaldas que no deja pasar más de lo necesario.' },
+    { id: 'dc_3', title: '🌟 ¡Los Paneles Solares!', story: '¡La estación espacial necesita energía del Sol! ☀️ Tienes 4 paneles solares que producen 3V cada uno. Pero el sistema necesita 12V para funcionar. ¿Cómo los conectas?', question: '¿Cómo conectas 4 paneles de 3V para obtener 12V?', options: ['Todos en paralelo (lado a lado)', 'Todos en serie (en fila)', '2 en serie y 2 en paralelo', 'No se puede con solo 4'], correct: 1, explanation: '¡En serie! 🚂 Como un tren: 3V + 3V + 3V + 3V = 12V. En paralelo se quedan en 3V pero dan más corriente. ¡Serie suma voltaje!' },
+    { id: 'dc_4', title: '🔧 ¡El Brazo Robótico!', story: '¡El brazo robot de la nave necesita reparación! Su motor funciona con 6V, pero la batería de la nave es de 12V. ¡Si le mandamos 12V se quema! 😱 Necesitamos bajar el voltaje.', question: '¿Cuál es la mejor forma de bajar de 12V a 6V para el motor?', options: ['Poner una resistencia grandota', 'Usar un regulador de voltaje (un chip especial)', 'Desconectar cables', 'Poner un LED para gastar voltaje'], correct: 1, explanation: '¡El regulador de voltaje! 🎯 Es un chip mágico que convierte 12V a exactamente 6V de forma segura. Una resistencia desperdiciaría mucha energía en forma de calor. 🌡️' },
+    { id: 'dc_5', title: '💡 ¡Luces por Zonas!', story: 'La nave tiene 3 zonas: la cabina del piloto (LED blanco ⬜), los motores (LED rojo 🔴) y la bodega (LED azul 🔵). El capitán quiere que CADA zona tenga su propio botón para encender y apagar.', question: '¿Cómo conectas los LEDs para que cada botón controle solo SU zona?', options: ['Todos en serie con un solo botón', 'Cada LED en paralelo con su propio botón', 'Todos en paralelo con un solo botón', 'En serie con 3 botones en paralelo'], correct: 1, explanation: '¡En paralelo con su propio botón! 🎮 Así el botón de la cabina solo prende la cabina, sin afectar los motores ni la bodega. ¡Cada zona es independiente!' },
+    { id: 'dc_6', title: '⚡ ¡Cargando Baterías!', story: '¡La nave necesita cargar 2 baterías de respaldo! Cada batería necesita 2A para cargar. Pero el generador de la nave solo produce 3A en total. ¿Podemos cargar las dos al mismo tiempo?', question: '¿Por qué NO podemos cargar las dos baterías al mismo tiempo?', options: ['Porque explotarían 💥', 'Porque necesitan 4A total y el generador solo da 3A', 'Porque en paralelo no cargan', 'Sí se puede sin problema'], correct: 1, explanation: '¡Es matemáticas! 🧮 Batería 1 necesita 2A + Batería 2 necesita 2A = 4A total. ¡Pero el generador solo da 3A! Se sobrecargaría. Hay que cargarlas una a la vez. ⏰' },
+    { id: 'dc_7', title: '🛰️ ¡La Radio de la Nave!', story: '¡El transmisor de radio necesita exactamente 5V para funcionar! Pero la fuente de energía de la nave da 9V. Necesitamos un componente especial que baje el voltaje a exactamente 5V.', question: '¿Qué componente usarías para convertir 9V a 5V de forma estable?', options: ['Un fusible', 'Un regulador de voltaje 7805', 'Un condensador', 'Un diodo simple'], correct: 1, explanation: '¡El 7805! 🌟 Es un regulador que siempre da exactamente 5V sin importar cuánto le metas (entre 7V y 35V). ¡Es súper útil para Arduino y muchos circuitos!' },
 ];
 
 const DAILY_PROGRAMMING_STORIES = [
-    { id: 'dp_1', title: '🚀 Calculador de Combustible', story: 'La nave CultivaTec-7 necesita calcular si tiene suficiente combustible para llegar al siguiente planeta. El tanque tiene 500 litros y consume 12 litros por hora. El viaje dura 38 horas.', task: 'Calcula si el combustible alcanza y cuántos litros sobran o faltan.', starterCode: 'tanque = 500\nconsumo_hora = 12\nhoras_viaje = 38\n\ntotal_necesario = consumo_hora * horas_viaje\nprint("Combustible necesario:", total_necesario, "litros")\n\nif tanque >= total_necesario:\n    sobra = tanque - total_necesario\n    print("✅ ¡Sí alcanza! Sobran", sobra, "litros")\nelse:\n    falta = total_necesario - tanque\n    print("❌ No alcanza. Faltan", falta, "litros")' },
-    { id: 'dp_2', title: '🛸 Código de Acceso', story: 'La puerta del laboratorio espacial necesita un código de 4 dígitos. El sistema valida si el código ingresado es correcto comparándolo con el código secreto 7294.', task: 'Simula la verificación del código de acceso con intentos.', starterCode: 'codigo_secreto = 7294\nintentos = [1234, 5678, 7294]\n\nfor i in range(len(intentos)):\n    codigo = intentos[i]\n    print("Intento", i + 1, "- Código:", codigo)\n    if codigo == codigo_secreto:\n        print("  🔓 ¡Acceso concedido!")\n    else:\n        print("  🔒 Acceso denegado")' },
-    { id: 'dp_3', title: '🌟 Temperatura del Reactor', story: 'El reactor de la nave genera datos de temperatura cada segundo. Si supera 90°C hay que activar el enfriamiento. Si baja de 30°C hay que calentar.', task: 'Monitorea las lecturas del sensor de temperatura y toma acción.', starterCode: 'import random\n\nprint("=== Monitor de Temperatura del Reactor ===")\n\nfor segundo in range(8):\n    temp = random.randint(20, 100)\n    print("Segundo", segundo + 1, "- Temp:", temp, "°C", end=" ")\n    if temp > 90:\n        print("🔥 ¡ALERTA! Activando enfriamiento")\n    elif temp < 30:\n        print("❄️ Muy frío. Calentando reactor")\n    else:\n        print("✅ Normal")' },
-    { id: 'dp_4', title: '🔧 Inventario de Repuestos', story: 'El mecánico de la nave necesita saber cuántas piezas de repuesto quedan para planificar una parada de reabastecimiento.', task: 'Gestiona el inventario y alerta cuando quedan pocas piezas.', starterCode: 'inventario = {\n    "tornillos": 45,\n    "tuercas": 12,\n    "cables": 8,\n    "fusibles": 3,\n    "motores": 2\n}\n\nprint("🔧 Inventario de la Nave CultivaTec-7")\nprint("=" * 35)\n\nalerta = []\nfor pieza, cantidad in inventario.items():\n    estado = "⚠️ BAJO" if cantidad < 10 else "✅ OK"\n    print(f"  {pieza}: {cantidad} - {estado}")\n    if cantidad < 10:\n        alerta.append(pieza)\n\nif alerta:\n    print(f"\\n🚨 Reabastecer: {alerta}")\nelse:\n    print("\\n✅ Todo en orden")' },
-    { id: 'dp_5', title: '💡 Secuencia de Aterrizaje', story: 'La nave debe seguir una secuencia precisa para aterrizar: encender retrocohetes, desplegar tren de aterrizaje, reducir velocidad, y tocar superficie.', task: 'Programa la secuencia de aterrizaje paso a paso.', starterCode: 'pasos = [\n    "Encender retrocohetes 🔥",\n    "Desplegar tren de aterrizaje 🦿",\n    "Reducir velocidad a 50 km/h 🐢",\n    "Activar sensores de superficie 📡",\n    "Toque de superficie 🌍",\n    "Apagar motores principales ⚡"\n]\n\nvelocidad = 300\n\nprint("🚀 Iniciando secuencia de aterrizaje...")\nprint("=" * 40)\n\nfor i in range(len(pasos)):\n    print(f"Paso {i + 1}: {pasos[i]}")\n    velocidad = velocidad - 50\n    if velocidad > 0:\n        print(f"  Velocidad actual: {velocidad} km/h")\n    else:\n        print("  ✅ ¡Nave detenida!")\n\nprint("\\n🎉 ¡Aterrizaje exitoso!")' },
-    { id: 'dp_6', title: '⚡ Distribución de Energía', story: 'La nave tiene 1000W de energía total y debe repartirla entre: navegación (300W mín), soporte vital (400W mín), comunicaciones (150W mín), y lo que sobre va a escudos.', task: 'Calcula la distribución de energía y cuánto queda para escudos.', starterCode: 'energia_total = 1000\n\nnavegacion = 300\nsoporte_vital = 400\ncomunicaciones = 150\n\nusado = navegacion + soporte_vital + comunicaciones\nescudos = energia_total - usado\n\nprint("⚡ Distribución de Energía")\nprint("=" * 30)\nprint(f"  Navegación: {navegacion}W")\nprint(f"  Soporte vital: {soporte_vital}W")\nprint(f"  Comunicaciones: {comunicaciones}W")\nprint(f"  Escudos: {escudos}W")\nprint(f"\\nTotal usado: {usado}W de {energia_total}W")\n\nif escudos < 100:\n    print("⚠️ ¡Escudos bajos! Peligro.")\nelse:\n    print("✅ Energía bien distribuida")' },
-    { id: 'dp_7', title: '🛰️ Mensaje SOS en Código', story: 'La antena de la nave está dañada y solo puede enviar pulsos cortos (.) y largos (-). Necesitas codificar "SOS" en código Morse: S = "...", O = "---"', task: 'Genera la señal SOS en código Morse y repítela 3 veces.', starterCode: 'morse = {\n    "S": "...",\n    "O": "---"\n}\n\nmensaje = "SOS"\n\nprint("📡 Transmitiendo señal de emergencia...")\nprint("=" * 35)\n\nfor repeticion in range(3):\n    senal = ""\n    for letra in mensaje:\n        senal = senal + morse[letra] + " "\n    print(f"  Transmisión {repeticion + 1}: {senal}")\n\nprint("\\n📡 Señal SOS enviada 3 veces")\nprint("🛸 Esperando respuesta...")' },
+    { id: 'dp_1', title: '🚀 ¿Alcanza el Combustible?', story: '¡La nave CultivaTec-7 necesita viajar al siguiente planeta! El tanque tiene 500 litros de combustible y la nave gasta 12 litros por hora. El viaje son 38 horas. ¿Llegamos o nos quedamos flotando? 😱', task: '¡Calcula si el combustible alcanza y cuántos litros sobran o faltan!', starterCode: 'tanque = 500\nconsumo_hora = 12\nhoras_viaje = 38\n\ntotal_necesario = consumo_hora * horas_viaje\nprint("⛽ Combustible necesario:", total_necesario, "litros")\nprint("🛢️ Combustible en tanque:", tanque, "litros\\n")\n\nif tanque >= total_necesario:\n    sobra = tanque - total_necesario\n    print("✅ ¡SÍ alcanza! ¡Vámonos! 🚀")\n    print("🎉 Sobran", sobra, "litros")\nelse:\n    falta = total_necesario - tanque\n    print("❌ ¡No alcanza! 😱")\n    print("Faltan", falta, "litros")' },
+    { id: 'dp_2', title: '🛸 ¡La Clave Secreta!', story: '¡La puerta del laboratorio espacial está cerrada con contraseña! El código secreto es 7294. Tenemos 3 intentos para abrirla... ¿lo lograremos? 🔐', task: '¡Simula los intentos de desbloqueo!', starterCode: 'codigo_secreto = 7294\nintentos = [1234, 5678, 7294]\n\nprint("🔐 Sistema de Seguridad Espacial")\nprint("=" * 30, "\\n")\n\nfor i in range(len(intentos)):\n    codigo = intentos[i]\n    print("Intento", i + 1, "- Código:", codigo)\n    if codigo == codigo_secreto:\n        print("  🔓 ¡ACCESO CONCEDIDO! ¡Bienvenido! 🎉\\n")\n    else:\n        print("  🔒 Nop... Acceso denegado ❌\\n")' },
+    { id: 'dp_3', title: '🌟 ¡El Reactor se Calienta!', story: '¡El reactor de la nave mide su temperatura cada segundo! Si pasa de 90°C hay que enfriarlo rápido. Si baja de 30°C hay que calentarlo. ¡Tú eres el ingeniero a cargo! 🌡️', task: '¡Monitorea el reactor y toma las decisiones correctas!', starterCode: 'import random\n\nprint("🌡️ Monitor de Temperatura del Reactor")\nprint("=" * 40, "\\n")\n\nfor segundo in range(8):\n    temp = random.randint(20, 100)\n    print("⏱️ Segundo", segundo + 1, "- Temp:", temp, "°C", end=" ")\n    if temp > 90:\n        print("🔥 ¡ALERTA! ¡Enfriando ya!")\n    elif temp < 30:\n        print("❄️ ¡Muy frío! Calentando...")\n    else:\n        print("✅ ¡Todo normal!")' },
+    { id: 'dp_4', title: '🔧 ¡Inventario de Emergencia!', story: '¡El mecánico de la nave necesita revisar las piezas de repuesto! Si quedan menos de 10 de algo, hay que comprar más en la siguiente estación espacial. 🛒', task: '¡Revisa el inventario y alerta sobre lo que falta!', starterCode: 'inventario = {\n    "tornillos": 45,\n    "tuercas": 12,\n    "cables": 8,\n    "fusibles": 3,\n    "motores": 2\n}\n\nprint("🔧 Inventario de la Nave CultivaTec-7")\nprint("=" * 35, "\\n")\n\nalerta = []\nfor pieza, cantidad in inventario.items():\n    if cantidad < 10:\n        estado = "⚠️ ¡POCAS!"\n        alerta.append(pieza)\n    else:\n        estado = "✅ Bien"\n    print(f"  {pieza}: {cantidad} - {estado}")\n\nif alerta:\n    print(f"\\n🚨 ¡Hay que comprar: {alerta}!")\nelse:\n    print("\\n🎉 ¡Todo en orden, capitán!")' },
+    { id: 'dp_5', title: '💡 ¡Secuencia de Aterrizaje!', story: '¡La nave va a aterrizar en un planeta! Hay que seguir 6 pasos EXACTOS o nos estrellamos. Cada paso reduce la velocidad. ¡Tú programas la secuencia! 🌍', task: '¡Programa los pasos de aterrizaje uno por uno!', starterCode: 'pasos = [\n    "Encender retrocohetes 🔥",\n    "Desplegar tren de aterrizaje 🦿",\n    "Reducir velocidad 🐢",\n    "Activar sensores 📡",\n    "Toque de superficie 🌍",\n    "Apagar motores ⚡"\n]\n\nvelocidad = 300\n\nprint("🚀 ¡Iniciando aterrizaje!")\nprint("=" * 40, "\\n")\n\nfor i in range(len(pasos)):\n    print(f"Paso {i + 1}: {pasos[i]}")\n    velocidad = velocidad - 50\n    if velocidad > 0:\n        print(f"  🏎️ Velocidad: {velocidad} km/h\\n")\n    else:\n        print("  ✅ ¡Nave detenida!\\n")\n\nprint("🎉🎉 ¡¡ATERRIZAJE EXITOSO!! 🎉🎉")' },
+    { id: 'dp_6', title: '⚡ ¡Repartiendo Energía!', story: '¡La nave tiene 1000W de energía y hay que repartirla bien! Navegación necesita mínimo 300W, soporte vital 400W, comunicaciones 150W. ¡Lo que sobre va para los escudos! 🛡️', task: '¡Calcula cuánta energía queda para los escudos!', starterCode: 'energia_total = 1000\n\nnavegacion = 300\nsoporte_vital = 400\ncomunicaciones = 150\n\nusado = navegacion + soporte_vital + comunicaciones\nescudos = energia_total - usado\n\nprint("⚡ Control de Energía de la Nave")\nprint("=" * 35, "\\n")\nprint(f"  🧭 Navegación: {navegacion}W")\nprint(f"  💗 Soporte vital: {soporte_vital}W")\nprint(f"  📡 Comunicaciones: {comunicaciones}W")\nprint(f"  🛡️ Escudos: {escudos}W")\nprint(f"\\n  Total: {usado}W de {energia_total}W\\n")\n\nif escudos < 100:\n    print("⚠️ ¡Escudos muy bajos! ¡Peligro! 😱")\nelse:\n    print("✅ ¡Energía bien repartida! 🎉")' },
+    { id: 'dp_7', title: '🛰️ ¡SOS en Código Morse!', story: '¡La antena de la nave está rota y solo puede enviar pulsos! Necesitamos enviar "SOS" en código Morse. S = "..." (3 pulsos cortos) y O = "---" (3 pulsos largos). ¡Repite 3 veces para que nos escuchen! 📡', task: '¡Genera la señal SOS en código Morse!', starterCode: 'morse = {\n    "S": "...",\n    "O": "---"\n}\n\nmensaje = "SOS"\n\nprint("📡 ¡Transmitiendo señal de emergencia!")\nprint("=" * 35, "\\n")\n\nfor repeticion in range(3):\n    senal = ""\n    for letra in mensaje:\n        senal = senal + morse[letra] + " "\n    print(f"  Transmisión {repeticion + 1}: {senal} 📻")\n\nprint("\\n📡 ¡Señal SOS enviada 3 veces!")\nprint("🛸 Esperando respuesta... 🤞")' },
 ];
 
 // Helper to get today's date key
@@ -404,21 +404,21 @@ const getTodayKey = () => {
 
 // --- CIRCUIT LAB SCREEN ---
 const CIRCUIT_CONCEPTS = [
-    { id: 'cc_1', title: '⚡ Voltaje (V)', emoji: '⚡', description: 'Es la "presión" que empuja a los electrones por el circuito. Se mide en Voltios. Una batería de 9V empuja más fuerte que una de 3V.', example: 'Imagina el agua en una manguera: el voltaje es como la presión del agua. Más presión = más fuerza.' },
-    { id: 'cc_2', title: '🌊 Corriente (I)', emoji: '🌊', description: 'Es la cantidad de electrones que fluyen. Se mide en Amperios (A). Más corriente = más electrones pasando.', example: 'Si el voltaje es la presión del agua, la corriente es la cantidad de agua que fluye por la manguera.' },
-    { id: 'cc_3', title: '🚧 Resistencia (R)', emoji: '🚧', description: 'Es lo que se opone al flujo de corriente. Se mide en Ohmios (Ω). Las resistencias protegen los componentes.', example: 'Como poner el dedo en la manguera: reduces el flujo de agua. Una resistencia reduce el flujo de corriente.' },
-    { id: 'cc_4', title: '📐 Ley de Ohm', emoji: '📐', description: 'V = I × R. El voltaje es igual a la corriente multiplicada por la resistencia. ¡La fórmula más importante!', example: 'Si tienes 9V y una resistencia de 450Ω:\nI = V/R = 9/450 = 0.02A = 20mA\nSuficiente para encender un LED.' },
-    { id: 'cc_5', title: '🔗 Serie vs Paralelo', emoji: '🔗', description: 'En SERIE los componentes van uno tras otro (el voltaje se divide). En PARALELO van lado a lado (la corriente se divide).', example: 'Navidad: las luces en serie → si una falla, todas se apagan. En paralelo → cada una es independiente.' },
-    { id: 'cc_6', title: '💡 LEDs', emoji: '💡', description: 'Los LEDs (Diodos Emisores de Luz) solo dejan pasar corriente en una dirección. Necesitan una resistencia para no quemarse.', example: 'Un LED rojo necesita ~2V y 20mA. Con batería de 9V: R = (9-2)/0.02 = 350Ω → usa una de 330Ω o 470Ω.' },
+    { id: 'cc_1', title: '⚡ Voltaje (V)', emoji: '⚡', description: 'Es como la "fuerza" que empuja a los electrones (bolitas de energía) a moverse por los cables. ¡Más voltaje = más fuerza!', example: 'Imagina una resbaladilla con agua: el voltaje es qué tan alta está. Más alta = el agua baja con más fuerza. Una pila de 9V empuja más que una de 3V.' },
+    { id: 'cc_2', title: '🌊 Corriente (I)', emoji: '🌊', description: 'Es la cantidad de electrones que pasan por el cable. Se mide en Amperios (A). ¡Más corriente = más electricidad fluyendo!', example: '¡Piensa en un río! El voltaje es lo inclinado del río, y la corriente es cuánta agua pasa. Un río ancho lleva más agua que un arroyo.' },
+    { id: 'cc_3', title: '🚧 Resistencia (R)', emoji: '🚧', description: 'Es como un "freno" para la electricidad. Se mide en Ohmios (Ω). Las resistencias protegen los componentes para que no se quemen.', example: 'Es como poner una roca en el río: reduce cuánta agua pasa. ¡Sin resistencia, pasaría demasiada corriente y se quemarían los LEDs!' },
+    { id: 'cc_4', title: '📐 Ley de Ohm', emoji: '📐', description: 'La fórmula mágica: V = I × R. Voltaje = Corriente × Resistencia. ¡Con esta fórmula puedes calcular lo que necesites!', example: 'Si tienes una pila de 9V y una resistencia de 450Ω:\nCorriente = 9V ÷ 450Ω = 0.02A = 20mA\n¡Justo lo que necesita un LED para encender! 💡' },
+    { id: 'cc_5', title: '🔗 Serie vs Paralelo', emoji: '🔗', description: 'SERIE = los componentes van en fila (como un tren 🚂). PARALELO = van lado a lado (como carriles de una alberca 🏊).', example: '🎄 Las luces del árbol de Navidad en serie: si una se quema, ¡TODAS se apagan! En paralelo: cada una funciona solita. ¡Por eso los focos de tu casa son en paralelo!' },
+    { id: 'cc_6', title: '💡 LEDs', emoji: '💡', description: 'Los LEDs son lucecitas especiales que solo dejan pasar electricidad en una dirección. ¡Siempre necesitan una resistencia amiga para no quemarse!', example: 'Un LED rojo necesita 2V y 20mA. Con pila de 9V:\nResistencia = (9-2) ÷ 0.02 = 350Ω\n¡Usa una de 330Ω o 470Ω y listo! 🎉' },
 ];
 
 const CIRCUIT_PROBLEMS = [
-    { id: 'cp_1', title: '🔌 Encender un LED', difficulty: 1, emoji: '💡', description: 'Conecta una batería, una resistencia y un LED para que encienda.', question: '¿Qué necesitas como mínimo para encender un LED de forma segura?', options: ['Solo el LED y la batería', 'Batería + Resistencia + LED', 'Solo el LED', 'Batería + 2 LEDs'], correct: 1, explanation: 'Necesitas batería (energía), resistencia (protección) y LED. Sin la resistencia, la corriente sería muy alta y el LED se quemaría.' },
-    { id: 'cp_2', title: '⚡ Calculando Resistencia', difficulty: 2, emoji: '🧮', description: 'Con batería de 9V y LED rojo (2V, 20mA), ¿qué resistencia necesitas?', question: 'R = (V_batería - V_LED) / I_LED = (9 - 2) / 0.020 = ?', options: ['150Ω', '350Ω', '470Ω', '1000Ω'], correct: 1, explanation: 'R = (9-2)/0.020 = 350Ω. En la práctica usarías 330Ω (valor comercial más cercano hacia abajo) o 470Ω (más seguro).' },
-    { id: 'cp_3', title: '🔗 LEDs en Serie', difficulty: 2, emoji: '🔗', description: 'Tienes 3 LEDs rojos (2V cada uno) y una batería de 9V. ¿Funciona en serie?', question: '¿Cuánto voltaje queda para la resistencia si conectas 3 LEDs en serie?', options: ['9V', '3V (9V - 3×2V)', '0V', '6V'], correct: 1, explanation: 'En serie: V_resistencia = 9V - (3 × 2V) = 3V. Quedan 3V para la resistencia, suficiente para que funcione con R = 3/0.020 = 150Ω.' },
-    { id: 'cp_4', title: '🔀 Serie o Paralelo', difficulty: 2, emoji: '🔀', description: 'Un sistema de alarma necesita que funcione aunque falle un componente. ¿Cómo conectas los LEDs?', question: '¿Qué conexión hace que cada LED funcione independientemente?', options: ['En serie', 'En paralelo', 'Da igual', 'Ninguna'], correct: 1, explanation: 'En paralelo cada LED tiene su propio camino de corriente. Si uno falla, los demás siguen funcionando. En serie, si uno falla se corta todo el circuito.' },
-    { id: 'cp_5', title: '🛡️ Fusibles de Protección', difficulty: 3, emoji: '🛡️', description: 'El sistema eléctrico de la nave tiene un fusible de 2A. Tienes 3 motores que consumen 0.5A cada uno y un calentador de 0.8A.', question: '¿Puedes encender todo al mismo tiempo sin quemar el fusible?', options: ['Sí, alcanza perfectamente', 'No, se quema el fusible porque la corriente total es 2.3A', 'Sí, los fusibles no importan', 'No se puede calcular'], correct: 1, explanation: 'Corriente total = (3 × 0.5A) + 0.8A = 2.3A > 2A del fusible. ¡Se quemaría! Necesitas un fusible de 3A o encender los motores por turnos.' },
-    { id: 'cp_6', title: '🔋 Baterías en Combinación', difficulty: 3, emoji: '🔋', description: 'Tienes 4 baterías de 3V/1A. Necesitas energizar un sistema de 6V/2A.', question: '¿Cómo combinas las baterías para obtener 6V y 2A?', options: ['Todas en serie', 'Todas en paralelo', '2 pares en serie, luego esos pares en paralelo', 'No es posible'], correct: 2, explanation: '2 en serie = 6V/1A. Pones 2 de esos pares en paralelo = 6V/2A. Serie suma voltaje, paralelo suma corriente. ¡Combinación perfecta!' },
+    { id: 'cp_1', title: '🔌 Enciende un LED', difficulty: 1, emoji: '💡', description: '¡Tu primer reto! Conecta una batería, resistencia y LED', question: '¿Qué necesitas como mínimo para que un LED encienda sin quemarse?', options: ['Solo el LED y la batería', 'Batería + Resistencia + LED', 'Solo el LED', 'Batería + 2 LEDs'], correct: 1, explanation: '¡Necesitas los 3! La batería da energía ⚡, la resistencia protege al LED 🛡️, y el LED se enciende 💡. Sin la resistencia, ¡pobre LED se quemaría! 🔥' },
+    { id: 'cp_2', title: '⚡ Calcula la Resistencia', difficulty: 2, emoji: '🧮', description: '¡Usa la Ley de Ohm! Batería 9V + LED rojo (2V)', question: 'R = (9V - 2V) ÷ 0.020A = ? ¡Calcula qué resistencia necesitas!', options: ['150Ω', '350Ω', '470Ω', '1000Ω'], correct: 1, explanation: '¡Bien hecho! 🎉 R = 7V ÷ 0.020A = 350Ω. En las tiendas venden de 330Ω o 470Ω. ¡Cualquiera funciona genial!' },
+    { id: 'cp_3', title: '🔗 Tren de LEDs (Serie)', difficulty: 2, emoji: '🔗', description: '3 LEDs rojos (2V c/u) en fila con batería de 9V', question: 'Si pones 3 LEDs en fila (serie), ¿cuánto voltaje queda para la resistencia?', options: ['9V', '3V (sobran 9V - 6V)', '0V', '6V'], correct: 1, explanation: '¡Perfecto! 🚂 Cada LED usa 2V: 3 × 2V = 6V. La batería tiene 9V, así que quedan 9V - 6V = 3V para la resistencia. ¡Matemáticas divertidas!' },
+    { id: 'cp_4', title: '🔀 ¿Serie o Paralelo?', difficulty: 2, emoji: '🔀', description: 'Una alarma necesita que CADA luz funcione sola', question: '¿Cómo conectas los LEDs para que si uno falla los demás sigan prendidos?', options: ['En serie (en fila)', 'En paralelo (lado a lado)', 'Da igual', 'No se puede'], correct: 1, explanation: '¡En paralelo! 🏊 Cada LED tiene su propio caminito de electricidad. Si un amigo se cae, los demás siguen corriendo por su carril. ¡En serie si uno falla, todos se apagan!' },
+    { id: 'cp_5', title: '🛡️ ¡Cuidado con el Fusible!', difficulty: 3, emoji: '🛡️', description: 'Fusible de 2A + 3 motores (0.5A c/u) + calentador (0.8A)', question: '¿Puedes encender todo al mismo tiempo sin que se queme el fusible?', options: ['Sí, alcanza', 'No, necesitan 2.3A y el fusible solo aguanta 2A', 'Los fusibles no importan', 'No se puede saber'], correct: 1, explanation: '¡Oh no! 😱 3 motores × 0.5A = 1.5A + calentador 0.8A = 2.3A total. ¡El fusible solo aguanta 2A! Se quemaría 🔥. Solución: enciende las cosas por turnos.' },
+    { id: 'cp_6', title: '🔋 Combo de Baterías', difficulty: 3, emoji: '🔋', description: '4 baterías de 3V. Necesitas obtener 6V y 2A', question: '¿Cómo combinas 4 baterías de 3V/1A para obtener 6V/2A?', options: ['Todas en serie', 'Todas en paralelo', '2 pares en serie, y luego los pares en paralelo', 'Imposible'], correct: 2, explanation: '¡Combinación mágica! ✨ 2 baterías en serie = 3V+3V = 6V (pero solo 1A). Ahora pones los 2 pares en paralelo = 6V pero 1A+1A = 2A. ¡Serie suma voltaje, paralelo suma corriente!' },
 ];
 
 const DAILY_CIRCUIT_XP = 15;
@@ -440,10 +440,19 @@ const CircuitLabScreen = ({ onBack, onOpenFreeCircuitBuilder, userId, userStats,
 
     const dailyProblem = DAILY_CIRCUIT_STORIES[getDailyIndex(DAILY_CIRCUIT_STORIES)];
 
+    const circuitStars = React.useMemo(() =>
+        Array.from({ length: 40 }, (_, i) => ({
+            left: `${(i * 11.3 + 7) % 98}%`,
+            top: `${(i * 19.7 + 2) % 95}%`,
+            size: 1 + (i % 3),
+            twinkleDuration: `${2 + (i % 5) * 0.8}s`,
+            twinkleDelay: `${(i * 0.4) % 4}s`,
+        }))
+    , []);
+
     const solveProblem = (answerIdx, problemIdx) => {
         setSelectedAnswer(answerIdx);
         setShowExplanation(true);
-        // Award XP first time solving a non-daily problem correctly
         if (answerIdx === CIRCUIT_PROBLEMS[problemIdx]?.correct && !solvedProblems.has(problemIdx) && onAwardXp) {
             setSolvedProblems(prev => new Set(prev).add(problemIdx));
             onAwardXp(CIRCUIT_PROBLEM_XP, 'circuitProblem');
@@ -456,7 +465,6 @@ const CircuitLabScreen = ({ onBack, onOpenFreeCircuitBuilder, userId, userStats,
         if (answerIdx === dailyProblem.correct) {
             const wasAlreadySolved = dailySolved;
             try { localStorage.setItem('cultivatec_daily_circuit', getTodayKey()); setDailySolved(true); } catch {}
-            // Award XP for daily circuit problem (first time today)
             if (!wasAlreadySolved && onAwardXp) {
                 onAwardXp(DAILY_CIRCUIT_XP, 'dailyCircuit');
             }
@@ -464,25 +472,52 @@ const CircuitLabScreen = ({ onBack, onOpenFreeCircuitBuilder, userId, userStats,
     };
 
     return (
-        <div className="pb-24 min-h-full bg-gradient-to-b from-[#0F172A] to-[#1E293B] w-full relative">
-            {/* Header */}
-            <div className="sticky top-0 z-20 bg-[#0F172A]/90 backdrop-blur-xl border-b border-[#334155] px-4 py-3">
-                <div className="flex items-center justify-between max-w-xl mx-auto">
-                    <button onClick={onBack} className="flex items-center gap-2 bg-[#334155] p-2.5 rounded-xl hover:bg-[#475569] transition active:scale-95">
-                        <ArrowLeft size={16} className="text-white" />
-                        <span className="text-xs font-black text-white">Volver</span>
+        <div className="pb-24 min-h-full bg-gradient-to-b from-[#0B1120] via-[#0E1A30] to-[#0F172A] w-full relative overflow-hidden">
+            {/* Space background */}
+            <div className="absolute inset-0 pointer-events-none">
+                <div className="galaxy-nebula" style={{ width: '280px', height: '280px', background: 'radial-gradient(circle, rgba(34,211,238,0.18) 0%, rgba(56,189,248,0.06) 40%, transparent 70%)', right: '-5%', top: '3%', '--nebula-duration': '22s' }}></div>
+                <div className="galaxy-nebula-2" style={{ width: '220px', height: '220px', background: 'radial-gradient(circle, rgba(99,102,241,0.12) 0%, rgba(139,92,246,0.05) 40%, transparent 70%)', left: '-8%', bottom: '25%', '--nebula-duration': '28s' }}></div>
+                {circuitStars.map((star, i) => (
+                    <div key={`cstar-${i}`} className="galaxy-star" style={{ left: star.left, top: star.top, width: `${star.size}px`, height: `${star.size}px`, '--twinkle-duration': star.twinkleDuration, '--twinkle-delay': star.twinkleDelay }}></div>
+                ))}
+                {['⚡', '💡', '🔌', '🔋', '🔧', '⚙️'].map((emoji, i) => (
+                    <div key={`cpart-${i}`} className="absolute text-lg opacity-15 pointer-events-none" style={{ left: `${8 + i * 15}%`, top: `${4 + (i * 21) % 80}%`, animation: `float-planet ${7 + i * 2}s ease-in-out infinite ${i * 1.2}s` }}>{emoji}</div>
+                ))}
+            </div>
+
+            {/* Hero header with floating icon */}
+            <div className="relative z-10">
+                <div className="bg-gradient-to-b from-cyan-900/40 via-cyan-900/15 to-transparent px-5 pt-5 pb-8">
+                    <button onClick={onBack} className="text-cyan-300/60 hover:text-cyan-300 mb-4 flex items-center text-sm font-black active:scale-95 transition">
+                        <ArrowLeft size={18} className="mr-1" /> Mapa Galáctico
                     </button>
-                    <div className="flex items-center gap-2 bg-[#22D3EE]/15 px-4 py-1.5 rounded-full border border-[#22D3EE]/30">
-                        <Cpu size={16} className="text-[#22D3EE]" />
-                        <span className="text-sm font-black text-[#22D3EE]">Laboratorio de Circuitos</span>
+                    <div className="text-center">
+                        {/* Floating electronica icon */}
+                        <div className="relative inline-block mb-3" style={{ animation: 'float-planet 5s ease-in-out infinite' }}>
+                            <div className="absolute inset-[-20px] rounded-full pointer-events-none opacity-70"
+                                style={{ background: 'radial-gradient(circle, rgba(34,211,238,0.4) 0%, transparent 65%)', filter: 'blur(10px)' }}></div>
+                            <img src="/electronica.png" alt="Laboratorio de Circuitos"
+                                className="w-28 h-28 sm:w-36 sm:h-36 object-contain relative z-10"
+                                style={{ filter: 'drop-shadow(0 0 20px rgba(34,211,238,0.5)) drop-shadow(0 0 40px rgba(34,211,238,0.2))' }} />
+                            {/* Orbiting sparkle */}
+                            <div className="absolute inset-[-12px] rounded-full border border-cyan-400/10 pointer-events-none" style={{ animation: 'orbit-ring 15s linear infinite' }}>
+                                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-cyan-400/60 rounded-full shadow-[0_0_6px_rgba(34,211,238,0.6)]"></div>
+                            </div>
+                        </div>
+                        <h1 className="text-2xl font-black text-cyan-300 tracking-tight drop-shadow-lg flex items-center justify-center gap-2">
+                            <Cpu size={20} className="text-cyan-400" /> Laboratorio de Circuitos
+                        </h1>
+                        <p className="text-xs text-cyan-200/50 font-bold mt-1.5 max-w-xs mx-auto leading-relaxed">
+                            ¡Aprende electrónica y resuelve problemas de la nave espacial!
+                        </p>
                     </div>
                 </div>
             </div>
 
             {/* Tab selector */}
             {tab !== 'concept_detail' && (
-                <div className="px-4 pt-4 pb-2 max-w-xl mx-auto">
-                    <div className="flex gap-1.5 bg-[#1E293B] rounded-2xl p-1.5 border border-[#334155]">
+                <div className="px-4 pb-2 max-w-xl mx-auto relative z-10">
+                    <div className="flex gap-1.5 bg-[#0F172A]/80 backdrop-blur-sm rounded-2xl p-1.5 border border-cyan-500/15">
                         {[
                             { key: 'daily', label: 'Misión Diaria', icon: <Calendar size={13} className="inline -mt-0.5 mr-1" /> },
                             { key: 'learn', label: 'Aprende', icon: <BookOpen size={13} className="inline -mt-0.5 mr-1" /> },
@@ -497,7 +532,7 @@ const CircuitLabScreen = ({ onBack, onOpenFreeCircuitBuilder, userId, userStats,
                 </div>
             )}
 
-            <div className="px-4 max-w-xl mx-auto py-4">
+            <div className="px-4 max-w-xl mx-auto py-4 relative z-10">
 
                 {/* DAILY MISSION TAB */}
                 {tab === 'daily' && (
@@ -506,22 +541,21 @@ const CircuitLabScreen = ({ onBack, onOpenFreeCircuitBuilder, userId, userStats,
                             <div className="bg-[#22C55E]/10 border-2 border-[#22C55E]/30 rounded-2xl p-6 text-center space-y-3">
                                 <div className="text-5xl">🎉</div>
                                 <h2 className="text-xl font-black text-[#22C55E]">¡Misión Completada!</h2>
-                                <p className="text-sm text-[#94A3B8] font-bold">Has resuelto el problema de circuitos de hoy.</p>
+                                <p className="text-sm text-[#94A3B8] font-bold">¡Eres increíble! Resolviste el problema de circuitos de hoy. 🌟</p>
                                 <div className="flex items-center justify-center gap-2 mt-1">
-                                    <span className="px-3 py-1 bg-[#FFC800]/20 text-[#FFC800] text-xs font-black rounded-full border border-[#FFC800]/30">+{DAILY_CIRCUIT_XP} XP ganados</span>
+                                    <span className="px-3 py-1 bg-[#FFC800]/20 text-[#FFC800] text-xs font-black rounded-full border border-[#FFC800]/30">+{DAILY_CIRCUIT_XP} XP ganados 🏆</span>
                                 </div>
                                 <div className="bg-[#1E293B] rounded-xl p-4 border border-[#334155]">
-                                    <p className="text-xs text-[#64748B] font-bold">🕐 Vuelve mañana para una nueva misión de la nave.</p>
-                                    <p className="text-[10px] text-[#475569] font-semibold mt-1">Cada día hay un nuevo problema de circuitos de la nave CultivaTec-7</p>
+                                    <p className="text-xs text-[#64748B] font-bold">🕐 ¡Vuelve mañana para una nueva aventura eléctrica!</p>
+                                    <p className="text-[10px] text-[#475569] font-semibold mt-1">Cada día la nave CultivaTec-7 tiene un nuevo problema de circuitos que resolver 🚀</p>
                                 </div>
-                                {/* Still allow re-reading */}
                                 <button onClick={() => { setDailyAnswer(null); setShowDailyExplanation(false); setDailySolved(false); }}
                                     className="text-[10px] font-bold text-[#22D3EE] underline mt-2">Volver a ver el problema</button>
                             </div>
                         ) : (
                             <>
                                 <div className="text-center mb-2">
-                                    <span className="text-[10px] font-black text-[#22D3EE] bg-[#22D3EE]/10 px-3 py-1 rounded-full border border-[#22D3EE]/20 flex items-center gap-1 mx-auto w-fit"><Calendar size={11} /> MISIÓN DIARIA DE CIRCUITOS</span>
+                                    <span className="text-[10px] font-black text-[#22D3EE] bg-[#22D3EE]/10 px-3 py-1 rounded-full border border-[#22D3EE]/20 flex items-center gap-1 mx-auto w-fit"><Calendar size={11} /> ⚡ MISIÓN DIARIA DE CIRCUITOS</span>
                                 </div>
                                 <div className="bg-gradient-to-br from-[#1E293B] to-[#0F172A] rounded-2xl border-2 border-[#22D3EE]/20 p-5 space-y-4">
                                     <h2 className="text-lg font-black text-white">{dailyProblem.title}</h2>
@@ -565,19 +599,21 @@ const CircuitLabScreen = ({ onBack, onOpenFreeCircuitBuilder, userId, userStats,
                     <div className="space-y-3">
                         <div className="text-center mb-4">
                             <h2 className="text-xl font-black text-white flex items-center justify-center gap-2"><BookOpen size={20} className="text-[#22D3EE]" /> ¿Cómo Funcionan los Circuitos?</h2>
-                            <p className="text-xs text-[#94A3B8] font-bold mt-1">Conceptos fundamentales de electrónica</p>
+                            <p className="text-xs text-[#94A3B8] font-bold mt-1">🔬 ¡Descubre la magia de la electricidad paso a paso!</p>
                         </div>
-                        {CIRCUIT_CONCEPTS.map(concept => (
+                        {CIRCUIT_CONCEPTS.map((concept, idx) => (
                             <button key={concept.id} onClick={() => { setSelectedConcept(concept); setTab('concept_detail'); }}
-                                className="w-full bg-[#1E293B] rounded-2xl border-2 border-[#334155] hover:border-[#22D3EE] p-4 flex items-center gap-4 transition-all active:scale-[0.98] group text-left">
-                                <div className="w-12 h-12 bg-[#22D3EE]/15 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0 group-hover:scale-110 transition-transform border border-[#22D3EE]/20">
+                                className="w-full bg-gradient-to-r from-[#1E293B] to-[#1E293B]/80 rounded-2xl border-2 border-[#334155] hover:border-[#22D3EE] p-4 flex items-center gap-4 transition-all active:scale-[0.98] group text-left hover:shadow-lg hover:shadow-cyan-500/10">
+                                <div className="w-14 h-14 bg-gradient-to-br from-[#22D3EE]/20 to-[#3B82F6]/10 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0 group-hover:scale-110 transition-transform border border-[#22D3EE]/25 shadow-inner"
+                                    style={{ animation: `float-planet ${6 + idx * 0.5}s ease-in-out infinite ${idx * 0.3}s` }}>
                                     {concept.emoji}
                                 </div>
                                 <div className="flex-grow min-w-0">
                                     <h3 className="text-sm font-black text-white">{concept.title}</h3>
                                     <p className="text-[11px] text-[#94A3B8] font-semibold mt-0.5 line-clamp-2">{concept.description}</p>
+                                    <span className="text-[9px] font-bold text-cyan-400/50 mt-1 inline-block">Toca para aprender más →</span>
                                 </div>
-                                <ChevronDown size={16} className="text-[#64748B] -rotate-90 flex-shrink-0" />
+                                <ChevronDown size={16} className="text-[#64748B] -rotate-90 flex-shrink-0 group-hover:text-cyan-400 transition-colors" />
                             </button>
                         ))}
 
@@ -620,21 +656,26 @@ const CircuitLabScreen = ({ onBack, onOpenFreeCircuitBuilder, userId, userStats,
                 {tab === 'problems' && !selectedProblem && (
                     <div className="space-y-3">
                         <div className="text-center mb-4">
-                            <h2 className="text-xl font-black text-white flex items-center justify-center gap-2"><Puzzle size={20} className="text-[#F59E0B]" /> Problemas de la Nave</h2>
-                            <p className="text-xs text-[#94A3B8] font-bold mt-1">Resuelve problemas de circuitos de la nave espacial</p>
+                            <h2 className="text-xl font-black text-white flex items-center justify-center gap-2"><Puzzle size={20} className="text-[#F59E0B]" /> 🚀 Problemas de la Nave</h2>
+                            <p className="text-xs text-[#94A3B8] font-bold mt-1">¡La nave necesita tu ayuda! Resuelve estos desafíos eléctricos</p>
                         </div>
-                        {CIRCUIT_PROBLEMS.map(prob => (
+                        {CIRCUIT_PROBLEMS.map((prob, idx) => (
                             <button key={prob.id} onClick={() => { setSelectedProblem(prob); setSelectedAnswer(null); setShowExplanation(false); }}
-                                className="w-full bg-[#1E293B] rounded-2xl border-2 border-[#334155] hover:border-[#F59E0B] p-4 flex items-center gap-4 transition-all active:scale-[0.98] group text-left">
-                                <div className="w-12 h-12 bg-[#F59E0B]/15 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0 group-hover:scale-110 transition-transform border border-[#F59E0B]/20">
+                                className="w-full bg-gradient-to-r from-[#1E293B] to-[#1E293B]/80 rounded-2xl border-2 border-[#334155] hover:border-[#F59E0B] p-4 flex items-center gap-4 transition-all active:scale-[0.98] group text-left hover:shadow-lg hover:shadow-amber-500/10">
+                                <div className="w-14 h-14 bg-gradient-to-br from-[#F59E0B]/20 to-[#F97316]/10 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0 group-hover:scale-110 transition-transform border border-[#F59E0B]/25 shadow-inner relative"
+                                    style={{ animation: `float-planet ${6 + idx * 0.5}s ease-in-out infinite ${idx * 0.4}s` }}>
                                     {prob.emoji}
+                                    {solvedProblems.has(idx) && <div className="absolute -top-1 -right-1 w-5 h-5 bg-[#22C55E] rounded-full flex items-center justify-center text-[10px] border-2 border-[#0F172A]">✅</div>}
                                 </div>
                                 <div className="flex-grow min-w-0">
                                     <h3 className="text-sm font-black text-white">{prob.title}</h3>
                                     <p className="text-[11px] text-[#94A3B8] font-semibold mt-0.5">{prob.description}</p>
-                                    <span className="text-[10px] font-bold text-[#64748B]">{'⭐'.repeat(prob.difficulty)}</span>
+                                    <div className="flex items-center gap-2 mt-1">
+                                        <span className="text-[10px] font-bold text-[#64748B]">{'⭐'.repeat(prob.difficulty)}</span>
+                                        <span className="text-[9px] font-bold text-amber-400/40">+{CIRCUIT_PROBLEM_XP} XP</span>
+                                    </div>
                                 </div>
-                                <div className="px-3 py-2 rounded-xl bg-[#F59E0B] text-[10px] font-black text-[#0F172A] flex-shrink-0">RESOLVER</div>
+                                <div className="px-3 py-2 rounded-xl bg-gradient-to-r from-[#F59E0B] to-[#F97316] text-[10px] font-black text-[#0F172A] flex-shrink-0 shadow-lg shadow-amber-500/20">RESOLVER</div>
                             </button>
                         ))}
                     </div>
@@ -691,65 +732,65 @@ const CircuitLabScreen = ({ onBack, onOpenFreeCircuitBuilder, userId, userStats,
 };
 const PROGRAMMING_TUTORIALS = [
     {
-        id: 'tut_1', title: '🐍 Hola Mundo en Python', difficulty: 1, emoji: '👋',
-        description: 'Tu primer programa: mostrar texto en pantalla',
+        id: 'tut_1', title: '🐍 ¡Hola Mundo!', difficulty: 1, emoji: '👋',
+        description: '¡Tu primer programa! Haz que la computadora te salude',
         steps: [
-            { instruction: 'Escribe este código para mostrar un saludo:', code: 'print("¡Hola Mundo!")' },
-            { instruction: 'Ahora personalízalo con tu nombre:', code: 'nombre = "TuNombre"\nprint("¡Hola,", nombre, "!")' },
-            { instruction: '¡Experimenta! Cambia el mensaje y corre el código', code: 'print("Soy un futuro ingeniero de robots 🤖")' },
+            { instruction: '¡Escribe esto para que la compu te diga hola!', code: 'print("¡Hola Mundo! 🌍")' },
+            { instruction: '¡Ahora ponle tu nombre para que te salude a TI!', code: 'nombre = "TuNombre"\nprint("¡Hola,", nombre, "! 🎉")\nprint("¡Bienvenido al espacio! 🚀")' },
+            { instruction: '¡Experimenta! Cambia el mensaje y corre el código', code: 'print("¡Soy un futuro ingeniero de robots! 🤖")\nprint("¡Y estoy aprendiendo a programar! 💻")' },
         ],
     },
     {
-        id: 'tut_2', title: '📦 Variables y Tipos', difficulty: 1, emoji: '📦',
-        description: 'Aprende a guardar datos en cajas llamadas variables',
+        id: 'tut_2', title: '📦 Variables: Cajas Mágicas', difficulty: 1, emoji: '📦',
+        description: '¡Aprende a guardar cosas en cajas llamadas "variables"!',
         steps: [
-            { instruction: 'Crea una variable de texto y una de número:', code: 'robot_nombre = "BotMax"\nrobot_edad = 3\nprint(robot_nombre, "tiene", robot_edad, "años")' },
-            { instruction: 'Las variables numéricas se pueden sumar:', code: 'velocidad = 10\nboost = 5\ntotal = velocidad + boost\nprint("Velocidad total:", total)' },
-            { instruction: 'También puedes hacer listas:', code: 'sensores = ["ultrasonico", "infrarrojo", "luz"]\nprint("Mi robot tiene:", sensores)' },
+            { instruction: 'Las variables son como cajas donde guardas cosas:', code: 'robot_nombre = "BotMax"\nrobot_edad = 3\nprint("Mi robot se llama", robot_nombre)\nprint("Tiene", robot_edad, "años 🤖")' },
+            { instruction: '¡Las cajas de números se pueden sumar!', code: 'velocidad = 10\nboost = 5\ntotal = velocidad + boost\nprint("Velocidad normal:", velocidad)\nprint("Con turbo:", total, "🏎️💨")' },
+            { instruction: '¡También puedes guardar listas de cosas!', code: 'sensores = ["ultrasonico", "infrarrojo", "luz"]\nprint("Mi robot tiene estos sensores:")\nprint(sensores)\nprint("¡Son", len(sensores), "sensores! 🎯")' },
         ],
     },
     {
-        id: 'tut_3', title: '🔀 Decisiones con IF', difficulty: 2, emoji: '🔀',
-        description: 'Haz que tu programa tome decisiones inteligentes',
+        id: 'tut_3', title: '🔀 ¡Tomando Decisiones!', difficulty: 2, emoji: '🔀',
+        description: '¡Haz que tu programa piense y decida como un robot!',
         steps: [
-            { instruction: 'Usa IF para decidir:', code: 'distancia = 15\n\nif distancia < 20:\n    print("⚠️ ¡Obstáculo detectado!")\n    print("Robot retrocediendo...")\nelse:\n    print("✅ Camino libre")\n    print("Robot avanzando...")' },
-            { instruction: 'Agrega más condiciones con ELIF:', code: 'temperatura = 35\n\nif temperatura > 40:\n    print("🔥 ¡Demasiado caliente!")\nelif temperatura > 25:\n    print("☀️ Hace calor")\nelse:\n    print("❄️ Hace frío")' },
+            { instruction: 'Con IF tu programa puede tomar decisiones:', code: 'distancia = 15\n\nif distancia < 20:\n    print("⚠️ ¡Obstáculo detectado!")\n    print("🤖 Robot retrocediendo...")\nelse:\n    print("✅ ¡Camino libre!")\n    print("🤖 Robot avanzando... 🏃")' },
+            { instruction: '¡Con ELIF agregas más opciones!', code: 'temperatura = 35\n\nif temperatura > 40:\n    print("🔥 ¡Demasiado caliente! Peligro")\nelif temperatura > 25:\n    print("☀️ Hace calorcito, ¡pero está bien!")\nelse:\n    print("❄️ ¡Brr! Hace frío, activa calefacción")' },
         ],
     },
     {
-        id: 'tut_4', title: '🔁 Bucles y Repeticiones', difficulty: 2, emoji: '🔁',
-        description: 'Repite acciones sin escribir código de más',
+        id: 'tut_4', title: '🔁 ¡Repite sin Cansar!', difficulty: 2, emoji: '🔁',
+        description: '¡Los bucles repiten cosas por ti, como magia!',
         steps: [
-            { instruction: 'Un bucle FOR cuenta automáticamente:', code: 'for i in range(5):\n    print("Parpadeo número", i + 1, "💡")' },
-            { instruction: 'Puedes recorrer listas:', code: 'componentes = ["LED", "Motor", "Sensor", "Arduino"]\n\nfor comp in componentes:\n    print("✅ Revisando:", comp)' },
-            { instruction: 'Los bucles WHILE repiten hasta cumplir una condición:', code: 'energia = 100\n\nwhile energia > 0:\n    energia = energia - 25\n    print("⚡ Energía restante:", energia)\n\nprint("🔋 ¡Robot sin batería!")' },
+            { instruction: '¡FOR cuenta y repite automáticamente!', code: 'print("¡Mi LED parpadea!\\n")\nfor i in range(5):\n    print("💡 Parpadeo número", i + 1)' },
+            { instruction: '¡Puedes revisar una lista entera!', code: 'componentes = ["LED", "Motor", "Sensor", "Arduino"]\n\nprint("🔍 Revisando componentes del robot...\\n")\nfor comp in componentes:\n    print("✅ Listo:", comp)' },
+            { instruction: '¡WHILE repite hasta que algo pase!', code: 'energia = 100\n\nprint("🤖 Robot en movimiento...\\n")\nwhile energia > 0:\n    energia = energia - 25\n    print("⚡ Energía:", energia, "%")\n\nprint("\\n🔋 ¡Robot sin batería! A recargar 🔌")' },
         ],
     },
     {
-        id: 'tut_5', title: '⚙️ Funciones', difficulty: 3, emoji: '⚙️',
-        description: 'Crea bloques de código reutilizables',
+        id: 'tut_5', title: '⚙️ Funciones: Súper Poderes', difficulty: 3, emoji: '⚙️',
+        description: '¡Crea tus propios comandos reutilizables!',
         steps: [
-            { instruction: 'Define tu primera función:', code: 'def saludar(nombre):\n    print("🤖 ¡Hola,", nombre, "!")\n    print("Bienvenido al laboratorio")\n\nsaludar("Diego")\nsaludar("Ana")' },
-            { instruction: 'Funciones que devuelven valores:', code: 'def calcular_velocidad(distancia, tiempo):\n    return distancia / tiempo\n\nv = calcular_velocidad(100, 5)\nprint("Velocidad:", v, "cm/s")' },
+            { instruction: '¡Crea tu primer súper poder (función)!', code: 'def saludar(nombre):\n    print("🤖 ¡Hola,", nombre, "!")\n    print("   Bienvenido al laboratorio espacial\\n")\n\nsaludar("Diego")\nsaludar("Ana")\nsaludar("TuNombre")' },
+            { instruction: '¡Las funciones pueden calcular y devolver resultados!', code: 'def calcular_velocidad(distancia, tiempo):\n    velocidad = distancia / tiempo\n    return velocidad\n\nv = calcular_velocidad(100, 5)\nprint("🏎️ Velocidad:", v, "cm/s")\n\nv2 = calcular_velocidad(200, 4)\nprint("🚀 Velocidad turbo:", v2, "cm/s")' },
         ],
     },
     {
-        id: 'tut_6', title: '🤖 Simulación Arduino', difficulty: 3, emoji: '🤖',
-        description: 'Simula código de Arduino con JavaScript',
+        id: 'tut_6', title: '🤖 ¡Simula un Arduino!', difficulty: 3, emoji: '🤖',
+        description: '¡Programa como si tuvieras un Arduino de verdad!',
         steps: [
-            { instruction: 'Simulación de blink con Arduino:', code: '# Simulación Arduino Blink\npin_led = 13\nestado = "LOW"\n\nfor ciclo in range(6):\n    if estado == "LOW":\n        estado = "HIGH"\n        print("💡 LED en pin", pin_led, "-> ENCENDIDO")\n    else:\n        estado = "LOW"\n        print("⚫ LED en pin", pin_led, "-> APAGADO")' },
-            { instruction: 'Simulación de sensor de distancia:', code: '# Simulación sensor ultrasónico\nimport random\n\nfor lectura in range(5):\n    distancia = random.randint(5, 100)\n    print("📏 Distancia:", distancia, "cm")\n    if distancia < 20:\n        print("  ⚠️ ¡Objeto cerca! Girar.")\n    else:\n        print("  ✅ Camino libre. Avanzar.")' },
+            { instruction: '¡Simula el parpadeo de un LED como en Arduino!', code: '# 🤖 Simulación Arduino: LED parpadeando\npin_led = 13\nestado = "LOW"\n\nprint("=== Arduino Simulator ==!\\n")\nfor ciclo in range(6):\n    if estado == "LOW":\n        estado = "HIGH"\n        print("💡 LED pin", pin_led, "-> ¡ENCENDIDO!")\n    else:\n        estado = "LOW"\n        print("⚫ LED pin", pin_led, "-> apagado")' },
+            { instruction: '¡Simula un sensor de distancia para tu robot!', code: '# 🤖 Sensor ultrasónico del robot\nimport random\n\nprint("=== Sensor de Distancia ===\\n")\nfor lectura in range(5):\n    distancia = random.randint(5, 100)\n    print("📏 Distancia:", distancia, "cm", end=" ")\n    if distancia < 20:\n        print("⚠️ ¡Cuidado! Girar")\n    else:\n        print("✅ ¡Vía libre! Avanzar")' },
         ],
     },
 ];
 
 const PRACTICE_CHALLENGES = [
-    { id: 'pc_1', title: 'Calculadora Simple', emoji: '🧮', difficulty: 1, description: 'Haz un programa que sume, reste, multiplique y divida', starterCode: 'a = 10\nb = 3\n\nprint("Suma:", a + b)\nprint("Resta:", a - b)\n# Completa multiplicación y división\n' },
-    { id: 'pc_2', title: 'Tabla de Multiplicar', emoji: '✖️', difficulty: 1, description: 'Genera la tabla de multiplicar de un número', starterCode: 'numero = 7\n\nfor i in range(1, 11):\n    resultado = numero * i\n    print(numero, "x", i, "=", resultado)' },
-    { id: 'pc_3', title: 'Detector de Pares', emoji: '🔢', difficulty: 2, description: 'Encuentra los números pares del 1 al 20', starterCode: 'for n in range(1, 21):\n    if n % 2 == 0:\n        print(n, "es PAR ✅")\n    else:\n        print(n, "es IMPAR")' },
-    { id: 'pc_4', title: 'Fibonacci Robot', emoji: '🐚', difficulty: 3, description: 'Genera la secuencia Fibonacci hasta 100', starterCode: 'a = 0\nb = 1\n\nprint("Secuencia Fibonacci:")\nwhile a <= 100:\n    print(a)\n    temp = a + b\n    a = b\n    b = temp' },
-    { id: 'pc_5', title: 'Piedra, Papel, Tijera', emoji: '✂️', difficulty: 2, description: 'Simula un juego de piedra, papel o tijera', starterCode: 'import random\n\nopciones = ["piedra", "papel", "tijera"]\n\njugador = "piedra"\nrobot = random.choice(opciones)\n\nprint("Tú:", jugador)\nprint("Robot:", robot)\n\nif jugador == robot:\n    print("🤝 ¡Empate!")\nelif (jugador == "piedra" and robot == "tijera") or (jugador == "papel" and robot == "piedra") or (jugador == "tijera" and robot == "papel"):\n    print("🎉 ¡Ganaste!")\nelse:\n    print("🤖 ¡Ganó el robot!")' },
-    { id: 'pc_6', title: 'Inventario de Robot', emoji: '📋', difficulty: 3, description: 'Gestiona el inventario de partes de un robot', starterCode: 'inventario = {\n    "motores": 4,\n    "sensores": 3,\n    "LEDs": 10,\n    "cables": 20\n}\n\nprint("=== Inventario del Robot ===")\nfor parte, cantidad in inventario.items():\n    print(f"  {parte}: {cantidad} unidades")\n\ntotal = sum(inventario.values())\nprint(f"\\nTotal de partes: {total}")' },
+    { id: 'pc_1', title: '🧮 Calculadora Espacial', emoji: '🧮', difficulty: 1, description: '¡Haz una calculadora que sume, reste y más!', starterCode: 'a = 10\nb = 3\n\nprint("🧮 Calculadora Espacial")\nprint("========================")\nprint("Suma:", a, "+", b, "=", a + b)\nprint("Resta:", a, "-", b, "=", a - b)\n# ¡Completa la multiplicación y división!\n# print("Multiplicación:", a, "x", b, "=", ???)\n# print("División:", a, "÷", b, "=", ???)\n' },
+    { id: 'pc_2', title: '✖️ Tabla de Multiplicar', emoji: '✖️', difficulty: 1, description: '¡Genera la tabla de multiplicar de tu número favorito!', starterCode: 'numero = 7\n\nprint("✖️ Tabla del", numero)\nprint("==================")\nfor i in range(1, 11):\n    resultado = numero * i\n    print(numero, "x", i, "=", resultado, "⭐")' },
+    { id: 'pc_3', title: '🔢 ¡Pares o Impares!', emoji: '🔢', difficulty: 2, description: '¡Descubre qué números del 1 al 20 son pares!', starterCode: 'print("🔢 ¡Detector de Pares e Impares!\\n")\n\npares = 0\nimpares = 0\nfor n in range(1, 21):\n    if n % 2 == 0:\n        print(n, "es PAR ✅")\n        pares = pares + 1\n    else:\n        print(n, "es IMPAR ❌")\n        impares = impares + 1\n\nprint("\\n📊 Resultado: ", pares, "pares y", impares, "impares")' },
+    { id: 'pc_4', title: '🐚 Fibonacci del Robot', emoji: '🐚', difficulty: 3, description: '¡Genera la secuencia mágica de Fibonacci!', starterCode: 'a = 0\nb = 1\n\nprint("🐚 Secuencia Fibonacci")\nprint("¡Cada número es la suma de los 2 anteriores!\\n")\ncontador = 1\nwhile a <= 100:\n    print("Paso", contador, ":", a, "🌟")\n    temp = a + b\n    a = b\n    b = temp\n    contador = contador + 1\n\nprint("\\n¡Estos números aparecen en la naturaleza! 🌻")' },
+    { id: 'pc_5', title: '✂️ Piedra, Papel, Tijera', emoji: '✂️', difficulty: 2, description: '¡Juega contra el robot! ¿Quién ganará?', starterCode: 'import random\n\nopciones = ["piedra", "papel", "tijera"]\nemojis = {"piedra": "🪨", "papel": "📄", "tijera": "✂️"}\n\njugador = "piedra"\nrobot = random.choice(opciones)\n\nprint("🎮 ¡Piedra, Papel o Tijera!")\nprint("========================")\nprint("Tú elegiste:", emojis[jugador], jugador)\nprint("Robot eligió:", emojis[robot], robot)\nprint("")\n\nif jugador == robot:\n    print("🤝 ¡Empate! Ambos pensaron igual")\nelif (jugador == "piedra" and robot == "tijera") or (jugador == "papel" and robot == "piedra") or (jugador == "tijera" and robot == "papel"):\n    print("🎉 ¡¡GANASTE!! ¡Eres el mejor!")\nelse:\n    print("🤖 El robot ganó esta vez... ¡Inténtalo de nuevo!")' },
+    { id: 'pc_6', title: '📋 Inventario del Robot', emoji: '📋', difficulty: 3, description: '¡Revisa las partes de tu robot y detecta lo que falta!', starterCode: 'inventario = {\n    "motores": 4,\n    "sensores": 3,\n    "LEDs": 10,\n    "cables": 20,\n    "baterias": 2\n}\n\nprint("📋 Inventario del Robot CultivaTec")\nprint("=" * 35)\n\nalerta = []\nfor parte, cantidad in inventario.items():\n    if cantidad < 5:\n        estado = "⚠️ ¡POCAS!"\n        alerta.append(parte)\n    else:\n        estado = "✅ Bien"\n    print(f"  {parte}: {cantidad} - {estado}")\n\ntotal = sum(inventario.values())\nprint(f"\\n🔧 Total de partes: {total}")\n\nif alerta:\n    print(f"\\n🚨 ¡Hay que comprar más: {alerta}!")\nelse:\n    print("\\n🎉 ¡Todo en orden! Robot listo")' },
 ];
 
 const ProgrammingStationScreen = ({ onBack, startChallenge, userScores, userId, userStats, setUserStats, onAwardXp }) => {
@@ -763,6 +804,16 @@ const ProgrammingStationScreen = ({ onBack, startChallenge, userScores, userId, 
         try { const saved = localStorage.getItem('cultivatec_daily_prog'); return saved === getTodayKey(); } catch { return false; }
     });
     const [dailyProgRan, setDailyProgRan] = useState(false);
+
+    const progStars = React.useMemo(() =>
+        Array.from({ length: 40 }, (_, i) => ({
+            left: `${(i * 12.7 + 5) % 98}%`,
+            top: `${(i * 18.1 + 3) % 95}%`,
+            size: 1 + (i % 3),
+            twinkleDuration: `${2 + (i % 5) * 0.8}s`,
+            twinkleDelay: `${(i * 0.35) % 4}s`,
+        }))
+    , []);
 
     const executeCode = (codeToRun) => {
         setIsLoading(true);
@@ -868,25 +919,52 @@ const ProgrammingStationScreen = ({ onBack, startChallenge, userScores, userId, 
     };
 
     return (
-        <div className="pb-24 min-h-full bg-gradient-to-b from-[#0F172A] to-[#1E293B] w-full relative">
-            {/* Header */}
-            <div className="sticky top-0 z-20 bg-[#0F172A]/90 backdrop-blur-xl border-b border-[#334155] px-4 py-3">
-                <div className="flex items-center justify-between max-w-xl mx-auto">
-                    <button onClick={onBack} className="flex items-center gap-2 bg-[#334155] p-2.5 rounded-xl hover:bg-[#475569] transition active:scale-95">
-                        <ArrowLeft size={16} className="text-white" />
-                        <span className="text-xs font-black text-white">Volver</span>
+        <div className="pb-24 min-h-full bg-gradient-to-b from-[#0B1120] via-[#0E1A30] to-[#0F172A] w-full relative overflow-hidden">
+            {/* Space background */}
+            <div className="absolute inset-0 pointer-events-none">
+                <div className="galaxy-nebula" style={{ width: '260px', height: '260px', background: 'radial-gradient(circle, rgba(147,197,253,0.18) 0%, rgba(99,102,241,0.06) 40%, transparent 70%)', right: '-6%', top: '4%', '--nebula-duration': '24s' }}></div>
+                <div className="galaxy-nebula-2" style={{ width: '230px', height: '230px', background: 'radial-gradient(circle, rgba(168,85,247,0.12) 0%, rgba(139,92,246,0.05) 40%, transparent 70%)', left: '-7%', bottom: '22%', '--nebula-duration': '27s' }}></div>
+                {progStars.map((star, i) => (
+                    <div key={`pstar-${i}`} className="galaxy-star" style={{ left: star.left, top: star.top, width: `${star.size}px`, height: `${star.size}px`, '--twinkle-duration': star.twinkleDuration, '--twinkle-delay': star.twinkleDelay }}></div>
+                ))}
+                {['💻', '🐍', '🤖', '⌨️', '🔢', '📡'].map((emoji, i) => (
+                    <div key={`ppart-${i}`} className="absolute text-lg opacity-15 pointer-events-none" style={{ left: `${7 + i * 15}%`, top: `${5 + (i * 22) % 80}%`, animation: `float-planet ${7 + i * 2}s ease-in-out infinite ${i * 1.3}s` }}>{emoji}</div>
+                ))}
+            </div>
+
+            {/* Hero header with floating icon */}
+            <div className="relative z-10">
+                <div className="bg-gradient-to-b from-blue-900/40 via-blue-900/15 to-transparent px-5 pt-5 pb-8">
+                    <button onClick={onBack} className="text-blue-300/60 hover:text-blue-300 mb-4 flex items-center text-sm font-black active:scale-95 transition">
+                        <ArrowLeft size={18} className="mr-1" /> Mapa Galáctico
                     </button>
-                    <div className="flex items-center gap-2 bg-[#22D3EE]/15 px-4 py-1.5 rounded-full border border-[#22D3EE]/30">
-                        <Rocket size={16} className="text-[#22D3EE]" />
-                        <span className="text-sm font-black text-[#22D3EE]">Estación de Programación</span>
+                    <div className="text-center">
+                        {/* Floating programacion icon */}
+                        <div className="relative inline-block mb-3" style={{ animation: 'float-planet 5s ease-in-out infinite' }}>
+                            <div className="absolute inset-[-20px] rounded-full pointer-events-none opacity-70"
+                                style={{ background: 'radial-gradient(circle, rgba(147,197,253,0.4) 0%, transparent 65%)', filter: 'blur(10px)' }}></div>
+                            <img src="/programacion.png" alt="Estación de Programación"
+                                className="w-28 h-28 sm:w-36 sm:h-36 object-contain relative z-10"
+                                style={{ filter: 'drop-shadow(0 0 20px rgba(147,197,253,0.5)) drop-shadow(0 0 40px rgba(147,197,253,0.2))' }} />
+                            {/* Orbiting sparkle */}
+                            <div className="absolute inset-[-12px] rounded-full border border-blue-400/10 pointer-events-none" style={{ animation: 'orbit-ring 15s linear infinite' }}>
+                                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-blue-400/60 rounded-full shadow-[0_0_6px_rgba(147,197,253,0.6)]"></div>
+                            </div>
+                        </div>
+                        <h1 className="text-2xl font-black text-blue-300 tracking-tight drop-shadow-lg flex items-center justify-center gap-2">
+                            <Rocket size={20} className="text-blue-400" /> Estación de Programación
+                        </h1>
+                        <p className="text-xs text-blue-200/50 font-bold mt-1.5 max-w-xs mx-auto leading-relaxed">
+                            ¡Aprende a programar y crea tus propios programas como un hacker espacial! 🐍
+                        </p>
                     </div>
                 </div>
             </div>
 
             {/* Tab selector */}
             {tab !== 'tutorial_detail' && tab !== 'daily_detail' && (
-                <div className="px-4 pt-4 pb-2 max-w-xl mx-auto">
-                    <div className="flex gap-1.5 bg-[#1E293B] rounded-2xl p-1.5 border border-[#334155]">
+                <div className="px-4 pb-2 max-w-xl mx-auto relative z-10">
+                    <div className="flex gap-1.5 bg-[#0F172A]/80 backdrop-blur-sm rounded-2xl p-1.5 border border-blue-500/15">
                         {[
                             { key: 'daily', label: 'Misión', icon: <Calendar size={13} className="inline -mt-0.5 mr-1" /> },
                             { key: 'tutorials', label: 'Tutoriales', icon: <GraduationCap size={13} className="inline -mt-0.5 mr-1" /> },
@@ -894,7 +972,7 @@ const ProgrammingStationScreen = ({ onBack, startChallenge, userScores, userId, 
                             { key: 'free', label: 'Libre', icon: <Monitor size={13} className="inline -mt-0.5 mr-1" /> },
                         ].map(t => (
                             <button key={t.key} onClick={() => { setTab(t.key); if (t.key === 'free') { setCode('# Escribe tu código Python aquí\nprint("¡Hola desde la Estación!")'); setOutput(''); } }}
-                                className={`flex-1 py-2.5 rounded-xl text-[11px] font-black transition-all ${tab === t.key ? 'bg-[#22D3EE] text-[#0F172A] shadow-lg shadow-[#22D3EE]/30' : 'text-[#94A3B8] hover:text-white'}`}>
+                                className={`flex-1 py-2.5 rounded-xl text-[11px] font-black transition-all ${tab === t.key ? 'bg-[#93C5FD] text-[#0F172A] shadow-lg shadow-[#93C5FD]/30' : 'text-[#94A3B8] hover:text-white'}`}>
                                 {t.icon}{t.label}
                             </button>
                         ))}
@@ -902,7 +980,7 @@ const ProgrammingStationScreen = ({ onBack, startChallenge, userScores, userId, 
                 </div>
             )}
 
-            <div className="px-4 max-w-xl mx-auto py-4">
+            <div className="px-4 max-w-xl mx-auto py-4 relative z-10">
 
                 {/* DAILY MISSION TAB */}
                 {tab === 'daily' && (
@@ -911,21 +989,21 @@ const ProgrammingStationScreen = ({ onBack, startChallenge, userScores, userId, 
                             <div className="bg-[#22C55E]/10 border-2 border-[#22C55E]/30 rounded-2xl p-6 text-center space-y-3">
                                 <div className="text-5xl">🎉</div>
                                 <h2 className="text-xl font-black text-[#22C55E]">¡Misión Completada!</h2>
-                                <p className="text-sm text-[#94A3B8] font-bold">Has resuelto el problema de programación de hoy.</p>
+                                <p className="text-sm text-[#94A3B8] font-bold">¡Genial! Resolviste el desafío de programación de hoy. 🌟</p>
                                 <div className="flex items-center justify-center gap-2 mt-1">
-                                    <span className="px-3 py-1 bg-[#FFC800]/20 text-[#FFC800] text-xs font-black rounded-full border border-[#FFC800]/30">+{DAILY_PROG_XP} XP ganados</span>
+                                    <span className="px-3 py-1 bg-[#FFC800]/20 text-[#FFC800] text-xs font-black rounded-full border border-[#FFC800]/30">+{DAILY_PROG_XP} XP ganados 🏆</span>
                                 </div>
                                 <div className="bg-[#1E293B] rounded-xl p-4 border border-[#334155]">
-                                    <p className="text-xs text-[#64748B] font-bold">🕐 Vuelve mañana para consultar si hay más problemas de la nave.</p>
-                                    <p className="text-[10px] text-[#475569] font-semibold mt-1">Cada día hay un nuevo desafío de programación de la nave CultivaTec-7</p>
+                                    <p className="text-xs text-[#64748B] font-bold">🕐 ¡Vuelve mañana para un nuevo reto de código!</p>
+                                    <p className="text-[10px] text-[#475569] font-semibold mt-1">Cada día la nave CultivaTec-7 tiene un nuevo desafío de programación 🚀</p>
                                 </div>
                                 <button onClick={() => { setDailyProgSolved(false); openDailyProblem(); }}
-                                    className="text-[10px] font-bold text-[#22D3EE] underline mt-2">Volver a practicar el problema</button>
+                                    className="text-[10px] font-bold text-[#93C5FD] underline mt-2">Volver a practicar el problema</button>
                             </div>
                         ) : (
                             <div className="space-y-4">
                                 <div className="text-center mb-2">
-                                    <span className="text-[10px] font-black text-[#93C5FD] bg-[#93C5FD]/10 px-3 py-1 rounded-full border border-[#93C5FD]/20 flex items-center gap-1 mx-auto w-fit"><Calendar size={11} /> MISIÓN DIARIA DE PROGRAMACIÓN</span>
+                                    <span className="text-[10px] font-black text-[#93C5FD] bg-[#93C5FD]/10 px-3 py-1 rounded-full border border-[#93C5FD]/20 flex items-center gap-1 mx-auto w-fit"><Calendar size={11} /> 🐍 MISIÓN DIARIA DE PROGRAMACIÓN</span>
                                 </div>
                                 <div className="bg-gradient-to-br from-[#1E293B] to-[#0F172A] rounded-2xl border-2 border-[#93C5FD]/20 p-5 space-y-4">
                                     <h2 className="text-lg font-black text-white">{dailyProgProblem.title}</h2>
@@ -1002,24 +1080,25 @@ const ProgrammingStationScreen = ({ onBack, startChallenge, userScores, userId, 
                 {tab === 'tutorials' && (
                     <div className="space-y-3">
                         <div className="text-center mb-4">
-                            <h2 className="text-xl font-black text-white flex items-center justify-center gap-2"><GraduationCap size={20} className="text-[#22D3EE]" /> Tutoriales Paso a Paso</h2>
-                            <p className="text-xs text-[#94A3B8] font-bold mt-1">Aprende conceptos con ejemplos interactivos</p>
+                            <h2 className="text-xl font-black text-white flex items-center justify-center gap-2"><GraduationCap size={20} className="text-[#93C5FD]" /> Tutoriales Paso a Paso</h2>
+                            <p className="text-xs text-[#94A3B8] font-bold mt-1">🎮 ¡Aprende a programar con ejemplos divertidos que puedes correr!</p>
                         </div>
-                        {PROGRAMMING_TUTORIALS.map(tut => (
+                        {PROGRAMMING_TUTORIALS.map((tut, idx) => (
                             <button key={tut.id} onClick={() => openTutorial(tut)}
-                                className="w-full bg-[#1E293B] rounded-2xl border-2 border-[#334155] hover:border-[#22D3EE] p-4 flex items-center gap-4 transition-all active:scale-[0.98] group text-left">
-                                <div className="w-12 h-12 bg-[#22D3EE]/15 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0 group-hover:scale-110 transition-transform border border-[#22D3EE]/20">
+                                className="w-full bg-gradient-to-r from-[#1E293B] to-[#1E293B]/80 rounded-2xl border-2 border-[#334155] hover:border-[#93C5FD] p-4 flex items-center gap-4 transition-all active:scale-[0.98] group text-left hover:shadow-lg hover:shadow-blue-500/10">
+                                <div className="w-14 h-14 bg-gradient-to-br from-[#93C5FD]/20 to-[#6366F1]/10 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0 group-hover:scale-110 transition-transform border border-[#93C5FD]/25 shadow-inner"
+                                    style={{ animation: `float-planet ${6 + idx * 0.5}s ease-in-out infinite ${idx * 0.3}s` }}>
                                     {tut.emoji}
                                 </div>
                                 <div className="flex-grow min-w-0">
                                     <h3 className="text-sm font-black text-white truncate">{tut.title}</h3>
                                     <p className="text-[11px] text-[#94A3B8] font-semibold mt-0.5">{tut.description}</p>
                                     <div className="flex items-center gap-2 mt-1">
-                                        <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-[#22D3EE]/10 text-[#22D3EE]">{tut.steps.length} pasos</span>
+                                        <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-[#93C5FD]/10 text-[#93C5FD]">{tut.steps.length} pasos</span>
                                         <span className="text-[10px] font-bold text-[#64748B]">{'⭐'.repeat(tut.difficulty)}</span>
                                     </div>
                                 </div>
-                                <div className="px-3 py-2 rounded-xl bg-[#22D3EE] text-[10px] font-black text-[#0F172A] flex-shrink-0">ABRIR</div>
+                                <div className="px-3 py-2 rounded-xl bg-gradient-to-r from-[#93C5FD] to-[#6366F1] text-[10px] font-black text-white flex-shrink-0 shadow-lg shadow-blue-500/20">ABRIR</div>
                             </button>
                         ))}
                     </div>
@@ -1104,13 +1183,14 @@ const ProgrammingStationScreen = ({ onBack, startChallenge, userScores, userId, 
                 {tab === 'practice' && (
                     <div className="space-y-3">
                         <div className="text-center mb-4">
-                            <h2 className="text-xl font-black text-white flex items-center justify-center gap-2"><Dumbbell size={20} className="text-[#93C5FD]" /> Retos de Práctica</h2>
-                            <p className="text-xs text-[#94A3B8] font-bold mt-1">Ejercicios independientes para practicar</p>
+                            <h2 className="text-xl font-black text-white flex items-center justify-center gap-2"><Dumbbell size={20} className="text-[#93C5FD]" /> 💪 Retos de Práctica</h2>
+                            <p className="text-xs text-[#94A3B8] font-bold mt-1">¡Pon a prueba tus habilidades de programador espacial!</p>
                         </div>
-                        {PRACTICE_CHALLENGES.map(ch => (
+                        {PRACTICE_CHALLENGES.map((ch, idx) => (
                             <button key={ch.id} onClick={() => openPractice(ch)}
-                                className="w-full bg-[#1E293B] rounded-2xl border-2 border-[#334155] hover:border-[#93C5FD] p-4 flex items-center gap-4 transition-all active:scale-[0.98] group text-left">
-                                <div className="w-12 h-12 bg-[#93C5FD]/15 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0 group-hover:scale-110 transition-transform border border-[#93C5FD]/20">
+                                className="w-full bg-gradient-to-r from-[#1E293B] to-[#1E293B]/80 rounded-2xl border-2 border-[#334155] hover:border-[#93C5FD] p-4 flex items-center gap-4 transition-all active:scale-[0.98] group text-left hover:shadow-lg hover:shadow-blue-500/10">
+                                <div className="w-14 h-14 bg-gradient-to-br from-[#93C5FD]/20 to-[#6366F1]/10 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0 group-hover:scale-110 transition-transform border border-[#93C5FD]/25 shadow-inner"
+                                    style={{ animation: `float-planet ${6 + idx * 0.5}s ease-in-out infinite ${idx * 0.4}s` }}>
                                     {ch.emoji}
                                 </div>
                                 <div className="flex-grow min-w-0">
@@ -1118,7 +1198,7 @@ const ProgrammingStationScreen = ({ onBack, startChallenge, userScores, userId, 
                                     <p className="text-[11px] text-[#94A3B8] font-semibold mt-0.5">{ch.description}</p>
                                     <span className="text-[10px] font-bold text-[#64748B]">{'⭐'.repeat(ch.difficulty)}</span>
                                 </div>
-                                <div className="px-3 py-2 rounded-xl bg-[#93C5FD] text-[10px] font-black text-white flex-shrink-0">PRACTICAR</div>
+                                <div className="px-3 py-2 rounded-xl bg-gradient-to-r from-[#93C5FD] to-[#6366F1] text-[10px] font-black text-white flex-shrink-0 shadow-lg shadow-blue-500/20">PRACTICAR</div>
                             </button>
                         ))}
 
@@ -1148,9 +1228,9 @@ const ProgrammingStationScreen = ({ onBack, startChallenge, userScores, userId, 
                 {tab === 'free' && (
                     <div className="space-y-4">
                         <div className="text-center mb-2">
-                            <h2 className="text-xl font-black text-white flex items-center justify-center gap-2"><Monitor size={20} className="text-[#22D3EE]" /> Código Libre</h2>
+                            <h2 className="text-xl font-black text-white flex items-center justify-center gap-2"><Monitor size={20} className="text-[#22D3EE]" /> 🚀 Código Libre</h2>
                             <p className="text-xs text-[#94A3B8] font-bold mt-1">
-                                {selectedTutorial?.title ? `Practicando: ${selectedTutorial.title}` : 'Escribe lo que quieras en Python'}
+                                {selectedTutorial?.title ? `✨ Practicando: ${selectedTutorial.title}` : '¡Escribe lo que quieras en Python! Tu imaginación es el límite 🐍'}
                             </p>
                         </div>
 
