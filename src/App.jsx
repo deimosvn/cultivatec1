@@ -631,6 +631,114 @@ const DAILY_PROGRAMMING_STORIES = [
     },
 ];
 
+// Robot repair daily missions for Programming Station
+const DAILY_PROG_REPAIR_MISSIONS = [
+    {
+        id: 'pr_1',
+        title: 'ALPHA choca con todo',
+        robotName: 'ALPHA',
+        story: 'ALPHA es un robot explorador que deberia esquivar obstaculos, pero camina directo hacia las paredes y se golpea. Su codigo no verifica la distancia antes de avanzar. Necesita una condicion que revise si hay algo cerca.',
+        symptom: 'Camina hacia las paredes sin detenerse',
+        correctBlocks: ['if_distancia'],
+        explanation: 'La instruccion "if distancia < 30" es una CONDICION: le pregunta al robot "¿hay algo a menos de 30cm?". Si la respuesta es si, el robot puede girar o detenerse en vez de chocar. Sin esta pregunta, el robot avanza ciegamente.',
+    },
+    {
+        id: 'pr_2',
+        title: 'BETA no se mueve',
+        robotName: 'BETA',
+        story: 'BETA tiene sensores perfectos y un cerebro que funciona bien, pero sus piernas no se mueven. El tecnico reviso el codigo y descubrio que falta el comando que activa los motores para que el robot camine hacia adelante.',
+        symptom: 'Los motores no se activan, no da un solo paso',
+        correctBlocks: ['motor_avanzar'],
+        explanation: '"motor.avanzar()" es el COMANDO que enciende los motores del robot para que se mueva hacia adelante. Los parentesis () le dicen a Python que ejecute la accion. Sin este comando, los motores nunca reciben la orden de moverse.',
+    },
+    {
+        id: 'pr_3',
+        title: 'GAMMA no para nunca',
+        robotName: 'GAMMA',
+        story: 'GAMMA empezo a caminar y ya no se detiene. Paso por la meta, se salio del area de pruebas y sigue caminando sin parar. Le falta el comando de emergencia para frenar los motores y quedarse quieto.',
+        symptom: 'No se detiene, sigue caminando para siempre',
+        correctBlocks: ['robot_detener'],
+        explanation: '"robot.detenerse()" es el FRENO del robot: apaga todos los motores inmediatamente. Es como el boton de STOP. Todo robot necesita un comando de parada para situaciones de emergencia o cuando llega a su destino.',
+    },
+    {
+        id: 'pr_4',
+        title: 'DELTA no lee sus sensores',
+        robotName: 'DELTA',
+        story: 'DELTA tiene un sensor ultrasonico que mide distancias, pero nunca lo usa. Toma decisiones sin informacion, como un piloto que no mira los instrumentos. Necesita el comando que lee los datos del sensor.',
+        symptom: 'Ignora los sensores, toma decisiones sin datos',
+        correctBlocks: ['sensor_leer'],
+        explanation: '"sensor.leer()" RECOGE la informacion del sensor y la guarda para que el robot la use. Es como abrir los ojos: primero MIRAS (sensor.leer) y luego DECIDES que hacer. Sin leer el sensor, el robot esta ciego.',
+    },
+    {
+        id: 'pr_5',
+        title: 'EPSILON se queda sin bateria',
+        robotName: 'EPSILON',
+        story: 'EPSILON trabaja sin descanso hasta que su bateria llega a 0 y se apaga de golpe en medio de una mision. Su codigo no tiene un bucle que verifique constantemente si le queda energia suficiente para seguir.',
+        symptom: 'Se apaga de golpe, no revisa la bateria',
+        correctBlocks: ['while_bateria'],
+        explanation: '"while bateria > 0:" es un BUCLE que repite las instrucciones MIENTRAS la bateria tenga carga. "while" significa "mientras que". Asi el robot trabaja solo si tiene energia, y cuando se acaba, para de forma segura.',
+    },
+    {
+        id: 'pr_6',
+        title: 'ZETA va demasiado rapido',
+        robotName: 'ZETA',
+        story: 'ZETA va a toda velocidad y no puede hacer giros precisos ni detenerse a tiempo. Su velocidad esta al maximo y necesita una linea de codigo que la reduzca a la mitad para poder maniobrar mejor.',
+        symptom: 'Velocidad maxima, no puede frenar a tiempo',
+        correctBlocks: ['reducir_velocidad'],
+        explanation: '"velocidad = velocidad / 2" toma el valor actual de velocidad y lo divide entre 2. Por ejemplo, si iba a 100, ahora va a 50. Es como cambiar de marcha en un auto: reduces la velocidad para tener mas control.',
+    },
+    {
+        id: 'pr_7',
+        title: 'THETA no agarra objetos',
+        robotName: 'THETA',
+        story: 'THETA tiene un brazo robotico con pinza, pero cuando llega a un objeto simplemente se queda mirandolo. Le falta la instruccion que cierra la pinza para sostener el objeto y poder cargarlo.',
+        symptom: 'Llega al objeto pero no lo agarra',
+        correctBlocks: ['brazo_agarrar'],
+        explanation: '"brazo.agarrar()" activa los motores de la pinza del brazo robotico para que se cierre y sujete el objeto. Es como decirle a tu mano que cierre los dedos. Sin este comando, la pinza se queda abierta.',
+    },
+    {
+        id: 'pr_8',
+        title: 'OMEGA no avisa de peligros',
+        robotName: 'OMEGA',
+        story: 'OMEGA detecta peligros pero no avisa a nadie. Cuando encuentra una zona peligrosa, se queda callado en vez de enviar una alerta. Necesita el comando que muestra un mensaje de advertencia en pantalla.',
+        symptom: 'Detecta peligros pero no muestra alertas',
+        correctBlocks: ['print_alerta'],
+        explanation: '"print(Alerta)" muestra un mensaje en la pantalla o consola del robot. "print" significa IMPRIMIR/MOSTRAR. Es la forma en que el robot se comunica con los humanos. Sin print, el robot piensa pero no habla.',
+    },
+    {
+        id: 'pr_9',
+        title: 'SIGMA no sigue la ruta',
+        robotName: 'SIGMA',
+        story: 'SIGMA tiene una lista con todos los puntos de su ruta guardados, pero no sabe como recorrerlos uno por uno. Se queda parado en el inicio porque le falta el bucle que lee cada paso de la ruta en orden.',
+        symptom: 'Tiene la ruta pero no la recorre',
+        correctBlocks: ['for_ruta'],
+        explanation: '"for paso in ruta:" es un bucle FOR que recorre la lista "ruta" elemento por elemento. "paso" toma el valor de cada punto: primero el 1ro, luego el 2do, etc. Es como leer una lista de instrucciones paso a paso.',
+    },
+    {
+        id: 'pr_10',
+        title: 'OMEGA-X choca y no gira',
+        robotName: 'OMEGA-X',
+        story: 'OMEGA-X es un robot avanzado que necesita dos reparaciones: no puede detectar cuando hay un obstaculo cerca Y tampoco puede girar para esquivarlo. Necesita la condicion de distancia y el comando de giro.',
+        symptom: 'No detecta obstaculos y no puede girar',
+        correctBlocks: ['if_distancia', 'motor_girar'],
+        explanation: 'Necesita DOS bloques trabajando juntos: "if distancia < 30" DETECTA el obstaculo (pregunta si hay algo cerca) y "motor.girar(90)" GIRA el robot 90 grados para esquivarlo. Primero detectas, luego actuas. Asi funcionan los robots autonomos.',
+    },
+];
+
+// All available code blocks for repair missions (colorful, with categories)
+const CODE_REPAIR_BLOCKS = [
+    { id: 'if_distancia', code: 'if distancia < 30:', nombre: 'Condicion de distancia', desc: 'Verifica si hay un obstaculo a menos de 30cm', category: 'Condicion', color: '#22D3EE', icon: '🔀', bgColor: 'rgba(34,211,238,0.12)' },
+    { id: 'motor_avanzar', code: 'motor.avanzar()', nombre: 'Avanzar', desc: 'Activa los motores para caminar hacia adelante', category: 'Movimiento', color: '#22C55E', icon: '🦿', bgColor: 'rgba(34,197,94,0.12)' },
+    { id: 'motor_girar', code: 'motor.girar(90)', nombre: 'Girar 90 grados', desc: 'Rota el robot 90 grados para cambiar direccion', category: 'Movimiento', color: '#10B981', icon: '🔄', bgColor: 'rgba(16,185,129,0.12)' },
+    { id: 'robot_detener', code: 'robot.detenerse()', nombre: 'Detenerse', desc: 'Frena todos los motores de emergencia', category: 'Control', color: '#EF4444', icon: '🛑', bgColor: 'rgba(239,68,68,0.12)' },
+    { id: 'sensor_leer', code: 'sensor.leer()', nombre: 'Leer sensor', desc: 'Obtiene datos del sensor de distancia', category: 'Sensor', color: '#F59E0B', icon: '📡', bgColor: 'rgba(245,158,11,0.12)' },
+    { id: 'while_bateria', code: 'while bateria > 0:', nombre: 'Bucle de bateria', desc: 'Repite mientras haya carga en la bateria', category: 'Bucle', color: '#A78BFA', icon: '🔋', bgColor: 'rgba(167,139,250,0.12)' },
+    { id: 'reducir_velocidad', code: 'velocidad = velocidad / 2', nombre: 'Reducir velocidad', desc: 'Divide la velocidad a la mitad para mas control', category: 'Variable', color: '#FFC800', icon: '🐢', bgColor: 'rgba(255,200,0,0.12)' },
+    { id: 'brazo_agarrar', code: 'brazo.agarrar()', nombre: 'Agarrar objeto', desc: 'Cierra la pinza del brazo para sujetar algo', category: 'Accion', color: '#EC4899', icon: '🤏', bgColor: 'rgba(236,72,153,0.12)' },
+    { id: 'print_alerta', code: 'print("¡Alerta!")', nombre: 'Enviar alerta', desc: 'Muestra un mensaje de advertencia en pantalla', category: 'Salida', color: '#FB923C', icon: '📢', bgColor: 'rgba(251,146,60,0.12)' },
+    { id: 'for_ruta', code: 'for paso in ruta:', nombre: 'Seguir ruta', desc: 'Recorre cada punto de la ruta uno por uno', category: 'Bucle', color: '#8B5CF6', icon: '🗺️', bgColor: 'rgba(139,92,246,0.12)' },
+];
+
 // Helper to get today's date key
 const getTodayKey = () => {
     const d = new Date();
@@ -1580,6 +1688,48 @@ const ProgrammingStationScreen = ({ onBack, startChallenge, userScores, userId, 
     const completedChallengeIds = Object.keys(userScores || {}).filter(k => k.startsWith('challenge_') && userScores[k]?.completed);
 
     const dailyProgProblem = DAILY_PROGRAMMING_STORIES[getDailyIndex(DAILY_PROGRAMMING_STORIES)];
+    const dailyProgRepairMission = DAILY_PROG_REPAIR_MISSIONS[getDailyIndex(DAILY_PROG_REPAIR_MISSIONS)];
+
+    // Robot repair mission state
+    const [selectedCodeBlocks, setSelectedCodeBlocks] = useState([]);
+    const [codeRepairAttempted, setCodeRepairAttempted] = useState(false);
+    const [codeRepairCorrect, setCodeRepairCorrect] = useState(false);
+    const [robotProgAnimFrame, setRobotProgAnimFrame] = useState(0);
+
+    // Robot animation effect — cycle robotp1/2/3 every 600ms
+    useEffect(() => {
+        if (tab !== 'daily' || dailyProgSolved || codeRepairCorrect) return;
+        const interval = setInterval(() => {
+            setRobotProgAnimFrame(prev => (prev + 1) % 3);
+        }, 600);
+        return () => clearInterval(interval);
+    }, [tab, dailyProgSolved, codeRepairCorrect]);
+
+    const toggleCodeBlock = (blockId) => {
+        if (codeRepairAttempted) return;
+        setSelectedCodeBlocks(prev => prev.includes(blockId) ? prev.filter(c => c !== blockId) : [...prev, blockId]);
+    };
+
+    const attemptCodeRepair = () => {
+        if (selectedCodeBlocks.length === 0) return;
+        setCodeRepairAttempted(true);
+        const correct = dailyProgRepairMission.correctBlocks;
+        const isCorrect = correct.length === selectedCodeBlocks.length && correct.every(c => selectedCodeBlocks.includes(c));
+        setCodeRepairCorrect(isCorrect);
+        if (isCorrect) {
+            const wasAlreadySolved = dailyProgSolved;
+            try { localStorage.setItem('cultivatec_daily_prog', getTodayKey()); setDailyProgSolved(true); } catch {}
+            if (!wasAlreadySolved && onAwardXp) {
+                onAwardXp(DAILY_PROG_XP, 'dailyProg');
+            }
+        }
+    };
+
+    const resetCodeRepair = () => {
+        setSelectedCodeBlocks([]);
+        setCodeRepairAttempted(false);
+        setCodeRepairCorrect(false);
+    };
 
     const openDailyProblem = () => {
         setBlockChallenge(dailyProgProblem);
@@ -1713,43 +1863,384 @@ const ProgrammingStationScreen = ({ onBack, startChallenge, userScores, userId, 
 
             <div className="px-4 max-w-xl mx-auto py-4 relative z-10">
 
-                {/* DAILY MISSION TAB */}
+                {/* DAILY MISSION TAB — Robot Code Repair */}
                 {tab === 'daily' && (
                     <div className="space-y-4">
-                        {dailyProgSolved ? (
-                            <div className="bg-[#22C55E]/10 border-2 border-[#22C55E]/30 rounded-2xl p-6 text-center space-y-3">
-                                <div className="text-5xl">🎉</div>
-                                <h2 className="text-xl font-black text-[#22C55E]">¡Misión Completada!</h2>
-                                <p className="text-sm text-[#94A3B8] font-bold">¡Genial! Resolviste el desafío de bloques de hoy. 🌟</p>
-                                <div className="flex items-center justify-center gap-2 mt-1">
-                                    <span className="px-3 py-1 bg-[#FFC800]/20 text-[#FFC800] text-xs font-black rounded-full border border-[#FFC800]/30">+{DAILY_PROG_XP} XP ganados 🏆</span>
+                        {dailyProgSolved && !codeRepairAttempted ? (
+                            /* ===== COMPLETED STATE ===== */
+                            <div className="relative overflow-hidden rounded-3xl border-2 border-[#22C55E]/40"
+                                style={{ background: 'linear-gradient(135deg, #064E3B 0%, #0B1120 40%, #052E16 100%)' }}>
+                                {[...Array(12)].map((_, i) => (
+                                    <div key={i} className="absolute rounded-full pointer-events-none animate-float-particle"
+                                        style={{
+                                            width: `${4 + Math.random() * 6}px`, height: `${4 + Math.random() * 6}px`,
+                                            background: ['#22C55E', '#FFC800', '#93C5FD', '#A78BFA', '#FB923C'][i % 5],
+                                            left: `${5 + Math.random() * 90}%`, top: `${5 + Math.random() * 90}%`,
+                                            opacity: 0.5 + Math.random() * 0.5,
+                                            animationDelay: `${Math.random() * 3}s`, animationDuration: `${3 + Math.random() * 4}s`
+                                        }} />
+                                ))}
+                                <div className="relative z-10 p-6 text-center space-y-4">
+                                    <div className="inline-flex items-center gap-2 bg-[#FFC800]/20 px-5 py-2 rounded-full border border-[#FFC800]/40">
+                                        <span className="text-2xl">🏆</span>
+                                        <span className="text-sm font-black text-[#FFC800] tracking-wide">MISIÓN COMPLETADA</span>
+                                        <span className="text-2xl">🏆</span>
+                                    </div>
+                                    <div className="relative inline-block">
+                                        <div className="absolute inset-[-40px] rounded-full pointer-events-none"
+                                            style={{ background: 'radial-gradient(circle, rgba(34,197,94,0.5) 0%, rgba(34,197,94,0.15) 40%, transparent 65%)', filter: 'blur(15px)' }}></div>
+                                        <div className="absolute inset-[-50px] rounded-full pointer-events-none animate-ping-slow"
+                                            style={{ background: 'radial-gradient(circle, rgba(34,197,94,0.2) 0%, transparent 50%)' }}></div>
+                                        <img src="/robotp4.png" alt="Robot reparado" className="w-52 h-52 sm:w-60 sm:h-60 object-contain mx-auto relative z-10"
+                                            style={{ filter: 'drop-shadow(0 0 30px rgba(34,197,94,0.6))' }} />
+                                    </div>
+                                    <div>
+                                        <h2 className="text-2xl font-black text-[#22C55E]">¡{dailyProgRepairMission.robotName} reparado!</h2>
+                                        <p className="text-sm text-[#86EFAC] font-bold mt-1">¡Código corregido exitosamente, programador! 🌟</p>
+                                    </div>
+                                    <div className="inline-flex items-center gap-3 bg-[#FFC800]/10 px-6 py-3 rounded-2xl border-2 border-[#FFC800]/30"
+                                        style={{ boxShadow: '0 0 30px rgba(255,200,0,0.15)' }}>
+                                        <div className="text-3xl">⚡</div>
+                                        <div>
+                                            <p className="text-xl font-black text-[#FFC800]">+{DAILY_PROG_XP} XP</p>
+                                            <p className="text-[10px] font-bold text-[#FFC800]/60">Recompensa de programación</p>
+                                        </div>
+                                    </div>
+                                    <div className="bg-[#1E293B]/80 rounded-2xl p-4 border border-[#334155] backdrop-blur-sm mt-2">
+                                        <div className="flex items-center justify-center gap-2 mb-1">
+                                            <Calendar size={14} className="text-[#93C5FD]" />
+                                            <p className="text-xs text-[#93C5FD] font-black">¡Vuelve mañana!</p>
+                                        </div>
+                                        <p className="text-[10px] text-[#64748B] font-semibold">Un nuevo robot con un bug necesitará tu código cada día 🤖</p>
+                                    </div>
+                                    <button onClick={() => { resetCodeRepair(); setDailyProgSolved(false); }}
+                                        className="text-[10px] font-bold text-[#93C5FD]/70 underline mt-1 hover:text-[#93C5FD]">Ver la misión de nuevo</button>
                                 </div>
-                                <div className="bg-[#1E293B] rounded-xl p-4 border border-[#334155]">
-                                    <p className="text-xs text-[#64748B] font-bold">🕐 ¡Vuelve mañana para un nuevo reto de bloques!</p>
-                                    <p className="text-[10px] text-[#475569] font-semibold mt-1">Cada día la nave CultivaTec-7 tiene un nuevo desafío de programación con bloques 🚀</p>
-                                </div>
-                                <button onClick={() => { setDailyProgSolved(false); openDailyProblem(); }}
-                                    className="text-[10px] font-bold text-[#93C5FD] underline mt-2">Volver a practicar el problema</button>
                             </div>
                         ) : (
-                            <div className="space-y-4">
-                                <div className="text-center mb-2">
-                                    <span className="text-[10px] font-black text-[#93C5FD] bg-[#93C5FD]/10 px-3 py-1 rounded-full border border-[#93C5FD]/20 flex items-center gap-1 mx-auto w-fit"><Calendar size={11} /> 🧩 MISIÓN DIARIA DE BLOQUES</span>
-                                </div>
-                                <div className="bg-gradient-to-br from-[#1E293B] to-[#0F172A] rounded-2xl border-2 border-[#93C5FD]/20 p-5 space-y-4">
-                                    <h2 className="text-lg font-black text-white">{dailyProgProblem.title}</h2>
-                                    <div className="bg-[#0F172A]/60 rounded-xl p-4 border border-[#334155]">
-                                        <p className="text-sm text-[#E2E8F0] font-semibold leading-relaxed">📖 {dailyProgProblem.story}</p>
+                            <>
+                                {/* ===== ACTIVE MISSION ===== */}
+                                {/* Mission header banner */}
+                                <div className="relative overflow-hidden rounded-2xl border-2 border-[#93C5FD]/30 p-3"
+                                    style={{ background: 'linear-gradient(135deg, rgba(147,197,253,0.15) 0%, rgba(14,26,48,0.9) 50%, rgba(139,92,246,0.1) 100%)' }}>
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-9 h-9 rounded-xl bg-[#93C5FD]/20 flex items-center justify-center border border-[#93C5FD]/30">
+                                                <Code size={18} className="text-[#93C5FD]" />
+                                            </div>
+                                            <div>
+                                                <p className="text-[10px] font-black text-[#93C5FD] uppercase tracking-widest">Misión Diaria</p>
+                                                <p className="text-[8px] font-bold text-[#64748B]">Depuración de Código Robótico</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center gap-1.5 bg-[#FFC800]/15 px-3 py-1.5 rounded-full border border-[#FFC800]/30">
+                                            <Zap size={12} className="text-[#FFC800]" />
+                                            <span className="text-[10px] font-black text-[#FFC800]">+{DAILY_PROG_XP} XP</span>
+                                        </div>
                                     </div>
-                                    <div className="bg-[#93C5FD]/10 rounded-xl p-4 border border-[#93C5FD]/20">
-                                        <p className="text-sm font-bold text-[#93C5FD]">🎯 {dailyProgProblem.task}</p>
-                                    </div>
-                                    <button onClick={openDailyProblem}
-                                        className="w-full py-3.5 bg-[#93C5FD] text-white rounded-xl text-sm font-black flex items-center justify-center gap-2 active:scale-95 transition shadow-lg shadow-[#93C5FD]/20">
-                                        <Puzzle size={16} /> 🧩 ¡Ordenar los Bloques!
-                                    </button>
                                 </div>
-                            </div>
+
+                                {/* Main mission card */}
+                                <div className="relative overflow-hidden rounded-3xl border-2"
+                                    style={{
+                                        borderColor: codeRepairCorrect ? 'rgba(34,197,94,0.4)' : 'rgba(147,197,253,0.25)',
+                                        background: codeRepairCorrect
+                                            ? 'linear-gradient(180deg, #064E3B 0%, #0B1120 30%, #0F172A 100%)'
+                                            : 'linear-gradient(180deg, #0F172A 0%, #0B1120 30%, #0F172A 100%)'
+                                    }}>
+
+                                    {/* ---- ROBOT DISPLAY AREA ---- */}
+                                    <div className="relative pt-6 pb-4 px-4">
+                                        {!codeRepairCorrect && (
+                                            <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-20">
+                                                <div className="absolute w-full h-[2px] bg-gradient-to-r from-transparent via-[#93C5FD] to-transparent animate-scan-line"
+                                                    style={{ animationDuration: '3s' }}></div>
+                                            </div>
+                                        )}
+                                        <div className="text-center">
+                                            <div className="relative inline-block">
+                                                <div className="absolute inset-[-45px] rounded-full pointer-events-none"
+                                                    style={{
+                                                        background: codeRepairCorrect
+                                                            ? 'radial-gradient(circle, rgba(34,197,94,0.45) 0%, rgba(34,197,94,0.1) 40%, transparent 65%)'
+                                                            : 'radial-gradient(circle, rgba(147,197,253,0.3) 0%, rgba(147,197,253,0.08) 40%, transparent 65%)',
+                                                        filter: 'blur(14px)'
+                                                    }}></div>
+                                                <div className="absolute inset-[-15px] rounded-full border-2 border-dashed pointer-events-none animate-spin-slow"
+                                                    style={{
+                                                        borderColor: codeRepairCorrect ? 'rgba(34,197,94,0.25)' : 'rgba(147,197,253,0.2)',
+                                                        animationDuration: '12s'
+                                                    }}></div>
+                                                {codeRepairCorrect ? (
+                                                    <img src="/robotp4.png" alt="Robot reparado"
+                                                        className="w-56 h-56 sm:w-64 sm:h-64 object-contain mx-auto relative z-10"
+                                                        style={{ filter: 'drop-shadow(0 0 30px rgba(34,197,94,0.5))' }} />
+                                                ) : (
+                                                    <img src={`/robotp${robotProgAnimFrame + 1}.png`} alt="Robot con bug"
+                                                        className="w-56 h-56 sm:w-64 sm:h-64 object-contain mx-auto relative z-10"
+                                                        style={{ filter: 'drop-shadow(0 0 25px rgba(147,197,253,0.4))' }} />
+                                                )}
+                                            </div>
+                                            <div className="mt-3">
+                                                {codeRepairCorrect ? (
+                                                    <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-[10px] font-black tracking-wider bg-[#22C55E]/20 text-[#22C55E] border border-[#22C55E]/30">
+                                                        <CheckCircle2 size={12} /> BUG CORREGIDO
+                                                    </span>
+                                                ) : (
+                                                    <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-[10px] font-black tracking-wider bg-red-500/15 text-red-400 border border-red-500/25 animate-pulse-soft">
+                                                        <AlertTriangle size={12} /> BUG DETECTADO — NECESITA CÓDIGO
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* ---- MISSION INFO ---- */}
+                                    <div className="px-5 pb-2 space-y-3">
+                                        <div className="flex items-start gap-3">
+                                            <div className="w-10 h-10 rounded-xl bg-[#93C5FD]/10 flex items-center justify-center border border-[#93C5FD]/20 flex-shrink-0 mt-0.5">
+                                                <Bot size={20} className="text-[#93C5FD]" />
+                                            </div>
+                                            <div>
+                                                <h2 className="text-lg font-black text-white leading-tight">{dailyProgRepairMission.title}</h2>
+                                                <p className="text-[10px] font-black text-[#93C5FD]/50 uppercase tracking-wider mt-0.5">Paciente: {dailyProgRepairMission.robotName}</p>
+                                            </div>
+                                        </div>
+
+                                        <div className="relative bg-[#1E293B]/80 rounded-2xl p-4 border border-[#334155]/60 backdrop-blur-sm">
+                                            <div className="absolute top-0 left-5 -translate-y-1/2 px-2 py-0.5 bg-[#334155] rounded-md">
+                                                <span className="text-[8px] font-black text-[#94A3B8] uppercase tracking-wider">Reporte de bug</span>
+                                            </div>
+                                            <p className="text-[13px] text-[#CBD5E1] font-semibold leading-relaxed mt-1">{dailyProgRepairMission.story}</p>
+                                        </div>
+
+                                        <div className="relative bg-red-950/30 rounded-2xl p-3.5 border border-red-500/20 overflow-hidden">
+                                            <div className="absolute top-0 right-0 w-20 h-20 pointer-events-none opacity-10"
+                                                style={{ background: 'radial-gradient(circle, rgba(239,68,68,0.8) 0%, transparent 70%)' }}></div>
+                                            <div className="flex items-start gap-3 relative z-10">
+                                                <div className="w-8 h-8 rounded-lg bg-red-500/20 flex items-center justify-center flex-shrink-0 border border-red-500/30">
+                                                    <AlertTriangle size={15} className="text-red-400" />
+                                                </div>
+                                                <div>
+                                                    <p className="text-[9px] font-black text-red-400/80 uppercase tracking-widest">Error en consola</p>
+                                                    <p className="text-xs text-red-200/90 font-bold mt-0.5 leading-relaxed font-mono">{dailyProgRepairMission.symptom}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* ---- CODE BLOCK SELECTION ---- */}
+                                    {!codeRepairCorrect && (
+                                        <div className="px-5 pt-2 pb-4">
+                                            <div className="flex items-center gap-2 mb-3">
+                                                <div className="w-7 h-7 rounded-lg bg-[#A78BFA]/15 flex items-center justify-center border border-[#A78BFA]/25">
+                                                    <Terminal size={14} className="text-[#A78BFA]" />
+                                                </div>
+                                                <div>
+                                                    <p className="text-[10px] font-black text-[#A78BFA] uppercase tracking-wider">Bloques de código</p>
+                                                    <p className="text-[8px] font-bold text-[#64748B]">Selecciona {dailyProgRepairMission.correctBlocks.length === 1 ? 'el bloque correcto' : 'los bloques correctos'}</p>
+                                                </div>
+                                                {selectedCodeBlocks.length > 0 && (
+                                                    <span className="ml-auto px-2.5 py-1 bg-[#93C5FD]/15 text-[#93C5FD] text-[9px] font-black rounded-full border border-[#93C5FD]/25">
+                                                        {selectedCodeBlocks.length} seleccionado{selectedCodeBlocks.length > 1 ? 's' : ''}
+                                                    </span>
+                                                )}
+                                            </div>
+
+                                            {/* Code blocks grid */}
+                                            <div className="space-y-2">
+                                                {CODE_REPAIR_BLOCKS.map(block => {
+                                                    const isSelected = selectedCodeBlocks.includes(block.id);
+                                                    const isCorrectBlock = codeRepairAttempted && dailyProgRepairMission.correctBlocks.includes(block.id);
+                                                    const isWrongSelection = codeRepairAttempted && isSelected && !dailyProgRepairMission.correctBlocks.includes(block.id);
+                                                    return (
+                                                        <button key={block.id} onClick={() => toggleCodeBlock(block.id)}
+                                                            disabled={codeRepairAttempted}
+                                                            className={`relative w-full rounded-2xl p-3 border-2 transition-all duration-200 active:scale-[0.97] text-left ${
+                                                                codeRepairAttempted
+                                                                    ? isCorrectBlock ? 'border-[#22C55E] ring-2 ring-[#22C55E]/30'
+                                                                    : isWrongSelection ? 'border-red-500 ring-2 ring-red-500/30'
+                                                                    : 'border-[#1E293B] opacity-40'
+                                                                    : isSelected ? 'border-[#93C5FD] ring-2 ring-[#93C5FD]/20 scale-[1.01]'
+                                                                    : 'border-[#334155]/60 hover:border-[#475569]'
+                                                            }`}
+                                                            style={{
+                                                                background: codeRepairAttempted
+                                                                    ? isCorrectBlock ? 'rgba(34,197,94,0.1)' : isWrongSelection ? 'rgba(239,68,68,0.1)' : 'rgba(15,23,42,0.5)'
+                                                                    : isSelected ? block.bgColor : 'rgba(30,41,59,0.5)',
+                                                                boxShadow: isSelected && !codeRepairAttempted ? `0 0 20px ${block.color}22` : 'none'
+                                                            }}>
+                                                            <div className="flex items-center gap-3">
+                                                                {/* Icon circle */}
+                                                                <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-lg border"
+                                                                    style={{
+                                                                        backgroundColor: `${block.color}15`,
+                                                                        borderColor: `${block.color}30`
+                                                                    }}>
+                                                                    {block.icon}
+                                                                </div>
+                                                                <div className="flex-grow min-w-0">
+                                                                    {/* Code text in monospace */}
+                                                                    <p className="text-xs font-mono font-black truncate" style={{ color: block.color }}>{block.code}</p>
+                                                                    {/* Name + description */}
+                                                                    <p className="text-[10px] font-black text-white/80 mt-0.5">{block.nombre}</p>
+                                                                    <p className="text-[8px] font-semibold text-[#64748B] leading-tight">{block.desc}</p>
+                                                                </div>
+                                                                {/* Category badge */}
+                                                                <span className="text-[7px] font-black px-2 py-0.5 rounded-md flex-shrink-0"
+                                                                    style={{ backgroundColor: `${block.color}15`, color: block.color, border: `1px solid ${block.color}30` }}>
+                                                                    {block.category}
+                                                                </span>
+                                                            </div>
+                                                            {/* Selection indicators */}
+                                                            {isSelected && !codeRepairAttempted && (
+                                                                <div className="absolute -top-1.5 -right-1.5 w-6 h-6 bg-[#93C5FD] rounded-full flex items-center justify-center shadow-lg shadow-blue-500/30 border-2 border-[#0B1120]">
+                                                                    <CheckCircle2 size={13} className="text-white" />
+                                                                </div>
+                                                            )}
+                                                            {codeRepairAttempted && isCorrectBlock && (
+                                                                <div className="absolute -top-1.5 -right-1.5 w-6 h-6 bg-[#22C55E] rounded-full flex items-center justify-center shadow-lg shadow-green-500/30 border-2 border-[#0B1120]">
+                                                                    <CheckCircle2 size={13} className="text-white" />
+                                                                </div>
+                                                            )}
+                                                            {isWrongSelection && (
+                                                                <div className="absolute -top-1.5 -right-1.5 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center shadow-lg shadow-red-500/30 border-2 border-[#0B1120]">
+                                                                    <X size={13} className="text-white" />
+                                                                </div>
+                                                            )}
+                                                        </button>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* ---- REPAIR BUTTON ---- */}
+                                    {!codeRepairAttempted && (
+                                        <div className="px-5 pb-5">
+                                            <button onClick={attemptCodeRepair}
+                                                disabled={selectedCodeBlocks.length === 0}
+                                                className={`w-full py-4 rounded-2xl font-black text-sm transition-all duration-200 active:scale-95 flex items-center justify-center gap-2.5 relative overflow-hidden ${
+                                                    selectedCodeBlocks.length > 0
+                                                        ? 'text-white shadow-xl'
+                                                        : 'bg-[#1E293B] text-[#475569] border-2 border-[#334155] cursor-not-allowed'
+                                                }`}
+                                                style={selectedCodeBlocks.length > 0 ? {
+                                                    background: 'linear-gradient(135deg, #93C5FD 0%, #6366F1 50%, #8B5CF6 100%)',
+                                                    boxShadow: '0 8px 30px rgba(147,197,253,0.3), 0 0 0 1px rgba(147,197,253,0.2)'
+                                                } : {}}>
+                                                {selectedCodeBlocks.length > 0 && (
+                                                    <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 animate-shimmer"
+                                                        style={{ animationDuration: '2s' }}></div>
+                                                )}
+                                                <Code size={18} className="relative z-10" />
+                                                <span className="relative z-10">
+                                                    {selectedCodeBlocks.length > 0 ? `¡Ejecutar código en ${dailyProgRepairMission.robotName}!` : 'Selecciona bloques de código'}
+                                                </span>
+                                            </button>
+                                        </div>
+                                    )}
+
+                                    {/* ---- RESULT PANEL ---- */}
+                                    {codeRepairAttempted && (
+                                        <div className="px-5 pb-5">
+                                            {codeRepairCorrect ? (
+                                                <div className="rounded-2xl p-5 text-center space-y-3 border-2 border-[#22C55E]/30"
+                                                    style={{ background: 'linear-gradient(135deg, rgba(34,197,94,0.15) 0%, rgba(11,17,32,0.9) 100%)' }}>
+                                                    {[...Array(6)].map((_, i) => (
+                                                        <div key={i} className="absolute rounded-full pointer-events-none animate-float-particle"
+                                                            style={{
+                                                                width: `${3 + Math.random() * 5}px`, height: `${3 + Math.random() * 5}px`,
+                                                                background: ['#22C55E', '#FFC800', '#93C5FD'][i % 3],
+                                                                left: `${10 + Math.random() * 80}%`, top: `${10 + Math.random() * 80}%`,
+                                                                opacity: 0.4, animationDelay: `${Math.random() * 2}s`, animationDuration: `${3 + Math.random() * 3}s`
+                                                            }} />
+                                                    ))}
+                                                    <div className="text-4xl">🎉</div>
+                                                    <h3 className="text-xl font-black text-[#22C55E]">¡Bug Corregido!</h3>
+                                                    <p className="text-xs text-[#86EFAC] font-bold">{dailyProgRepairMission.robotName} está funcionando perfectamente</p>
+                                                    {/* Explanation with code highlight */}
+                                                    <div className="bg-[#1E293B]/60 rounded-xl p-3.5 border border-[#334155] text-left mt-2">
+                                                        <p className="text-[9px] font-black text-[#93C5FD]/60 uppercase tracking-wider mb-1">💡 ¿Qué aprendiste?</p>
+                                                        <p className="text-xs text-[#94A3B8] font-semibold leading-relaxed">{dailyProgRepairMission.explanation}</p>
+                                                    </div>
+                                                    {/* Show the correct code block(s) */}
+                                                    <div className="flex flex-wrap items-center justify-center gap-2 mt-2">
+                                                        {dailyProgRepairMission.correctBlocks.map(bId => {
+                                                            const b = CODE_REPAIR_BLOCKS.find(cb => cb.id === bId);
+                                                            return b ? (
+                                                                <div key={bId} className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border"
+                                                                    style={{ backgroundColor: `${b.color}15`, borderColor: `${b.color}30` }}>
+                                                                    <span className="text-sm">{b.icon}</span>
+                                                                    <span className="text-[10px] font-mono font-black" style={{ color: b.color }}>{b.code}</span>
+                                                                </div>
+                                                            ) : null;
+                                                        })}
+                                                    </div>
+                                                    <div className="inline-flex items-center gap-2.5 bg-[#FFC800]/15 px-5 py-2.5 rounded-2xl border-2 border-[#FFC800]/30 mt-1"
+                                                        style={{ boxShadow: '0 0 25px rgba(255,200,0,0.12)' }}>
+                                                        <span className="text-2xl">⚡</span>
+                                                        <span className="text-lg font-black text-[#FFC800]">+{DAILY_PROG_XP} XP</span>
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <div className="rounded-2xl p-5 space-y-3 border-2 border-red-500/25"
+                                                    style={{ background: 'linear-gradient(135deg, rgba(127,29,29,0.2) 0%, rgba(11,17,32,0.95) 100%)' }}>
+                                                    <div className="text-center">
+                                                        <div className="text-3xl mb-1">🔍</div>
+                                                        <h3 className="text-base font-black text-red-400">Código incorrecto</h3>
+                                                        <p className="text-[10px] text-red-300/60 font-bold mt-0.5">¡Casi! Revisa el error</p>
+                                                    </div>
+                                                    {/* Correct answer reveal */}
+                                                    <div className="bg-[#1E293B]/60 rounded-xl p-3.5 border border-[#334155]">
+                                                        <p className="text-[9px] font-black text-[#93C5FD]/60 uppercase tracking-wider mb-1.5">Bloque correcto</p>
+                                                        <div className="flex flex-col items-center gap-2">
+                                                            {dailyProgRepairMission.correctBlocks.map(bId => {
+                                                                const b = CODE_REPAIR_BLOCKS.find(cb => cb.id === bId);
+                                                                return b ? (
+                                                                    <div key={bId} className="flex items-center gap-2 px-3 py-2 rounded-xl border w-full"
+                                                                        style={{ backgroundColor: `${b.color}10`, borderColor: `${b.color}30` }}>
+                                                                        <span className="text-lg">{b.icon}</span>
+                                                                        <div>
+                                                                            <p className="text-xs font-mono font-black" style={{ color: b.color }}>{b.code}</p>
+                                                                            <p className="text-[8px] font-semibold text-[#94A3B8]">{b.nombre}</p>
+                                                                        </div>
+                                                                    </div>
+                                                                ) : null;
+                                                            })}
+                                                        </div>
+                                                    </div>
+                                                    <div className="bg-[#1E293B]/60 rounded-xl p-3.5 border border-[#334155]">
+                                                        <p className="text-[9px] font-black text-[#F59E0B]/60 uppercase tracking-wider mb-1">💡 Explicación</p>
+                                                        <p className="text-xs text-[#94A3B8] font-semibold leading-relaxed">{dailyProgRepairMission.explanation}</p>
+                                                    </div>
+                                                    <button onClick={resetCodeRepair}
+                                                        className="w-full py-3.5 rounded-2xl font-black text-sm active:scale-95 transition-all flex items-center justify-center gap-2 border-2 border-[#93C5FD]/30 text-[#93C5FD] relative overflow-hidden"
+                                                        style={{ background: 'linear-gradient(135deg, rgba(147,197,253,0.1) 0%, rgba(14,26,48,0.8) 100%)' }}>
+                                                        <RotateCcw size={16} />
+                                                        <span>Intentar de nuevo</span>
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Practice link - go to block ordering */}
+                                <div className="bg-[#1E293B]/50 rounded-2xl p-4 border border-[#334155]/50">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-10 h-10 rounded-xl bg-[#93C5FD]/10 flex items-center justify-center text-lg border border-[#93C5FD]/20">🧩</div>
+                                        <div className="flex-grow">
+                                            <p className="text-xs font-black text-white">¿Quieres practicar más?</p>
+                                            <p className="text-[9px] text-[#64748B] font-semibold">Ordena bloques de código en la pestaña Práctica</p>
+                                        </div>
+                                        <button onClick={() => setTab('practice')}
+                                            className="px-3 py-1.5 bg-[#93C5FD]/20 text-[#93C5FD] text-[10px] font-black rounded-xl border border-[#93C5FD]/30 active:scale-95 transition">
+                                            Ir →
+                                        </button>
+                                    </div>
+                                </div>
+                            </>
                         )}
                     </div>
                 )}
