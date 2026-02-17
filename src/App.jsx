@@ -24,7 +24,8 @@ import { onAuthChange, loginUser, registerUser, logoutUser, getCurrentUser } fro
 import {
   getUserProfile, onUserProfileChange, updateUserProfile, syncUserStats,
   saveModuleScore, onUserScoresChange, createUserProfile, calculateLevel,
-  getPendingFriendRequests, onPendingRequestsChange, checkAndUpdateStreak
+  getPendingFriendRequests, onPendingRequestsChange, checkAndUpdateStreak,
+  syncFriendsCount
 } from './firebase/firestore';
 
 // Helper: guardar scores en localStorage (fallback local)
@@ -4366,6 +4367,9 @@ export default function App() {
 
         // Verificar y actualizar racha diaria
         checkAndUpdateStreak(userId).catch(console.error);
+
+        // Sincronizar friendsCount con el conteo real de amigos
+        syncFriendsCount(userId).catch(console.error);
 
         // Listen to user profile
         const unsubProfile = onUserProfileChange(userId, (profile) => {

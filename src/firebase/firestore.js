@@ -524,6 +524,19 @@ export const getFriendsList = async (uid) => {
  */
 export const onFriendsChange = (uid, callback) => {
   return onSnapshot(collection(db, 'friends', uid, 'list'), async (snap) => {
+    const realCount = snap.size;
+
+    // Sincronizar friendsCount en el perfil del usuario con el conteo real
+    try {
+      const userRef = doc(db, 'users', uid);
+      const userSnap = await getDoc(userRef);
+      if (userSnap.exists() && (userSnap.data().friendsCount ?? 0) !== realCount) {
+        await updateDoc(userRef, { friendsCount: realCount });
+      }
+    } catch (e) {
+      console.warn('No se pudo sincronizar friendsCount:', e.message);
+    }
+
     if (snap.empty) {
       callback([]);
       return;
@@ -571,5 +584,23 @@ export const removeFriend = async (uid, friendUid) => {
     await updateDoc(doc(db, 'users', friendUid), { friendsCount: increment(-1) });
   } catch (e) {
     console.warn('No se pudo actualizar friendsCount del otro usuario:', e.message);
+  }
+};
+
+/**
+ * Sincronizar friendsCount con el conteo real de la subcolección friends/{uid}/list.
+ * Llamar al iniciar sesión para corregir desincronizaciones.
+ */
+export const syncFriendsCount = async (uid) => {
+  try {
+    const friendsSnap = await getDocs(collection(db, 'friends', uid, 'list'));
+    const realCount = friendsSnap.size;
+    const userRef = doc(db, 'users', uid);
+    const userSnap = await getDoc(userRef);
+    if (userSnap.exists() && (userSnap.data().friendsCount ?? 0) !== realCount) {
+      await updateDoc(userRef, { friendsCount: realCount });
+    }
+  } catch (e) {
+    console.warn('Error sincronizando friendsCount:', e.message);
   }
 };
