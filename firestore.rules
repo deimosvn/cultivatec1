@@ -16,7 +16,11 @@ service cloud.firestore {
       allow read: if request.auth != null;
       // Solo el propio usuario puede escribir su perfil
       allow create: if request.auth != null && request.auth.uid == userId;
-      allow update: if request.auth != null && request.auth.uid == userId;
+      // El propio usuario puede actualizar todo; otros solo friendsCount
+      allow update: if request.auth != null && (
+        request.auth.uid == userId ||
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['friendsCount'])
+      );
     }
 
     // --- Usernames (unicidad) ---

@@ -461,14 +461,19 @@ export const acceptFriendRequest = async (requestId, fromUid, toUid, fromUsernam
     since: serverTimestamp(),
   });
 
-  // Incrementar contador de amigos
-  const userRef1 = doc(db, 'users', fromUid);
-  batch.update(userRef1, { friendsCount: increment(1) });
-
+  // Incrementar contador de amigos del usuario actual (toUid)
   const userRef2 = doc(db, 'users', toUid);
   batch.update(userRef2, { friendsCount: increment(1) });
 
   await batch.commit();
+
+  // Incrementar contador del otro usuario por separado (puede fallar por reglas)
+  try {
+    const userRef1 = doc(db, 'users', fromUid);
+    await updateDoc(userRef1, { friendsCount: increment(1) });
+  } catch (e) {
+    console.warn('No se pudo actualizar friendsCount del otro usuario:', e.message);
+  }
 };
 
 /**
@@ -556,8 +561,15 @@ export const removeFriend = async (uid, friendUid) => {
   batch.delete(doc(db, 'friends', uid, 'list', friendUid));
   batch.delete(doc(db, 'friends', friendUid, 'list', uid));
 
+  // Solo decrementar el propio contador en el batch
   batch.update(doc(db, 'users', uid), { friendsCount: increment(-1) });
-  batch.update(doc(db, 'users', friendUid), { friendsCount: increment(-1) });
 
   await batch.commit();
+
+  // Decrementar el contador del otro usuario por separado
+  try {
+    await updateDoc(doc(db, 'users', friendUid), { friendsCount: increment(-1) });
+  } catch (e) {
+    console.warn('No se pudo actualizar friendsCount del otro usuario:', e.message);
+  }
 };
