@@ -159,13 +159,13 @@ body {
 
 /* ===== FLOATING DOCK NAV ===== */
 .nav-dock {
-  background: rgba(255, 255, 255, 0.88);
+  background: rgba(240, 247, 255, 0.92);
   backdrop-filter: blur(24px) saturate(180%);
   -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(219, 234, 254, 0.6);
   box-shadow:
     0 -4px 32px rgba(0, 0, 0, 0.08),
-    0 2px 12px rgba(0, 0, 0, 0.04),
+    0 2px 12px rgba(37, 99, 235, 0.04),
     inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
@@ -298,7 +298,7 @@ body {
 
 /* World 1: El Taller del Inventor - Workshop pixel pattern */
 .bg-world-taller {
-  background-color: #EEF2FF;
+  background-color: #E8F0FE;
   background-image:
     /* Workbench grid lines */
     linear-gradient(90deg, rgba(99,102,241,0.06) 1px, transparent 1px),
@@ -350,7 +350,7 @@ body {
 
 /* World 2: La Fábrica de Autómatas - Factory pixel pattern */
 .bg-world-fabrica {
-  background-color: #FFFBEB;
+  background-color: #FEF9E7;
   background-image:
     /* Factory grid */
     linear-gradient(90deg, rgba(217,119,6,0.05) 1px, transparent 1px),
@@ -396,7 +396,7 @@ body {
 
 /* World 3: La Selva Cibernética - Bio jungle pixel pattern */
 .bg-world-selva {
-  background-color: #ECFDF5;
+  background-color: #E6F7F0;
   background-image:
     /* Vine grid lines */
     linear-gradient(90deg, rgba(5,150,105,0.05) 1px, transparent 1px),
@@ -444,7 +444,7 @@ body {
 
 /* World 4: La Estación Orbital - Space station pixel pattern */
 .bg-world-orbital {
-  background-color: #EEF2FF;
+  background-color: #E8F0FE;
   background-image:
     /* Station hull grid */
     linear-gradient(90deg, rgba(99,102,241,0.06) 1px, transparent 1px),
@@ -553,7 +553,7 @@ body {
 }
 
 .galaxy-bg {
-  background: linear-gradient(135deg, #2E1065 0%, #312E81 20%, #1E3A5F 40%, #1E1B4B 60%, #4C1D95 80%, #312E81 100%);
+  background: linear-gradient(135deg, #0F1A3E 0%, #1E3A8A 20%, #1E3A5F 40%, #172554 60%, #1E40AF 80%, #1E3A8A 100%);
   background-size: 400% 400%;
   animation: galaxy-bg-shift 20s ease-in-out infinite;
 }
@@ -623,8 +623,8 @@ body {
 
 /* Station panel - dark metallic card */
 .station-panel {
-  background: linear-gradient(145deg, rgba(30,27,75,0.95), rgba(46,16,101,0.9));
-  border: 1px solid rgba(139,92,246,0.3);
+  background: linear-gradient(145deg, rgba(15,26,62,0.95), rgba(30,58,138,0.9));
+  border: 1px solid rgba(59,130,246,0.3);
   border-radius: 16px;
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,0.06),
@@ -640,20 +640,20 @@ body {
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 3px;
-  background: linear-gradient(90deg, transparent, rgba(139,92,246,0.6), transparent);
+  background: linear-gradient(90deg, transparent, rgba(59,130,246,0.6), transparent);
 }
 
 /* Mechanical button - space station control */
 .mech-btn {
   position: relative;
-  background: linear-gradient(180deg, rgba(55,48,107,0.9) 0%, rgba(30,27,75,0.95) 100%);
-  border: 1px solid rgba(139,92,246,0.35);
+  background: linear-gradient(180deg, rgba(30,64,175,0.9) 0%, rgba(15,26,62,0.95) 100%);
+  border: 1px solid rgba(59,130,246,0.35);
   border-radius: 14px;
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,0.08),
     inset 0 -2px 0 rgba(0,0,0,0.3),
     0 4px 12px rgba(0,0,0,0.4),
-    0 0 20px rgba(139,92,246,0.08);
+    0 0 20px rgba(59,130,246,0.08);
   cursor: pointer;
   transition: all 0.2s ease;
   overflow: hidden;
@@ -669,12 +669,12 @@ body {
 }
 
 .mech-btn:hover {
-  border-color: rgba(139,92,246,0.6);
+  border-color: rgba(59,130,246,0.6);
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,0.1),
     inset 0 -2px 0 rgba(0,0,0,0.3),
-    0 4px 20px rgba(139,92,246,0.2),
-    0 0 30px rgba(139,92,246,0.1);
+    0 4px 20px rgba(59,130,246,0.2),
+    0 0 30px rgba(59,130,246,0.1);
   transform: translateY(-1px);
 }
 
@@ -764,8 +764,8 @@ body {
   align-items: center;
   gap: 10px;
   padding: 10px 16px;
-  background: linear-gradient(90deg, rgba(139,92,246,0.15), transparent);
-  border-left: 3px solid rgba(139,92,246,0.7);
+  background: linear-gradient(90deg, rgba(59,130,246,0.15), transparent);
+  border-left: 3px solid rgba(59,130,246,0.7);
   border-radius: 0 8px 8px 0;
   margin-bottom: 12px;
 }
@@ -804,8 +804,8 @@ body {
     0deg,
     transparent,
     transparent 2px,
-    rgba(139,92,246,0.02) 2px,
-    rgba(139,92,246,0.02) 4px
+    rgba(59,130,246,0.02) 2px,
+    rgba(59,130,246,0.02) 4px
   );
   pointer-events: none;
   border-radius: inherit;
@@ -825,6 +825,6 @@ body {
 }
 
 /* Glow text */
-.glow-text-purple { text-shadow: 0 0 10px rgba(139,92,246,0.5); }
+.glow-text-purple { text-shadow: 0 0 10px rgba(59,130,246,0.5); }
 .glow-text-cyan { text-shadow: 0 0 10px rgba(6,182,212,0.5); }
 .glow-text-amber { text-shadow: 0 0 10px rgba(245,158,11,0.5); }

@@ -21,6 +21,7 @@ import {
   arrayUnion,
   arrayRemove,
   writeBatch,
+  runTransaction,
 } from 'firebase/firestore';
 import { db } from './config';
 
@@ -267,44 +268,54 @@ export const onUserScoresChange = (uid, callback) => {
 
 /**
  * Sincronizar stats del usuario (después de quiz, reto, etc.)
+ * Usa una transacción para leer el totalPoints real de Firestore,
+ * sumar los nuevos puntos, y recalcular el nivel atomicamente.
+ * Esto evita bugs de estado stale sobreescribiendo el valor real.
  */
 export const syncUserStats = async (uid, statsUpdate) => {
   const userRef = doc(db, 'users', uid);
 
-  const updateData = { lastActive: serverTimestamp() };
+  await runTransaction(db, async (transaction) => {
+    const snap = await transaction.get(userRef);
+    const currentData = snap.exists() ? snap.data() : {};
 
-  // Si se proporciona newTotalPoints, usar como valor absoluto (evita doble conteo)
-  if (statsUpdate.newTotalPoints !== undefined) {
-    updateData.totalPoints = statsUpdate.newTotalPoints;
-    const lv = calculateLevel(statsUpdate.newTotalPoints);
-    updateData.level = lv.level;
-    updateData.levelTitle = lv.title;
-  } else if (statsUpdate.addPoints) {
-    // Solo usar increment si NO hay valor absoluto
-    updateData.totalPoints = increment(statsUpdate.addPoints);
-  }
-  if (statsUpdate.addModulesCompleted) {
-    updateData.modulesCompleted = increment(statsUpdate.addModulesCompleted);
-  }
-  if (statsUpdate.addQuizzesCompleted) {
-    updateData.quizzesCompleted = increment(statsUpdate.addQuizzesCompleted);
-  }
-  if (statsUpdate.addChallengesCompleted) {
-    updateData.challengesCompleted = increment(statsUpdate.addChallengesCompleted);
-  }
-  if (statsUpdate.addPerfectQuizzes) {
-    updateData.perfectQuizzes = increment(statsUpdate.addPerfectQuizzes);
-  }
+    const updateData = { lastActive: serverTimestamp() };
 
-  // Manejar valores directos
-  if (statsUpdate.maxStreak !== undefined) {
-    updateData.maxStreak = statsUpdate.maxStreak;
-  }
-  if (statsUpdate.achievementId) {
-    updateData.achievementsUnlocked = arrayUnion(statsUpdate.achievementId);
-  }
+    // Sumar puntos al valor REAL de Firestore (no al estado local)
+    if (statsUpdate.addPoints) {
+      const currentPoints = currentData.totalPoints || 0;
+      const newTotal = currentPoints + statsUpdate.addPoints;
+      updateData.totalPoints = newTotal;
 
-  await updateDoc(userRef, updateData);
+      // Siempre recalcular nivel basado en el total real
+      const lv = calculateLevel(newTotal);
+      updateData.level = lv.level;
+      updateData.levelTitle = lv.title;
+    }
+
+    if (statsUpdate.addModulesCompleted) {
+      updateData.modulesCompleted = (currentData.modulesCompleted || 0) + statsUpdate.addModulesCompleted;
+    }
+    if (statsUpdate.addQuizzesCompleted) {
+      updateData.quizzesCompleted = (currentData.quizzesCompleted || 0) + statsUpdate.addQuizzesCompleted;
+    }
+    if (statsUpdate.addChallengesCompleted) {
+      updateData.challengesCompleted = (currentData.challengesCompleted || 0) + statsUpdate.addChallengesCompleted;
+    }
+    if (statsUpdate.addPerfectQuizzes) {
+      updateData.perfectQuizzes = (currentData.perfectQuizzes || 0) + statsUpdate.addPerfectQuizzes;
+    }
+
+    // Manejar valores directos
+    if (statsUpdate.maxStreak !== undefined) {
+      updateData.maxStreak = statsUpdate.maxStreak;
+    }
+    if (statsUpdate.achievementId) {
+      updateData.achievementsUnlocked = arrayUnion(statsUpdate.achievementId);
+    }
+
+    transaction.update(userRef, updateData);
+  });
 };
 
 // ================================================================

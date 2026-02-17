@@ -1,5 +1,5 @@
-// ================================================================
-// FRIENDS SCREEN — CultivaTec App
+﻿// ================================================================
+// FRIENDS SCREEN â€” CultivaTec App
 // Sistema de amigos: buscar, agregar, solicitudes, lista
 // ================================================================
 
@@ -23,7 +23,7 @@ const FriendAvatar = ({ config, size = 44 }) => {
         background: 'linear-gradient(135deg, #3B82F6, #3B82F688)',
         border: '2px solid #3B82F655',
       }}>
-        <span style={{ fontSize: size * 0.45 }}>🤖</span>
+        <span style={{ fontSize: size * 0.45 }}>ðŸ¤–</span>
       </div>
     );
   }
@@ -51,17 +51,17 @@ const FriendCard = ({ friend, onRemove }) => {
             <span className="text-sm font-black text-[#3C3C3C] truncate">{friend.username}</span>
           </div>
           <div className="flex items-center gap-2 mt-0.5">
-            <span className="text-[10px] font-bold text-[#AFAFAF]">{lv.emoji} Nv.{lv.level} — {lv.title}</span>
+            <span className="text-[10px] font-bold text-[#AFAFAF]">{lv.emoji} Nv.{lv.level} â€” {lv.title}</span>
           </div>
           <div className="flex items-center gap-3 mt-1">
             <span className="text-[10px] font-bold text-[#CDCDCD] flex items-center gap-0.5">
               <Star size={10} className="text-[#FFC800]" /> {(friend.totalPoints || 0).toLocaleString()} XP
             </span>
             <span className="text-[10px] font-bold text-[#CDCDCD]">
-              📚 {friend.modulesCompleted || 0} módulos
+              ðŸ“š {friend.modulesCompleted || 0} mÃ³dulos
             </span>
             <span className="text-[10px] font-bold text-[#CDCDCD]">
-              🧩 {friend.challengesCompleted || 0} retos
+              ðŸ§© {friend.challengesCompleted || 0} retos
             </span>
           </div>
         </div>
@@ -179,7 +179,7 @@ const FriendsScreen = ({ onBack, currentUserId, currentUserProfile }) => {
       if (!user) {
         setSearchResult('not_found');
       } else if (user.uid === currentUserId) {
-        setError('¡No puedes agregarte a ti mismo!');
+        setError('Â¡No puedes agregarte a ti mismo!');
       } else {
         setSearchResult(user);
       }
@@ -254,7 +254,7 @@ const FriendsScreen = ({ onBack, currentUserId, currentUserProfile }) => {
             </button>
           )}
           <div className="relative z-10 text-center">
-            <div className="text-5xl mb-2">👥</div>
+            <div className="text-5xl mb-2">ðŸ‘¥</div>
             <h1 className="text-2xl font-black text-white tracking-tight drop-shadow">Amigos</h1>
             <p className="text-white/70 text-xs font-bold mt-1">Conecta y compite con tus amigos</p>
           </div>
@@ -264,12 +264,12 @@ const FriendsScreen = ({ onBack, currentUserId, currentUserProfile }) => {
         <div className="px-4 -mt-5 relative z-10">
           <div className="grid grid-cols-2 gap-2">
             <div className="bg-white rounded-2xl p-3 text-center border-2 border-[#E5E5E5] shadow-sm">
-              <span className="text-2xl block mb-0.5">🤝</span>
+              <span className="text-2xl block mb-0.5">ðŸ¤</span>
               <span className="text-lg font-black text-[#3C3C3C]">{friends.length}</span>
               <span className="text-[9px] font-bold text-[#AFAFAF] block">Amigos</span>
             </div>
             <div className="bg-white rounded-2xl p-3 text-center border-2 border-[#E5E5E5] shadow-sm relative">
-              <span className="text-2xl block mb-0.5">📩</span>
+              <span className="text-2xl block mb-0.5">ðŸ“©</span>
               <span className="text-lg font-black text-[#3C3C3C]">{pendingRequests.length}</span>
               <span className="text-[9px] font-bold text-[#AFAFAF] block">Solicitudes</span>
               {pendingRequests.length > 0 && (
@@ -315,9 +315,9 @@ const FriendsScreen = ({ onBack, currentUserId, currentUserProfile }) => {
               </div>
             ) : friends.length === 0 ? (
               <div className="text-center py-16">
-                <span className="text-5xl block mb-3">🔍</span>
-                <p className="text-sm font-black text-[#AFAFAF] mb-2">Aún no tienes amigos</p>
-                <p className="text-xs text-[#CDCDCD] font-bold mb-4">Busca usuarios por su nombre y envía solicitudes</p>
+                <span className="text-5xl block mb-3">ðŸ”</span>
+                <p className="text-sm font-black text-[#AFAFAF] mb-2">AÃºn no tienes amigos</p>
+                <p className="text-xs text-[#CDCDCD] font-bold mb-4">Busca usuarios por su nombre y envÃ­a solicitudes</p>
                 <button
                   onClick={() => setTab('search')}
                   className="px-6 py-3 bg-[#58CC02] text-white rounded-2xl text-sm font-black shadow-[0_4px_0_#46A302] active:scale-95 active:shadow-[0_2px_0_#46A302] active:translate-y-[2px] transition-all"
@@ -342,7 +342,7 @@ const FriendsScreen = ({ onBack, currentUserId, currentUserProfile }) => {
           <div className="space-y-3">
             {pendingRequests.length === 0 ? (
               <div className="text-center py-16">
-                <span className="text-5xl block mb-3">📭</span>
+                <span className="text-5xl block mb-3">ðŸ“­</span>
                 <p className="text-sm font-black text-[#AFAFAF]">No tienes solicitudes pendientes</p>
               </div>
             ) : (
@@ -397,7 +397,7 @@ const FriendsScreen = ({ onBack, currentUserId, currentUserProfile }) => {
             {/* Search Result */}
             {searchResult === 'not_found' && (
               <div className="bg-white rounded-2xl border-2 border-[#E5E5E5] p-6 text-center">
-                <span className="text-4xl block mb-2">🔍</span>
+                <span className="text-4xl block mb-2">ðŸ”</span>
                 <p className="text-sm font-black text-[#AFAFAF]">Usuario no encontrado</p>
                 <p className="text-xs text-[#CDCDCD] font-bold mt-1">Verifica que el nombre sea exacto</p>
               </div>
@@ -413,7 +413,7 @@ const FriendsScreen = ({ onBack, currentUserId, currentUserProfile }) => {
                       <span className="text-[10px] font-bold text-[#AFAFAF]">
                         {calculateLevel(searchResult.totalPoints || 0).emoji} Nv.{calculateLevel(searchResult.totalPoints || 0).level}
                       </span>
-                      <span className="text-[10px] font-bold text-[#CDCDCD]">·</span>
+                      <span className="text-[10px] font-bold text-[#CDCDCD]">Â·</span>
                       <span className="text-[10px] font-bold text-[#AFAFAF]">
                         <Star size={9} className="inline text-[#FFC800]" /> {searchResult.totalPoints || 0} XP
                       </span>

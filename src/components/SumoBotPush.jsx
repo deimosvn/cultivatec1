@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+﻿import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { ArrowLeft } from 'lucide-react';
 
 // ================================================================
-// SUMOBOT PUSH — 2-Player Local Multiplayer on One Device
-// Tap battle · Canvas2D rendering · Best of 3
+// SUMOBOT PUSH â€” 2-Player Local Multiplayer on One Device
+// Tap battle Â· Canvas2D rendering Â· Best of 3
 // ================================================================
 
 const ROUND_COUNT_DOWN = 3; // seconds
@@ -103,7 +103,7 @@ export default function SumoBotPush({ onBack }) {
     ctx.ellipse(2, 3, r * 0.95, r * 0.85, 0, 0, Math.PI * 2);
     ctx.fill();
 
-    // Body (rounded rectangle shape — robot chassis from above)
+    // Body (rounded rectangle shape â€” robot chassis from above)
     const bw = r * 1.6;
     const bh = r * 1.3;
     const br = r * 0.3;
@@ -361,19 +361,19 @@ export default function SumoBotPush({ onBack }) {
   const drawHUD = (ctx, w, h, gs, time) => {
     ctx.save();
 
-    // P1 tap zone label (top, rotated 180°)
+    // P1 tap zone label (top, rotated 180Â°)
     ctx.save();
     ctx.translate(w / 2, 25);
     ctx.rotate(Math.PI);
     ctx.fillStyle = 'rgba(59,130,246,0.7)';
     ctx.font = 'bold 13px sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('👆 ¡TOCA AQUÍ! — AZUL', 0, 0);
+    ctx.fillText('ðŸ‘† Â¡TOCA AQUÃ! â€” AZUL', 0, 0);
     // P1 combo indicator (also rotated for player 1)
     if (gs.p1Combo > 1) {
       ctx.fillStyle = '#60A5FA';
       ctx.font = 'bold 15px sans-serif';
-      ctx.fillText(`⚡ x${Math.floor(gs.p1Combo)}`, 0, 20);
+      ctx.fillText(`âš¡ x${Math.floor(gs.p1Combo)}`, 0, 20);
     }
     ctx.restore();
 
@@ -381,12 +381,12 @@ export default function SumoBotPush({ onBack }) {
     ctx.fillStyle = 'rgba(239,68,68,0.7)';
     ctx.font = 'bold 13px sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('👆 ¡TOCA AQUÍ! — ROJO', w / 2, h - 12);
+    ctx.fillText('ðŸ‘† Â¡TOCA AQUÃ! â€” ROJO', w / 2, h - 12);
     // P2 combo indicator
     if (gs.p2Combo > 1) {
       ctx.fillStyle = '#FCA5A5';
       ctx.font = 'bold 15px sans-serif';
-      ctx.fillText(`⚡ x${Math.floor(gs.p2Combo)}`, w / 2, h - 28);
+      ctx.fillText(`âš¡ x${Math.floor(gs.p2Combo)}`, w / 2, h - 28);
     }
 
     // Round indicator
@@ -401,11 +401,11 @@ export default function SumoBotPush({ onBack }) {
     const p2Wins = gs.wins[1];
     let pipsText = '';
     for (let i = 0; i < 2; i++) {
-      pipsText += i < p1Wins ? '🔵' : '⚪';
+      pipsText += i < p1Wins ? 'ðŸ”µ' : 'âšª';
     }
     pipsText += ' vs ';
     for (let i = 0; i < 2; i++) {
-      pipsText += i < p2Wins ? '🔴' : '⚪';
+      pipsText += i < p2Wins ? 'ðŸ”´' : 'âšª';
     }
     ctx.fillStyle = 'rgba(255,255,255,0.6)';
     ctx.font = 'bold 12px sans-serif';
@@ -526,9 +526,9 @@ export default function SumoBotPush({ onBack }) {
     if (!gs || gs.ended) return;
 
     const now = Date.now();
-    // Base push strength with random variance (±30%) so equal tapping still creates movement
+    // Base push strength with random variance (Â±30%) so equal tapping still creates movement
     const baseForce = 1.8;
-    const variance = 0.7 + Math.random() * 0.6; // 0.7 — 1.3
+    const variance = 0.7 + Math.random() * 0.6; // 0.7 â€” 1.3
 
     if (player === 1) {
       // Combo: rapid taps within 250ms build combo for bonus power
@@ -569,9 +569,9 @@ export default function SumoBotPush({ onBack }) {
     for (let i = 0; i < e.changedTouches.length; i++) {
       const touch = e.changedTouches[i];
       if (touch.clientY < midY) {
-        handleTap(1); // P1 — top
+        handleTap(1); // P1 â€” top
       } else {
-        handleTap(2); // P2 — bottom
+        handleTap(2); // P2 â€” bottom
       }
     }
   }, [handleTap]);
@@ -609,7 +609,7 @@ export default function SumoBotPush({ onBack }) {
         gs.battleVel *= 0.92;
 
         // Light spring tension: slight pull toward center so the battle oscillates
-        // (weaker when near center, stronger when far out — creates exciting near-edge tension)
+        // (weaker when near center, stronger when far out â€” creates exciting near-edge tension)
         const springForce = -gs.battlePos * 0.008;
         gs.battleVel += springForce;
 
@@ -685,7 +685,7 @@ export default function SumoBotPush({ onBack }) {
 
         // P1 pushed out (too far UP = P2 won) or P2 pushed out (too far DOWN = P1 won)
         if (p1Dist > ringR - robotR * 0.3) {
-          // P1 pushed out → P2 wins
+          // P1 pushed out â†’ P2 wins
           gs.ended = true;
           gs.winner = 2;
           gs.wins[1]++;
@@ -702,7 +702,7 @@ export default function SumoBotPush({ onBack }) {
             }, 1200);
           }
         } else if (p2Dist > ringR - robotR * 0.3) {
-          // P2 pushed out → P1 wins
+          // P2 pushed out â†’ P1 wins
           gs.ended = true;
           gs.winner = 1;
           gs.wins[0]++;
@@ -742,7 +742,7 @@ export default function SumoBotPush({ onBack }) {
       }
 
       // Robots
-      // P1 (Blue, top, faces down = π/2... actually since it starts above, faces down toward P2)
+      // P1 (Blue, top, faces down = Ï€/2... actually since it starts above, faces down toward P2)
       drawRobot(ctx, gs.p1x, gs.p1y, robotR, '#2563EB', '#1E40AF', '#60A5FA', Math.PI / 2, gs.p1TapIntensity, time);
       // P2 (Red, bottom, faces up)
       drawRobot(ctx, gs.p2x, gs.p2y, robotR, '#DC2626', '#991B1B', '#FCA5A5', -Math.PI / 2, gs.p2TapIntensity, time);
@@ -777,7 +777,7 @@ export default function SumoBotPush({ onBack }) {
         ctx.shadowColor = gs.winner === 1 ? '#3B82F6' : '#EF4444';
         ctx.shadowBlur = 20;
         ctx.fillText(
-          gs.winner === 1 ? '🔵 ¡AZUL GANA!' : '🔴 ¡ROJO GANA!',
+          gs.winner === 1 ? 'ðŸ”µ Â¡AZUL GANA!' : 'ðŸ”´ Â¡ROJO GANA!',
           w / 2, h / 2
         );
         ctx.shadowBlur = 0;
@@ -856,7 +856,7 @@ export default function SumoBotPush({ onBack }) {
         <div className="flex-grow flex flex-col items-center justify-center px-6 gap-6">
           {/* Title */}
           <div className="text-center">
-            <div className="text-7xl mb-3" style={{ filter: 'drop-shadow(0 0 20px rgba(99,102,241,0.4))' }}>🤼</div>
+            <div className="text-7xl mb-3" style={{ filter: 'drop-shadow(0 0 20px rgba(99,102,241,0.4))' }}>ðŸ¤¼</div>
             <h1 className="text-3xl font-black text-white tracking-tight" style={{ textShadow: '0 0 30px rgba(99,102,241,0.4)' }}>
               SUMOBOT PUSH
             </h1>
@@ -874,19 +874,19 @@ export default function SumoBotPush({ onBack }) {
           }}>
             <div className="space-y-3 text-sm font-semibold text-slate-300">
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center text-lg flex-shrink-0">🔵</div>
+                <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center text-lg flex-shrink-0">ðŸ”µ</div>
                 <p><b className="text-blue-300">Jugador 1</b> toca la mitad <b className="text-white">superior</b></p>
               </div>
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-lg bg-red-500/20 flex items-center justify-center text-lg flex-shrink-0">🔴</div>
+                <div className="w-8 h-8 rounded-lg bg-red-500/20 flex items-center justify-center text-lg flex-shrink-0">ðŸ”´</div>
                 <p><b className="text-red-300">Jugador 2</b> toca la mitad <b className="text-white">inferior</b></p>
               </div>
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-lg bg-yellow-500/20 flex items-center justify-center text-lg flex-shrink-0">💥</div>
-                <p>¡Toca <b className="text-yellow-200">rápido</b> para empujar al rival fuera del ring!</p>
+                <div className="w-8 h-8 rounded-lg bg-yellow-500/20 flex items-center justify-center text-lg flex-shrink-0">ðŸ’¥</div>
+                <p>Â¡Toca <b className="text-yellow-200">rÃ¡pido</b> para empujar al rival fuera del ring!</p>
               </div>
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center text-lg flex-shrink-0">🏆</div>
+                <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center text-lg flex-shrink-0">ðŸ†</div>
                 <p>Gana <b className="text-white">al mejor de 3</b> rondas</p>
               </div>
             </div>
@@ -897,15 +897,15 @@ export default function SumoBotPush({ onBack }) {
             background: 'linear-gradient(180deg, rgba(59,130,246,0.15), rgba(15,23,42,0.6), rgba(239,68,68,0.15))',
           }}>
             <div className="py-4 text-center border-b border-white/5">
-              <span className="text-xs font-black text-blue-300 uppercase tracking-wider">↑ Zona de Azul ↑</span>
+              <span className="text-xs font-black text-blue-300 uppercase tracking-wider">â†‘ Zona de Azul â†‘</span>
             </div>
             <div className="py-6 text-center flex items-center justify-center gap-3">
-              <span className="text-3xl" style={{ transform: 'rotate(90deg)' }}>🤖</span>
-              <span className="text-xl">⚡</span>
-              <span className="text-3xl" style={{ transform: 'rotate(-90deg)' }}>🤖</span>
+              <span className="text-3xl" style={{ transform: 'rotate(90deg)' }}>ðŸ¤–</span>
+              <span className="text-xl">âš¡</span>
+              <span className="text-3xl" style={{ transform: 'rotate(-90deg)' }}>ðŸ¤–</span>
             </div>
             <div className="py-4 text-center border-t border-white/5">
-              <span className="text-xs font-black text-red-300 uppercase tracking-wider">↓ Zona de Rojo ↓</span>
+              <span className="text-xs font-black text-red-300 uppercase tracking-wider">â†“ Zona de Rojo â†“</span>
             </div>
           </div>
 
@@ -916,7 +916,7 @@ export default function SumoBotPush({ onBack }) {
               background: 'linear-gradient(135deg, #6366F1, #8B5CF6)',
               boxShadow: '0 6px 0 #4338CA, 0 0 30px rgba(99,102,241,0.3)',
             }}>
-            ⚔️ ¡COMENZAR BATALLA!
+            âš”ï¸ Â¡COMENZAR BATALLA!
           </button>
         </div>
       </div>
@@ -934,16 +934,16 @@ export default function SumoBotPush({ onBack }) {
       }}>
         <div className="text-center max-w-xs w-full">
           <div className="text-7xl mb-4" style={{ filter: `drop-shadow(0 0 30px ${isP1 ? 'rgba(59,130,246,0.5)' : 'rgba(239,68,68,0.5)'})` }}>
-            🏆
+            ðŸ†
           </div>
           <h1 className="text-3xl font-black text-white mb-2">
-            ¡{isP1 ? 'AZUL' : 'ROJO'} GANA!
+            Â¡{isP1 ? 'AZUL' : 'ROJO'} GANA!
           </h1>
           <p className="text-white/60 text-sm font-bold mb-2">
-            Resultado: {roundWins[0]} — {roundWins[1]}
+            Resultado: {roundWins[0]} â€” {roundWins[1]}
           </p>
           <p className="text-lg font-black mb-8" style={{ color: isP1 ? '#60A5FA' : '#FCA5A5' }}>
-            🤖 ¡Jugador {matchWinner} es el campeón SumoBot!
+            ðŸ¤– Â¡Jugador {matchWinner} es el campeÃ³n SumoBot!
           </p>
 
           <button onClick={restartMatch}
@@ -952,12 +952,12 @@ export default function SumoBotPush({ onBack }) {
               background: 'linear-gradient(135deg, #6366F1, #8B5CF6)',
               boxShadow: '0 4px 0 #4338CA',
             }}>
-            🔄 Revancha
+            ðŸ”„ Revancha
           </button>
           <button onClick={onBack}
             className="w-full py-3 rounded-xl text-sm font-black text-slate-400 active:scale-[0.97] transition-transform"
             style={{ background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.15)' }}>
-            ← Volver al Taller
+            â† Volver al Taller
           </button>
         </div>
       </div>
@@ -991,7 +991,7 @@ export default function SumoBotPush({ onBack }) {
               textShadow: '0 0 40px rgba(99,102,241,0.6)',
               animation: 'countPulse 1s ease-in-out infinite',
             }}>
-              {countdown > 0 ? countdown : '¡GO!'}
+              {countdown > 0 ? countdown : 'Â¡GO!'}
             </div>
             <p className="text-white/50 text-sm font-bold mt-4">Ronda {currentRound} de 3</p>
           </div>
@@ -1006,12 +1006,12 @@ export default function SumoBotPush({ onBack }) {
             border: `2px solid ${roundWinner === 1 ? 'rgba(59,130,246,0.5)' : 'rgba(239,68,68,0.5)'}`,
             boxShadow: `0 0 40px ${roundWinner === 1 ? 'rgba(59,130,246,0.2)' : 'rgba(239,68,68,0.2)'}`,
           }}>
-            <div className="text-4xl mb-2">{roundWinner === 1 ? '🔵' : '🔴'}</div>
+            <div className="text-4xl mb-2">{roundWinner === 1 ? 'ðŸ”µ' : 'ðŸ”´'}</div>
             <p className="text-xl font-black text-white">
-              ¡{roundWinner === 1 ? 'AZUL' : 'ROJO'} gana la ronda!
+              Â¡{roundWinner === 1 ? 'AZUL' : 'ROJO'} gana la ronda!
             </p>
             <p className="text-white/50 text-sm font-bold mt-1">
-              {roundWins[0]} — {roundWins[1]}
+              {roundWins[0]} â€” {roundWins[1]}
             </p>
           </div>
         </div>

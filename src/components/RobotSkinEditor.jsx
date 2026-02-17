@@ -1,7 +1,7 @@
-// ================================================================
-// ROBOT SKIN EDITOR — CultivaTec App
+﻿// ================================================================
+// ROBOT SKIN EDITOR â€” CultivaTec App
 // Modal para editar el skin del robot desde la pantalla principal
-// Incluye skins predefinidas únicas y editor de partes personalizadas
+// Incluye skins predefinidas Ãºnicas y editor de partes personalizadas
 // ================================================================
 
 import React, { useState, useEffect } from 'react';
@@ -13,12 +13,12 @@ import { RobotAvatar, HEADS, EYES, MOUTHS, BODIES, ACCESSORIES, ARMS, LEGS, PATT
 // ============================================
 
 const ROBOT_STORY_LINES = [
-  { emoji: '✨', getText: (name, user) => `*bzzz... bip bip...* ¿Dónde... dónde estoy? Ah... ¡Hola! Mi nombre es ${name}. ¡Acabo de despertar en el Laboratorio de CultivaTec!` },
-  { emoji: '🤔', getText: (name, user) => `Mmm... parece que no sé mucho todavía. No entiendo qué es la electricidad, ni cómo funcionan los circuitos, ni nada de programación... ¡Necesito un maestro!` },
-  { emoji: '🌟', getText: (name, user) => `¡Espera! ¿Tú eres ${user}? El profesor me dijo que vendrías. ¡Tú vas a ser mi maestro! Juntos vamos a aprender de todo.` },
-  { emoji: '🎯', getText: (name, user) => `Tu misión es completar las lecciones de la Biblioteca. Cada módulo que completes me enseñará algo nuevo: electricidad, circuitos, sensores, programación...` },
-  { emoji: '🛠️', getText: (name, user) => `¡Hay mucho por explorar! Puedes practicar código en el Taller, resolver retos de programación, simular robots, construir circuitos virtuales y hasta ganar trofeos. ¡Ah, y puedes cambiar mi apariencia cuando quieras tocándome en la pantalla!` },
-  { emoji: '🚀', getText: (name, user) => `¡Estoy listo, ${user}! Con cada lección que completes, yo creceré y me haré más fuerte. ¿Empezamos esta aventura juntos? ¡Vamos a ser los mejores del laboratorio!` },
+  { emoji: 'âœ¨', getText: (name, user) => `*bzzz... bip bip...* Â¿DÃ³nde... dÃ³nde estoy? Ah... Â¡Hola! Mi nombre es ${name}. Â¡Acabo de despertar en el Laboratorio de CultivaTec!` },
+  { emoji: 'ðŸ¤”', getText: (name, user) => `Mmm... parece que no sÃ© mucho todavÃ­a. No entiendo quÃ© es la electricidad, ni cÃ³mo funcionan los circuitos, ni nada de programaciÃ³n... Â¡Necesito un maestro!` },
+  { emoji: 'ðŸŒŸ', getText: (name, user) => `Â¡Espera! Â¿TÃº eres ${user}? El profesor me dijo que vendrÃ­as. Â¡TÃº vas a ser mi maestro! Juntos vamos a aprender de todo.` },
+  { emoji: 'ðŸŽ¯', getText: (name, user) => `Tu misiÃ³n es completar las lecciones de la Biblioteca. Cada mÃ³dulo que completes me enseÃ±arÃ¡ algo nuevo: electricidad, circuitos, sensores, programaciÃ³n...` },
+  { emoji: 'ðŸ› ï¸', getText: (name, user) => `Â¡Hay mucho por explorar! Puedes practicar cÃ³digo en el Taller, resolver retos de programaciÃ³n, simular robots, construir circuitos virtuales y hasta ganar trofeos. Â¡Ah, y puedes cambiar mi apariencia cuando quieras tocÃ¡ndome en la pantalla!` },
+  { emoji: 'ðŸš€', getText: (name, user) => `Â¡Estoy listo, ${user}! Con cada lecciÃ³n que completes, yo crecerÃ© y me harÃ© mÃ¡s fuerte. Â¿Empezamos esta aventura juntos? Â¡Vamos a ser los mejores del laboratorio!` },
 ];
 
 // ============================================
@@ -29,88 +29,88 @@ export const ROBOT_SKINS = [
   {
     id: 'chispitas',
     name: 'Chispitas',
-    description: 'Un robot eléctrico lleno de energía ⚡',
-    icon: '⚡',
+    description: 'Un robot elÃ©ctrico lleno de energÃ­a âš¡',
+    icon: 'âš¡',
     rarity: 'common',
-    rarityLabel: 'Común',
+    rarityLabel: 'ComÃºn',
     rarityColor: '#58CC02',
     config: { head: 'round', eyes: 'round', mouth: 'smile', body: 'box', accessory: 'antenna', color: 'blue', arms: 'normal', legs: 'normal', pattern: 'lightning' },
   },
   {
     id: 'galaxia',
     name: 'Galaxia',
-    description: 'Viajero intergaláctico con poderes cósmicos 🌌',
-    icon: '🌌',
+    description: 'Viajero intergalÃ¡ctico con poderes cÃ³smicos ðŸŒŒ',
+    icon: 'ðŸŒŒ',
     rarity: 'rare',
     rarityLabel: 'Raro',
-    rarityColor: '#A855F7',
+    rarityColor: '#3B82F6',
     config: { head: 'alien', eyes: 'star_eyes', mouth: 'open', body: 'rounded', accessory: 'halo', color: 'purple', arms: 'wings', legs: 'hover', pattern: 'dots' },
   },
   {
     id: 'guerrero',
     name: 'Guerrero',
-    description: 'Robot de combate listo para la batalla 🗡️',
-    icon: '⚔️',
+    description: 'Robot de combate listo para la batalla ðŸ—¡ï¸',
+    icon: 'âš”ï¸',
     rarity: 'epic',
-    rarityLabel: 'Épico',
+    rarityLabel: 'Ã‰pico',
     rarityColor: '#FF4B4B',
     config: { head: 'shield', eyes: 'angry', mouth: 'grr', body: 'armor', accessory: 'horns', color: 'red', arms: 'claws', legs: 'treads', pattern: 'star_emblem' },
   },
   {
     id: 'dulce',
     name: 'Dulce',
-    description: 'El robot más tierno y adorable del laboratorio 💖',
-    icon: '💖',
+    description: 'El robot mÃ¡s tierno y adorable del laboratorio ðŸ’–',
+    icon: 'ðŸ’–',
     rarity: 'rare',
     rarityLabel: 'Raro',
-    rarityColor: '#A855F7',
+    rarityColor: '#3B82F6',
     config: { head: 'bunny', eyes: 'heart', mouth: 'kiss', body: 'rounded', accessory: 'bow', color: 'pink', arms: 'normal', legs: 'springs', pattern: 'heart_emblem' },
   },
   {
     id: 'ninja',
     name: 'Ninja',
-    description: 'Silencioso, rápido e invisible en las sombras 🥷',
-    icon: '🥷',
+    description: 'Silencioso, rÃ¡pido e invisible en las sombras ðŸ¥·',
+    icon: 'ðŸ¥·',
     rarity: 'epic',
-    rarityLabel: 'Épico',
+    rarityLabel: 'Ã‰pico',
     rarityColor: '#FF4B4B',
     config: { head: 'square', eyes: 'angry', mouth: 'line', body: 'slim', accessory: 'goggles', color: 'gray', arms: 'claws', legs: 'spider', pattern: 'none' },
   },
   {
     id: 'capitan',
-    name: 'Capitán',
-    description: 'Líder nato que inspira a todos los robots 🎖️',
-    icon: '🎖️',
+    name: 'CapitÃ¡n',
+    description: 'LÃ­der nato que inspira a todos los robots ðŸŽ–ï¸',
+    icon: 'ðŸŽ–ï¸',
     rarity: 'epic',
-    rarityLabel: 'Épico',
+    rarityLabel: 'Ã‰pico',
     rarityColor: '#FF4B4B',
     config: { head: 'helmet', eyes: 'big', mouth: 'smile', body: 'armor', accessory: 'cap', color: 'indigo', arms: 'muscles', legs: 'normal', pattern: 'star_emblem' },
   },
   {
     id: 'cientifico',
-    name: 'Científico',
-    description: 'Genio del laboratorio con circuitos avanzados 🔬',
-    icon: '🔬',
+    name: 'CientÃ­fico',
+    description: 'Genio del laboratorio con circuitos avanzados ðŸ”¬',
+    icon: 'ðŸ”¬',
     rarity: 'rare',
     rarityLabel: 'Raro',
-    rarityColor: '#A855F7',
+    rarityColor: '#3B82F6',
     config: { head: 'square', eyes: 'glasses', mouth: 'zigzag', body: 'mech', accessory: 'antenna', color: 'cyan', arms: 'pincers', legs: 'normal', pattern: 'circuit' },
   },
   {
     id: 'naturaleza',
     name: 'Naturaleza',
-    description: 'Robot ecológico conectado con la naturaleza 🌿',
-    icon: '🌿',
+    description: 'Robot ecolÃ³gico conectado con la naturaleza ðŸŒ¿',
+    icon: 'ðŸŒ¿',
     rarity: 'common',
-    rarityLabel: 'Común',
+    rarityLabel: 'ComÃºn',
     rarityColor: '#58CC02',
     config: { head: 'bear', eyes: 'happy', mouth: 'tongue', body: 'rounded', accessory: 'flower', color: 'green', arms: 'normal', legs: 'normal', pattern: 'dots' },
   },
   {
     id: 'rey_dorado',
     name: 'Rey Dorado',
-    description: 'El robot más raro y majestuoso del reino ✨',
-    icon: '👑',
+    description: 'El robot mÃ¡s raro y majestuoso del reino âœ¨',
+    icon: 'ðŸ‘‘',
     rarity: 'legendary',
     rarityLabel: 'Legendario',
     rarityColor: '#FFC800',
@@ -118,69 +118,69 @@ export const ROBOT_SKINS = [
   },
   {
     id: 'mecanico',
-    name: 'Mecánico',
-    description: 'Experto en reparar y construir cualquier cosa 🔧',
-    icon: '🔧',
+    name: 'MecÃ¡nico',
+    description: 'Experto en reparar y construir cualquier cosa ðŸ”§',
+    icon: 'ðŸ”§',
     rarity: 'common',
-    rarityLabel: 'Común',
+    rarityLabel: 'ComÃºn',
     rarityColor: '#58CC02',
     config: { head: 'square', eyes: 'screen', mouth: 'line', body: 'tank', accessory: 'headphones', color: 'orange', arms: 'pincers', legs: 'wheels', pattern: 'gear' },
   },
   {
     id: 'fantasma',
     name: 'Fantasma',
-    description: 'Robot etéreo que flota entre dimensiones 👻',
-    icon: '👻',
+    description: 'Robot etÃ©reo que flota entre dimensiones ðŸ‘»',
+    icon: 'ðŸ‘»',
     rarity: 'rare',
     rarityLabel: 'Raro',
-    rarityColor: '#A855F7',
+    rarityColor: '#3B82F6',
     config: { head: 'cat', eyes: 'sleepy', mouth: 'whistle', body: 'slim', accessory: 'halo', color: 'mint', arms: 'tentacles', legs: 'hover', pattern: 'dots' },
   },
   {
     id: 'rockero',
     name: 'Rockero',
-    description: 'Robot musical que agita el laboratorio 🎸',
-    icon: '🎸',
+    description: 'Robot musical que agita el laboratorio ðŸŽ¸',
+    icon: 'ðŸŽ¸',
     rarity: 'epic',
-    rarityLabel: 'Épico',
+    rarityLabel: 'Ã‰pico',
     rarityColor: '#FF4B4B',
     config: { head: 'star', eyes: 'x_eyes', mouth: 'grr', body: 'slim', accessory: 'horns', color: 'crimson', arms: 'muscles', legs: 'springs', pattern: 'lightning' },
   },
   {
     id: 'explorador',
     name: 'Explorador',
-    description: 'Aventurero que descubre mundos desconocidos 🧭',
-    icon: '🧭',
+    description: 'Aventurero que descubre mundos desconocidos ðŸ§­',
+    icon: 'ðŸ§­',
     rarity: 'common',
-    rarityLabel: 'Común',
+    rarityLabel: 'ComÃºn',
     rarityColor: '#58CC02',
     config: { head: 'helmet', eyes: 'wink', mouth: 'smile', body: 'barrel', accessory: 'goggles', color: 'teal', arms: 'normal', legs: 'treads', pattern: 'stripes' },
   },
   {
     id: 'astronauta',
     name: 'Astronauta',
-    description: 'Explorador del espacio exterior 🚀',
-    icon: '🚀',
+    description: 'Explorador del espacio exterior ðŸš€',
+    icon: 'ðŸš€',
     rarity: 'epic',
-    rarityLabel: 'Épico',
+    rarityLabel: 'Ã‰pico',
     rarityColor: '#FF4B4B',
     config: { head: 'octagon', eyes: 'big', mouth: 'open', body: 'mech', accessory: 'propeller', color: 'sky', arms: 'wings', legs: 'hover', pattern: 'star_emblem' },
   },
   {
     id: 'pirata',
     name: 'Pirata',
-    description: 'Robot corsario surcando mares digitales 🏴‍☠️',
-    icon: '🏴‍☠️',
+    description: 'Robot corsario surcando mares digitales ðŸ´â€â˜ ï¸',
+    icon: 'ðŸ´â€â˜ ï¸',
     rarity: 'rare',
     rarityLabel: 'Raro',
-    rarityColor: '#A855F7',
+    rarityColor: '#3B82F6',
     config: { head: 'triangle', eyes: 'wink', mouth: 'fangs', body: 'barrel', accessory: 'cap', color: 'orange', arms: 'claws', legs: 'normal', pattern: 'stripes' },
   },
   {
     id: 'samurai',
     name: 'Samurai',
-    description: 'Robot honorable con espíritu de guerrero 🏯',
-    icon: '🏯',
+    description: 'Robot honorable con espÃ­ritu de guerrero ðŸ¯',
+    icon: 'ðŸ¯',
     rarity: 'legendary',
     rarityLabel: 'Legendario',
     rarityColor: '#FFC800',
@@ -189,8 +189,8 @@ export const ROBOT_SKINS = [
   {
     id: 'hada',
     name: 'Hada Digital',
-    description: 'Robot mágico con poderes de programación ✨',
-    icon: '🧚',
+    description: 'Robot mÃ¡gico con poderes de programaciÃ³n âœ¨',
+    icon: 'ðŸ§š',
     rarity: 'legendary',
     rarityLabel: 'Legendario',
     rarityColor: '#FFC800',
@@ -199,11 +199,11 @@ export const ROBOT_SKINS = [
   {
     id: 'polar',
     name: 'Polar',
-    description: 'Robot helado del polo norte digital ❄️',
-    icon: '❄️',
+    description: 'Robot helado del polo norte digital â„ï¸',
+    icon: 'â„ï¸',
     rarity: 'rare',
     rarityLabel: 'Raro',
-    rarityColor: '#A855F7',
+    rarityColor: '#3B82F6',
     config: { head: 'bear', eyes: 'big', mouth: 'braces', body: 'rounded', accessory: 'goggles', color: 'sky', arms: 'normal', legs: 'normal', pattern: 'dots' },
   },
 ];
@@ -252,8 +252,8 @@ const RobotStoryTab = ({ robotConfig, robotName, userName, storyIndex, setStoryI
         <div className="w-28 h-28 bg-gradient-to-br from-[#DBEAFE] to-[#EFF6FF] rounded-3xl border-2 border-[#93C5FD] flex items-center justify-center p-2 shadow-inner">
           <RobotAvatar config={robotConfig} size={95} animate />
         </div>
-        <div className="absolute -top-1 -right-2 text-lg animate-bounce">✨</div>
-        <div className="absolute -bottom-1 -left-2 text-sm animate-pulse">💫</div>
+        <div className="absolute -top-1 -right-2 text-lg animate-bounce">âœ¨</div>
+        <div className="absolute -bottom-1 -left-2 text-sm animate-pulse">ðŸ’«</div>
       </div>
 
       {/* Name badge */}
@@ -293,7 +293,7 @@ const RobotStoryTab = ({ robotConfig, robotName, userName, storyIndex, setStoryI
         )}
         <button onClick={handleTap}
           className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-[#2563EB] to-[#3B82F6] text-white font-bold text-sm shadow-md active:scale-95 transition-all flex items-center justify-center gap-1">
-          {storyTyping ? 'Saltar ▸▸' : isLast ? '🎉 ¡Fin!' : <>Siguiente <ChevronRight size={16}/></>}
+          {storyTyping ? 'Saltar â–¸â–¸' : isLast ? 'ðŸŽ‰ Â¡Fin!' : <>Siguiente <ChevronRight size={16}/></>}
         </button>
       </div>
 
@@ -364,15 +364,15 @@ const RobotSkinEditor = ({ isOpen, onClose, currentConfig, currentName, onSave, 
   };
 
   const builderTabs = [
-    { id: 'head', label: '🗣️', fullLabel: 'Cabeza', items: HEADS, key: 'head' },
-    { id: 'eyes', label: '👀', fullLabel: 'Ojos', items: EYES, key: 'eyes' },
-    { id: 'mouth', label: '👄', fullLabel: 'Boca', items: MOUTHS, key: 'mouth' },
-    { id: 'body', label: '🦾', fullLabel: 'Cuerpo', items: BODIES, key: 'body' },
-    { id: 'arms', label: '💪', fullLabel: 'Brazos', items: ARMS, key: 'arms' },
-    { id: 'legs', label: '🦵', fullLabel: 'Piernas', items: LEGS, key: 'legs' },
-    { id: 'pattern', label: '⭐', fullLabel: 'Emblema', items: PATTERNS, key: 'pattern' },
-    { id: 'accessory', label: '🎩', fullLabel: 'Accesorio', items: ACCESSORIES, key: 'accessory' },
-    { id: 'color', label: '🎨', fullLabel: 'Color', items: COLORS, key: 'color' },
+    { id: 'head', label: 'ðŸ—£ï¸', fullLabel: 'Cabeza', items: HEADS, key: 'head' },
+    { id: 'eyes', label: 'ðŸ‘€', fullLabel: 'Ojos', items: EYES, key: 'eyes' },
+    { id: 'mouth', label: 'ðŸ‘„', fullLabel: 'Boca', items: MOUTHS, key: 'mouth' },
+    { id: 'body', label: 'ðŸ¦¾', fullLabel: 'Cuerpo', items: BODIES, key: 'body' },
+    { id: 'arms', label: 'ðŸ’ª', fullLabel: 'Brazos', items: ARMS, key: 'arms' },
+    { id: 'legs', label: 'ðŸ¦µ', fullLabel: 'Piernas', items: LEGS, key: 'legs' },
+    { id: 'pattern', label: 'â­', fullLabel: 'Emblema', items: PATTERNS, key: 'pattern' },
+    { id: 'accessory', label: 'ðŸŽ©', fullLabel: 'Accesorio', items: ACCESSORIES, key: 'accessory' },
+    { id: 'color', label: 'ðŸŽ¨', fullLabel: 'Color', items: COLORS, key: 'color' },
   ];
 
   const getPreviewViewBox = (category) => {
@@ -390,7 +390,7 @@ const RobotSkinEditor = ({ isOpen, onClose, currentConfig, currentName, onSave, 
     switch(rarity) {
       case 'legendary': return 'border-[#FFC800] bg-gradient-to-br from-[#FFC800]/10 to-[#FF9600]/10';
       case 'epic': return 'border-[#FF4B4B] bg-gradient-to-br from-[#FF4B4B]/10 to-[#FF6B6B]/5';
-      case 'rare': return 'border-[#A855F7] bg-gradient-to-br from-[#A855F7]/10 to-[#CE82FF]/5';
+      case 'rare': return 'border-[#3B82F6] bg-gradient-to-br from-[#3B82F6]/10 to-[#60A5FA]/5';
       default: return 'border-[#58CC02] bg-gradient-to-br from-[#58CC02]/10 to-[#7CDB30]/5';
     }
   };
@@ -416,7 +416,7 @@ const RobotSkinEditor = ({ isOpen, onClose, currentConfig, currentName, onSave, 
             <div className="w-24 h-24 bg-[#58CC02]/10 rounded-full flex items-center justify-center mb-4">
               <Check size={48} className="text-[#58CC02]" />
             </div>
-            <h3 className="text-xl font-black text-[#3C3C3C]">¡Guardado!</h3>
+            <h3 className="text-xl font-black text-[#3C3C3C]">Â¡Guardado!</h3>
             <p className="text-sm text-[#777] font-bold">Tu robot se ha actualizado</p>
           </div>
         )}
@@ -571,7 +571,7 @@ const RobotSkinEditor = ({ isOpen, onClose, currentConfig, currentName, onSave, 
                               ? 'bg-white ring-2 ring-[#2563EB] scale-[1.03] shadow-sm' 
                               : 'bg-white/50 hover:bg-white active:scale-95'}`}>
                           {(item.id === 'none' && (builderTab === 'pattern' || builderTab === 'accessory')) ? (
-                            <div className="w-10 h-10 flex items-center justify-center text-[#AFAFAF] text-lg">✕</div>
+                            <div className="w-10 h-10 flex items-center justify-center text-[#AFAFAF] text-lg">âœ•</div>
                           ) : (
                             <svg width="42" height="42" viewBox={viewBox}>
                               <g dangerouslySetInnerHTML={{ __html: item.path(currentColor) }}/>

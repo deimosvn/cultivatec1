@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+﻿import React, { useState, useEffect, useCallback } from 'react';
 import { Zap, Home, BookOpen, Settings, Sun, Moon, ArrowLeft, Lightbulb, Play, Target, Code, Terminal, BatteryCharging, Power, RadioTower, Component, Link, Minus, Plus, Bot, Send, Trophy, ChevronDown, Map, Calendar, Puzzle, Cpu, Dumbbell, Monitor, GraduationCap, Wrench, Rocket, Star } from 'lucide-react';
 import QuizScreen from './components/QuizScreen';
 import GlossaryScreen, { GLOSSARY_TERMS as GLOSSARY_TERMS_DATA } from './components/GlossaryScreen';
@@ -31,22 +31,22 @@ const persistUserScores = (scores) => {
     try { localStorage.setItem('cultivatec_userScores', JSON.stringify(scores)); } catch {}
 };
 
-// Helper: verificar si un módulo está completado en userScores
+// Helper: verificar si un mÃ³dulo estÃ¡ completado en userScores
 const isModuleCompleted = (userScores, moduleId) => {
     const s = userScores[moduleId];
     return s && s.total > 0 && Math.round((s.score / s.total) * 100) >= 100;
 };
 
-// Helper: verificar si un módulo está desbloqueado (progression system)
+// Helper: verificar si un mÃ³dulo estÃ¡ desbloqueado (progression system)
 const isModuleUnlocked = (userScores, moduleIndex, allModules) => {
-    if (moduleIndex === 0) return true; // El primer módulo siempre está desbloqueado
-    // El módulo anterior debe estar completado
+    if (moduleIndex === 0) return true; // El primer mÃ³dulo siempre estÃ¡ desbloqueado
+    // El mÃ³dulo anterior debe estar completado
     const prevModule = allModules[moduleIndex - 1];
     return prevModule ? isModuleCompleted(userScores, prevModule.id) : false;
 };
 
-// 🟢 RUTA DE IMAGEN (Logo de la aplicación)
-const CULTIVATEC_LOGO_PATH = "/logo-v2.png"; // Color Indigo más fuerte
+// ðŸŸ¢ RUTA DE IMAGEN (Logo de la aplicaciÃ³n)
+const CULTIVATEC_LOGO_PATH = "/logo-v2.png"; // Color Indigo mÃ¡s fuerte
 
 // --- ESTRUCTURA DE CONTENIDO (IMPORTADA) ---
 const MODULOS_DE_ROBOTICA = MODULOS_DATA;
@@ -55,13 +55,13 @@ const MODULO_1_LESSONS = []; // Legacy: Module1View ya no se usa, electricidad u
 const CODE_CHALLENGES = CODE_CHALLENGES_DATA;
 const shuffleArray = (array) => [...array].sort(() => Math.random() - 0.5);
 
-// --- CONFIGURACIÓN DE MUNDOS ---
+// --- CONFIGURACIÃ“N DE MUNDOS ---
 const WORLDS_CONFIG = [
     {
         id: 'world_1',
         name: 'El Taller del Inventor',
-        emoji: '🔧',
-        description: '¡Descubre los fundamentos de la robótica desde cero!',
+        emoji: 'ðŸ”§',
+        description: 'Â¡Descubre los fundamentos de la robÃ³tica desde cero!',
         bgGradient: 'from-[#1D4ED8] via-[#2563EB] to-[#3B82F6]',
         bgCard: 'from-[#DBEAFE] to-[#EFF6FF]',
         bgClass: 'bg-world-taller',
@@ -70,22 +70,22 @@ const WORLDS_CONFIG = [
         accentDark: '#1D4ED8',
         modules: MODULOS_DATA,
         sections: [
-            { startIdx: 0, title: '🤖 Introducción', subtitle: '¡Descubre el increíble mundo de los robots!', color: '#58CC02', colorLight: '#D7FFB8', emoji: '🚀' },
-            { startIdx: 3, title: '🔬 Fundamentos', subtitle: 'Electricidad, electrónica y mecánica', color: '#2563EB', colorLight: '#DBEAFE', emoji: '⚡' },
-            { startIdx: 6, title: '💻 Programación', subtitle: 'Lógica, código y Arduino', color: '#1CB0F6', colorLight: '#D0ECFB', emoji: '🎮' },
-            { startIdx: 9, title: '🛠️ Prácticas', subtitle: 'Proyectos físicos paso a paso', color: '#FF9600', colorLight: '#FFECD0', emoji: '🔧' },
-            { startIdx: 12, title: '🧠 Avanzado', subtitle: 'Control, diseño y más', color: '#CE82FF', colorLight: '#F0DEFF', emoji: '🏆' },
+            { startIdx: 0, title: 'ðŸ¤– IntroducciÃ³n', subtitle: 'Â¡Descubre el increÃ­ble mundo de los robots!', color: '#58CC02', colorLight: '#D7FFB8', emoji: 'ðŸš€' },
+            { startIdx: 3, title: 'ðŸ”¬ Fundamentos', subtitle: 'Electricidad, electrÃ³nica y mecÃ¡nica', color: '#2563EB', colorLight: '#DBEAFE', emoji: 'âš¡' },
+            { startIdx: 6, title: 'ðŸ’» ProgramaciÃ³n', subtitle: 'LÃ³gica, cÃ³digo y Arduino', color: '#1CB0F6', colorLight: '#D0ECFB', emoji: 'ðŸŽ®' },
+            { startIdx: 9, title: 'ðŸ› ï¸ PrÃ¡cticas', subtitle: 'Proyectos fÃ­sicos paso a paso', color: '#FF9600', colorLight: '#FFECD0', emoji: 'ðŸ”§' },
+            { startIdx: 12, title: 'ðŸ§  Avanzado', subtitle: 'Control, diseÃ±o y mÃ¡s', color: '#60A5FA', colorLight: '#DBEAFE', emoji: 'ðŸ†' },
         ],
-        bgPattern: '🔧⚡🤖💡🔩',
+        bgPattern: 'ðŸ”§âš¡ðŸ¤–ðŸ’¡ðŸ”©',
         challengeIds: ['py_hola_mundo', 'py_variable_basica', 'py_suma_numeros', 'py_texto_formateado', 'ard_setup_loop', 'ard_blink_basico'],
         circuitIds: [1, 2],
         glossaryTermIds: ['g1','g2','g3','g4','g5','g6','g7','g8','g9','g10','g11','g12','g13','g14','g18'],
     },
     {
         id: 'world_2',
-        name: 'La Fábrica de Autómatas',
-        emoji: '🏭',
-        description: 'Construye robots reales con sensores, motores y IA básica.',
+        name: 'La FÃ¡brica de AutÃ³matas',
+        emoji: 'ðŸ­',
+        description: 'Construye robots reales con sensores, motores y IA bÃ¡sica.',
         bgGradient: 'from-[#B45309] via-[#D97706] to-[#F59E0B]',
         bgCard: 'from-[#FEF3C7] to-[#FFFBEB]',
         accentColor: '#D97706',
@@ -94,16 +94,16 @@ const WORLDS_CONFIG = [
         sections: WORLD_2_SECTIONS,
         bgClass: 'bg-world-fabrica',
         worldImage: '/mundo2.png',
-        bgPattern: '🦇🛤️🌡️🏗️⚡🦾🏃📡📺📱🎵🎛️🔋🔧🏆',
+        bgPattern: 'ðŸ¦‡ðŸ›¤ï¸ðŸŒ¡ï¸ðŸ—ï¸âš¡ðŸ¦¾ðŸƒðŸ“¡ðŸ“ºðŸ“±ðŸŽµðŸŽ›ï¸ðŸ”‹ðŸ”§ðŸ†',
         challengeIds: ['py_blink_arduino', 'py_if_else', 'py_for_contar', 'py_lista_robots', 'ard_serial_monitor', 'py_input_usuario'],
         circuitIds: [3, 4],
         glossaryTermIds: ['g15','g16','g17','g19','g20','g21','g23','g24','g25','g26','g33','g34'],
     },
     {
         id: 'world_3',
-        name: 'La Selva Cibernética',
-        emoji: '🌿',
-        description: 'Biorobótica: donde la naturaleza inspira la tecnología.',
+        name: 'La Selva CibernÃ©tica',
+        emoji: 'ðŸŒ¿',
+        description: 'BiorobÃ³tica: donde la naturaleza inspira la tecnologÃ­a.',
         bgGradient: 'from-[#065F46] via-[#059669] to-[#10B981]',
         bgCard: 'from-[#D1FAE5] to-[#ECFDF5]',
         bgClass: 'bg-world-selva',
@@ -112,16 +112,16 @@ const WORLDS_CONFIG = [
         accentDark: '#065F46',
         modules: WORLD_3_MODULES,
         sections: WORLD_3_SECTIONS,
-        bgPattern: '🦎🐾💪👁️🦾🦿⌚🧠🐙🧬🌿🐜🔬🤔🎨🏆',
+        bgPattern: 'ðŸ¦ŽðŸ¾ðŸ’ªðŸ‘ï¸ðŸ¦¾ðŸ¦¿âŒšðŸ§ ðŸ™ðŸ§¬ðŸŒ¿ðŸœðŸ”¬ðŸ¤”ðŸŽ¨ðŸ†',
         challengeIds: ['py_funcion_saludar', 'ard_leer_sensor', 'py_if_elif_else', 'ard_servo_motor', 'py_funcion_retorno', 'py_while_loop'],
         circuitIds: [5, 6],
         glossaryTermIds: ['g22','g27','g28','g29','g35','g36','g37','g38','g39','g40','g41','g42'],
     },
     {
         id: 'world_4',
-        name: 'La Estación Orbital',
-        emoji: '🛸',
-        description: 'Robótica espacial: rovers, satélites, IA y misiones interplanetarias.',
+        name: 'La EstaciÃ³n Orbital',
+        emoji: 'ðŸ›¸',
+        description: 'RobÃ³tica espacial: rovers, satÃ©lites, IA y misiones interplanetarias.',
         bgGradient: 'from-[#312E81] via-[#4338CA] to-[#6366F1]',
         bgCard: 'from-[#E0E7FF] to-[#EEF2FF]',
         bgClass: 'bg-world-orbital',
@@ -130,7 +130,7 @@ const WORLDS_CONFIG = [
         accentDark: '#4338CA',
         modules: WORLD_4_MODULES,
         sections: WORLD_4_SECTIONS,
-        bgPattern: '🛸🌙📡☀️🛰️🏠🗑️🖨️🧠🤖🔭🏗️🌙🔴🏆🚀',
+        bgPattern: 'ðŸ›¸ðŸŒ™ðŸ“¡â˜€ï¸ðŸ›°ï¸ðŸ ðŸ—‘ï¸ðŸ–¨ï¸ðŸ§ ðŸ¤–ðŸ”­ðŸ—ï¸ðŸŒ™ðŸ”´ðŸ†ðŸš€',
         unlockType: 'friends',
         unlockRequirement: 5,
         challengeIds: ['ard_robot_obstaculo', 'py_diccionario', 'ard_motor_control', 'cpp_hola_mundo', 'cpp_if_else', 'py_try_except'],
@@ -157,7 +157,7 @@ const isWorldUnlocked = (userScores, worldIndex, firebaseProfile) => {
 // Get all modules across all worlds (for lookup)
 const ALL_MODULES = WORLDS_CONFIG.flatMap(w => w.modules);
 
-// --- FUNCIÓN PARA DAR FORMATO AZUL Y NEGRITA ---
+// --- FUNCIÃ“N PARA DAR FORMATO AZUL Y NEGRITA ---
 const formatDetailBody = (text) => {
     return text.replace(/\*\*(.*?)\*\*/g, (match, p1) => {
         return `<span class="font-black text-[#1CB0F6]">${p1}</span>`;
@@ -165,11 +165,11 @@ const formatDetailBody = (text) => {
 };
 
 // ==========================================================
-// --- INTEGRACIÓN GEMINI API (Generación de Código) ---
+// --- INTEGRACIÃ“N GEMINI API (GeneraciÃ³n de CÃ³digo) ---
 // ==========================================================
 
 /**
- * Llama a la API de Gemini para generar código Python estructurado (código + explicación).
+ * Llama a la API de Gemini para generar cÃ³digo Python estructurado (cÃ³digo + explicaciÃ³n).
  * Implementa reintento con retroceso exponencial.
  * @param {string} userPrompt - La solicitud del usuario.
  * @param {function} setOutput - Callback para establecer el objeto de salida { code, explanation }.
@@ -235,7 +235,7 @@ const callGeminiCodeGenerator = async (userPrompt, setOutput, setIsLoading) => {
                 await new Promise(resolve => setTimeout(resolve, delay));
             } else {
                 console.error("Gemini API call failed after multiple retries:", error);
-                setOutput({ code: '# Error de conexión con el Asistente IA. Revisa tu red o intenta simplificar tu solicitud.', explanation: 'Hubo un problema al contactar al Asistente IA.' });
+                setOutput({ code: '# Error de conexiÃ³n con el Asistente IA. Revisa tu red o intenta simplificar tu solicitud.', explanation: 'Hubo un problema al contactar al Asistente IA.' });
                 setIsLoading(false);
                 return;
             }
@@ -244,7 +244,7 @@ const callGeminiCodeGenerator = async (userPrompt, setOutput, setIsLoading) => {
 };
 
 // ==========================================================
-// --- NUEVO COMPONENTE: MODAL DE GENERACIÓN DE CÓDIGO ---
+// --- NUEVO COMPONENTE: MODAL DE GENERACIÃ“N DE CÃ“DIGO ---
 // ==========================================================
 const CodeGenerationModal = ({ isOpen, onClose, setCode, setAiExplanation }) => {
     const [prompt, setPrompt] = useState('');
@@ -279,7 +279,7 @@ const CodeGenerationModal = ({ isOpen, onClose, setCode, setAiExplanation }) => 
         <div className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
             <div className="bg-white rounded-2xl w-full max-w-lg overflow-hidden animate-scale-in border-2 border-[#E5E5E5]">
                 {/* Header */}
-                <div className="bg-[#CE82FF] px-5 py-4 flex justify-between items-center border-b-4 border-[#A855F7]">
+                <div className="bg-[#60A5FA] px-5 py-4 flex justify-between items-center border-b-4 border-[#3B82F6]">
                     <h2 className="text-lg font-black text-white flex items-center">
                         <Bot size={22} className="mr-2" />
                         Asistente IA
@@ -290,15 +290,15 @@ const CodeGenerationModal = ({ isOpen, onClose, setCode, setAiExplanation }) => 
                 </div>
                 
                 <div className="p-5">
-                    <p className="text-xs text-[#AFAFAF] font-bold mb-4">Pide al Asistente que genere código Python (ej: "calcula el área de un círculo")</p>
+                    <p className="text-xs text-[#AFAFAF] font-bold mb-4">Pide al Asistente que genere cÃ³digo Python (ej: "calcula el Ã¡rea de un cÃ­rculo")</p>
 
                     <div className="flex gap-2 mb-4">
                         <input
                             type="text"
                             value={prompt}
                             onChange={(e) => setPrompt(e.target.value)}
-                            placeholder="Quiero un código que..."
-                            className="flex-grow p-3 bg-[#F7F7F7] border-2 border-[#E5E5E5] rounded-xl focus:ring-2 focus:ring-[#CE82FF] focus:border-[#CE82FF] outline-none transition text-sm font-bold text-[#3C3C3C]"
+                            placeholder="Quiero un cÃ³digo que..."
+                            className="flex-grow p-3 bg-[#F7F7F7] border-2 border-[#E5E5E5] rounded-xl focus:ring-2 focus:ring-[#60A5FA] focus:border-[#60A5FA] outline-none transition text-sm font-bold text-[#3C3C3C]"
                             disabled={isLoading}
                             onKeyDown={(e) => e.key === 'Enter' && handleGenerate()}
                         />
@@ -315,11 +315,11 @@ const CodeGenerationModal = ({ isOpen, onClose, setCode, setAiExplanation }) => 
                     {output && (
                         <div className="p-4 bg-[#F7F7F7] rounded-xl border-2 border-[#E5E5E5] space-y-3 animate-slide-up">
                             <div>
-                                <h3 className="font-black text-[#CE82FF] mb-1 flex items-center text-sm"><Lightbulb size={14} className="mr-1" /> Explicación:</h3>
+                                <h3 className="font-black text-[#60A5FA] mb-1 flex items-center text-sm"><Lightbulb size={14} className="mr-1" /> ExplicaciÃ³n:</h3>
                                 <p className="text-xs text-[#777] font-semibold">{output.explanation}</p>
                             </div>
                             <div>
-                                <h3 className="font-black text-[#2563EB] mb-1 flex items-center text-sm"><Code size={14} className="mr-1" /> Código:</h3>
+                                <h3 className="font-black text-[#2563EB] mb-1 flex items-center text-sm"><Code size={14} className="mr-1" /> CÃ³digo:</h3>
                                 <pre className="bg-gray-900 text-green-400 p-3 rounded-lg text-xs overflow-x-auto whitespace-pre-wrap font-mono">{output.code}</pre>
                             </div>
                             <button
@@ -342,7 +342,7 @@ const CodeGenerationModal = ({ isOpen, onClose, setCode, setAiExplanation }) => 
 // ==========================================================
 // ... (InteractiveLEDGuide, LessonCardComponent, LessonDetailView, Module1View, etc. remain the same)
 
-// Se añade la explicación de la IA debajo de la consola de salida
+// Se aÃ±ade la explicaciÃ³n de la IA debajo de la consola de salida
 
 // --- DAILY STORY PROBLEMS (shared date logic) ---
 const getDailyIndex = (pool) => {
@@ -352,23 +352,23 @@ const getDailyIndex = (pool) => {
 };
 
 const DAILY_CIRCUIT_STORIES = [
-    { id: 'dc_1', title: '🚀 Luces de Emergencia', story: 'La nave CultivaTec-7 atraviesa un campo de asteroides. ¡El sistema de luces de emergencia falló! El capitán necesita que conectes 3 LEDs rojos en paralelo con una resistencia de protección cada uno a una batería de 9V para alertar a la tripulación.', question: '¿Qué pasa si conectas los 3 LEDs en serie en vez de paralelo?', options: ['Brillan igual', 'Brillan menos porque el voltaje se divide entre los 3', 'Brillan más', 'No cambia nada'], correct: 1, explanation: 'En serie el voltaje se divide entre los LEDs, así que cada uno recibe menos voltaje y brilla menos. En paralelo, cada LED recibe el voltaje completo.' },
-    { id: 'dc_2', title: '🛸 Sensor de Proximidad', story: 'Un satélite de rescate necesita detectar basura espacial. Su sensor ultrasónico envía una señal y mide el tiempo que tarda en regresar. El circuito necesita: sensor ultrasónico, Arduino, un buzzer que suene cuando detecte algo a menos de 30cm.', question: '¿Por qué necesitamos una resistencia entre el Arduino y el buzzer?', options: ['Para que suene más fuerte', 'Para proteger el pin del Arduino limitando la corriente', 'No se necesita resistencia', 'Para que no suene'], correct: 1, explanation: 'Los pines del Arduino solo soportan ~20mA. Sin resistencia la corriente podría ser mayor y dañar el pin. La resistencia limita la corriente a un nivel seguro.' },
-    { id: 'dc_3', title: '🌟 Panel Solar de la Estación', story: 'La estación espacial necesita energía. Tienes 4 paneles solares que generan 3V cada uno. Necesitas alimentar un sistema que requiere 12V. ¿Cómo los conectas?', question: '¿Cómo debes conectar los 4 paneles de 3V para obtener 12V?', options: ['Todos en paralelo', 'Todos en serie', '2 en serie y 2 en paralelo', 'No es posible con solo 4 paneles'], correct: 1, explanation: 'En serie los voltajes se suman: 3V + 3V + 3V + 3V = 12V. En paralelo se mantienen los 3V pero aumenta la corriente disponible.' },
-    { id: 'dc_4', title: '🔧 Motor del Brazo Robótico', story: 'El brazo robótico de la nave necesita reparación. El motor DC funciona con 6V pero la batería de la nave es de 12V. Necesitas reducir el voltaje sin desperdiciar energía.', question: '¿Cuál es la mejor forma de reducir 12V a 6V para el motor?', options: ['Conectar una resistencia grande en serie', 'Usar un regulador de voltaje o divisor de voltaje', 'Desconectar cables', 'Usar un LED para absorber voltaje'], correct: 1, explanation: 'Un regulador de voltaje convierte eficientemente 12V a 6V. Un divisor de voltaje con resistencias también funciona pero desperdicia energía en forma de calor.' },
-    { id: 'dc_5', title: '💡 Sistema de Iluminación por Zonas', story: 'La nave tiene 3 zonas: cabina (LED blanco), motor (LED rojo), carga (LED azul). Cada zona necesita encenderse independientemente con su propio interruptor.', question: '¿Cómo se deben conectar los 3 LEDs con sus interruptores?', options: ['Todos en serie con un solo interruptor', 'Cada LED en paralelo con su propio interruptor en serie', 'Todos en paralelo con un solo interruptor', 'En serie con 3 interruptores en paralelo'], correct: 1, explanation: 'Cada LED se conecta en paralelo a la fuente, con su interruptor en serie. Así cada interruptor controla solo su zona sin afectar las demás.' },
-    { id: 'dc_6', title: '⚡ Carga de Baterías de Respaldo', story: 'La nave necesita cargar 2 baterías de respaldo de 5V/2A cada una. El generador produce 5V/3A máximo. No puedes cargar las dos al mismo tiempo.', question: '¿Por qué no puedes cargar ambas baterías simultáneamente en paralelo?', options: ['Porque explotarían', 'Porque necesitarían 4A y el generador solo da 3A', 'Porque en paralelo no cargan', 'Sí se puede sin problema'], correct: 1, explanation: 'Cada batería necesita 2A. En paralelo pedirían 4A total, pero el generador solo da 3A. Se sobrecargaría. Debes cargarlas una a la vez o conseguir un generador más potente.' },
-    { id: 'dc_7', title: '🛰️ Comunicaciones de Radio', story: 'El transmisor de radio de la nave necesita una antena conectada a un circuito amplificador. El amplificador necesita exactamente 5V, pero la fuente da 9V.', question: '¿Qué componente usarías para bajar de 9V a 5V de forma estable?', options: ['Un fusible', 'Un regulador de voltaje 7805', 'Un condensador', 'Un diodo simple'], correct: 1, explanation: 'El regulador 7805 convierte cualquier voltaje entre 7-35V a una salida estable de 5V. Es el componente estándar para esta tarea. Un condensador no regula voltaje y un diodo solo baja ~0.7V.' },
+    { id: 'dc_1', title: 'ðŸš€ Luces de Emergencia', story: 'La nave CultivaTec-7 atraviesa un campo de asteroides. Â¡El sistema de luces de emergencia fallÃ³! El capitÃ¡n necesita que conectes 3 LEDs rojos en paralelo con una resistencia de protecciÃ³n cada uno a una baterÃ­a de 9V para alertar a la tripulaciÃ³n.', question: 'Â¿QuÃ© pasa si conectas los 3 LEDs en serie en vez de paralelo?', options: ['Brillan igual', 'Brillan menos porque el voltaje se divide entre los 3', 'Brillan mÃ¡s', 'No cambia nada'], correct: 1, explanation: 'En serie el voltaje se divide entre los LEDs, asÃ­ que cada uno recibe menos voltaje y brilla menos. En paralelo, cada LED recibe el voltaje completo.' },
+    { id: 'dc_2', title: 'ðŸ›¸ Sensor de Proximidad', story: 'Un satÃ©lite de rescate necesita detectar basura espacial. Su sensor ultrasÃ³nico envÃ­a una seÃ±al y mide el tiempo que tarda en regresar. El circuito necesita: sensor ultrasÃ³nico, Arduino, un buzzer que suene cuando detecte algo a menos de 30cm.', question: 'Â¿Por quÃ© necesitamos una resistencia entre el Arduino y el buzzer?', options: ['Para que suene mÃ¡s fuerte', 'Para proteger el pin del Arduino limitando la corriente', 'No se necesita resistencia', 'Para que no suene'], correct: 1, explanation: 'Los pines del Arduino solo soportan ~20mA. Sin resistencia la corriente podrÃ­a ser mayor y daÃ±ar el pin. La resistencia limita la corriente a un nivel seguro.' },
+    { id: 'dc_3', title: 'ðŸŒŸ Panel Solar de la EstaciÃ³n', story: 'La estaciÃ³n espacial necesita energÃ­a. Tienes 4 paneles solares que generan 3V cada uno. Necesitas alimentar un sistema que requiere 12V. Â¿CÃ³mo los conectas?', question: 'Â¿CÃ³mo debes conectar los 4 paneles de 3V para obtener 12V?', options: ['Todos en paralelo', 'Todos en serie', '2 en serie y 2 en paralelo', 'No es posible con solo 4 paneles'], correct: 1, explanation: 'En serie los voltajes se suman: 3V + 3V + 3V + 3V = 12V. En paralelo se mantienen los 3V pero aumenta la corriente disponible.' },
+    { id: 'dc_4', title: 'ðŸ”§ Motor del Brazo RobÃ³tico', story: 'El brazo robÃ³tico de la nave necesita reparaciÃ³n. El motor DC funciona con 6V pero la baterÃ­a de la nave es de 12V. Necesitas reducir el voltaje sin desperdiciar energÃ­a.', question: 'Â¿CuÃ¡l es la mejor forma de reducir 12V a 6V para el motor?', options: ['Conectar una resistencia grande en serie', 'Usar un regulador de voltaje o divisor de voltaje', 'Desconectar cables', 'Usar un LED para absorber voltaje'], correct: 1, explanation: 'Un regulador de voltaje convierte eficientemente 12V a 6V. Un divisor de voltaje con resistencias tambiÃ©n funciona pero desperdicia energÃ­a en forma de calor.' },
+    { id: 'dc_5', title: 'ðŸ’¡ Sistema de IluminaciÃ³n por Zonas', story: 'La nave tiene 3 zonas: cabina (LED blanco), motor (LED rojo), carga (LED azul). Cada zona necesita encenderse independientemente con su propio interruptor.', question: 'Â¿CÃ³mo se deben conectar los 3 LEDs con sus interruptores?', options: ['Todos en serie con un solo interruptor', 'Cada LED en paralelo con su propio interruptor en serie', 'Todos en paralelo con un solo interruptor', 'En serie con 3 interruptores en paralelo'], correct: 1, explanation: 'Cada LED se conecta en paralelo a la fuente, con su interruptor en serie. AsÃ­ cada interruptor controla solo su zona sin afectar las demÃ¡s.' },
+    { id: 'dc_6', title: 'âš¡ Carga de BaterÃ­as de Respaldo', story: 'La nave necesita cargar 2 baterÃ­as de respaldo de 5V/2A cada una. El generador produce 5V/3A mÃ¡ximo. No puedes cargar las dos al mismo tiempo.', question: 'Â¿Por quÃ© no puedes cargar ambas baterÃ­as simultÃ¡neamente en paralelo?', options: ['Porque explotarÃ­an', 'Porque necesitarÃ­an 4A y el generador solo da 3A', 'Porque en paralelo no cargan', 'SÃ­ se puede sin problema'], correct: 1, explanation: 'Cada baterÃ­a necesita 2A. En paralelo pedirÃ­an 4A total, pero el generador solo da 3A. Se sobrecargarÃ­a. Debes cargarlas una a la vez o conseguir un generador mÃ¡s potente.' },
+    { id: 'dc_7', title: 'ðŸ›°ï¸ Comunicaciones de Radio', story: 'El transmisor de radio de la nave necesita una antena conectada a un circuito amplificador. El amplificador necesita exactamente 5V, pero la fuente da 9V.', question: 'Â¿QuÃ© componente usarÃ­as para bajar de 9V a 5V de forma estable?', options: ['Un fusible', 'Un regulador de voltaje 7805', 'Un condensador', 'Un diodo simple'], correct: 1, explanation: 'El regulador 7805 convierte cualquier voltaje entre 7-35V a una salida estable de 5V. Es el componente estÃ¡ndar para esta tarea. Un condensador no regula voltaje y un diodo solo baja ~0.7V.' },
 ];
 
 const DAILY_PROGRAMMING_STORIES = [
-    { id: 'dp_1', title: '🚀 Calculador de Combustible', story: 'La nave CultivaTec-7 necesita calcular si tiene suficiente combustible para llegar al siguiente planeta. El tanque tiene 500 litros y consume 12 litros por hora. El viaje dura 38 horas.', task: 'Calcula si el combustible alcanza y cuántos litros sobran o faltan.', starterCode: 'tanque = 500\nconsumo_hora = 12\nhoras_viaje = 38\n\ntotal_necesario = consumo_hora * horas_viaje\nprint("Combustible necesario:", total_necesario, "litros")\n\nif tanque >= total_necesario:\n    sobra = tanque - total_necesario\n    print("✅ ¡Sí alcanza! Sobran", sobra, "litros")\nelse:\n    falta = total_necesario - tanque\n    print("❌ No alcanza. Faltan", falta, "litros")' },
-    { id: 'dp_2', title: '🛸 Código de Acceso', story: 'La puerta del laboratorio espacial necesita un código de 4 dígitos. El sistema valida si el código ingresado es correcto comparándolo con el código secreto 7294.', task: 'Simula la verificación del código de acceso con intentos.', starterCode: 'codigo_secreto = 7294\nintentos = [1234, 5678, 7294]\n\nfor i in range(len(intentos)):\n    codigo = intentos[i]\n    print("Intento", i + 1, "- Código:", codigo)\n    if codigo == codigo_secreto:\n        print("  🔓 ¡Acceso concedido!")\n    else:\n        print("  🔒 Acceso denegado")' },
-    { id: 'dp_3', title: '🌟 Temperatura del Reactor', story: 'El reactor de la nave genera datos de temperatura cada segundo. Si supera 90°C hay que activar el enfriamiento. Si baja de 30°C hay que calentar.', task: 'Monitorea las lecturas del sensor de temperatura y toma acción.', starterCode: 'import random\n\nprint("=== Monitor de Temperatura del Reactor ===")\n\nfor segundo in range(8):\n    temp = random.randint(20, 100)\n    print("Segundo", segundo + 1, "- Temp:", temp, "°C", end=" ")\n    if temp > 90:\n        print("🔥 ¡ALERTA! Activando enfriamiento")\n    elif temp < 30:\n        print("❄️ Muy frío. Calentando reactor")\n    else:\n        print("✅ Normal")' },
-    { id: 'dp_4', title: '🔧 Inventario de Repuestos', story: 'El mecánico de la nave necesita saber cuántas piezas de repuesto quedan para planificar una parada de reabastecimiento.', task: 'Gestiona el inventario y alerta cuando quedan pocas piezas.', starterCode: 'inventario = {\n    "tornillos": 45,\n    "tuercas": 12,\n    "cables": 8,\n    "fusibles": 3,\n    "motores": 2\n}\n\nprint("🔧 Inventario de la Nave CultivaTec-7")\nprint("=" * 35)\n\nalerta = []\nfor pieza, cantidad in inventario.items():\n    estado = "⚠️ BAJO" if cantidad < 10 else "✅ OK"\n    print(f"  {pieza}: {cantidad} - {estado}")\n    if cantidad < 10:\n        alerta.append(pieza)\n\nif alerta:\n    print(f"\\n🚨 Reabastecer: {alerta}")\nelse:\n    print("\\n✅ Todo en orden")' },
-    { id: 'dp_5', title: '💡 Secuencia de Aterrizaje', story: 'La nave debe seguir una secuencia precisa para aterrizar: encender retrocohetes, desplegar tren de aterrizaje, reducir velocidad, y tocar superficie.', task: 'Programa la secuencia de aterrizaje paso a paso.', starterCode: 'pasos = [\n    "Encender retrocohetes 🔥",\n    "Desplegar tren de aterrizaje 🦿",\n    "Reducir velocidad a 50 km/h 🐢",\n    "Activar sensores de superficie 📡",\n    "Toque de superficie 🌍",\n    "Apagar motores principales ⚡"\n]\n\nvelocidad = 300\n\nprint("🚀 Iniciando secuencia de aterrizaje...")\nprint("=" * 40)\n\nfor i in range(len(pasos)):\n    print(f"Paso {i + 1}: {pasos[i]}")\n    velocidad = velocidad - 50\n    if velocidad > 0:\n        print(f"  Velocidad actual: {velocidad} km/h")\n    else:\n        print("  ✅ ¡Nave detenida!")\n\nprint("\\n🎉 ¡Aterrizaje exitoso!")' },
-    { id: 'dp_6', title: '⚡ Distribución de Energía', story: 'La nave tiene 1000W de energía total y debe repartirla entre: navegación (300W mín), soporte vital (400W mín), comunicaciones (150W mín), y lo que sobre va a escudos.', task: 'Calcula la distribución de energía y cuánto queda para escudos.', starterCode: 'energia_total = 1000\n\nnavegacion = 300\nsoporte_vital = 400\ncomunicaciones = 150\n\nusado = navegacion + soporte_vital + comunicaciones\nescudos = energia_total - usado\n\nprint("⚡ Distribución de Energía")\nprint("=" * 30)\nprint(f"  Navegación: {navegacion}W")\nprint(f"  Soporte vital: {soporte_vital}W")\nprint(f"  Comunicaciones: {comunicaciones}W")\nprint(f"  Escudos: {escudos}W")\nprint(f"\\nTotal usado: {usado}W de {energia_total}W")\n\nif escudos < 100:\n    print("⚠️ ¡Escudos bajos! Peligro.")\nelse:\n    print("✅ Energía bien distribuida")' },
-    { id: 'dp_7', title: '🛰️ Mensaje SOS en Código', story: 'La antena de la nave está dañada y solo puede enviar pulsos cortos (.) y largos (-). Necesitas codificar "SOS" en código Morse: S = "...", O = "---"', task: 'Genera la señal SOS en código Morse y repítela 3 veces.', starterCode: 'morse = {\n    "S": "...",\n    "O": "---"\n}\n\nmensaje = "SOS"\n\nprint("📡 Transmitiendo señal de emergencia...")\nprint("=" * 35)\n\nfor repeticion in range(3):\n    senal = ""\n    for letra in mensaje:\n        senal = senal + morse[letra] + " "\n    print(f"  Transmisión {repeticion + 1}: {senal}")\n\nprint("\\n📡 Señal SOS enviada 3 veces")\nprint("🛸 Esperando respuesta...")' },
+    { id: 'dp_1', title: 'ðŸš€ Calculador de Combustible', story: 'La nave CultivaTec-7 necesita calcular si tiene suficiente combustible para llegar al siguiente planeta. El tanque tiene 500 litros y consume 12 litros por hora. El viaje dura 38 horas.', task: 'Calcula si el combustible alcanza y cuÃ¡ntos litros sobran o faltan.', starterCode: 'tanque = 500\nconsumo_hora = 12\nhoras_viaje = 38\n\ntotal_necesario = consumo_hora * horas_viaje\nprint("Combustible necesario:", total_necesario, "litros")\n\nif tanque >= total_necesario:\n    sobra = tanque - total_necesario\n    print("âœ… Â¡SÃ­ alcanza! Sobran", sobra, "litros")\nelse:\n    falta = total_necesario - tanque\n    print("âŒ No alcanza. Faltan", falta, "litros")' },
+    { id: 'dp_2', title: 'ðŸ›¸ CÃ³digo de Acceso', story: 'La puerta del laboratorio espacial necesita un cÃ³digo de 4 dÃ­gitos. El sistema valida si el cÃ³digo ingresado es correcto comparÃ¡ndolo con el cÃ³digo secreto 7294.', task: 'Simula la verificaciÃ³n del cÃ³digo de acceso con intentos.', starterCode: 'codigo_secreto = 7294\nintentos = [1234, 5678, 7294]\n\nfor i in range(len(intentos)):\n    codigo = intentos[i]\n    print("Intento", i + 1, "- CÃ³digo:", codigo)\n    if codigo == codigo_secreto:\n        print("  ðŸ”“ Â¡Acceso concedido!")\n    else:\n        print("  ðŸ”’ Acceso denegado")' },
+    { id: 'dp_3', title: 'ðŸŒŸ Temperatura del Reactor', story: 'El reactor de la nave genera datos de temperatura cada segundo. Si supera 90Â°C hay que activar el enfriamiento. Si baja de 30Â°C hay que calentar.', task: 'Monitorea las lecturas del sensor de temperatura y toma acciÃ³n.', starterCode: 'import random\n\nprint("=== Monitor de Temperatura del Reactor ===")\n\nfor segundo in range(8):\n    temp = random.randint(20, 100)\n    print("Segundo", segundo + 1, "- Temp:", temp, "Â°C", end=" ")\n    if temp > 90:\n        print("ðŸ”¥ Â¡ALERTA! Activando enfriamiento")\n    elif temp < 30:\n        print("â„ï¸ Muy frÃ­o. Calentando reactor")\n    else:\n        print("âœ… Normal")' },
+    { id: 'dp_4', title: 'ðŸ”§ Inventario de Repuestos', story: 'El mecÃ¡nico de la nave necesita saber cuÃ¡ntas piezas de repuesto quedan para planificar una parada de reabastecimiento.', task: 'Gestiona el inventario y alerta cuando quedan pocas piezas.', starterCode: 'inventario = {\n    "tornillos": 45,\n    "tuercas": 12,\n    "cables": 8,\n    "fusibles": 3,\n    "motores": 2\n}\n\nprint("ðŸ”§ Inventario de la Nave CultivaTec-7")\nprint("=" * 35)\n\nalerta = []\nfor pieza, cantidad in inventario.items():\n    estado = "âš ï¸ BAJO" if cantidad < 10 else "âœ… OK"\n    print(f"  {pieza}: {cantidad} - {estado}")\n    if cantidad < 10:\n        alerta.append(pieza)\n\nif alerta:\n    print(f"\\nðŸš¨ Reabastecer: {alerta}")\nelse:\n    print("\\nâœ… Todo en orden")' },
+    { id: 'dp_5', title: 'ðŸ’¡ Secuencia de Aterrizaje', story: 'La nave debe seguir una secuencia precisa para aterrizar: encender retrocohetes, desplegar tren de aterrizaje, reducir velocidad, y tocar superficie.', task: 'Programa la secuencia de aterrizaje paso a paso.', starterCode: 'pasos = [\n    "Encender retrocohetes ðŸ”¥",\n    "Desplegar tren de aterrizaje ðŸ¦¿",\n    "Reducir velocidad a 50 km/h ðŸ¢",\n    "Activar sensores de superficie ðŸ“¡",\n    "Toque de superficie ðŸŒ",\n    "Apagar motores principales âš¡"\n]\n\nvelocidad = 300\n\nprint("ðŸš€ Iniciando secuencia de aterrizaje...")\nprint("=" * 40)\n\nfor i in range(len(pasos)):\n    print(f"Paso {i + 1}: {pasos[i]}")\n    velocidad = velocidad - 50\n    if velocidad > 0:\n        print(f"  Velocidad actual: {velocidad} km/h")\n    else:\n        print("  âœ… Â¡Nave detenida!")\n\nprint("\\nðŸŽ‰ Â¡Aterrizaje exitoso!")' },
+    { id: 'dp_6', title: 'âš¡ DistribuciÃ³n de EnergÃ­a', story: 'La nave tiene 1000W de energÃ­a total y debe repartirla entre: navegaciÃ³n (300W mÃ­n), soporte vital (400W mÃ­n), comunicaciones (150W mÃ­n), y lo que sobre va a escudos.', task: 'Calcula la distribuciÃ³n de energÃ­a y cuÃ¡nto queda para escudos.', starterCode: 'energia_total = 1000\n\nnavegacion = 300\nsoporte_vital = 400\ncomunicaciones = 150\n\nusado = navegacion + soporte_vital + comunicaciones\nescudos = energia_total - usado\n\nprint("âš¡ DistribuciÃ³n de EnergÃ­a")\nprint("=" * 30)\nprint(f"  NavegaciÃ³n: {navegacion}W")\nprint(f"  Soporte vital: {soporte_vital}W")\nprint(f"  Comunicaciones: {comunicaciones}W")\nprint(f"  Escudos: {escudos}W")\nprint(f"\\nTotal usado: {usado}W de {energia_total}W")\n\nif escudos < 100:\n    print("âš ï¸ Â¡Escudos bajos! Peligro.")\nelse:\n    print("âœ… EnergÃ­a bien distribuida")' },
+    { id: 'dp_7', title: 'ðŸ›°ï¸ Mensaje SOS en CÃ³digo', story: 'La antena de la nave estÃ¡ daÃ±ada y solo puede enviar pulsos cortos (.) y largos (-). Necesitas codificar "SOS" en cÃ³digo Morse: S = "...", O = "---"', task: 'Genera la seÃ±al SOS en cÃ³digo Morse y repÃ­tela 3 veces.', starterCode: 'morse = {\n    "S": "...",\n    "O": "---"\n}\n\nmensaje = "SOS"\n\nprint("ðŸ“¡ Transmitiendo seÃ±al de emergencia...")\nprint("=" * 35)\n\nfor repeticion in range(3):\n    senal = ""\n    for letra in mensaje:\n        senal = senal + morse[letra] + " "\n    print(f"  TransmisiÃ³n {repeticion + 1}: {senal}")\n\nprint("\\nðŸ“¡ SeÃ±al SOS enviada 3 veces")\nprint("ðŸ›¸ Esperando respuesta...")' },
 ];
 
 // Helper to get today's date key
@@ -379,21 +379,21 @@ const getTodayKey = () => {
 
 // --- CIRCUIT LAB SCREEN ---
 const CIRCUIT_CONCEPTS = [
-    { id: 'cc_1', title: '⚡ Voltaje (V)', emoji: '⚡', description: 'Es la "presión" que empuja a los electrones por el circuito. Se mide en Voltios. Una batería de 9V empuja más fuerte que una de 3V.', example: 'Imagina el agua en una manguera: el voltaje es como la presión del agua. Más presión = más fuerza.' },
-    { id: 'cc_2', title: '🌊 Corriente (I)', emoji: '🌊', description: 'Es la cantidad de electrones que fluyen. Se mide en Amperios (A). Más corriente = más electrones pasando.', example: 'Si el voltaje es la presión del agua, la corriente es la cantidad de agua que fluye por la manguera.' },
-    { id: 'cc_3', title: '🚧 Resistencia (R)', emoji: '🚧', description: 'Es lo que se opone al flujo de corriente. Se mide en Ohmios (Ω). Las resistencias protegen los componentes.', example: 'Como poner el dedo en la manguera: reduces el flujo de agua. Una resistencia reduce el flujo de corriente.' },
-    { id: 'cc_4', title: '📐 Ley de Ohm', emoji: '📐', description: 'V = I × R. El voltaje es igual a la corriente multiplicada por la resistencia. ¡La fórmula más importante!', example: 'Si tienes 9V y una resistencia de 450Ω:\nI = V/R = 9/450 = 0.02A = 20mA\nSuficiente para encender un LED.' },
-    { id: 'cc_5', title: '🔗 Serie vs Paralelo', emoji: '🔗', description: 'En SERIE los componentes van uno tras otro (el voltaje se divide). En PARALELO van lado a lado (la corriente se divide).', example: 'Navidad: las luces en serie → si una falla, todas se apagan. En paralelo → cada una es independiente.' },
-    { id: 'cc_6', title: '💡 LEDs', emoji: '💡', description: 'Los LEDs (Diodos Emisores de Luz) solo dejan pasar corriente en una dirección. Necesitan una resistencia para no quemarse.', example: 'Un LED rojo necesita ~2V y 20mA. Con batería de 9V: R = (9-2)/0.02 = 350Ω → usa una de 330Ω o 470Ω.' },
+    { id: 'cc_1', title: 'âš¡ Voltaje (V)', emoji: 'âš¡', description: 'Es la "presiÃ³n" que empuja a los electrones por el circuito. Se mide en Voltios. Una baterÃ­a de 9V empuja mÃ¡s fuerte que una de 3V.', example: 'Imagina el agua en una manguera: el voltaje es como la presiÃ³n del agua. MÃ¡s presiÃ³n = mÃ¡s fuerza.' },
+    { id: 'cc_2', title: 'ðŸŒŠ Corriente (I)', emoji: 'ðŸŒŠ', description: 'Es la cantidad de electrones que fluyen. Se mide en Amperios (A). MÃ¡s corriente = mÃ¡s electrones pasando.', example: 'Si el voltaje es la presiÃ³n del agua, la corriente es la cantidad de agua que fluye por la manguera.' },
+    { id: 'cc_3', title: 'ðŸš§ Resistencia (R)', emoji: 'ðŸš§', description: 'Es lo que se opone al flujo de corriente. Se mide en Ohmios (Î©). Las resistencias protegen los componentes.', example: 'Como poner el dedo en la manguera: reduces el flujo de agua. Una resistencia reduce el flujo de corriente.' },
+    { id: 'cc_4', title: 'ðŸ“ Ley de Ohm', emoji: 'ðŸ“', description: 'V = I Ã— R. El voltaje es igual a la corriente multiplicada por la resistencia. Â¡La fÃ³rmula mÃ¡s importante!', example: 'Si tienes 9V y una resistencia de 450Î©:\nI = V/R = 9/450 = 0.02A = 20mA\nSuficiente para encender un LED.' },
+    { id: 'cc_5', title: 'ðŸ”— Serie vs Paralelo', emoji: 'ðŸ”—', description: 'En SERIE los componentes van uno tras otro (el voltaje se divide). En PARALELO van lado a lado (la corriente se divide).', example: 'Navidad: las luces en serie â†’ si una falla, todas se apagan. En paralelo â†’ cada una es independiente.' },
+    { id: 'cc_6', title: 'ðŸ’¡ LEDs', emoji: 'ðŸ’¡', description: 'Los LEDs (Diodos Emisores de Luz) solo dejan pasar corriente en una direcciÃ³n. Necesitan una resistencia para no quemarse.', example: 'Un LED rojo necesita ~2V y 20mA. Con baterÃ­a de 9V: R = (9-2)/0.02 = 350Î© â†’ usa una de 330Î© o 470Î©.' },
 ];
 
 const CIRCUIT_PROBLEMS = [
-    { id: 'cp_1', title: '🔌 Encender un LED', difficulty: 1, emoji: '💡', description: 'Conecta una batería, una resistencia y un LED para que encienda.', question: '¿Qué necesitas como mínimo para encender un LED de forma segura?', options: ['Solo el LED y la batería', 'Batería + Resistencia + LED', 'Solo el LED', 'Batería + 2 LEDs'], correct: 1, explanation: 'Necesitas batería (energía), resistencia (protección) y LED. Sin la resistencia, la corriente sería muy alta y el LED se quemaría.' },
-    { id: 'cp_2', title: '⚡ Calculando Resistencia', difficulty: 2, emoji: '🧮', description: 'Con batería de 9V y LED rojo (2V, 20mA), ¿qué resistencia necesitas?', question: 'R = (V_batería - V_LED) / I_LED = (9 - 2) / 0.020 = ?', options: ['150Ω', '350Ω', '470Ω', '1000Ω'], correct: 1, explanation: 'R = (9-2)/0.020 = 350Ω. En la práctica usarías 330Ω (valor comercial más cercano hacia abajo) o 470Ω (más seguro).' },
-    { id: 'cp_3', title: '🔗 LEDs en Serie', difficulty: 2, emoji: '🔗', description: 'Tienes 3 LEDs rojos (2V cada uno) y una batería de 9V. ¿Funciona en serie?', question: '¿Cuánto voltaje queda para la resistencia si conectas 3 LEDs en serie?', options: ['9V', '3V (9V - 3×2V)', '0V', '6V'], correct: 1, explanation: 'En serie: V_resistencia = 9V - (3 × 2V) = 3V. Quedan 3V para la resistencia, suficiente para que funcione con R = 3/0.020 = 150Ω.' },
-    { id: 'cp_4', title: '🔀 Serie o Paralelo', difficulty: 2, emoji: '🔀', description: 'Un sistema de alarma necesita que funcione aunque falle un componente. ¿Cómo conectas los LEDs?', question: '¿Qué conexión hace que cada LED funcione independientemente?', options: ['En serie', 'En paralelo', 'Da igual', 'Ninguna'], correct: 1, explanation: 'En paralelo cada LED tiene su propio camino de corriente. Si uno falla, los demás siguen funcionando. En serie, si uno falla se corta todo el circuito.' },
-    { id: 'cp_5', title: '🛡️ Fusibles de Protección', difficulty: 3, emoji: '🛡️', description: 'El sistema eléctrico de la nave tiene un fusible de 2A. Tienes 3 motores que consumen 0.5A cada uno y un calentador de 0.8A.', question: '¿Puedes encender todo al mismo tiempo sin quemar el fusible?', options: ['Sí, alcanza perfectamente', 'No, se quema el fusible porque la corriente total es 2.3A', 'Sí, los fusibles no importan', 'No se puede calcular'], correct: 1, explanation: 'Corriente total = (3 × 0.5A) + 0.8A = 2.3A > 2A del fusible. ¡Se quemaría! Necesitas un fusible de 3A o encender los motores por turnos.' },
-    { id: 'cp_6', title: '🔋 Baterías en Combinación', difficulty: 3, emoji: '🔋', description: 'Tienes 4 baterías de 3V/1A. Necesitas energizar un sistema de 6V/2A.', question: '¿Cómo combinas las baterías para obtener 6V y 2A?', options: ['Todas en serie', 'Todas en paralelo', '2 pares en serie, luego esos pares en paralelo', 'No es posible'], correct: 2, explanation: '2 en serie = 6V/1A. Pones 2 de esos pares en paralelo = 6V/2A. Serie suma voltaje, paralelo suma corriente. ¡Combinación perfecta!' },
+    { id: 'cp_1', title: 'ðŸ”Œ Encender un LED', difficulty: 1, emoji: 'ðŸ’¡', description: 'Conecta una baterÃ­a, una resistencia y un LED para que encienda.', question: 'Â¿QuÃ© necesitas como mÃ­nimo para encender un LED de forma segura?', options: ['Solo el LED y la baterÃ­a', 'BaterÃ­a + Resistencia + LED', 'Solo el LED', 'BaterÃ­a + 2 LEDs'], correct: 1, explanation: 'Necesitas baterÃ­a (energÃ­a), resistencia (protecciÃ³n) y LED. Sin la resistencia, la corriente serÃ­a muy alta y el LED se quemarÃ­a.' },
+    { id: 'cp_2', title: 'âš¡ Calculando Resistencia', difficulty: 2, emoji: 'ðŸ§®', description: 'Con baterÃ­a de 9V y LED rojo (2V, 20mA), Â¿quÃ© resistencia necesitas?', question: 'R = (V_baterÃ­a - V_LED) / I_LED = (9 - 2) / 0.020 = ?', options: ['150Î©', '350Î©', '470Î©', '1000Î©'], correct: 1, explanation: 'R = (9-2)/0.020 = 350Î©. En la prÃ¡ctica usarÃ­as 330Î© (valor comercial mÃ¡s cercano hacia abajo) o 470Î© (mÃ¡s seguro).' },
+    { id: 'cp_3', title: 'ðŸ”— LEDs en Serie', difficulty: 2, emoji: 'ðŸ”—', description: 'Tienes 3 LEDs rojos (2V cada uno) y una baterÃ­a de 9V. Â¿Funciona en serie?', question: 'Â¿CuÃ¡nto voltaje queda para la resistencia si conectas 3 LEDs en serie?', options: ['9V', '3V (9V - 3Ã—2V)', '0V', '6V'], correct: 1, explanation: 'En serie: V_resistencia = 9V - (3 Ã— 2V) = 3V. Quedan 3V para la resistencia, suficiente para que funcione con R = 3/0.020 = 150Î©.' },
+    { id: 'cp_4', title: 'ðŸ”€ Serie o Paralelo', difficulty: 2, emoji: 'ðŸ”€', description: 'Un sistema de alarma necesita que funcione aunque falle un componente. Â¿CÃ³mo conectas los LEDs?', question: 'Â¿QuÃ© conexiÃ³n hace que cada LED funcione independientemente?', options: ['En serie', 'En paralelo', 'Da igual', 'Ninguna'], correct: 1, explanation: 'En paralelo cada LED tiene su propio camino de corriente. Si uno falla, los demÃ¡s siguen funcionando. En serie, si uno falla se corta todo el circuito.' },
+    { id: 'cp_5', title: 'ðŸ›¡ï¸ Fusibles de ProtecciÃ³n', difficulty: 3, emoji: 'ðŸ›¡ï¸', description: 'El sistema elÃ©ctrico de la nave tiene un fusible de 2A. Tienes 3 motores que consumen 0.5A cada uno y un calentador de 0.8A.', question: 'Â¿Puedes encender todo al mismo tiempo sin quemar el fusible?', options: ['SÃ­, alcanza perfectamente', 'No, se quema el fusible porque la corriente total es 2.3A', 'SÃ­, los fusibles no importan', 'No se puede calcular'], correct: 1, explanation: 'Corriente total = (3 Ã— 0.5A) + 0.8A = 2.3A > 2A del fusible. Â¡Se quemarÃ­a! Necesitas un fusible de 3A o encender los motores por turnos.' },
+    { id: 'cp_6', title: 'ðŸ”‹ BaterÃ­as en CombinaciÃ³n', difficulty: 3, emoji: 'ðŸ”‹', description: 'Tienes 4 baterÃ­as de 3V/1A. Necesitas energizar un sistema de 6V/2A.', question: 'Â¿CÃ³mo combinas las baterÃ­as para obtener 6V y 2A?', options: ['Todas en serie', 'Todas en paralelo', '2 pares en serie, luego esos pares en paralelo', 'No es posible'], correct: 2, explanation: '2 en serie = 6V/1A. Pones 2 de esos pares en paralelo = 6V/2A. Serie suma voltaje, paralelo suma corriente. Â¡CombinaciÃ³n perfecta!' },
 ];
 
 const DAILY_CIRCUIT_XP = 15;
@@ -459,7 +459,7 @@ const CircuitLabScreen = ({ onBack, onOpenFreeCircuitBuilder, userId, userStats,
                 <div className="px-4 pt-4 pb-2 max-w-xl mx-auto">
                     <div className="flex gap-1.5 bg-[#1E293B] rounded-2xl p-1.5 border border-[#334155]">
                         {[
-                            { key: 'daily', label: 'Misión Diaria', icon: <Calendar size={13} className="inline -mt-0.5 mr-1" /> },
+                            { key: 'daily', label: 'MisiÃ³n Diaria', icon: <Calendar size={13} className="inline -mt-0.5 mr-1" /> },
                             { key: 'learn', label: 'Aprende', icon: <BookOpen size={13} className="inline -mt-0.5 mr-1" /> },
                             { key: 'problems', label: 'Problemas', icon: <Puzzle size={13} className="inline -mt-0.5 mr-1" /> },
                         ].map(t => (
@@ -479,15 +479,15 @@ const CircuitLabScreen = ({ onBack, onOpenFreeCircuitBuilder, userId, userStats,
                     <div className="space-y-4">
                         {dailySolved ? (
                             <div className="bg-[#22C55E]/10 border-2 border-[#22C55E]/30 rounded-2xl p-6 text-center space-y-3">
-                                <div className="text-5xl">🎉</div>
-                                <h2 className="text-xl font-black text-[#22C55E]">¡Misión Completada!</h2>
+                                <div className="text-5xl">ðŸŽ‰</div>
+                                <h2 className="text-xl font-black text-[#22C55E]">Â¡MisiÃ³n Completada!</h2>
                                 <p className="text-sm text-[#94A3B8] font-bold">Has resuelto el problema de circuitos de hoy.</p>
                                 <div className="flex items-center justify-center gap-2 mt-1">
                                     <span className="px-3 py-1 bg-[#FFC800]/20 text-[#FFC800] text-xs font-black rounded-full border border-[#FFC800]/30">+{DAILY_CIRCUIT_XP} XP ganados</span>
                                 </div>
                                 <div className="bg-[#1E293B] rounded-xl p-4 border border-[#334155]">
-                                    <p className="text-xs text-[#64748B] font-bold">🕐 Vuelve mañana para una nueva misión de la nave.</p>
-                                    <p className="text-[10px] text-[#475569] font-semibold mt-1">Cada día hay un nuevo problema de circuitos de la nave CultivaTec-7</p>
+                                    <p className="text-xs text-[#64748B] font-bold">ðŸ• Vuelve maÃ±ana para una nueva misiÃ³n de la nave.</p>
+                                    <p className="text-[10px] text-[#475569] font-semibold mt-1">Cada dÃ­a hay un nuevo problema de circuitos de la nave CultivaTec-7</p>
                                 </div>
                                 {/* Still allow re-reading */}
                                 <button onClick={() => { setDailyAnswer(null); setShowDailyExplanation(false); setDailySolved(false); }}
@@ -496,15 +496,15 @@ const CircuitLabScreen = ({ onBack, onOpenFreeCircuitBuilder, userId, userStats,
                         ) : (
                             <>
                                 <div className="text-center mb-2">
-                                    <span className="text-[10px] font-black text-[#22D3EE] bg-[#22D3EE]/10 px-3 py-1 rounded-full border border-[#22D3EE]/20 flex items-center gap-1 mx-auto w-fit"><Calendar size={11} /> MISIÓN DIARIA DE CIRCUITOS</span>
+                                    <span className="text-[10px] font-black text-[#22D3EE] bg-[#22D3EE]/10 px-3 py-1 rounded-full border border-[#22D3EE]/20 flex items-center gap-1 mx-auto w-fit"><Calendar size={11} /> MISIÃ“N DIARIA DE CIRCUITOS</span>
                                 </div>
                                 <div className="bg-gradient-to-br from-[#1E293B] to-[#0F172A] rounded-2xl border-2 border-[#22D3EE]/20 p-5 space-y-4">
                                     <h2 className="text-lg font-black text-white">{dailyProblem.title}</h2>
                                     <div className="bg-[#0F172A]/60 rounded-xl p-4 border border-[#334155]">
-                                        <p className="text-sm text-[#E2E8F0] font-semibold leading-relaxed">📖 {dailyProblem.story}</p>
+                                        <p className="text-sm text-[#E2E8F0] font-semibold leading-relaxed">ðŸ“– {dailyProblem.story}</p>
                                     </div>
                                     <div className="bg-[#22D3EE]/10 rounded-xl p-4 border border-[#22D3EE]/20">
-                                        <p className="text-sm font-bold text-[#22D3EE]">❓ {dailyProblem.question}</p>
+                                        <p className="text-sm font-bold text-[#22D3EE]">â“ {dailyProblem.question}</p>
                                     </div>
                                     <div className="space-y-2">
                                         {dailyProblem.options.map((opt, oi) => (
@@ -518,14 +518,14 @@ const CircuitLabScreen = ({ onBack, onOpenFreeCircuitBuilder, userId, userStats,
                                                         : 'bg-[#1E293B] border-[#334155] text-[#E2E8F0] hover:border-[#22D3EE] active:scale-[0.98]'
                                                 }`}>
                                                 <span className="mr-2">{String.fromCharCode(65 + oi)})</span>{opt}
-                                                {showDailyExplanation && oi === dailyProblem.correct && ' ✅'}
-                                                {showDailyExplanation && oi === dailyAnswer && oi !== dailyProblem.correct && ' ❌'}
+                                                {showDailyExplanation && oi === dailyProblem.correct && ' âœ…'}
+                                                {showDailyExplanation && oi === dailyAnswer && oi !== dailyProblem.correct && ' âŒ'}
                                             </button>
                                         ))}
                                     </div>
                                     {showDailyExplanation && (
                                         <div className={`rounded-xl p-4 border-2 ${dailyAnswer === dailyProblem.correct ? 'bg-[#22C55E]/10 border-[#22C55E]/30' : 'bg-[#F59E0B]/10 border-[#F59E0B]/30'}`}>
-                                            <p className="text-sm font-bold text-white mb-1">{dailyAnswer === dailyProblem.correct ? '🎉 ¡Correcto!' : '💡 No exactamente...'}</p>
+                                            <p className="text-sm font-bold text-white mb-1">{dailyAnswer === dailyProblem.correct ? 'ðŸŽ‰ Â¡Correcto!' : 'ðŸ’¡ No exactamente...'}</p>
                                             <p className="text-xs text-[#94A3B8] font-semibold leading-relaxed">{dailyProblem.explanation}</p>
                                         </div>
                                     )}
@@ -539,8 +539,8 @@ const CircuitLabScreen = ({ onBack, onOpenFreeCircuitBuilder, userId, userStats,
                 {tab === 'learn' && (
                     <div className="space-y-3">
                         <div className="text-center mb-4">
-                            <h2 className="text-xl font-black text-white flex items-center justify-center gap-2"><BookOpen size={20} className="text-[#22D3EE]" /> ¿Cómo Funcionan los Circuitos?</h2>
-                            <p className="text-xs text-[#94A3B8] font-bold mt-1">Conceptos fundamentales de electrónica</p>
+                            <h2 className="text-xl font-black text-white flex items-center justify-center gap-2"><BookOpen size={20} className="text-[#22D3EE]" /> Â¿CÃ³mo Funcionan los Circuitos?</h2>
+                            <p className="text-xs text-[#94A3B8] font-bold mt-1">Conceptos fundamentales de electrÃ³nica</p>
                         </div>
                         {CIRCUIT_CONCEPTS.map(concept => (
                             <button key={concept.id} onClick={() => { setSelectedConcept(concept); setTab('concept_detail'); }}
@@ -561,7 +561,7 @@ const CircuitLabScreen = ({ onBack, onOpenFreeCircuitBuilder, userId, userStats,
                             <button onClick={onOpenFreeCircuitBuilder}
                                 className="w-full py-4 bg-gradient-to-r from-[#22D3EE] to-[#3B82F6] rounded-2xl text-white font-black text-sm flex items-center justify-center gap-3 active:scale-95 transition shadow-lg shadow-[#22D3EE]/20">
                                 <Zap size={20} />
-                                🔧 Abrir Modo Libre de Circuitos
+                                ðŸ”§ Abrir Modo Libre de Circuitos
                             </button>
                             <p className="text-[10px] text-[#64748B] font-bold text-center mt-2">Arma circuitos libremente con componentes reales</p>
                         </div>
@@ -584,7 +584,7 @@ const CircuitLabScreen = ({ onBack, onOpenFreeCircuitBuilder, userId, userStats,
                                 <p className="text-sm text-[#E2E8F0] font-semibold leading-relaxed">{selectedConcept.description}</p>
                             </div>
                             <div className="bg-[#22D3EE]/10 rounded-xl p-4 border border-[#22D3EE]/20">
-                                <p className="text-xs font-black text-[#22D3EE] mb-1">💡 Ejemplo:</p>
+                                <p className="text-xs font-black text-[#22D3EE] mb-1">ðŸ’¡ Ejemplo:</p>
                                 <p className="text-sm text-[#E2E8F0] font-semibold whitespace-pre-line leading-relaxed">{selectedConcept.example}</p>
                             </div>
                         </div>
@@ -607,7 +607,7 @@ const CircuitLabScreen = ({ onBack, onOpenFreeCircuitBuilder, userId, userStats,
                                 <div className="flex-grow min-w-0">
                                     <h3 className="text-sm font-black text-white">{prob.title}</h3>
                                     <p className="text-[11px] text-[#94A3B8] font-semibold mt-0.5">{prob.description}</p>
-                                    <span className="text-[10px] font-bold text-[#64748B]">{'⭐'.repeat(prob.difficulty)}</span>
+                                    <span className="text-[10px] font-bold text-[#64748B]">{'â­'.repeat(prob.difficulty)}</span>
                                 </div>
                                 <div className="px-3 py-2 rounded-xl bg-[#F59E0B] text-[10px] font-black text-[#0F172A] flex-shrink-0">RESOLVER</div>
                             </button>
@@ -632,7 +632,7 @@ const CircuitLabScreen = ({ onBack, onOpenFreeCircuitBuilder, userId, userStats,
                                 </div>
                             </div>
                             <div className="bg-[#F59E0B]/10 rounded-xl p-4 border border-[#F59E0B]/20">
-                                <p className="text-sm font-bold text-[#F59E0B]">❓ {selectedProblem.question}</p>
+                                <p className="text-sm font-bold text-[#F59E0B]">â“ {selectedProblem.question}</p>
                             </div>
                             <div className="space-y-2">
                                 {selectedProblem.options.map((opt, oi) => (
@@ -646,14 +646,14 @@ const CircuitLabScreen = ({ onBack, onOpenFreeCircuitBuilder, userId, userStats,
                                                 : 'bg-[#1E293B] border-[#334155] text-[#E2E8F0] hover:border-[#F59E0B] active:scale-[0.98]'
                                         }`}>
                                         <span className="mr-2">{String.fromCharCode(65 + oi)})</span>{opt}
-                                        {showExplanation && oi === selectedProblem.correct && ' ✅'}
-                                        {showExplanation && oi === selectedAnswer && oi !== selectedProblem.correct && ' ❌'}
+                                        {showExplanation && oi === selectedProblem.correct && ' âœ…'}
+                                        {showExplanation && oi === selectedAnswer && oi !== selectedProblem.correct && ' âŒ'}
                                     </button>
                                 ))}
                             </div>
                             {showExplanation && (
                                 <div className={`rounded-xl p-4 border-2 ${selectedAnswer === selectedProblem.correct ? 'bg-[#22C55E]/10 border-[#22C55E]/30' : 'bg-[#F59E0B]/10 border-[#F59E0B]/30'}`}>
-                                    <p className="text-sm font-bold text-white mb-1">{selectedAnswer === selectedProblem.correct ? '🎉 ¡Correcto!' : '💡 No exactamente...'}</p>
+                                    <p className="text-sm font-bold text-white mb-1">{selectedAnswer === selectedProblem.correct ? 'ðŸŽ‰ Â¡Correcto!' : 'ðŸ’¡ No exactamente...'}</p>
                                     <p className="text-xs text-[#94A3B8] font-semibold leading-relaxed">{selectedProblem.explanation}</p>
                                 </div>
                             )}
@@ -666,65 +666,65 @@ const CircuitLabScreen = ({ onBack, onOpenFreeCircuitBuilder, userId, userStats,
 };
 const PROGRAMMING_TUTORIALS = [
     {
-        id: 'tut_1', title: '🐍 Hola Mundo en Python', difficulty: 1, emoji: '👋',
+        id: 'tut_1', title: 'ðŸ Hola Mundo en Python', difficulty: 1, emoji: 'ðŸ‘‹',
         description: 'Tu primer programa: mostrar texto en pantalla',
         steps: [
-            { instruction: 'Escribe este código para mostrar un saludo:', code: 'print("¡Hola Mundo!")' },
-            { instruction: 'Ahora personalízalo con tu nombre:', code: 'nombre = "TuNombre"\nprint("¡Hola,", nombre, "!")' },
-            { instruction: '¡Experimenta! Cambia el mensaje y corre el código', code: 'print("Soy un futuro ingeniero de robots 🤖")' },
+            { instruction: 'Escribe este cÃ³digo para mostrar un saludo:', code: 'print("Â¡Hola Mundo!")' },
+            { instruction: 'Ahora personalÃ­zalo con tu nombre:', code: 'nombre = "TuNombre"\nprint("Â¡Hola,", nombre, "!")' },
+            { instruction: 'Â¡Experimenta! Cambia el mensaje y corre el cÃ³digo', code: 'print("Soy un futuro ingeniero de robots ðŸ¤–")' },
         ],
     },
     {
-        id: 'tut_2', title: '📦 Variables y Tipos', difficulty: 1, emoji: '📦',
+        id: 'tut_2', title: 'ðŸ“¦ Variables y Tipos', difficulty: 1, emoji: 'ðŸ“¦',
         description: 'Aprende a guardar datos en cajas llamadas variables',
         steps: [
-            { instruction: 'Crea una variable de texto y una de número:', code: 'robot_nombre = "BotMax"\nrobot_edad = 3\nprint(robot_nombre, "tiene", robot_edad, "años")' },
-            { instruction: 'Las variables numéricas se pueden sumar:', code: 'velocidad = 10\nboost = 5\ntotal = velocidad + boost\nprint("Velocidad total:", total)' },
-            { instruction: 'También puedes hacer listas:', code: 'sensores = ["ultrasonico", "infrarrojo", "luz"]\nprint("Mi robot tiene:", sensores)' },
+            { instruction: 'Crea una variable de texto y una de nÃºmero:', code: 'robot_nombre = "BotMax"\nrobot_edad = 3\nprint(robot_nombre, "tiene", robot_edad, "aÃ±os")' },
+            { instruction: 'Las variables numÃ©ricas se pueden sumar:', code: 'velocidad = 10\nboost = 5\ntotal = velocidad + boost\nprint("Velocidad total:", total)' },
+            { instruction: 'TambiÃ©n puedes hacer listas:', code: 'sensores = ["ultrasonico", "infrarrojo", "luz"]\nprint("Mi robot tiene:", sensores)' },
         ],
     },
     {
-        id: 'tut_3', title: '🔀 Decisiones con IF', difficulty: 2, emoji: '🔀',
+        id: 'tut_3', title: 'ðŸ”€ Decisiones con IF', difficulty: 2, emoji: 'ðŸ”€',
         description: 'Haz que tu programa tome decisiones inteligentes',
         steps: [
-            { instruction: 'Usa IF para decidir:', code: 'distancia = 15\n\nif distancia < 20:\n    print("⚠️ ¡Obstáculo detectado!")\n    print("Robot retrocediendo...")\nelse:\n    print("✅ Camino libre")\n    print("Robot avanzando...")' },
-            { instruction: 'Agrega más condiciones con ELIF:', code: 'temperatura = 35\n\nif temperatura > 40:\n    print("🔥 ¡Demasiado caliente!")\nelif temperatura > 25:\n    print("☀️ Hace calor")\nelse:\n    print("❄️ Hace frío")' },
+            { instruction: 'Usa IF para decidir:', code: 'distancia = 15\n\nif distancia < 20:\n    print("âš ï¸ Â¡ObstÃ¡culo detectado!")\n    print("Robot retrocediendo...")\nelse:\n    print("âœ… Camino libre")\n    print("Robot avanzando...")' },
+            { instruction: 'Agrega mÃ¡s condiciones con ELIF:', code: 'temperatura = 35\n\nif temperatura > 40:\n    print("ðŸ”¥ Â¡Demasiado caliente!")\nelif temperatura > 25:\n    print("â˜€ï¸ Hace calor")\nelse:\n    print("â„ï¸ Hace frÃ­o")' },
         ],
     },
     {
-        id: 'tut_4', title: '🔁 Bucles y Repeticiones', difficulty: 2, emoji: '🔁',
-        description: 'Repite acciones sin escribir código de más',
+        id: 'tut_4', title: 'ðŸ” Bucles y Repeticiones', difficulty: 2, emoji: 'ðŸ”',
+        description: 'Repite acciones sin escribir cÃ³digo de mÃ¡s',
         steps: [
-            { instruction: 'Un bucle FOR cuenta automáticamente:', code: 'for i in range(5):\n    print("Parpadeo número", i + 1, "💡")' },
-            { instruction: 'Puedes recorrer listas:', code: 'componentes = ["LED", "Motor", "Sensor", "Arduino"]\n\nfor comp in componentes:\n    print("✅ Revisando:", comp)' },
-            { instruction: 'Los bucles WHILE repiten hasta cumplir una condición:', code: 'energia = 100\n\nwhile energia > 0:\n    energia = energia - 25\n    print("⚡ Energía restante:", energia)\n\nprint("🔋 ¡Robot sin batería!")' },
+            { instruction: 'Un bucle FOR cuenta automÃ¡ticamente:', code: 'for i in range(5):\n    print("Parpadeo nÃºmero", i + 1, "ðŸ’¡")' },
+            { instruction: 'Puedes recorrer listas:', code: 'componentes = ["LED", "Motor", "Sensor", "Arduino"]\n\nfor comp in componentes:\n    print("âœ… Revisando:", comp)' },
+            { instruction: 'Los bucles WHILE repiten hasta cumplir una condiciÃ³n:', code: 'energia = 100\n\nwhile energia > 0:\n    energia = energia - 25\n    print("âš¡ EnergÃ­a restante:", energia)\n\nprint("ðŸ”‹ Â¡Robot sin baterÃ­a!")' },
         ],
     },
     {
-        id: 'tut_5', title: '⚙️ Funciones', difficulty: 3, emoji: '⚙️',
-        description: 'Crea bloques de código reutilizables',
+        id: 'tut_5', title: 'âš™ï¸ Funciones', difficulty: 3, emoji: 'âš™ï¸',
+        description: 'Crea bloques de cÃ³digo reutilizables',
         steps: [
-            { instruction: 'Define tu primera función:', code: 'def saludar(nombre):\n    print("🤖 ¡Hola,", nombre, "!")\n    print("Bienvenido al laboratorio")\n\nsaludar("Diego")\nsaludar("Ana")' },
+            { instruction: 'Define tu primera funciÃ³n:', code: 'def saludar(nombre):\n    print("ðŸ¤– Â¡Hola,", nombre, "!")\n    print("Bienvenido al laboratorio")\n\nsaludar("Diego")\nsaludar("Ana")' },
             { instruction: 'Funciones que devuelven valores:', code: 'def calcular_velocidad(distancia, tiempo):\n    return distancia / tiempo\n\nv = calcular_velocidad(100, 5)\nprint("Velocidad:", v, "cm/s")' },
         ],
     },
     {
-        id: 'tut_6', title: '🤖 Simulación Arduino', difficulty: 3, emoji: '🤖',
-        description: 'Simula código de Arduino con JavaScript',
+        id: 'tut_6', title: 'ðŸ¤– SimulaciÃ³n Arduino', difficulty: 3, emoji: 'ðŸ¤–',
+        description: 'Simula cÃ³digo de Arduino con JavaScript',
         steps: [
-            { instruction: 'Simulación de blink con Arduino:', code: '# Simulación Arduino Blink\npin_led = 13\nestado = "LOW"\n\nfor ciclo in range(6):\n    if estado == "LOW":\n        estado = "HIGH"\n        print("💡 LED en pin", pin_led, "-> ENCENDIDO")\n    else:\n        estado = "LOW"\n        print("⚫ LED en pin", pin_led, "-> APAGADO")' },
-            { instruction: 'Simulación de sensor de distancia:', code: '# Simulación sensor ultrasónico\nimport random\n\nfor lectura in range(5):\n    distancia = random.randint(5, 100)\n    print("📏 Distancia:", distancia, "cm")\n    if distancia < 20:\n        print("  ⚠️ ¡Objeto cerca! Girar.")\n    else:\n        print("  ✅ Camino libre. Avanzar.")' },
+            { instruction: 'SimulaciÃ³n de blink con Arduino:', code: '# SimulaciÃ³n Arduino Blink\npin_led = 13\nestado = "LOW"\n\nfor ciclo in range(6):\n    if estado == "LOW":\n        estado = "HIGH"\n        print("ðŸ’¡ LED en pin", pin_led, "-> ENCENDIDO")\n    else:\n        estado = "LOW"\n        print("âš« LED en pin", pin_led, "-> APAGADO")' },
+            { instruction: 'SimulaciÃ³n de sensor de distancia:', code: '# SimulaciÃ³n sensor ultrasÃ³nico\nimport random\n\nfor lectura in range(5):\n    distancia = random.randint(5, 100)\n    print("ðŸ“ Distancia:", distancia, "cm")\n    if distancia < 20:\n        print("  âš ï¸ Â¡Objeto cerca! Girar.")\n    else:\n        print("  âœ… Camino libre. Avanzar.")' },
         ],
     },
 ];
 
 const PRACTICE_CHALLENGES = [
-    { id: 'pc_1', title: 'Calculadora Simple', emoji: '🧮', difficulty: 1, description: 'Haz un programa que sume, reste, multiplique y divida', starterCode: 'a = 10\nb = 3\n\nprint("Suma:", a + b)\nprint("Resta:", a - b)\n# Completa multiplicación y división\n' },
-    { id: 'pc_2', title: 'Tabla de Multiplicar', emoji: '✖️', difficulty: 1, description: 'Genera la tabla de multiplicar de un número', starterCode: 'numero = 7\n\nfor i in range(1, 11):\n    resultado = numero * i\n    print(numero, "x", i, "=", resultado)' },
-    { id: 'pc_3', title: 'Detector de Pares', emoji: '🔢', difficulty: 2, description: 'Encuentra los números pares del 1 al 20', starterCode: 'for n in range(1, 21):\n    if n % 2 == 0:\n        print(n, "es PAR ✅")\n    else:\n        print(n, "es IMPAR")' },
-    { id: 'pc_4', title: 'Fibonacci Robot', emoji: '🐚', difficulty: 3, description: 'Genera la secuencia Fibonacci hasta 100', starterCode: 'a = 0\nb = 1\n\nprint("Secuencia Fibonacci:")\nwhile a <= 100:\n    print(a)\n    temp = a + b\n    a = b\n    b = temp' },
-    { id: 'pc_5', title: 'Piedra, Papel, Tijera', emoji: '✂️', difficulty: 2, description: 'Simula un juego de piedra, papel o tijera', starterCode: 'import random\n\nopciones = ["piedra", "papel", "tijera"]\n\njugador = "piedra"\nrobot = random.choice(opciones)\n\nprint("Tú:", jugador)\nprint("Robot:", robot)\n\nif jugador == robot:\n    print("🤝 ¡Empate!")\nelif (jugador == "piedra" and robot == "tijera") or (jugador == "papel" and robot == "piedra") or (jugador == "tijera" and robot == "papel"):\n    print("🎉 ¡Ganaste!")\nelse:\n    print("🤖 ¡Ganó el robot!")' },
-    { id: 'pc_6', title: 'Inventario de Robot', emoji: '📋', difficulty: 3, description: 'Gestiona el inventario de partes de un robot', starterCode: 'inventario = {\n    "motores": 4,\n    "sensores": 3,\n    "LEDs": 10,\n    "cables": 20\n}\n\nprint("=== Inventario del Robot ===")\nfor parte, cantidad in inventario.items():\n    print(f"  {parte}: {cantidad} unidades")\n\ntotal = sum(inventario.values())\nprint(f"\\nTotal de partes: {total}")' },
+    { id: 'pc_1', title: 'Calculadora Simple', emoji: 'ðŸ§®', difficulty: 1, description: 'Haz un programa que sume, reste, multiplique y divida', starterCode: 'a = 10\nb = 3\n\nprint("Suma:", a + b)\nprint("Resta:", a - b)\n# Completa multiplicaciÃ³n y divisiÃ³n\n' },
+    { id: 'pc_2', title: 'Tabla de Multiplicar', emoji: 'âœ–ï¸', difficulty: 1, description: 'Genera la tabla de multiplicar de un nÃºmero', starterCode: 'numero = 7\n\nfor i in range(1, 11):\n    resultado = numero * i\n    print(numero, "x", i, "=", resultado)' },
+    { id: 'pc_3', title: 'Detector de Pares', emoji: 'ðŸ”¢', difficulty: 2, description: 'Encuentra los nÃºmeros pares del 1 al 20', starterCode: 'for n in range(1, 21):\n    if n % 2 == 0:\n        print(n, "es PAR âœ…")\n    else:\n        print(n, "es IMPAR")' },
+    { id: 'pc_4', title: 'Fibonacci Robot', emoji: 'ðŸš', difficulty: 3, description: 'Genera la secuencia Fibonacci hasta 100', starterCode: 'a = 0\nb = 1\n\nprint("Secuencia Fibonacci:")\nwhile a <= 100:\n    print(a)\n    temp = a + b\n    a = b\n    b = temp' },
+    { id: 'pc_5', title: 'Piedra, Papel, Tijera', emoji: 'âœ‚ï¸', difficulty: 2, description: 'Simula un juego de piedra, papel o tijera', starterCode: 'import random\n\nopciones = ["piedra", "papel", "tijera"]\n\njugador = "piedra"\nrobot = random.choice(opciones)\n\nprint("TÃº:", jugador)\nprint("Robot:", robot)\n\nif jugador == robot:\n    print("ðŸ¤ Â¡Empate!")\nelif (jugador == "piedra" and robot == "tijera") or (jugador == "papel" and robot == "piedra") or (jugador == "tijera" and robot == "papel"):\n    print("ðŸŽ‰ Â¡Ganaste!")\nelse:\n    print("ðŸ¤– Â¡GanÃ³ el robot!")' },
+    { id: 'pc_6', title: 'Inventario de Robot', emoji: 'ðŸ“‹', difficulty: 3, description: 'Gestiona el inventario de partes de un robot', starterCode: 'inventario = {\n    "motores": 4,\n    "sensores": 3,\n    "LEDs": 10,\n    "cables": 20\n}\n\nprint("=== Inventario del Robot ===")\nfor parte, cantidad in inventario.items():\n    print(f"  {parte}: {cantidad} unidades")\n\ntotal = sum(inventario.values())\nprint(f"\\nTotal de partes: {total}")' },
 ];
 
 const ProgrammingStationScreen = ({ onBack, startChallenge, userScores, userId, userStats, setUserStats, onAwardXp }) => {
@@ -853,7 +853,7 @@ const ProgrammingStationScreen = ({ onBack, startChallenge, userScores, userId, 
                     </button>
                     <div className="flex items-center gap-2 bg-[#22D3EE]/15 px-4 py-1.5 rounded-full border border-[#22D3EE]/30">
                         <Rocket size={16} className="text-[#22D3EE]" />
-                        <span className="text-sm font-black text-[#22D3EE]">Estación de Programación</span>
+                        <span className="text-sm font-black text-[#22D3EE]">EstaciÃ³n de ProgramaciÃ³n</span>
                     </div>
                 </div>
             </div>
@@ -863,12 +863,12 @@ const ProgrammingStationScreen = ({ onBack, startChallenge, userScores, userId, 
                 <div className="px-4 pt-4 pb-2 max-w-xl mx-auto">
                     <div className="flex gap-1.5 bg-[#1E293B] rounded-2xl p-1.5 border border-[#334155]">
                         {[
-                            { key: 'daily', label: 'Misión', icon: <Calendar size={13} className="inline -mt-0.5 mr-1" /> },
+                            { key: 'daily', label: 'MisiÃ³n', icon: <Calendar size={13} className="inline -mt-0.5 mr-1" /> },
                             { key: 'tutorials', label: 'Tutoriales', icon: <GraduationCap size={13} className="inline -mt-0.5 mr-1" /> },
-                            { key: 'practice', label: 'Práctica', icon: <Dumbbell size={13} className="inline -mt-0.5 mr-1" /> },
+                            { key: 'practice', label: 'PrÃ¡ctica', icon: <Dumbbell size={13} className="inline -mt-0.5 mr-1" /> },
                             { key: 'free', label: 'Libre', icon: <Monitor size={13} className="inline -mt-0.5 mr-1" /> },
                         ].map(t => (
-                            <button key={t.key} onClick={() => { setTab(t.key); if (t.key === 'free') { setCode('# Escribe tu código Python aquí\nprint("¡Hola desde la Estación!")'); setOutput(''); } }}
+                            <button key={t.key} onClick={() => { setTab(t.key); if (t.key === 'free') { setCode('# Escribe tu cÃ³digo Python aquÃ­\nprint("Â¡Hola desde la EstaciÃ³n!")'); setOutput(''); } }}
                                 className={`flex-1 py-2.5 rounded-xl text-[11px] font-black transition-all ${tab === t.key ? 'bg-[#22D3EE] text-[#0F172A] shadow-lg shadow-[#22D3EE]/30' : 'text-[#94A3B8] hover:text-white'}`}>
                                 {t.icon}{t.label}
                             </button>
@@ -884,15 +884,15 @@ const ProgrammingStationScreen = ({ onBack, startChallenge, userScores, userId, 
                     <div className="space-y-4">
                         {dailyProgSolved ? (
                             <div className="bg-[#22C55E]/10 border-2 border-[#22C55E]/30 rounded-2xl p-6 text-center space-y-3">
-                                <div className="text-5xl">🎉</div>
-                                <h2 className="text-xl font-black text-[#22C55E]">¡Misión Completada!</h2>
-                                <p className="text-sm text-[#94A3B8] font-bold">Has resuelto el problema de programación de hoy.</p>
+                                <div className="text-5xl">ðŸŽ‰</div>
+                                <h2 className="text-xl font-black text-[#22C55E]">Â¡MisiÃ³n Completada!</h2>
+                                <p className="text-sm text-[#94A3B8] font-bold">Has resuelto el problema de programaciÃ³n de hoy.</p>
                                 <div className="flex items-center justify-center gap-2 mt-1">
                                     <span className="px-3 py-1 bg-[#FFC800]/20 text-[#FFC800] text-xs font-black rounded-full border border-[#FFC800]/30">+{DAILY_PROG_XP} XP ganados</span>
                                 </div>
                                 <div className="bg-[#1E293B] rounded-xl p-4 border border-[#334155]">
-                                    <p className="text-xs text-[#64748B] font-bold">🕐 Vuelve mañana para consultar si hay más problemas de la nave.</p>
-                                    <p className="text-[10px] text-[#475569] font-semibold mt-1">Cada día hay un nuevo desafío de programación de la nave CultivaTec-7</p>
+                                    <p className="text-xs text-[#64748B] font-bold">ðŸ• Vuelve maÃ±ana para consultar si hay mÃ¡s problemas de la nave.</p>
+                                    <p className="text-[10px] text-[#475569] font-semibold mt-1">Cada dÃ­a hay un nuevo desafÃ­o de programaciÃ³n de la nave CultivaTec-7</p>
                                 </div>
                                 <button onClick={() => { setDailyProgSolved(false); openDailyProblem(); }}
                                     className="text-[10px] font-bold text-[#22D3EE] underline mt-2">Volver a practicar el problema</button>
@@ -900,15 +900,15 @@ const ProgrammingStationScreen = ({ onBack, startChallenge, userScores, userId, 
                         ) : (
                             <div className="space-y-4">
                                 <div className="text-center mb-2">
-                                    <span className="text-[10px] font-black text-[#A78BFA] bg-[#A78BFA]/10 px-3 py-1 rounded-full border border-[#A78BFA]/20 flex items-center gap-1 mx-auto w-fit"><Calendar size={11} /> MISIÓN DIARIA DE PROGRAMACIÓN</span>
+                                    <span className="text-[10px] font-black text-[#A78BFA] bg-[#A78BFA]/10 px-3 py-1 rounded-full border border-[#A78BFA]/20 flex items-center gap-1 mx-auto w-fit"><Calendar size={11} /> MISIÃ“N DIARIA DE PROGRAMACIÃ“N</span>
                                 </div>
                                 <div className="bg-gradient-to-br from-[#1E293B] to-[#0F172A] rounded-2xl border-2 border-[#A78BFA]/20 p-5 space-y-4">
                                     <h2 className="text-lg font-black text-white">{dailyProgProblem.title}</h2>
                                     <div className="bg-[#0F172A]/60 rounded-xl p-4 border border-[#334155]">
-                                        <p className="text-sm text-[#E2E8F0] font-semibold leading-relaxed">📖 {dailyProgProblem.story}</p>
+                                        <p className="text-sm text-[#E2E8F0] font-semibold leading-relaxed">ðŸ“– {dailyProgProblem.story}</p>
                                     </div>
                                     <div className="bg-[#A78BFA]/10 rounded-xl p-4 border border-[#A78BFA]/20">
-                                        <p className="text-sm font-bold text-[#A78BFA]">🎯 {dailyProgProblem.task}</p>
+                                        <p className="text-sm font-bold text-[#A78BFA]">ðŸŽ¯ {dailyProgProblem.task}</p>
                                     </div>
                                     <button onClick={openDailyProblem}
                                         className="w-full py-3.5 bg-[#A78BFA] text-white rounded-xl text-sm font-black flex items-center justify-center gap-2 active:scale-95 transition shadow-lg shadow-[#A78BFA]/20">
@@ -929,11 +929,11 @@ const ProgrammingStationScreen = ({ onBack, startChallenge, userScores, userId, 
                             </button>
                             <div>
                                 <h2 className="text-base font-black text-white">{dailyProgProblem.title}</h2>
-                                <p className="text-[11px] text-[#A78BFA] font-bold">Misión diaria de programación</p>
+                                <p className="text-[11px] text-[#A78BFA] font-bold">MisiÃ³n diaria de programaciÃ³n</p>
                             </div>
                         </div>
                         <div className="bg-[#A78BFA]/10 rounded-xl p-3 border border-[#A78BFA]/20">
-                            <p className="text-xs font-bold text-[#A78BFA]">🎯 {dailyProgProblem.task}</p>
+                            <p className="text-xs font-bold text-[#A78BFA]">ðŸŽ¯ {dailyProgProblem.task}</p>
                         </div>
                         {/* Code editor */}
                         <div className="bg-[#1E293B] rounded-2xl overflow-hidden border-2 border-[#334155]">
@@ -956,18 +956,18 @@ const ProgrammingStationScreen = ({ onBack, startChallenge, userScores, userId, 
                                 <span className="text-[10px] font-black text-[#64748B]">Consola</span>
                             </div>
                             <pre className="font-mono text-sm p-4 min-h-[60px] whitespace-pre-wrap text-[#A78BFA]">
-                                {output || <span className="text-[#475569] italic">Corre el código para resolver la misión...</span>}
+                                {output || <span className="text-[#475569] italic">Corre el cÃ³digo para resolver la misiÃ³n...</span>}
                             </pre>
                         </div>
                         <button onClick={runDailyCode}
                             disabled={isLoading}
                             className="w-full py-3.5 bg-[#A78BFA] text-white rounded-xl text-sm font-black flex items-center justify-center gap-2 active:scale-95 transition disabled:opacity-50 shadow-lg shadow-[#A78BFA]/20">
-                            <Play size={16} /> {isLoading ? 'Ejecutando...' : '▶ Correr y Resolver Misión'}
+                            <Play size={16} /> {isLoading ? 'Ejecutando...' : 'â–¶ Correr y Resolver MisiÃ³n'}
                         </button>
                         {dailyProgRan && output && !output.startsWith('Error') && (
                             <div className="bg-[#22C55E]/10 border-2 border-[#22C55E]/30 rounded-2xl p-4 text-center space-y-2">
-                                <p className="text-sm font-black text-[#22C55E]">🎉 ¡Misión completada!</p>
-                                <p className="text-xs text-[#94A3B8] font-bold">Todos los problemas resueltos por hoy. ¡Vuelve mañana para consultar si hay más problemas!</p>
+                                <p className="text-sm font-black text-[#22C55E]">ðŸŽ‰ Â¡MisiÃ³n completada!</p>
+                                <p className="text-xs text-[#94A3B8] font-bold">Todos los problemas resueltos por hoy. Â¡Vuelve maÃ±ana para consultar si hay mÃ¡s problemas!</p>
                             </div>
                         )}
                     </div>
@@ -991,7 +991,7 @@ const ProgrammingStationScreen = ({ onBack, startChallenge, userScores, userId, 
                                     <p className="text-[11px] text-[#94A3B8] font-semibold mt-0.5">{tut.description}</p>
                                     <div className="flex items-center gap-2 mt-1">
                                         <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-[#22D3EE]/10 text-[#22D3EE]">{tut.steps.length} pasos</span>
-                                        <span className="text-[10px] font-bold text-[#64748B]">{'⭐'.repeat(tut.difficulty)}</span>
+                                        <span className="text-[10px] font-bold text-[#64748B]">{'â­'.repeat(tut.difficulty)}</span>
                                     </div>
                                 </div>
                                 <div className="px-3 py-2 rounded-xl bg-[#22D3EE] text-[10px] font-black text-[#0F172A] flex-shrink-0">ABRIR</div>
@@ -1023,7 +1023,7 @@ const ProgrammingStationScreen = ({ onBack, startChallenge, userScores, userId, 
 
                         {/* Instruction */}
                         <div className="bg-[#22D3EE]/10 border border-[#22D3EE]/20 rounded-2xl p-4">
-                            <p className="text-sm font-bold text-[#22D3EE]">📝 {selectedTutorial.steps[currentStep].instruction}</p>
+                            <p className="text-sm font-bold text-[#22D3EE]">ðŸ“ {selectedTutorial.steps[currentStep].instruction}</p>
                         </div>
 
                         {/* Code editor */}
@@ -1048,7 +1048,7 @@ const ProgrammingStationScreen = ({ onBack, startChallenge, userScores, userId, 
                                 <span className="text-[10px] font-black text-[#64748B]">Consola</span>
                             </div>
                             <pre className="font-mono text-sm p-4 min-h-[60px] whitespace-pre-wrap text-[#22D3EE]">
-                                {output || <span className="text-[#475569] italic">Corre el código para ver la salida...</span>}
+                                {output || <span className="text-[#475569] italic">Corre el cÃ³digo para ver la salida...</span>}
                             </pre>
                         </div>
 
@@ -1057,18 +1057,18 @@ const ProgrammingStationScreen = ({ onBack, startChallenge, userScores, userId, 
                             <button onClick={() => executeCode(code)}
                                 disabled={isLoading}
                                 className="flex-1 py-3 bg-[#22D3EE] text-[#0F172A] rounded-xl text-sm font-black flex items-center justify-center gap-2 active:scale-95 transition disabled:opacity-50">
-                                <Play size={16} /> {isLoading ? 'Ejecutando...' : '▶ Correr'}
+                                <Play size={16} /> {isLoading ? 'Ejecutando...' : 'â–¶ Correr'}
                             </button>
                             {currentStep < selectedTutorial.steps.length - 1 && (
                                 <button onClick={() => goToStep(currentStep + 1)}
                                     className="flex-1 py-3 bg-[#334155] text-white rounded-xl text-sm font-black flex items-center justify-center gap-2 active:scale-95 transition hover:bg-[#475569]">
-                                    Siguiente →
+                                    Siguiente â†’
                                 </button>
                             )}
                             {currentStep === selectedTutorial.steps.length - 1 && (
                                 <button onClick={() => setTab('tutorials')}
                                     className="flex-1 py-3 bg-[#22C55E] text-white rounded-xl text-sm font-black flex items-center justify-center gap-2 active:scale-95 transition">
-                                    ✅ ¡Completado!
+                                    âœ… Â¡Completado!
                                 </button>
                             )}
                         </div>
@@ -1079,7 +1079,7 @@ const ProgrammingStationScreen = ({ onBack, startChallenge, userScores, userId, 
                 {tab === 'practice' && (
                     <div className="space-y-3">
                         <div className="text-center mb-4">
-                            <h2 className="text-xl font-black text-white flex items-center justify-center gap-2"><Dumbbell size={20} className="text-[#A78BFA]" /> Retos de Práctica</h2>
+                            <h2 className="text-xl font-black text-white flex items-center justify-center gap-2"><Dumbbell size={20} className="text-[#A78BFA]" /> Retos de PrÃ¡ctica</h2>
                             <p className="text-xs text-[#94A3B8] font-bold mt-1">Ejercicios independientes para practicar</p>
                         </div>
                         {PRACTICE_CHALLENGES.map(ch => (
@@ -1091,7 +1091,7 @@ const ProgrammingStationScreen = ({ onBack, startChallenge, userScores, userId, 
                                 <div className="flex-grow min-w-0">
                                     <h3 className="text-sm font-black text-white truncate">{ch.title}</h3>
                                     <p className="text-[11px] text-[#94A3B8] font-semibold mt-0.5">{ch.description}</p>
-                                    <span className="text-[10px] font-bold text-[#64748B]">{'⭐'.repeat(ch.difficulty)}</span>
+                                    <span className="text-[10px] font-bold text-[#64748B]">{'â­'.repeat(ch.difficulty)}</span>
                                 </div>
                                 <div className="px-3 py-2 rounded-xl bg-[#A78BFA] text-[10px] font-black text-white flex-shrink-0">PRACTICAR</div>
                             </button>
@@ -1099,7 +1099,7 @@ const ProgrammingStationScreen = ({ onBack, startChallenge, userScores, userId, 
 
                         {/* Link to module challenges */}
                         <div className="mt-6 border-t border-[#334155] pt-4">
-                            <p className="text-xs text-[#64748B] font-bold text-center mb-3">🧩 Retos de Bloques de Código (de los mundos)</p>
+                            <p className="text-xs text-[#64748B] font-bold text-center mb-3">ðŸ§© Retos de Bloques de CÃ³digo (de los mundos)</p>
                             <div className="grid grid-cols-2 gap-2">
                                 {CODE_CHALLENGES.slice(0, 6).map(ch => (
                                     <button key={ch.id} onClick={() => startChallenge(ch.id)}
@@ -1110,7 +1110,7 @@ const ProgrammingStationScreen = ({ onBack, startChallenge, userScores, userId, 
                                         </div>
                                         <div className="flex items-center gap-1">
                                             <span className="text-[9px] font-bold text-[#64748B]">{ch.name}</span>
-                                            {completedChallengeIds.includes('challenge_' + ch.id) && <span className="text-[9px]">✅</span>}
+                                            {completedChallengeIds.includes('challenge_' + ch.id) && <span className="text-[9px]">âœ…</span>}
                                         </div>
                                     </button>
                                 ))}
@@ -1123,7 +1123,7 @@ const ProgrammingStationScreen = ({ onBack, startChallenge, userScores, userId, 
                 {tab === 'free' && (
                     <div className="space-y-4">
                         <div className="text-center mb-2">
-                            <h2 className="text-xl font-black text-white flex items-center justify-center gap-2"><Monitor size={20} className="text-[#22D3EE]" /> Código Libre</h2>
+                            <h2 className="text-xl font-black text-white flex items-center justify-center gap-2"><Monitor size={20} className="text-[#22D3EE]" /> CÃ³digo Libre</h2>
                             <p className="text-xs text-[#94A3B8] font-bold mt-1">
                                 {selectedTutorial?.title ? `Practicando: ${selectedTutorial.title}` : 'Escribe lo que quieras en Python'}
                             </p>
@@ -1151,22 +1151,22 @@ const ProgrammingStationScreen = ({ onBack, startChallenge, userScores, userId, 
                                 <span className="text-[10px] font-black text-[#64748B]">Consola</span>
                             </div>
                             <pre className="font-mono text-sm p-4 min-h-[80px] whitespace-pre-wrap text-[#22D3EE]">
-                                {output || <span className="text-[#475569] italic">Corre el código para ver la salida...</span>}
+                                {output || <span className="text-[#475569] italic">Corre el cÃ³digo para ver la salida...</span>}
                             </pre>
                         </div>
 
                         <button onClick={() => executeCode(code)}
                             disabled={isLoading}
                             className="w-full py-3.5 bg-[#22D3EE] text-[#0F172A] rounded-xl text-sm font-black flex items-center justify-center gap-2 active:scale-95 transition disabled:opacity-50">
-                            <Play size={16} /> {isLoading ? 'Ejecutando...' : '▶ Correr Código'}
+                            <Play size={16} /> {isLoading ? 'Ejecutando...' : 'â–¶ Correr CÃ³digo'}
                         </button>
 
                         {/* Quick templates */}
                         <div className="grid grid-cols-3 gap-2 mt-2">
                             {[
-                                { label: '👋 Hola', code: 'print("¡Hola Mundo! 🤖")' },
-                                { label: '🔁 Bucle', code: 'for i in range(5):\n    print("Vuelta", i + 1)' },
-                                { label: '🔀 If/Else', code: 'x = 10\nif x > 5:\n    print("Mayor que 5")\nelse:\n    print("Menor o igual")' },
+                                { label: 'ðŸ‘‹ Hola', code: 'print("Â¡Hola Mundo! ðŸ¤–")' },
+                                { label: 'ðŸ” Bucle', code: 'for i in range(5):\n    print("Vuelta", i + 1)' },
+                                { label: 'ðŸ”€ If/Else', code: 'x = 10\nif x > 5:\n    print("Mayor que 5")\nelse:\n    print("Menor o igual")' },
                             ].map((t, i) => (
                                 <button key={i} onClick={() => { setCode(t.code); setOutput(''); }}
                                     className="py-2 bg-[#334155] text-white rounded-xl text-[10px] font-black hover:bg-[#475569] transition active:scale-95">
@@ -1182,38 +1182,38 @@ const ProgrammingStationScreen = ({ onBack, startChallenge, userScores, userId, 
 };
 
 const WorkshopScreen = ({ goToMenu }) => {
-    const [code, setCode] = useState('nombre = "CultivaTec"\nprint("Hola mundo desde", nombre)\n\n# Puedes sumar números!\nprint(5 + 3)');
+    const [code, setCode] = useState('nombre = "CultivaTec"\nprint("Hola mundo desde", nombre)\n\n# Puedes sumar nÃºmeros!\nprint(5 + 3)');
     const [output, setOutput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [isGeminiModalOpen, setIsGeminiModalOpen] = useState(false);
-    const [aiExplanation, setAiExplanation] = useState(''); // Estado para la explicación del último código insertado por IA
+    const [aiExplanation, setAiExplanation] = useState(''); // Estado para la explicaciÃ³n del Ãºltimo cÃ³digo insertado por IA
 
     const executeCode = () => {
         setIsLoading(true);
         setOutput('');
-        setAiExplanation(''); // Limpiar explicación al correr código propio
+        setAiExplanation(''); // Limpiar explicaciÃ³n al correr cÃ³digo propio
         let capturedOutput = [];
 
-        // 1. Simulación de la función print() de Python en JavaScript
+        // 1. SimulaciÃ³n de la funciÃ³n print() de Python en JavaScript
         const __custom_print = (...args) => {
             // Convierte argumentos a string y los une con un espacio
             const outputString = args.map(arg => String(arg)).join(' ');
             capturedOutput.push(outputString);
         };
         
-        // 2. Preparar el código para ejecución
+        // 2. Preparar el cÃ³digo para ejecuciÃ³n
         let codeToExecute = code;
         // Reemplazar todas las ocurrencias de 'print(' con '__custom_print('
         codeToExecute = codeToExecute.replace(/print\s*\(/g, '__custom_print(');
 
         try {
-            // 3. Ejecutar el código modificado de forma controlada
+            // 3. Ejecutar el cÃ³digo modificado de forma controlada
             new Function('__custom_print', codeToExecute)(__custom_print);
             
             setOutput(capturedOutput.join('\n'));
         } catch (error) {
-            // 4. Capturar y mostrar errores de sintaxis o ejecución
-            setOutput(`Error de Código:\n${error.message}`);
+            // 4. Capturar y mostrar errores de sintaxis o ejecuciÃ³n
+            setOutput(`Error de CÃ³digo:\n${error.message}`);
         } finally {
             setTimeout(() => setIsLoading(false), 500); 
         }
@@ -1235,16 +1235,16 @@ const WorkshopScreen = ({ goToMenu }) => {
                     className="text-[#AFAFAF] hover:text-[#3C3C3C] transition flex items-center bg-white p-2.5 rounded-xl border-2 border-[#E5E5E5] active:scale-95"
                 >
                     <ArrowLeft size={20} className="mr-1" />
-                    <span className="text-sm font-black">Menú</span>
+                    <span className="text-sm font-black">MenÃº</span>
                 </button>
                 <div className="flex items-center bg-[#1CB0F6]/10 px-4 py-1.5 rounded-full">
                     <Code size={18} className="mr-1.5 text-[#1CB0F6]" />
-                    <span className="text-sm font-black text-[#1CB0F6]">Taller de Código</span>
+                    <span className="text-sm font-black text-[#1CB0F6]">Taller de CÃ³digo</span>
                 </div>
             </header>
 
             <div className="text-center mb-4">
-                <h1 className="text-2xl font-black text-[#3C3C3C]">👨‍💻 ¡A Programar en Python!</h1>
+                <h1 className="text-2xl font-black text-[#3C3C3C]">ðŸ‘¨â€ðŸ’» Â¡A Programar en Python!</h1>
                 <p className="text-xs text-[#AFAFAF] font-bold mt-1">Escribe comandos <code className="bg-[#F7F7F7] px-1.5 py-0.5 rounded text-[#1CB0F6] font-black border border-[#E5E5E5]">print()</code> y presiona Correr</p>
             </div>
             
@@ -1263,7 +1263,7 @@ const WorkshopScreen = ({ goToMenu }) => {
                         value={code}
                         onChange={(e) => setCode(e.target.value)}
                         className="flex-grow font-mono text-sm resize-none outline-none border-none p-4 min-h-[150px] md:min-h-0 bg-[#F7F7F7] text-[#3C3C3C]"
-                        placeholder="Escribe tu código aquí..."
+                        placeholder="Escribe tu cÃ³digo aquÃ­..."
                         spellCheck={false}
                     />
                 </div>
@@ -1276,14 +1276,14 @@ const WorkshopScreen = ({ goToMenu }) => {
                             <span className="text-xs font-black text-gray-400">Consola de Salida</span>
                         </div>
                         <pre className="flex-grow font-mono text-sm p-4 whitespace-pre-wrap text-[#2563EB]">
-                            {output || <span className="text-gray-600 italic">La salida aparecerá aquí...</span>}
+                            {output || <span className="text-gray-600 italic">La salida aparecerÃ¡ aquÃ­...</span>}
                         </pre>
                     </div>
 
                     {aiExplanation && (
-                        <div className="p-4 bg-[#CE82FF]/10 rounded-2xl border-2 border-[#CE82FF]/30 animate-slide-up">
-                            <h3 className="font-black text-[#CE82FF] mb-1 flex items-center text-sm">
-                                <Bot size={16} className="mr-1.5" /> Explicación IA
+                        <div className="p-4 bg-[#60A5FA]/10 rounded-2xl border-2 border-[#60A5FA]/30 animate-slide-up">
+                            <h3 className="font-black text-[#60A5FA] mb-1 flex items-center text-sm">
+                                <Bot size={16} className="mr-1.5" /> ExplicaciÃ³n IA
                             </h3>
                             <p className="text-xs text-[#777] font-semibold leading-relaxed">{aiExplanation}</p>
                         </div>
@@ -1298,14 +1298,14 @@ const WorkshopScreen = ({ goToMenu }) => {
                     className="flex-1 py-3.5 btn-3d btn-3d-purple rounded-xl text-sm flex items-center justify-center"
                 >
                     <Zap size={18} className="mr-1.5" />
-                    Generar IA ✨
+                    Generar IA âœ¨
                 </button>
                 <button
                     onClick={executeCode}
                     disabled={isLoading}
                     className="flex-1 py-3.5 btn-3d btn-3d-green rounded-xl text-sm flex items-center justify-center disabled:opacity-50"
                 >
-                    {isLoading ? 'Ejecutando...' : <><Play size={18} className="mr-1.5" /> Correr Código</>}
+                    {isLoading ? 'Ejecutando...' : <><Play size={18} className="mr-1.5" /> Correr CÃ³digo</>}
                 </button>
             </div>
         </div>
@@ -1317,35 +1317,35 @@ const InteractiveLEDGuide = ({ onBack, onModuleComplete, userProfile, onShowLice
     const [hasCompleted, setHasCompleted] = useState(false);
 
     const steps = [
-        { type: 'intro', title: '¡A Construir Nuestro Primer Circuito!', icon: '🛠️' },
-        { type: 'components', title: 'Componentes Necesarios', icon: '📦' },
-        { type: 'connection', title: 'Paso 1: Preparación del LED y Resistencia', icon: '🔗' },
-        { type: 'connection', title: 'Paso 2: Conexión de la Pila (Fuente)', icon: '🔋' },
-        { type: 'connection', title: 'Paso 3: Añadir el Botón (Interruptor)', icon: '🔘' },
-        { type: 'connection', title: 'Paso 4: ¡Prueba Final!', icon: '✅' },
-        { type: 'conclusion', title: '¡Misión Cumplida!', icon: '🌟' }
+        { type: 'intro', title: 'Â¡A Construir Nuestro Primer Circuito!', icon: 'ðŸ› ï¸' },
+        { type: 'components', title: 'Componentes Necesarios', icon: 'ðŸ“¦' },
+        { type: 'connection', title: 'Paso 1: PreparaciÃ³n del LED y Resistencia', icon: 'ðŸ”—' },
+        { type: 'connection', title: 'Paso 2: ConexiÃ³n de la Pila (Fuente)', icon: 'ðŸ”‹' },
+        { type: 'connection', title: 'Paso 3: AÃ±adir el BotÃ³n (Interruptor)', icon: 'ðŸ”˜' },
+        { type: 'connection', title: 'Paso 4: Â¡Prueba Final!', icon: 'âœ…' },
+        { type: 'conclusion', title: 'Â¡MisiÃ³n Cumplida!', icon: 'ðŸŒŸ' }
     ];
 
     const ComponentData = [
         {
             id: 'led',
-            title: '1. El LED (La Bombilla Pequeña) 💡',
+            title: '1. El LED (La Bombilla PequeÃ±a) ðŸ’¡',
             icon: <Lightbulb size={30} className="text-red-500" />,
             image: 'https://placehold.co/100x100/f87171/ffffff?text=LED', // 
             description: 'El LED es una luz. Es especial porque la electricidad solo puede entrar por una ' +
-                         'patita (la **larga, el Ánodo, o "Mas")** y salir por la otra (la **corta, el Cátodo, o "Menos")**.'
+                         'patita (la **larga, el Ãnodo, o "Mas")** y salir por la otra (la **corta, el CÃ¡todo, o "Menos")**.'
         },
         {
             id: 'resistor',
-            title: '2. La Resistencia (El Freno) 🛑',
+            title: '2. La Resistencia (El Freno) ðŸ›‘',
             icon: <Component size={30} className="text-yellow-700" />,
             image: 'https://placehold.co/100x100/fde047/000000?text=Resistencia', // [Image of resistor]
-            description: 'La Resistencia es como un **freno** en la autopista de electrones. Es vital, ya que si le das demasiada energía ' +
-                         'al LED sin frenarla, ¡el LED se quema! (Usaremos una de **220 Ohms**).'
+            description: 'La Resistencia es como un **freno** en la autopista de electrones. Es vital, ya que si le das demasiada energÃ­a ' +
+                         'al LED sin frenarla, Â¡el LED se quema! (Usaremos una de **220 Ohms**).'
         },
         {
             id: 'battery',
-            title: '3. La Pila (La Fuente de Energía) 🔋',
+            title: '3. La Pila (La Fuente de EnergÃ­a) ðŸ”‹',
             icon: <BatteryCharging size={30} className="text-green-600" />,
             image: 'https://placehold.co/100x100/4ade80/000000?text=Pila+9V', // 
             description: 'La Pila da el **Voltaje (la fuerza de empuje)**. Tiene un lado **Positivo (+)** y uno **Negativo (-)**, ' +
@@ -1353,19 +1353,19 @@ const InteractiveLEDGuide = ({ onBack, onModuleComplete, userProfile, onShowLice
         },
         {
             id: 'button',
-            title: '4. El Botón (El Interruptor) 🔘',
+            title: '4. El BotÃ³n (El Interruptor) ðŸ”˜',
             icon: <Power size={30} className="text-blue-600" />,
-            image: 'https://placehold.co/100x100/60a5fa/ffffff?text=Botón+Pulsador', // 
-            description: 'El Botón es un **puente** que puedes abrir o cerrar. Cuando lo aprietas, el circuito se cierra y ' +
+            image: 'https://placehold.co/100x100/60a5fa/ffffff?text=BotÃ³n+Pulsador', // 
+            description: 'El BotÃ³n es un **puente** que puedes abrir o cerrar. Cuando lo aprietas, el circuito se cierra y ' +
                          'la electricidad pasa. Cuando lo sueltas, el circuito se abre y se detiene.'
         },
         {
             id: 'protoboard',
-            title: '5. La Protoboard (El Tablero de Conexión) 🕳️',
+            title: '5. La Protoboard (El Tablero de ConexiÃ³n) ðŸ•³ï¸',
             icon: <RadioTower size={30} className="text-orange-500" />,
             image: 'https://placehold.co/100x100/fb923c/000000?text=Protoboard', // [Image of breadboard]
-            description: 'Es tu **tablero de juego**. Los agujeros están conectados en filas o columnas (depende de dónde mires) ' +
-                         'para que puedas armar el circuito sin soldar nada. ¡Ideal para experimentar!'
+            description: 'Es tu **tablero de juego**. Los agujeros estÃ¡n conectados en filas o columnas (depende de dÃ³nde mires) ' +
+                         'para que puedas armar el circuito sin soldar nada. Â¡Ideal para experimentar!'
         },
     ];
 
@@ -1378,10 +1378,10 @@ const InteractiveLEDGuide = ({ onBack, onModuleComplete, userProfile, onShowLice
         if (currentStep.type === 'intro') {
             return (
                 <div className="text-center p-6 space-y-4">
-                    <span className="text-7xl">🛠️</span>
+                    <span className="text-7xl">ðŸ› ï¸</span>
                     <h2 className="text-3xl font-black text-[#3C3C3C]">Construye el Circuito 'LED de Prueba'</h2>
                     <p className="text-[#777] text-base font-semibold">
-                        Esta guía te enseñará a conectar una pila, una resistencia, un LED y un botón en una protoboard. <span className="font-black text-[#FF4B4B]">¡Recuerda hacerlo bajo supervisión de un adulto!</span>
+                        Esta guÃ­a te enseÃ±arÃ¡ a conectar una pila, una resistencia, un LED y un botÃ³n en una protoboard. <span className="font-black text-[#FF4B4B]">Â¡Recuerda hacerlo bajo supervisiÃ³n de un adulto!</span>
                     </p>
                     <button onClick={handleNext} className="mt-4 py-3.5 px-8 btn-3d btn-3d-green rounded-2xl text-base">
                         Empezar (Ver Componentes)
@@ -1426,32 +1426,32 @@ const InteractiveLEDGuide = ({ onBack, onModuleComplete, userProfile, onShowLice
                     stepTitle = 'Conecta la Resistencia al LED';
                     imageUrl = 'https://placehold.co/200x150/ffeedd/000000?text=Paso+1'; // 
                     connectionDetails = {
-                        instruccion: 'Inserta la **pata larga (+)** del LED y una pata de la **Resistencia** en la misma línea de agujeros de la protoboard. La otra pata de la resistencia debe ir en una línea separada. ¡Así el freno protege al LED!',
-                        consejo: 'Asegúrate de que la pata corta (-) del LED quede libre.'
+                        instruccion: 'Inserta la **pata larga (+)** del LED y una pata de la **Resistencia** en la misma lÃ­nea de agujeros de la protoboard. La otra pata de la resistencia debe ir en una lÃ­nea separada. Â¡AsÃ­ el freno protege al LED!',
+                        consejo: 'AsegÃºrate de que la pata corta (-) del LED quede libre.'
                     };
                     break;
                 case 3:
                     stepTitle = 'Conecta la Pila y el GND (-)';
                     imageUrl = 'https://placehold.co/200x150/d4e9ff/000000?text=Paso+2'; // 
                     connectionDetails = {
-                        instruccion: 'Conecta el cable **Negativo (-) de la pila** al bus de energía **Azul (-) de la protoboard**. Conecta la **pata corta (-) del LED** a otra línea, y usa un cable de conexión para llevar esa línea al bus **Azul (-)**.',
-                        consejo: 'El bus Azul (-) y Rojo (+) recorren toda la protoboard. Son las líneas de alimentación.'
+                        instruccion: 'Conecta el cable **Negativo (-) de la pila** al bus de energÃ­a **Azul (-) de la protoboard**. Conecta la **pata corta (-) del LED** a otra lÃ­nea, y usa un cable de conexiÃ³n para llevar esa lÃ­nea al bus **Azul (-)**.',
+                        consejo: 'El bus Azul (-) y Rojo (+) recorren toda la protoboard. Son las lÃ­neas de alimentaciÃ³n.'
                     };
                     break;
                 case 4:
-                    stepTitle = 'Añade el Botón y Cierra el Circuito';
+                    stepTitle = 'AÃ±ade el BotÃ³n y Cierra el Circuito';
                     imageUrl = 'https://placehold.co/200x150/e0ffb0/000000?text=Paso+3'; // 
                     connectionDetails = {
-                        instruccion: 'Conecta el cable **Positivo (+) de la pila** al bus **Rojo (+)**. Luego, conecta un cable del bus Rojo a un lado del **Botón**. Finalmente, conecta el otro lado del Botón a la pata libre de la **Resistencia**.',
-                        consejo: 'El circuito completo es: Pila(+) → Botón → Resistencia → LED(+) → LED(-) → Pila(-). El botón y la resistencia deben ir en serie (uno detrás del otro).'
+                        instruccion: 'Conecta el cable **Positivo (+) de la pila** al bus **Rojo (+)**. Luego, conecta un cable del bus Rojo a un lado del **BotÃ³n**. Finalmente, conecta el otro lado del BotÃ³n a la pata libre de la **Resistencia**.',
+                        consejo: 'El circuito completo es: Pila(+) â†’ BotÃ³n â†’ Resistencia â†’ LED(+) â†’ LED(-) â†’ Pila(-). El botÃ³n y la resistencia deben ir en serie (uno detrÃ¡s del otro).'
                     };
                     break;
                 case 5:
-                    stepTitle = '¡PRUEBA! Presiona el Botón';
+                    stepTitle = 'Â¡PRUEBA! Presiona el BotÃ³n';
                     imageUrl = 'https://placehold.co/200x150/b0fff2/000000?text=Paso+Final'; // 
                     connectionDetails = {
-                        instruccion: 'Revisa todas tus conexiones. ¡Ahora, presiona y mantén presionado el botón! Si el LED se enciende, ¡has cerrado el circuito correctamente! Si no, revisa que la pata larga del LED esté hacia el lado positivo.',
-                        consejo: 'Si el LED no enciende, asegúrate de que el cable negativo del LED esté bien conectado al negativo de la pila.'
+                        instruccion: 'Revisa todas tus conexiones. Â¡Ahora, presiona y mantÃ©n presionado el botÃ³n! Si el LED se enciende, Â¡has cerrado el circuito correctamente! Si no, revisa que la pata larga del LED estÃ© hacia el lado positivo.',
+                        consejo: 'Si el LED no enciende, asegÃºrate de que el cable negativo del LED estÃ© bien conectado al negativo de la pila.'
                     };
                     break;
                 default:
@@ -1484,13 +1484,13 @@ const InteractiveLEDGuide = ({ onBack, onModuleComplete, userProfile, onShowLice
         if (currentStep.type === 'conclusion') {
             return (
                 <div className="text-center p-6 space-y-4">
-                    <span className="text-7xl">🌟</span>
-                    <h2 className="text-3xl font-black text-[#2563EB]">¡Felicidades, Súper Ingeniero!</h2>
+                    <span className="text-7xl">ðŸŒŸ</span>
+                    <h2 className="text-3xl font-black text-[#2563EB]">Â¡Felicidades, SÃºper Ingeniero!</h2>
                     <p className="text-base text-[#777] font-semibold">
-                        Acabas de construir tu primer circuito básico. Entendiste cómo la Pila da energía, la Resistencia la protege, el LED la usa para brillar, y el Botón la controla.
+                        Acabas de construir tu primer circuito bÃ¡sico. Entendiste cÃ³mo la Pila da energÃ­a, la Resistencia la protege, el LED la usa para brillar, y el BotÃ³n la controla.
                     </p>
                     <div className="mt-6 p-4 bg-[#DBEAFE] rounded-2xl font-black text-[#2563EB] border-2 border-[#2563EB]/30">
-                        <p>¡El concepto clave es el Circuito Cerrado!</p>
+                        <p>Â¡El concepto clave es el Circuito Cerrado!</p>
                     </div>
                     <button onClick={() => {
                         if (!hasCompleted) {
@@ -1499,7 +1499,7 @@ const InteractiveLEDGuide = ({ onBack, onModuleComplete, userProfile, onShowLice
                         }
                         setShowCelebration(true);
                     }} className="mt-6 w-full py-3.5 px-8 btn-3d btn-3d-green rounded-2xl text-base">
-                        ✅ ¡Proyecto Completado!
+                        âœ… Â¡Proyecto Completado!
                     </button>
                 </div>
             );
@@ -1516,45 +1516,45 @@ const InteractiveLEDGuide = ({ onBack, onModuleComplete, userProfile, onShowLice
                             <RobotAvatar config={userProfile.robotConfig} size={80} animate />
                         </div>
                     ) : (
-                        <div className="text-7xl mb-4 animate-bounce-in">🎉</div>
+                        <div className="text-7xl mb-4 animate-bounce-in">ðŸŽ‰</div>
                     )}
                     <h1 className="text-3xl font-black text-white mb-2">
-                        {userProfile ? `¡Increíble, ${userProfile.userName}!` : '¡Proyecto Final Completado!'}
+                        {userProfile ? `Â¡IncreÃ­ble, ${userProfile.userName}!` : 'Â¡Proyecto Final Completado!'}
                     </h1>
-                    <p className="text-white/80 font-bold text-base mb-6">¡Proyecto Final! 🏆</p>
+                    <p className="text-white/80 font-bold text-base mb-6">Â¡Proyecto Final! ðŸ†</p>
                     
                     <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 mb-6 max-w-xs mx-auto">
                         <div className="flex justify-center gap-1 mb-3">
-                            {[1,2,3].map(i => <span key={i} className="text-3xl animate-bounce" style={{animationDelay: `${i*150}ms`}}>⭐</span>)}
+                            {[1,2,3].map(i => <span key={i} className="text-3xl animate-bounce" style={{animationDelay: `${i*150}ms`}}>â­</span>)}
                         </div>
                         <div className="text-4xl font-black text-white mb-1">+100 XP</div>
-                        <p className="text-white/70 text-sm font-bold">¡Completaste el proyecto final!</p>
+                        <p className="text-white/70 text-sm font-bold">Â¡Completaste el proyecto final!</p>
                     </div>
 
                     <div className="space-y-3 max-w-xs mx-auto">
                         <div className="bg-white/20 rounded-xl p-3 flex items-center gap-3">
-                            <span className="text-2xl">🛠️</span>
+                            <span className="text-2xl">ðŸ› ï¸</span>
                             <div className="text-left">
                                 <p className="text-white font-black text-sm">7/7 pasos</p>
                                 <p className="text-white/60 text-xs font-bold">completados</p>
                             </div>
                         </div>
                         <div className="bg-[#FFC800]/30 rounded-xl p-3 flex items-center gap-3 border border-[#FFC800]/50 animate-bounce-in" style={{animationDelay: '600ms'}}>
-                            <span className="text-2xl">📜</span>
+                            <span className="text-2xl">ðŸ“œ</span>
                             <div className="text-left flex-grow">
-                                <p className="text-white font-black text-sm">¡Licencia Obtenida!</p>
+                                <p className="text-white font-black text-sm">Â¡Licencia Obtenida!</p>
                                 <p className="text-white/70 text-xs font-bold">Proyecto Final - Primer LED</p>
                             </div>
-                            <span className="text-lg">🏅</span>
+                            <span className="text-lg">ðŸ…</span>
                         </div>
                     </div>
 
                     <div className="flex gap-2 mt-6 max-w-xs mx-auto">
                         <button onClick={onShowLicenses} className="flex-1 py-4 bg-white/20 text-white rounded-2xl font-black text-sm border-b-4 border-white/10 active:scale-95 transition flex items-center justify-center gap-1">
-                            📜 Mis Licencias
+                            ðŸ“œ Mis Licencias
                         </button>
                         <button onClick={onBack} className="flex-1 py-4 bg-white text-[#2563EB] rounded-2xl font-black text-sm border-b-4 border-[#E5E5E5] active:scale-95 transition hover:bg-gray-50">
-                            Continuar 🚀
+                            Continuar ðŸš€
                         </button>
                     </div>
                 </div>
@@ -1575,7 +1575,7 @@ const InteractiveLEDGuide = ({ onBack, onModuleComplete, userProfile, onShowLice
                 {userProfile && (
                     <div className="flex items-center gap-2 bg-blue-50 px-3 py-1.5 rounded-xl">
                         <RobotMini config={userProfile.robotConfig} size={28} />
-                        <span className="text-xs font-black text-[#2563EB]">¡Vamos, {userProfile.userName}!</span>
+                        <span className="text-xs font-black text-[#2563EB]">Â¡Vamos, {userProfile.userName}!</span>
                     </div>
                 )}
             </div>
@@ -1632,7 +1632,7 @@ const LessonCardComponent = ({ lesson, onSelect }) => {
                 <p className="text-[11px] font-bold text-[#AFAFAF] mt-0.5">{lesson.subtitulo}</p>
             </div>
             <div className="absolute bottom-3 right-3 w-8 h-8 bg-[#2563EB] rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all border-b-2 border-[#1D4ED8]">
-                <span className="text-white text-xs font-black">▶</span>
+                <span className="text-white text-xs font-black">â–¶</span>
             </div>
         </div>
     );
@@ -1642,7 +1642,7 @@ const LessonDetailView = ({ lesson, onBack }) => {
         <div className="min-h-full bg-white flex flex-col animate-fade-in">
             {/* Duolingo-style colored header bar */}
             <div className="bg-[#1CB0F6] px-6 pt-6 pb-8 text-center">
-                <button onClick={onBack} className="absolute left-4 top-4 text-white/80 hover:text-white flex items-center text-sm font-black active:scale-95 transition"><ArrowLeft size={18} className="mr-1" /> Módulo 1</button>
+                <button onClick={onBack} className="absolute left-4 top-4 text-white/80 hover:text-white flex items-center text-sm font-black active:scale-95 transition"><ArrowLeft size={18} className="mr-1" /> MÃ³dulo 1</button>
                 <span className="text-5xl block mb-2">{lesson.icon}</span>
                 <h2 className="text-2xl font-black text-white">{lesson.detail.title}</h2>
                 <p className="text-sm text-white/80 font-bold mt-1">{lesson.subtitulo}</p>
@@ -1657,7 +1657,7 @@ const LessonDetailView = ({ lesson, onBack }) => {
                     </div>
                     {lesson.detail.formula && (
                         <div className="bg-[#FFC800]/10 p-4 rounded-xl border-2 border-[#FFC800]/30">
-                            <h4 className="font-black text-sm text-[#FF9600] mb-2 flex items-center"><Lightbulb size={16} className="mr-1.5" /> La Regla Mágica</h4>
+                            <h4 className="font-black text-sm text-[#FF9600] mb-2 flex items-center"><Lightbulb size={16} className="mr-1.5" /> La Regla MÃ¡gica</h4>
                             <div className="text-center overflow-x-auto">
                                 <span className="text-2xl font-mono font-black text-[#3C3C3C]" dangerouslySetInnerHTML={{ __html: lesson.detail.formula }}></span>
                             </div>
@@ -1674,7 +1674,7 @@ const LessonDetailView = ({ lesson, onBack }) => {
                 </div>
 
                 <button onClick={onBack} className="w-full py-3.5 btn-3d btn-3d-green rounded-xl text-sm">
-                    ¡Aprendido! Volver al Módulo
+                    Â¡Aprendido! Volver al MÃ³dulo
                 </button>
             </div>
         </div>
@@ -1703,8 +1703,8 @@ const Module1View = ({ module, onBack, startPractice, onModuleComplete }) => {
             {/* Header */}
             <div className="bg-[#2563EB] px-6 pt-6 pb-8 text-center">
                 <button onClick={onBack} className="absolute left-4 top-4 text-white/80 hover:text-white flex items-center text-sm font-black active:scale-95 transition"><ArrowLeft size={18} className="mr-1" /> Biblioteca</button>
-                <span className="text-4xl block mb-1">⚡</span>
-                <h1 className="text-2xl font-black text-white">Fundamentos Eléctricos</h1>
+                <span className="text-4xl block mb-1">âš¡</span>
+                <h1 className="text-2xl font-black text-white">Fundamentos ElÃ©ctricos</h1>
                 <p className="text-white/80 text-sm font-bold mt-1">6 temas clave para empezar a crear</p>
             </div>
 
@@ -1734,7 +1734,7 @@ const Module1View = ({ module, onBack, startPractice, onModuleComplete }) => {
                         onClick={() => { onModuleComplete?.(module?.id || 'mod_electr', 60); onBack(); }}
                         className="w-full py-3.5 btn-3d btn-3d-green rounded-xl text-sm flex items-center justify-center gap-2 animate-scale-in"
                     >
-                        ✅ ¡Módulo Completado! Volver
+                        âœ… Â¡MÃ³dulo Completado! Volver
                     </button>
                 )}
 
@@ -1743,7 +1743,7 @@ const Module1View = ({ module, onBack, startPractice, onModuleComplete }) => {
                     className="w-full py-3.5 btn-3d btn-3d-blue rounded-xl text-sm flex items-center justify-center"
                 >
                     <Target size={18} className="mr-1.5" />
-                    ¡Poner a Prueba Mi Saber!
+                    Â¡Poner a Prueba Mi Saber!
                 </button>
             </div>
         </div>
@@ -1788,15 +1788,15 @@ const MatchingGameSection = ({ section, setXpEarned, setShowXpPop, setMascotMood
     };
     const allMatched = matchedPairs.size >= pairs.length * 2;
     return (
-        <div className="bg-white rounded-2xl border-2 border-[#CE82FF]/40 overflow-hidden animate-scale-in">
-            <div className="bg-gradient-to-r from-[#CE82FF] to-[#9333EA] px-4 py-3">
-                <h3 className="text-sm font-black text-white flex items-center gap-2">🧩 {section.titulo}</h3>
+        <div className="bg-white rounded-2xl border-2 border-[#60A5FA]/40 overflow-hidden animate-scale-in">
+            <div className="bg-gradient-to-r from-[#60A5FA] to-[#2563EB] px-4 py-3">
+                <h3 className="text-sm font-black text-white flex items-center gap-2">ðŸ§© {section.titulo}</h3>
                 <p className="text-[10px] text-white/70 font-bold mt-0.5">{section.instruccion || 'Toca un elemento de cada columna para relacionarlos'}</p>
             </div>
             <div className="p-4">
                 <div className="grid grid-cols-2 gap-3">
                     <div className="space-y-2">
-                        <p className="text-[10px] font-black text-[#CE82FF] text-center mb-1">CONCEPTO</p>
+                        <p className="text-[10px] font-black text-[#60A5FA] text-center mb-1">CONCEPTO</p>
                         {shuffled.left.map(item => {
                             const isMatched = matchedPairs.has(item.pairIdx + '-left');
                             const isSelected = selectedMatch?.id === item.id;
@@ -1806,16 +1806,16 @@ const MatchingGameSection = ({ section, setXpEarned, setShowXpPop, setMascotMood
                                     className={`w-full text-left p-2.5 rounded-xl text-xs font-bold transition-all active:scale-95 ${
                                         isMatched ? 'bg-[#58CC02]/20 text-[#58CC02] border-2 border-[#58CC02]/40' :
                                         isWrong ? 'bg-[#FF4B4B]/20 text-[#FF4B4B] border-2 border-[#FF4B4B]/40 animate-shake' :
-                                        isSelected ? 'bg-[#CE82FF]/20 text-[#CE82FF] border-2 border-[#CE82FF] scale-[1.02]' :
-                                        'bg-[#F7F7F7] text-[#3C3C3C] border-2 border-[#E5E5E5] hover:border-[#CE82FF]'
+                                        isSelected ? 'bg-[#60A5FA]/20 text-[#60A5FA] border-2 border-[#60A5FA] scale-[1.02]' :
+                                        'bg-[#F7F7F7] text-[#3C3C3C] border-2 border-[#E5E5E5] hover:border-[#60A5FA]'
                                     }`}>
-                                    {isMatched ? '✅ ' : ''}{item.text}
+                                    {isMatched ? 'âœ… ' : ''}{item.text}
                                 </button>
                             );
                         })}
                     </div>
                     <div className="space-y-2">
-                        <p className="text-[10px] font-black text-[#9333EA] text-center mb-1">RESPUESTA</p>
+                        <p className="text-[10px] font-black text-[#2563EB] text-center mb-1">RESPUESTA</p>
                         {shuffled.right.map(item => {
                             const isMatched = matchedPairs.has(item.pairIdx + '-right');
                             const isSelected = selectedMatch?.id === item.id;
@@ -1825,10 +1825,10 @@ const MatchingGameSection = ({ section, setXpEarned, setShowXpPop, setMascotMood
                                     className={`w-full text-left p-2.5 rounded-xl text-xs font-bold transition-all active:scale-95 ${
                                         isMatched ? 'bg-[#58CC02]/20 text-[#58CC02] border-2 border-[#58CC02]/40' :
                                         isWrong ? 'bg-[#FF4B4B]/20 text-[#FF4B4B] border-2 border-[#FF4B4B]/40 animate-shake' :
-                                        isSelected ? 'bg-[#9333EA]/20 text-[#9333EA] border-2 border-[#9333EA] scale-[1.02]' :
-                                        'bg-[#F7F7F7] text-[#3C3C3C] border-2 border-[#E5E5E5] hover:border-[#9333EA]'
+                                        isSelected ? 'bg-[#2563EB]/20 text-[#2563EB] border-2 border-[#2563EB] scale-[1.02]' :
+                                        'bg-[#F7F7F7] text-[#3C3C3C] border-2 border-[#E5E5E5] hover:border-[#2563EB]'
                                     }`}>
-                                    {isMatched ? '✅ ' : ''}{item.text}
+                                    {isMatched ? 'âœ… ' : ''}{item.text}
                                 </button>
                             );
                         })}
@@ -1836,7 +1836,7 @@ const MatchingGameSection = ({ section, setXpEarned, setShowXpPop, setMascotMood
                 </div>
                 {allMatched && (
                     <div className="mt-3 bg-[#58CC02]/10 p-3 rounded-xl text-center animate-bounce-in border-2 border-[#58CC02]/30">
-                        <p className="text-sm font-black text-[#58CC02]">🎉 ¡Todas las parejas conectadas! +20 XP</p>
+                        <p className="text-sm font-black text-[#58CC02]">ðŸŽ‰ Â¡Todas las parejas conectadas! +20 XP</p>
                     </div>
                 )}
             </div>
@@ -1872,8 +1872,8 @@ const TrueFalseSection = ({ section, setXpEarned, setShowXpPop, setMascotMood, o
     return (
         <div className="bg-white rounded-2xl border-2 border-[#1CB0F6]/40 overflow-hidden animate-scale-in">
             <div className="bg-gradient-to-r from-[#1CB0F6] to-[#0D8ECF] px-4 py-3">
-                <h3 className="text-sm font-black text-white flex items-center gap-2">✅❌ {section.titulo}</h3>
-                <p className="text-[10px] text-white/70 font-bold mt-0.5">¿Verdadero o Falso? ¡Demuestra lo que aprendiste!</p>
+                <h3 className="text-sm font-black text-white flex items-center gap-2">âœ…âŒ {section.titulo}</h3>
+                <p className="text-[10px] text-white/70 font-bold mt-0.5">Â¿Verdadero o Falso? Â¡Demuestra lo que aprendiste!</p>
             </div>
             <div className="p-4 space-y-3">
                 {statements.map((st, sIdx) => (
@@ -1890,7 +1890,7 @@ const TrueFalseSection = ({ section, setXpEarned, setShowXpPop, setMascotMood, o
                                     tfAnswers[sIdx] === 'wrong' && st.correct !== true ? 'bg-[#FF4B4B]/20 text-[#FF4B4B]' :
                                     'bg-white border-2 border-[#58CC02]/40 text-[#58CC02] hover:bg-[#58CC02]/10'
                                 }`}>
-                                ✅ Verdadero
+                                âœ… Verdadero
                             </button>
                             <button onClick={() => handleTF(sIdx, false)} disabled={tfAnswers[sIdx] !== undefined}
                                 className={`flex-1 py-2 rounded-lg text-xs font-black transition-all active:scale-95 ${
@@ -1898,12 +1898,12 @@ const TrueFalseSection = ({ section, setXpEarned, setShowXpPop, setMascotMood, o
                                     tfAnswers[sIdx] === 'wrong' && st.correct !== false ? 'bg-[#FF4B4B]/20 text-[#FF4B4B]' :
                                     'bg-white border-2 border-[#FF4B4B]/40 text-[#FF4B4B] hover:bg-[#FF4B4B]/10'
                                 }`}>
-                                ❌ Falso
+                                âŒ Falso
                             </button>
                         </div>
                         {tfAnswers[sIdx] && (
                             <p className={`text-[10px] font-bold mt-2 ${tfAnswers[sIdx] === 'correct' ? 'text-[#58CC02]' : 'text-[#FF4B4B]'}`}>
-                                {tfAnswers[sIdx] === 'correct' ? '🎉 ¡Correcto!' : `💡 Respuesta: ${st.correct ? 'Verdadero' : 'Falso'}`} — {st.explain}
+                                {tfAnswers[sIdx] === 'correct' ? 'ðŸŽ‰ Â¡Correcto!' : `ðŸ’¡ Respuesta: ${st.correct ? 'Verdadero' : 'Falso'}`} â€” {st.explain}
                             </p>
                         )}
                     </div>
@@ -1935,13 +1935,13 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete, userPr
     // Extract plain text from a section for TTS
     const getSectionText = (section) => {
         let text = '';
-        if (section.titulo) text += section.titulo.replace(/[^\wáéíóúñü\s.,!?¿¡]/gi, '') + '. ';
+        if (section.titulo) text += section.titulo.replace(/[^\wÃ¡Ã©Ã­Ã³ÃºÃ±Ã¼\s.,!?Â¿Â¡]/gi, '') + '. ';
         if (section.texto) text += section.texto.replace(/\*\*/g, '') + ' ';
         if (section.puntos) text += section.puntos.map(p => p.replace(/\*\*/g, '')).join('. ') + ' ';
         if (section.pregunta) text += 'Pregunta: ' + section.pregunta + '. ';
         if (section.opciones) text += 'Opciones: ' + section.opciones.join(', ') + '. ';
         if (section.instruccion) text += section.instruccion.replace(/\*\*/g, '') + ' ';
-        if (section.formula) text += 'Fórmula: ' + section.formula.replace(/<[^>]*>/g, '') + '. ';
+        if (section.formula) text += 'FÃ³rmula: ' + section.formula.replace(/<[^>]*>/g, '') + '. ';
         if (section.explicacion && !section.opciones) text += section.explicacion + ' ';
         if (section.caption) text += section.caption.replace(/\*\*/g, '') + ' ';
         if (section.pairs) text += 'Juego de emparejar: ' + section.pairs.map(p => p.left + ' con ' + p.right).join('. ') + '. ';
@@ -2051,13 +2051,13 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete, userPr
     const goPrev = () => { if (currentStep > 0) setCurrentStep(currentStep - 1); };
     const progressPercent = Math.round(((completedSteps.size) / totalSteps) * 100);
 
-    const mascotEmojis = { happy: '😊', thinking: '🤔', celebrating: '🥳', sad: '😅', reading: '📖' };
+    const mascotEmojis = { happy: 'ðŸ˜Š', thinking: 'ðŸ¤”', celebrating: 'ðŸ¥³', sad: 'ðŸ˜…', reading: 'ðŸ“–' };
     const mascotMessages = {
-        happy: ['¡Sigue así!', '¡Vas genial!', '¡Tú puedes!', '¡Qué buen estudiante!'],
+        happy: ['Â¡Sigue asÃ­!', 'Â¡Vas genial!', 'Â¡TÃº puedes!', 'Â¡QuÃ© buen estudiante!'],
         thinking: ['Piensa bien...', 'Hmm interesante...', 'Revisa de nuevo...'],
-        celebrating: ['¡EXCELENTE!', '¡INCREÍBLE!', '¡WOW!', '¡GENIO!'],
-        sad: ['¡Casi! Intenta otra vez', '¡No te rindas!', '¡La próxima será!'],
-        reading: ['Escucha con atención...', 'Te lo leo...', '¡Pon atención!', 'Leyendo para ti...'],
+        celebrating: ['Â¡EXCELENTE!', 'Â¡INCREÃBLE!', 'Â¡WOW!', 'Â¡GENIO!'],
+        sad: ['Â¡Casi! Intenta otra vez', 'Â¡No te rindas!', 'Â¡La prÃ³xima serÃ¡!'],
+        reading: ['Escucha con atenciÃ³n...', 'Te lo leo...', 'Â¡Pon atenciÃ³n!', 'Leyendo para ti...'],
     };
     const randomMsg = (mood) => mascotMessages[mood][Math.floor(Math.random() * mascotMessages[mood].length)];
 
@@ -2068,12 +2068,12 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete, userPr
             return (
                 <div className="bg-gradient-to-br from-[#FFC800]/10 to-[#FF9600]/10 p-5 rounded-2xl border-2 border-[#FFC800]/40 animate-scale-in">
                     <div className="flex items-center gap-2 mb-3">
-                        <span className="text-2xl animate-wiggle">💡</span>
+                        <span className="text-2xl animate-wiggle">ðŸ’¡</span>
                         <h3 className="text-lg font-black text-[#FF9600]">{section.titulo}</h3>
                     </div>
                     <p className="text-sm text-[#777] font-semibold leading-relaxed" dangerouslySetInnerHTML={{ __html: boldReplace(section.texto) }} />
                     <div className="mt-3 bg-[#FFC800]/20 p-3 rounded-xl">
-                        <p className="text-xs font-black text-[#FF9600]">🧠 ¿Lo sabías? ¡Comparte este dato con tus amigos!</p>
+                        <p className="text-xs font-black text-[#FF9600]">ðŸ§  Â¿Lo sabÃ­as? Â¡Comparte este dato con tus amigos!</p>
                     </div>
                 </div>
             );
@@ -2091,9 +2091,9 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete, userPr
                     <pre className="bg-[#1a1a2e] text-green-400 p-4 text-xs font-mono overflow-x-auto whitespace-pre-wrap leading-relaxed">{section.codigo}</pre>
                     <div className="p-4 bg-gradient-to-r from-[#2563EB]/10 to-[#1CB0F6]/10 border-t-2 border-[#2563EB]/20">
                         <div className="flex items-start gap-2">
-                            <span className="text-lg">🤖</span>
+                            <span className="text-lg">ðŸ¤–</span>
                             <div>
-                                <p className="text-xs font-black text-[#2563EB] mb-1">¿Qué hace este código?</p>
+                                <p className="text-xs font-black text-[#2563EB] mb-1">Â¿QuÃ© hace este cÃ³digo?</p>
                                 <p className="text-xs text-[#777] font-semibold">{section.explicacion}</p>
                             </div>
                         </div>
@@ -2104,10 +2104,10 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete, userPr
         if (section.tipo === 'mini_quiz') {
             const answered = quizAnswers[index];
             return (
-                <div className="bg-white rounded-2xl border-2 border-[#CE82FF]/40 overflow-hidden animate-scale-in">
-                    <div className="bg-gradient-to-r from-[#CE82FF] to-[#9333EA] px-4 py-3">
+                <div className="bg-white rounded-2xl border-2 border-[#60A5FA]/40 overflow-hidden animate-scale-in">
+                    <div className="bg-gradient-to-r from-[#60A5FA] to-[#2563EB] px-4 py-3">
                         <div className="flex items-center gap-2">
-                            <span className="text-lg">🎯</span>
+                            <span className="text-lg">ðŸŽ¯</span>
                             <h3 className="text-sm font-black text-white">{section.titulo}</h3>
                         </div>
                     </div>
@@ -2115,18 +2115,18 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete, userPr
                         <p className="text-sm font-bold text-[#3C3C3C] whitespace-pre-line bg-[#F7F7F7] p-3 rounded-xl">{section.pregunta}</p>
                         <div className="space-y-2">
                             {section.opciones.map((op, oIdx) => {
-                                let btnClass = 'bg-white border-2 border-[#E5E5E5] text-[#3C3C3C] hover:border-[#CE82FF] hover:bg-[#CE82FF]/5';
+                                let btnClass = 'bg-white border-2 border-[#E5E5E5] text-[#3C3C3C] hover:border-[#60A5FA] hover:bg-[#60A5FA]/5';
                                 let emoji = '';
                                 if (answered) {
-                                    if (oIdx === section.respuestaCorrecta) { btnClass = 'bg-[#DBEAFE] border-2 border-[#2563EB] text-[#2563EB]'; emoji = ' ✅'; }
-                                    else if (answered === 'wrong' && quizAnswers[`${index}_selected`] === oIdx) { btnClass = 'bg-[#FF4B4B]/10 border-2 border-[#FF4B4B] text-[#FF4B4B]'; emoji = ' ❌'; }
+                                    if (oIdx === section.respuestaCorrecta) { btnClass = 'bg-[#DBEAFE] border-2 border-[#2563EB] text-[#2563EB]'; emoji = ' âœ…'; }
+                                    else if (answered === 'wrong' && quizAnswers[`${index}_selected`] === oIdx) { btnClass = 'bg-[#FF4B4B]/10 border-2 border-[#FF4B4B] text-[#FF4B4B]'; emoji = ' âŒ'; }
                                     else { btnClass = 'bg-[#F7F7F7] border-2 border-[#E5E5E5] text-[#AFAFAF]'; }
                                 }
                                 return (
                                     <button key={oIdx} disabled={!!answered}
                                         onClick={() => { setQuizAnswers(prev => ({ ...prev, [`${index}_selected`]: oIdx })); handleQuizAnswer(index, oIdx, section.respuestaCorrecta); }}
                                         className={`w-full text-left p-3.5 rounded-xl text-sm font-bold transition-all active:scale-[0.98] ${btnClass}`}>
-                                        <span className="inline-flex items-center justify-center w-6 h-6 rounded-lg bg-[#CE82FF]/10 text-[#CE82FF] text-xs font-black mr-2">{String.fromCharCode(65 + oIdx)}</span>
+                                        <span className="inline-flex items-center justify-center w-6 h-6 rounded-lg bg-[#60A5FA]/10 text-[#60A5FA] text-xs font-black mr-2">{String.fromCharCode(65 + oIdx)}</span>
                                         {op}{emoji}
                                     </button>
                                 );
@@ -2134,7 +2134,7 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete, userPr
                         </div>
                         {answered && (
                             <div className={`p-3.5 rounded-xl text-sm font-semibold animate-bounce-in ${answered === 'correct' ? 'bg-[#DBEAFE] text-[#2563EB]' : 'bg-[#FF4B4B]/10 text-[#FF4B4B]'}`}>
-                                <span className="text-lg mr-1">{answered === 'correct' ? '🎉' : '💪'}</span>
+                                <span className="text-lg mr-1">{answered === 'correct' ? 'ðŸŽ‰' : 'ðŸ’ª'}</span>
                                 {section.explicacion}
                             </div>
                         )}
@@ -2144,15 +2144,15 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete, userPr
         }
         if (section.tipo === 'intro_hero') {
             return (
-                <div className="bg-gradient-to-br from-[#58CC02]/10 via-[#2563EB]/5 to-[#CE82FF]/10 p-6 rounded-2xl border-2 border-[#58CC02]/40 animate-scale-in relative overflow-hidden">
-                    <div className="absolute top-2 right-2 text-5xl opacity-20 rotate-12">🤖</div>
-                    <div className="absolute bottom-2 left-2 text-4xl opacity-10 -rotate-12">⚡</div>
+                <div className="bg-gradient-to-br from-[#58CC02]/10 via-[#2563EB]/5 to-[#60A5FA]/10 p-6 rounded-2xl border-2 border-[#58CC02]/40 animate-scale-in relative overflow-hidden">
+                    <div className="absolute top-2 right-2 text-5xl opacity-20 rotate-12">ðŸ¤–</div>
+                    <div className="absolute bottom-2 left-2 text-4xl opacity-10 -rotate-12">âš¡</div>
                     <h3 className="text-xl font-black text-[#58CC02] mb-3 flex items-center gap-2">
                         {section.titulo}
                     </h3>
                     <p className="text-sm text-[#555] font-semibold leading-relaxed relative z-10" dangerouslySetInnerHTML={{ __html: boldReplace(section.texto) }} />
                     <div className="mt-4 bg-white/60 p-3 rounded-xl border border-[#58CC02]/20">
-                        <p className="text-xs font-black text-[#58CC02]">🌟 ¡Empecemos esta aventura juntos!</p>
+                        <p className="text-xs font-black text-[#58CC02]">ðŸŒŸ Â¡Empecemos esta aventura juntos!</p>
                     </div>
                 </div>
             );
@@ -2160,15 +2160,15 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete, userPr
         if (section.tipo === 'interactive_challenge') {
             return (
                 <div className="bg-gradient-to-br from-[#FFC800]/10 via-[#FF9600]/10 to-[#FF4B4B]/10 p-5 rounded-2xl border-2 border-[#FF9600]/40 animate-scale-in relative overflow-hidden">
-                    <div className="absolute top-3 right-3 text-4xl opacity-15 rotate-6">🎮</div>
+                    <div className="absolute top-3 right-3 text-4xl opacity-15 rotate-6">ðŸŽ®</div>
                     <div className="flex items-center gap-2 mb-3">
-                        <span className="text-2xl animate-pulse-soft">🎯</span>
+                        <span className="text-2xl animate-pulse-soft">ðŸŽ¯</span>
                         <h3 className="text-lg font-black text-[#FF9600]">{section.titulo}</h3>
                     </div>
                     <p className="text-sm text-[#555] font-semibold leading-relaxed mb-3 whitespace-pre-line" dangerouslySetInnerHTML={{ __html: boldReplace(section.instruccion) }} />
                     {section.recompensa && (
                         <div className="bg-gradient-to-r from-[#FFC800]/30 to-[#FF9600]/20 p-3.5 rounded-xl border border-[#FFC800]/40 flex items-center gap-3">
-                            <span className="text-2xl">🏆</span>
+                            <span className="text-2xl">ðŸ†</span>
                             <div>
                                 <p className="text-xs font-black text-[#FF9600]">Recompensa:</p>
                                 <p className="text-sm font-bold text-[#E58600]">{section.recompensa}</p>
@@ -2177,9 +2177,9 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete, userPr
                     )}
                     {section.materiales && (
                         <div className="mt-3 bg-white/60 p-3 rounded-xl border border-[#FF9600]/20">
-                            <p className="text-xs font-black text-[#FF9600] mb-2">📋 Necesitas:</p>
+                            <p className="text-xs font-black text-[#FF9600] mb-2">ðŸ“‹ Necesitas:</p>
                             <ul className="text-xs text-[#777] font-semibold space-y-1">
-                                {section.materiales.map((m, mIdx) => <li key={mIdx} className="flex items-center gap-2"><span className="w-5 h-5 bg-[#FF9600]/10 rounded-lg flex items-center justify-center text-[10px]">✓</span> {m}</li>)}
+                                {section.materiales.map((m, mIdx) => <li key={mIdx} className="flex items-center gap-2"><span className="w-5 h-5 bg-[#FF9600]/10 rounded-lg flex items-center justify-center text-[10px]">âœ“</span> {m}</li>)}
                             </ul>
                         </div>
                     )}
@@ -2190,20 +2190,20 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete, userPr
             return (
                 <div className="bg-gradient-to-br from-[#1CB0F6]/10 to-[#0D8ECF]/10 p-5 rounded-2xl border-2 border-[#1CB0F6]/30 animate-scale-in">
                     <div className="flex items-center gap-2 mb-3">
-                        <span className="text-2xl animate-pulse-soft">🔬</span>
+                        <span className="text-2xl animate-pulse-soft">ðŸ”¬</span>
                         <h3 className="text-lg font-black text-[#1CB0F6]">{section.titulo}</h3>
                     </div>
                     <p className="text-sm text-[#777] font-semibold leading-relaxed mb-3" dangerouslySetInnerHTML={{ __html: boldReplace(section.instruccion) }} />
                     {section.materiales && (
                         <div className="bg-white p-3.5 rounded-xl border-2 border-[#1CB0F6]/20">
-                            <p className="text-xs font-black text-[#1CB0F6] mb-2">📋 Necesitas:</p>
+                            <p className="text-xs font-black text-[#1CB0F6] mb-2">ðŸ“‹ Necesitas:</p>
                             <ul className="text-xs text-[#777] font-semibold space-y-1">
-                                {section.materiales.map((m, mIdx) => <li key={mIdx} className="flex items-center gap-2"><span className="w-5 h-5 bg-[#1CB0F6]/10 rounded-lg flex items-center justify-center text-[10px]">✓</span> {m}</li>)}
+                                {section.materiales.map((m, mIdx) => <li key={mIdx} className="flex items-center gap-2"><span className="w-5 h-5 bg-[#1CB0F6]/10 rounded-lg flex items-center justify-center text-[10px]">âœ“</span> {m}</li>)}
                             </ul>
                         </div>
                     )}
                     <div className="mt-3 bg-[#1CB0F6]/20 p-3 rounded-xl">
-                        <p className="text-xs font-black text-[#0D8ECF]">🏅 +15 XP por completar esta actividad</p>
+                        <p className="text-xs font-black text-[#0D8ECF]">ðŸ… +15 XP por completar esta actividad</p>
                     </div>
                 </div>
             );
@@ -2212,7 +2212,7 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete, userPr
             return (
                 <div className="bg-gradient-to-br from-[#2563EB]/10 to-[#1D4ED8]/10 p-5 rounded-2xl border-2 border-[#2563EB]/30 animate-scale-in">
                     <div className="flex items-center gap-2 mb-2">
-                        <span className="text-2xl">💡</span>
+                        <span className="text-2xl">ðŸ’¡</span>
                         <h3 className="text-base font-black text-[#2563EB]">{section.titulo}</h3>
                     </div>
                     <p className="text-sm text-[#777] font-semibold leading-relaxed" dangerouslySetInnerHTML={{ __html: boldReplace(section.texto) }} />
@@ -2225,7 +2225,7 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete, userPr
                 <div className="bg-white rounded-2xl border-2 border-[#E5E5E5] overflow-hidden animate-img-reveal">
                     <div className="bg-gradient-to-r from-[#2563EB]/10 to-[#1CB0F6]/10 px-4 py-3 border-b border-[#E5E5E5]">
                         <h3 className="text-base font-black text-[#2563EB] flex items-center gap-2">
-                            🖼️ {section.titulo}
+                            ðŸ–¼ï¸ {section.titulo}
                         </h3>
                     </div>
                     <div className="p-4 flex flex-col items-center">
@@ -2269,14 +2269,14 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete, userPr
                         {section.tipo === 'texto' && section.puntos && (
                             <ul className="space-y-2 text-[#777] text-sm font-semibold">
                                 {section.puntos.map((punto, pIndex) => (
-                                    <li key={pIndex} className="flex items-start gap-2"><span className="text-[#1CB0F6] mt-0.5 flex-shrink-0">●</span><span dangerouslySetInnerHTML={{ __html: boldReplace(punto) }} /></li>
+                                    <li key={pIndex} className="flex items-start gap-2"><span className="text-[#1CB0F6] mt-0.5 flex-shrink-0">â—</span><span dangerouslySetInnerHTML={{ __html: boldReplace(punto) }} /></li>
                                 ))}
                             </ul>
                         )}
                         {section.tipo === 'formula' && (
                             <div className="space-y-3">
                                 <p className="text-[#AFAFAF] text-sm italic font-semibold">{section.texto}</p>
-                                <div className="bg-gradient-to-br from-[#1CB0F6]/10 to-[#CE82FF]/10 p-4 rounded-xl text-center font-mono text-2xl font-black text-[#3C3C3C] overflow-x-auto border-2 border-[#1CB0F6]/20">
+                                <div className="bg-gradient-to-br from-[#1CB0F6]/10 to-[#60A5FA]/10 p-4 rounded-xl text-center font-mono text-2xl font-black text-[#3C3C3C] overflow-x-auto border-2 border-[#1CB0F6]/20">
                                     <span dangerouslySetInnerHTML={{ __html: section.formula }}></span>
                                 </div>
                                 <p className="text-xs text-[#AFAFAF] font-semibold">{section.explicacion}</p>
@@ -2298,16 +2298,16 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete, userPr
                             <RobotAvatar config={userProfile.robotConfig} size={80} animate />
                         </div>
                     ) : (
-                        <div className="text-7xl mb-4 animate-bounce-in">🎉</div>
+                        <div className="text-7xl mb-4 animate-bounce-in">ðŸŽ‰</div>
                     )}
                     <h1 className="text-3xl font-black text-white mb-2">
-                        {userProfile ? `¡Genial, ${userProfile.userName}!` : '¡Módulo Completado!'}
+                        {userProfile ? `Â¡Genial, ${userProfile.userName}!` : 'Â¡MÃ³dulo Completado!'}
                     </h1>
                     <p className="text-white/80 font-bold text-base mb-6">{currentModule.titulo}</p>
                     
                     <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 mb-6 max-w-xs mx-auto">
                         <div className="flex justify-center gap-1 mb-3">
-                            {[1,2,3].map(i => <span key={i} className="text-3xl animate-bounce" style={{animationDelay: `${i*150}ms`}}>⭐</span>)}
+                            {[1,2,3].map(i => <span key={i} className="text-3xl animate-bounce" style={{animationDelay: `${i*150}ms`}}>â­</span>)}
                         </div>
                         <div className="text-4xl font-black text-white mb-1">+{xpEarned} XP</div>
                         <p className="text-white/70 text-sm font-bold">Puntos de experiencia ganados</p>
@@ -2315,14 +2315,14 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete, userPr
 
                     <div className="space-y-3 max-w-xs mx-auto">
                         <div className="bg-white/20 rounded-xl p-3 flex items-center gap-3">
-                            <span className="text-2xl">📖</span>
+                            <span className="text-2xl">ðŸ“–</span>
                             <div className="text-left">
                                 <p className="text-white font-black text-sm">{completedSteps.size}/{totalSteps} secciones</p>
                                 <p className="text-white/60 text-xs font-bold">completadas</p>
                             </div>
                         </div>
                         <div className="bg-white/20 rounded-xl p-3 flex items-center gap-3">
-                            <span className="text-2xl">🧠</span>
+                            <span className="text-2xl">ðŸ§ </span>
                             <div className="text-left">
                                 <p className="text-white font-black text-sm">{Object.values(quizAnswers).filter(v => v === 'correct').length} respuestas</p>
                                 <p className="text-white/60 text-xs font-bold">correctas en mini-quizzes</p>
@@ -2330,21 +2330,21 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete, userPr
                         </div>
                         {/* License earned badge */}
                         <div className="bg-[#FFC800]/30 rounded-xl p-3 flex items-center gap-3 border border-[#FFC800]/50 animate-bounce-in" style={{animationDelay: '600ms'}}>
-                            <span className="text-2xl">📜</span>
+                            <span className="text-2xl">ðŸ“œ</span>
                             <div className="text-left flex-grow">
-                                <p className="text-white font-black text-sm">¡Licencia Obtenida!</p>
+                                <p className="text-white font-black text-sm">Â¡Licencia Obtenida!</p>
                                 <p className="text-white/70 text-xs font-bold">{currentModule.titulo}</p>
                             </div>
-                            <span className="text-lg">🏅</span>
+                            <span className="text-lg">ðŸ…</span>
                         </div>
                     </div>
 
                     <div className="flex gap-2 mt-6 max-w-xs mx-auto">
                         <button onClick={onShowLicenses} className="flex-1 py-4 bg-white/20 text-white rounded-2xl font-black text-sm border-b-4 border-white/10 active:scale-95 transition flex items-center justify-center gap-1">
-                            📜 Mis Licencias
+                            ðŸ“œ Mis Licencias
                         </button>
                         <button onClick={goToMenu} className="flex-1 py-4 bg-white text-[#2563EB] rounded-2xl font-black text-sm border-b-4 border-[#E5E5E5] active:scale-95 transition hover:bg-gray-50">
-                            Continuar 🚀
+                            Continuar ðŸš€
                         </button>
                     </div>
                 </div>
@@ -2353,7 +2353,7 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete, userPr
     }
 
     const currentSection = content[currentStep];
-    const nodeColors = ['#2563EB', '#1CB0F6', '#CE82FF', '#FF9600', '#FF4B4B', '#FFC800'];
+    const nodeColors = ['#2563EB', '#1CB0F6', '#60A5FA', '#FF9600', '#FF4B4B', '#FFC800'];
     const moduleColor = nodeColors[moduleIndex % nodeColors.length];
 
     return (
@@ -2407,7 +2407,7 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete, userPr
                     </div>
                     <div>
                         <h1 className="text-base font-black text-[#3C3C3C] leading-tight">{currentModule.titulo}</h1>
-                        <p className="text-[10px] font-bold text-[#AFAFAF]">Módulo {moduleIndex + 1} · Sección {currentStep + 1}</p>
+                        <p className="text-[10px] font-bold text-[#AFAFAF]">MÃ³dulo {moduleIndex + 1} Â· SecciÃ³n {currentStep + 1}</p>
                     </div>
                 </div>
             </div>
@@ -2415,7 +2415,7 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete, userPr
             {/* XP Pop animation */}
             {showXpPop && (
                 <div className="fixed top-20 right-6 z-30 animate-xp-pop">
-                    <span className="text-sm font-black text-[#2563EB] bg-[#DBEAFE] px-3 py-1.5 rounded-full shadow-lg">+10 XP ⭐</span>
+                    <span className="text-sm font-black text-[#2563EB] bg-[#DBEAFE] px-3 py-1.5 rounded-full shadow-lg">+10 XP â­</span>
                 </div>
             )}
 
@@ -2441,7 +2441,7 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete, userPr
                     )}
                     <div className={`px-3 py-2 rounded-xl rounded-bl-none flex-grow ${isSpeaking ? 'bg-gradient-to-r from-[#2563EB]/10 to-[#1CB0F6]/10 border border-[#2563EB]/20' : 'bg-[#F7F7F7]'}`}>
                         <p className={`text-xs font-bold ${isSpeaking ? 'text-[#2563EB]' : 'text-[#777]'}`}>
-                            {isSpeaking ? '🔊 ' : ''}{randomMsg(mascotMood)}
+                            {isSpeaking ? 'ðŸ”Š ' : ''}{randomMsg(mascotMood)}
                         </p>
                     </div>
                     {/* TTS Button */}
@@ -2453,11 +2453,11 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete, userPr
                                     : 'bg-[#2563EB]/10 text-[#2563EB] hover:bg-[#2563EB]/20'
                             }`}
                             title={isSpeaking ? 'Detener lectura' : 'Leer en voz alta'}>
-                            <span className="text-lg">{isSpeaking ? '⏹️' : '🔊'}</span>
+                            <span className="text-lg">{isSpeaking ? 'â¹ï¸' : 'ðŸ”Š'}</span>
                         </button>
                     )}
                     <div className="flex items-center gap-1 bg-[#FFC800]/10 px-2.5 py-1.5 rounded-xl">
-                        <span className="text-sm">⭐</span>
+                        <span className="text-sm">â­</span>
                         <span className="text-xs font-black text-[#FF9600]">{xpEarned}</span>
                     </div>
                 </div>
@@ -2467,7 +2467,7 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete, userPr
                     <button onClick={goPrev} disabled={currentStep === 0}
                         className={`flex-1 py-3.5 rounded-xl text-sm font-black transition-all active:scale-95 border-2
                             ${currentStep === 0 ? 'bg-[#F7F7F7] text-[#CDCDCD] border-[#E5E5E5] cursor-not-allowed' : 'bg-white text-[#3C3C3C] border-[#E5E5E5] hover:border-[#AFAFAF]'}`}>
-                        ← Anterior
+                        â† Anterior
                     </button>
                     <button onClick={goNext}
                         disabled={!canAdvance(currentStep)}
@@ -2478,10 +2478,10 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete, userPr
                         }`}
                         style={canAdvance(currentStep) ? { backgroundColor: moduleColor, borderBottomColor: `${moduleColor}CC` } : {}}>
                         {!canAdvance(currentStep) 
-                            ? '🔒 Completa la actividad' 
+                            ? 'ðŸ”’ Completa la actividad' 
                             : currentStep === totalSteps - 1 
-                                ? '🎉 ¡Completar Módulo!' 
-                                : 'Siguiente →'
+                                ? 'ðŸŽ‰ Â¡Completar MÃ³dulo!' 
+                                : 'Siguiente â†’'
                         }
                     </button>
                 </div>
@@ -2505,14 +2505,14 @@ const ModuleCard = ({ module, onStart, userScores, index, totalModules, sectionC
     const nodeColors = [
         { hex: '#2563EB', hexDark: '#1D4ED8', hexLight: '#DBEAFE' },
         { hex: '#1CB0F6', hexDark: '#1899D6', hexLight: '#D0ECFB' },
-        { hex: '#CE82FF', hexDark: '#A855F7', hexLight: '#F0DEFF' },
+        { hex: '#60A5FA', hexDark: '#3B82F6', hexLight: '#DBEAFE' },
         { hex: '#FF9600', hexDark: '#E58600', hexLight: '#FFECD0' },
         { hex: '#FF4B4B', hexDark: '#EA2B2B', hexLight: '#FFD4D4' },
         { hex: '#FFC800', hexDark: '#E5B800', hexLight: '#FFF4CC' },
     ];
     const c = nodeColors[(index || 0) % nodeColors.length];
 
-    // Snake path: left → center → right → center → left...
+    // Snake path: left â†’ center â†’ right â†’ center â†’ left...
     const positions = ['self-start ml-4', 'self-center', 'self-end mr-4', 'self-center'];
     const posClass = positions[index % 4];
 
@@ -2545,7 +2545,7 @@ const ModuleCard = ({ module, onStart, userScores, index, totalModules, sectionC
                             borderBottom: `4px solid ${c.hexDark}`,
                         } : {}}
                     >
-                        {isLocked ? '🔒' : isCompleted ? '⭐' : module.icon}
+                        {isLocked ? 'ðŸ”’' : isCompleted ? 'â­' : module.icon}
                     </div>
                     {/* Module number badge */}
                     <div 
@@ -2559,12 +2559,12 @@ const ModuleCard = ({ module, onStart, userScores, index, totalModules, sectionC
                     {isActive && !isLocked && (
                         <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-white rounded-full border-2 flex items-center justify-center animate-pulse-soft"
                             style={{ borderColor: c.hex }}>
-                            <span className="text-[8px] font-black" style={{ color: c.hex }}>▶</span>
+                            <span className="text-[8px] font-black" style={{ color: c.hex }}>â–¶</span>
                         </div>
                     )}
                     {isCompleted && (
                         <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-[#FFC800] rounded-full border-2 border-[#E5B800] flex items-center justify-center">
-                            <span className="text-[8px] font-black text-white">✓</span>
+                            <span className="text-[8px] font-black text-white">âœ“</span>
                         </div>
                     )}
                 </div>
@@ -2594,7 +2594,7 @@ const ModuleCard = ({ module, onStart, userScores, index, totalModules, sectionC
                             <span className="text-[10px] font-bold" style={{ color: c.hex }}>{progress}%</span>
                         )}
                         {isLocked && (
-                            <span className="text-[10px] font-bold text-[#CDCDCD]">🔒 Completa el anterior</span>
+                            <span className="text-[10px] font-bold text-[#CDCDCD]">ðŸ”’ Completa el anterior</span>
                         )}
                     </div>
                 </div>
@@ -2622,11 +2622,11 @@ const SectionBanner = ({ section, modulesInSection, userScores, sectionIndex, al
 
     // Fun motivational messages per section
     const sectionMotivation = {
-        0: '¡Tu aventura robótica comienza aquí! 🚀',
-        1: '¡Domina los fundamentos como un pro! 💪',
-        2: '¡Es hora de programar robots! 🎮',
-        3: '¡Manos a la obra con proyectos reales! 🔧',
-        4: '¡Nivel experto desbloqueado! 🏆',
+        0: 'Â¡Tu aventura robÃ³tica comienza aquÃ­! ðŸš€',
+        1: 'Â¡Domina los fundamentos como un pro! ðŸ’ª',
+        2: 'Â¡Es hora de programar robots! ðŸŽ®',
+        3: 'Â¡Manos a la obra con proyectos reales! ðŸ”§',
+        4: 'Â¡Nivel experto desbloqueado! ðŸ†',
     };
 
     return (
@@ -2638,19 +2638,19 @@ const SectionBanner = ({ section, modulesInSection, userScores, sectionIndex, al
                 {!isSectionLocked && (
                     <div className="absolute right-0 top-0 text-6xl opacity-10 transform translate-x-4 -translate-y-2"
                         style={{ color: section.color }}>
-                        {section.emoji || '⭐'}
+                        {section.emoji || 'â­'}
                     </div>
                 )}
                 <div className="flex-grow relative z-10">
                     <h3 className="text-lg font-black flex items-center gap-2" style={{ color: isSectionLocked ? '#AFAFAF' : section.color }}>
-                        {isSectionLocked && <span>🔒</span>} {section.title}
-                        {isComplete && <span className="animate-bounce-in">✨</span>}
+                        {isSectionLocked && <span>ðŸ”’</span>} {section.title}
+                        {isComplete && <span className="animate-bounce-in">âœ¨</span>}
                     </h3>
                     <p className="text-[11px] font-bold text-[#777] mt-0.5">
                         {isSectionLocked 
-                            ? '🔒 Completa la sección anterior para desbloquear' 
+                            ? 'ðŸ”’ Completa la secciÃ³n anterior para desbloquear' 
                             : isComplete 
-                                ? '🎉 ¡Sección completada! ¡Eres increíble!' 
+                                ? 'ðŸŽ‰ Â¡SecciÃ³n completada! Â¡Eres increÃ­ble!' 
                                 : sectionMotivation[sectionIndex] || section.subtitle
                         }
                     </p>
@@ -2661,7 +2661,7 @@ const SectionBanner = ({ section, modulesInSection, userScores, sectionIndex, al
                             backgroundColor: isSectionLocked ? '#AFAFAF' : isComplete ? '#58CC02' : section.color, 
                             borderBottom: `4px solid ${isSectionLocked ? '#999' : isComplete ? '#4CAF00' : section.color + 'CC'}` 
                         }}>
-                        {isComplete ? '⭐' : `${completedInSection}/${totalInSection}`}
+                        {isComplete ? 'â­' : `${completedInSection}/${totalInSection}`}
                     </div>
                 </div>
             </div>
@@ -2678,7 +2678,7 @@ const SectionBanner = ({ section, modulesInSection, userScores, sectionIndex, al
     );
 };
 
-// --- WORLD MAP SCREEN (Selección de Mundos) ---
+// --- WORLD MAP SCREEN (SelecciÃ³n de Mundos) ---
 const WorldMapScreen = ({ userScores, onSelectWorld, userProfile, firebaseProfile, onShowAchievements, onShowLicenses, onLogout, onEditRobot, userStats, onGoToCircuits, onGoToProgramming, onShowSettings }) => {
     // Generate stars deterministically
     const stars = React.useMemo(() => 
@@ -2707,7 +2707,7 @@ const WorldMapScreen = ({ userScores, onSelectWorld, userProfile, firebaseProfil
                 {/* Nebula blobs */}
                 <div className="galaxy-nebula" style={{
                     width: '300px', height: '300px',
-                    background: 'radial-gradient(circle, rgba(139,92,246,0.35) 0%, rgba(99,102,241,0.15) 40%, transparent 70%)',
+                    background: 'radial-gradient(circle, rgba(37,99,235,0.35) 0%, rgba(59,130,246,0.15) 40%, transparent 70%)',
                     left: '-5%', top: '10%',
                     '--nebula-duration': '18s'
                 }}></div>
@@ -2719,13 +2719,13 @@ const WorldMapScreen = ({ userScores, onSelectWorld, userProfile, firebaseProfil
                 }}></div>
                 <div className="galaxy-nebula" style={{
                     width: '350px', height: '350px',
-                    background: 'radial-gradient(circle, rgba(168,85,247,0.25) 0%, rgba(192,132,252,0.1) 40%, transparent 70%)',
+                    background: 'radial-gradient(circle, rgba(96,165,250,0.25) 0%, rgba(147,197,253,0.1) 40%, transparent 70%)',
                     left: '30%', bottom: '5%',
                     '--nebula-duration': '25s'
                 }}></div>
                 <div className="galaxy-nebula-2" style={{
                     width: '200px', height: '200px',
-                    background: 'radial-gradient(circle, rgba(236,72,153,0.2) 0%, rgba(244,114,182,0.08) 40%, transparent 70%)',
+                    background: 'radial-gradient(circle, rgba(56,189,248,0.2) 0%, rgba(125,211,252,0.08) 40%, transparent 70%)',
                     right: '20%', top: '5%',
                     '--nebula-duration': '16s'
                 }}></div>
@@ -2759,41 +2759,41 @@ const WorldMapScreen = ({ userScores, onSelectWorld, userProfile, firebaseProfil
 
                 {/* Soft light overlay for "not too dark" effect */}
                 <div className="absolute inset-0" style={{
-                    background: 'radial-gradient(ellipse at 50% 0%, rgba(147,130,220,0.15) 0%, transparent 60%)',
+                    background: 'radial-gradient(ellipse at 50% 0%, rgba(96,165,250,0.15) 0%, transparent 60%)',
                 }}></div>
             </div>
 
             {/* Top Stats Bar */}
-            <div className="sticky top-0 z-20 bg-[#1E1B4B]/60 backdrop-blur-2xl border-b border-purple-500/15 px-4 py-2.5">
+            <div className="sticky top-0 z-20 bg-[#0F1A3E]/70 backdrop-blur-2xl border-b border-blue-500/15 px-4 py-2.5">
                 <div className="flex items-center justify-between max-w-xl mx-auto">
                     <div className="flex items-center gap-2.5">
                         {userProfile && (
-                            <button onClick={onEditRobot} className="active:scale-90 transition-transform hover:ring-2 hover:ring-purple-400/40 rounded-2xl p-0.5 bg-purple-500/10 border border-purple-400/15">
+                            <button onClick={onEditRobot} className="active:scale-90 transition-transform hover:ring-2 hover:ring-blue-400/40 rounded-2xl p-0.5 bg-blue-500/10 border border-blue-400/15">
                                 <RobotMini config={userProfile.robotConfig} size={36} />
                             </button>
                         )}
                         <div className="flex flex-col">
                             <span className="text-[11px] font-black text-white/90 leading-tight">{firebaseProfile?.username || 'Explorador'}</span>
-                            <span className="text-[9px] font-bold text-purple-300/60 leading-tight">
-                                {(() => { const lv = calculateLevel(firebaseProfile?.totalPoints ?? userStats?.totalPoints ?? 0); return `${lv.emoji} Nv.${lv.level} · ${lv.title}`; })()}
+                            <span className="text-[9px] font-bold text-blue-300/60 leading-tight">
+                                {(() => { const lv = calculateLevel(firebaseProfile?.totalPoints ?? userStats?.totalPoints ?? 0); return `${lv.emoji} Nv.${lv.level} Â· ${lv.title}`; })()}
                             </span>
                         </div>
                     </div>
                     <div className="flex items-center gap-2">
-                        <div className="flex items-center gap-1 bg-purple-400/15 px-2.5 py-1.5 rounded-xl border border-purple-400/15">
-                            <Zap size={14} className="text-purple-300" />
-                            <span className="text-xs font-black text-purple-200">{firebaseProfile?.currentStreak || 0}</span>
+                        <div className="flex items-center gap-1 bg-blue-400/15 px-2.5 py-1.5 rounded-xl border border-blue-400/15">
+                            <Zap size={14} className="text-blue-300" />
+                            <span className="text-xs font-black text-blue-200">{firebaseProfile?.currentStreak || 0}</span>
                         </div>
                         <div className="flex items-center gap-1 bg-yellow-400/12 px-2.5 py-1.5 rounded-xl border border-yellow-400/15">
                             <Star size={14} className="text-yellow-300" />
                             <span className="text-xs font-black text-yellow-300">{(firebaseProfile?.totalPoints ?? userStats?.totalPoints ?? 0).toLocaleString()}</span>
                         </div>
-                        <button onClick={onShowLicenses} className="flex items-center bg-purple-500/15 p-2 rounded-xl hover:bg-purple-500/25 transition active:scale-95 border border-purple-400/15">
-                            <GraduationCap size={16} className="text-purple-300" />
+                        <button onClick={onShowLicenses} className="flex items-center bg-blue-500/15 p-2 rounded-xl hover:bg-blue-500/25 transition active:scale-95 border border-blue-400/15">
+                            <GraduationCap size={16} className="text-blue-300" />
                         </button>
                         {onShowSettings && (
-                            <button onClick={onShowSettings} className="flex items-center bg-purple-500/15 p-2 rounded-xl hover:bg-purple-500/25 transition active:scale-95 border border-purple-400/15" title="Ajustes">
-                                <Settings size={14} className="text-purple-300" />
+                            <button onClick={onShowSettings} className="flex items-center bg-blue-500/15 p-2 rounded-xl hover:bg-blue-500/25 transition active:scale-95 border border-blue-400/15" title="Ajustes">
+                                <Settings size={14} className="text-blue-300" />
                             </button>
                         )}
                     </div>
@@ -2803,9 +2803,9 @@ const WorldMapScreen = ({ userScores, onSelectWorld, userProfile, firebaseProfil
             {/* Header */}
             <div className="text-center pt-6 pb-3 px-4 relative z-10">
                 <h1 className="text-2xl font-black text-white mb-1 tracking-tight drop-shadow-lg flex items-center justify-center gap-2">
-                    <Rocket size={22} className="text-purple-300" /> Mapa Galáctico
+                    <Rocket size={22} className="text-blue-300" /> Mapa GalÃ¡ctico
                 </h1>
-                <p className="text-xs text-purple-200/60 font-bold">Elige tu destino y conquista los mundos</p>
+                <p className="text-xs text-blue-200/60 font-bold">Elige tu destino y conquista los mundos</p>
             </div>
 
             {/* Station Ships */}
@@ -2834,7 +2834,7 @@ const WorldMapScreen = ({ userScores, onSelectWorld, userProfile, firebaseProfil
                         <div className="text-center mt-1">
                             <h3 className="text-xs font-black text-[#22D3EE] leading-tight">Laboratorio</h3>
                             <h3 className="text-xs font-black text-[#22D3EE] leading-tight">de Circuitos</h3>
-                            <span className="text-[9px] font-bold text-purple-200/50 mt-0.5 block">Practica libremente</span>
+                            <span className="text-[9px] font-bold text-blue-200/50 mt-0.5 block">Practica libremente</span>
                         </div>
                     </div>
 
@@ -2845,23 +2845,23 @@ const WorldMapScreen = ({ userScores, onSelectWorld, userProfile, firebaseProfil
                             style={{ animation: 'ship-fly 7s ease-in-out infinite 0.8s' }}>
                             {/* Outer glow ring */}
                             <div className="absolute inset-[-16px] rounded-full pointer-events-none opacity-60 group-hover:opacity-100 transition-opacity duration-500"
-                                style={{ background: 'radial-gradient(circle, rgba(167,139,250,0.4) 0%, rgba(167,139,250,0.1) 40%, transparent 70%)', filter: 'blur(8px)' }}></div>
+                                style={{ background: 'radial-gradient(circle, rgba(96,165,250,0.4) 0%, rgba(96,165,250,0.1) 40%, transparent 70%)', filter: 'blur(8px)' }}></div>
                             {/* Ship image */}
-                            <img src="/programacion.png" alt="Estación de Programación"
+                            <img src="/programacion.png" alt="EstaciÃ³n de ProgramaciÃ³n"
                                 className="w-28 h-28 sm:w-32 sm:h-32 object-contain relative z-10 group-hover:scale-110 transition-transform duration-300"
-                                style={{ filter: 'drop-shadow(0 0 18px rgba(167,139,250,0.6)) drop-shadow(0 0 40px rgba(167,139,250,0.3))' }} />
+                                style={{ filter: 'drop-shadow(0 0 18px rgba(96,165,250,0.6)) drop-shadow(0 0 40px rgba(96,165,250,0.3))' }} />
                             {/* Thruster glow */}
-                            <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-14 h-5 rounded-full bg-[#A78BFA]/50 blur-lg z-0" style={{ animation: 'twinkle 1.8s ease-in-out infinite 0.3s' }}></div>
+                            <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-14 h-5 rounded-full bg-[#60A5FA]/50 blur-lg z-0" style={{ animation: 'twinkle 1.8s ease-in-out infinite 0.3s' }}></div>
                             {/* Sparkles around ship */}
-                            <div className="absolute top-0 left-0 w-2 h-2 bg-[#A78BFA]/70 rounded-full" style={{ animation: 'twinkle 2.5s ease-in-out infinite 0.3s' }}></div>
+                            <div className="absolute top-0 left-0 w-2 h-2 bg-[#60A5FA]/70 rounded-full" style={{ animation: 'twinkle 2.5s ease-in-out infinite 0.3s' }}></div>
                             <div className="absolute bottom-4 right-0 w-1.5 h-1.5 bg-white/50 rounded-full" style={{ animation: 'twinkle 3s ease-in-out infinite 1s' }}></div>
-                            <div className="absolute top-6 right-1 w-1 h-1 bg-[#A78BFA]/50 rounded-full" style={{ animation: 'twinkle 2s ease-in-out infinite 0.7s' }}></div>
+                            <div className="absolute top-6 right-1 w-1 h-1 bg-[#60A5FA]/50 rounded-full" style={{ animation: 'twinkle 2s ease-in-out infinite 0.7s' }}></div>
                         </button>
                         {/* Info below */}
                         <div className="text-center mt-1">
-                            <h3 className="text-xs font-black text-[#A78BFA] leading-tight">Estación de</h3>
-                            <h3 className="text-xs font-black text-[#A78BFA] leading-tight">Programación</h3>
-                            <span className="text-[9px] font-bold text-purple-200/50 mt-0.5 block">Tutoriales y retos</span>
+                            <h3 className="text-xs font-black text-[#60A5FA] leading-tight">EstaciÃ³n de</h3>
+                            <h3 className="text-xs font-black text-[#60A5FA] leading-tight">ProgramaciÃ³n</h3>
+                            <span className="text-[9px] font-bold text-blue-200/50 mt-0.5 block">Tutoriales y retos</span>
                         </div>
                     </div>
                 </div>
@@ -2883,7 +2883,7 @@ const WorldMapScreen = ({ userScores, onSelectWorld, userProfile, firebaseProfil
                             {/* Connector line between planets */}
                             {idx > 0 && (
                                 <div className="flex justify-center -mt-6 mb-4">
-                                    <div className="w-0.5 h-10 bg-gradient-to-b from-purple-400/50 via-purple-300/20 to-transparent rounded-full shadow-[0_0_8px_rgba(168,85,247,0.3)]"></div>
+                                    <div className="w-0.5 h-10 bg-gradient-to-b from-blue-400/50 via-blue-300/20 to-transparent rounded-full shadow-[0_0_8px_rgba(59,130,246,0.3)]"></div>
                                 </div>
                             )}
 
@@ -2928,7 +2928,7 @@ const WorldMapScreen = ({ userScores, onSelectWorld, userProfile, firebaseProfil
                                 {!unlocked && (
                                     <div className="absolute inset-0 flex items-center justify-center z-20">
                                         <div className="w-14 h-14 bg-black/60 backdrop-blur-sm rounded-full flex items-center justify-center border-2 border-white/20 shadow-lg">
-                                            <span className="text-2xl">🔒</span>
+                                            <span className="text-2xl">ðŸ”’</span>
                                         </div>
                                     </div>
                                 )}
@@ -2937,7 +2937,7 @@ const WorldMapScreen = ({ userScores, onSelectWorld, userProfile, firebaseProfil
                                 {isComplete && (
                                     <div className="absolute -top-2 -right-2 z-20 animate-bounce-in">
                                         <div className="w-10 h-10 bg-[#FFC800] rounded-full flex items-center justify-center border-2 border-[#E5B800] shadow-[0_0_15px_rgba(255,200,0,0.5)]">
-                                            <span className="text-lg">⭐</span>
+                                            <span className="text-lg">â­</span>
                                         </div>
                                     </div>
                                 )}
@@ -2945,21 +2945,21 @@ const WorldMapScreen = ({ userScores, onSelectWorld, userProfile, firebaseProfil
 
                             {/* World Details Below Image */}
                             <div className={`mt-4 text-center max-w-xs transition-all duration-500 ${!unlocked ? 'opacity-50' : ''}`}>
-                                <span className="text-[10px] font-black text-purple-300/70 uppercase tracking-widest">Mundo {idx + 1}</span>
+                                <span className="text-[10px] font-black text-blue-300/70 uppercase tracking-widest">Mundo {idx + 1}</span>
                                 <h2 className="text-xl font-black text-white mt-0.5 drop-shadow-lg">
                                     {world.name}
-                                    {isComplete && <span className="ml-2 text-sm animate-pulse">✨</span>}
+                                    {isComplete && <span className="ml-2 text-sm animate-pulse">âœ¨</span>}
                                 </h2>
-                                <p className="text-xs text-purple-200/70 font-semibold mt-1 leading-relaxed">{world.description}</p>
+                                <p className="text-xs text-blue-200/70 font-semibold mt-1 leading-relaxed">{world.description}</p>
 
                                 {/* Progress bar */}
                                 {unlocked && (
                                     <div className="mt-3 px-4">
                                         <div className="flex items-center justify-between mb-1">
-                                            <span className="text-[10px] font-black text-purple-200/80">
-                                                {completedCount}/{totalCount} módulos
+                                            <span className="text-[10px] font-black text-blue-200/80">
+                                                {completedCount}/{totalCount} mÃ³dulos
                                             </span>
-                                            <span className="text-[10px] font-black text-purple-200/80">{progress}%</span>
+                                            <span className="text-[10px] font-black text-blue-200/80">{progress}%</span>
                                         </div>
                                         <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden backdrop-blur-sm">
                                             <div className={`h-full rounded-full transition-all duration-1000 ${isComplete ? 'bg-[#FFC800]' : 'bg-white/80'}`}
@@ -2972,10 +2972,10 @@ const WorldMapScreen = ({ userScores, onSelectWorld, userProfile, firebaseProfil
                                 {/* Lock message */}
                                 {!unlocked && (
                                     <div className="mt-2 bg-white/5 backdrop-blur-sm rounded-lg px-3 py-1.5 border border-white/10">
-                                        <p className="text-[10px] text-purple-300/60 font-bold">
+                                        <p className="text-[10px] text-blue-300/60 font-bold">
                                             {world.unlockType === 'friends'
-                                                ? `🔒 Agrega ${world.unlockRequirement} amigos para desbloquear (${firebaseProfile?.friendsCount || 0}/${world.unlockRequirement})`
-                                                : `🔒 Completa "${WORLDS_CONFIG[idx - 1]?.name}"`
+                                                ? `ðŸ”’ Agrega ${world.unlockRequirement} amigos para desbloquear (${firebaseProfile?.friendsCount || 0}/${world.unlockRequirement})`
+                                                : `ðŸ”’ Completa "${WORLDS_CONFIG[idx - 1]?.name}"`
                                             }
                                         </p>
                                     </div>
@@ -2987,12 +2987,12 @@ const WorldMapScreen = ({ userScores, onSelectWorld, userProfile, firebaseProfil
 
                 {/* Future worlds teaser */}
                 <div className="flex flex-col items-center py-4">
-                    <div className="w-0.5 h-8 bg-gradient-to-b from-purple-400/30 to-transparent rounded-full mb-4"></div>
+                    <div className="w-0.5 h-8 bg-gradient-to-b from-blue-400/30 to-transparent rounded-full mb-4"></div>
                     <div className="inline-flex flex-col items-center gap-2 opacity-50">
-                        <div className="w-16 h-16 bg-purple-500/15 rounded-full flex items-center justify-center text-3xl border-2 border-dashed border-purple-400/20 shadow-[0_0_15px_rgba(168,85,247,0.15)]" style={{animation: 'float-planet 6s ease-in-out infinite'}}>
-                            🚀
+                        <div className="w-16 h-16 bg-blue-500/15 rounded-full flex items-center justify-center text-3xl border-2 border-dashed border-blue-400/20 shadow-[0_0_15px_rgba(59,130,246,0.15)]" style={{animation: 'float-planet 6s ease-in-out infinite'}}>
+                            ðŸš€
                         </div>
-                        <span className="text-xs font-black text-purple-300/60">¡Más mundos próximamente!</span>
+                        <span className="text-xs font-black text-blue-300/60">Â¡MÃ¡s mundos prÃ³ximamente!</span>
                     </div>
                 </div>
             </div>
@@ -3017,37 +3017,37 @@ const speakText = (text, lang = 'es-MX') => {
 // --- Robot companion phrases by context ---
 const ROBOT_COMPANION_PHRASES = {
     start: [
-        '¡Vamos a aprender juntos! 🚀',
-        '¡Hoy va a ser un gran día de aprendizaje! ✨',
-        '¡Estoy listo para explorar contigo! 🤖',
+        'Â¡Vamos a aprender juntos! ðŸš€',
+        'Â¡Hoy va a ser un gran dÃ­a de aprendizaje! âœ¨',
+        'Â¡Estoy listo para explorar contigo! ðŸ¤–',
     ],
     progress: [
-        '¡Vas muy bien! ¡Sigue así! 💪',
-        '¡Cada módulo te hace más fuerte! ⚡',
-        '¡Estoy orgulloso de tu progreso! 🌟',
-        '¡No te detengas, falta poco! 🔥',
+        'Â¡Vas muy bien! Â¡Sigue asÃ­! ðŸ’ª',
+        'Â¡Cada mÃ³dulo te hace mÃ¡s fuerte! âš¡',
+        'Â¡Estoy orgulloso de tu progreso! ðŸŒŸ',
+        'Â¡No te detengas, falta poco! ðŸ”¥',
     ],
     challenge: [
-        '¡Un reto! ¿Te atreves? Los retos te hacen mejor programador 🧩',
-        '¡Hora de poner a prueba lo aprendido! 💻',
-        '¡Este reto será pan comido para ti! 😎',
+        'Â¡Un reto! Â¿Te atreves? Los retos te hacen mejor programador ðŸ§©',
+        'Â¡Hora de poner a prueba lo aprendido! ðŸ’»',
+        'Â¡Este reto serÃ¡ pan comido para ti! ðŸ˜Ž',
     ],
     circuit: [
-        '¡Hora de construir un circuito! ¡Manos a la obra! ⚡',
-        '¡Los circuitos son mi parte favorita! 🔌',
+        'Â¡Hora de construir un circuito! Â¡Manos a la obra! âš¡',
+        'Â¡Los circuitos son mi parte favorita! ðŸ”Œ',
     ],
     glossary: [
-        '¡Nuevo término! Leerlo te ayudará mucho 📖',
-        '¡Aprende este concepto, te será muy útil! 🧠',
-        '¡Toca el 🔊 para que te lo lea en voz alta!',
+        'Â¡Nuevo tÃ©rmino! Leerlo te ayudarÃ¡ mucho ðŸ“–',
+        'Â¡Aprende este concepto, te serÃ¡ muy Ãºtil! ðŸ§ ',
+        'Â¡Toca el ðŸ”Š para que te lo lea en voz alta!',
     ],
     locked: [
-        '¡Completa el módulo anterior para desbloquear esto! 🔒',
-        '¡Paso a paso! Primero termina lo de arriba 📚',
+        'Â¡Completa el mÃ³dulo anterior para desbloquear esto! ðŸ”’',
+        'Â¡Paso a paso! Primero termina lo de arriba ðŸ“š',
     ],
     complete: [
-        '¡INCREÍBLE! ¡Completaste todo! ¡Eres un genio! 🏆',
-        '¡WOW! ¡Dominaste esta sección! 🎉',
+        'Â¡INCREÃBLE! Â¡Completaste todo! Â¡Eres un genio! ðŸ†',
+        'Â¡WOW! Â¡Dominaste esta secciÃ³n! ðŸŽ‰',
     ],
 };
 const getCompanionPhrase = (context, seed = 0) => {
@@ -3101,9 +3101,9 @@ const InlineGlossaryTerm = ({ term, isLocked }) => {
             <div className="relative z-10 w-full flex justify-center">
                 <div className="w-full max-w-[300px] bg-[#F7F7F7] rounded-2xl border-2 border-[#E5E5E5] p-3.5 opacity-50 cursor-not-allowed">
                     <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-[#E5E5E5] rounded-xl flex items-center justify-center text-xl flex-shrink-0">🔒</div>
+                        <div className="w-10 h-10 bg-[#E5E5E5] rounded-xl flex items-center justify-center text-xl flex-shrink-0">ðŸ”’</div>
                         <div className="flex-grow min-w-0">
-                            <span className="text-[9px] font-black text-[#AFAFAF] uppercase tracking-wider">📖 Término</span>
+                            <span className="text-[9px] font-black text-[#AFAFAF] uppercase tracking-wider">ðŸ“– TÃ©rmino</span>
                             <h3 className="text-[13px] font-black text-[#AFAFAF] truncate">???</h3>
                         </div>
                     </div>
@@ -3119,18 +3119,18 @@ const InlineGlossaryTerm = ({ term, isLocked }) => {
                 <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-[#10B981]/10 rounded-xl flex items-center justify-center text-xl flex-shrink-0 group-hover:scale-110 transition-transform">{term.emoji}</div>
                     <div className="flex-grow min-w-0">
-                        <span className="text-[9px] font-black text-[#10B981] uppercase tracking-wider">📖 Término</span>
+                        <span className="text-[9px] font-black text-[#10B981] uppercase tracking-wider">ðŸ“– TÃ©rmino</span>
                         <h3 className="text-[13px] font-black text-[#3C3C3C] truncate">{term.term}</h3>
                     </div>
                     <button onClick={handleSpeak} className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-all ${isSpeaking ? 'bg-[#10B981] text-white scale-110' : 'bg-[#10B981]/10 text-[#10B981] hover:bg-[#10B981]/20'}`} title="Escuchar">
-                        {isSpeaking ? '🔊' : '🔈'}
+                        {isSpeaking ? 'ðŸ”Š' : 'ðŸ”ˆ'}
                     </button>
                     <ChevronDown size={14} className={`text-[#10B981] transition-transform flex-shrink-0 ${open ? 'rotate-180' : ''}`} />
                 </div>
                 {open && (
                     <div className="mt-3 pt-3 border-t border-[#10B981]/15 animate-fade-in">
                         <p className="text-[11px] text-[#555] leading-relaxed font-medium">{term.definition}</p>
-                        {term.example && <p className="text-[10px] text-[#888] mt-2 italic bg-[#F0FDF4] p-2 rounded-lg">💡 {term.example}</p>}
+                        {term.example && <p className="text-[10px] text-[#888] mt-2 italic bg-[#F0FDF4] p-2 rounded-lg">ðŸ’¡ {term.example}</p>}
                     </div>
                 )}
             </div>
@@ -3147,12 +3147,12 @@ const InlineChallengeNode = ({ challenge, onStart, isCompleted, isLocked }) => {
             <div className="relative z-10 w-full flex justify-center">
                 <div className="w-full max-w-[300px] bg-[#F7F7F7] rounded-2xl border-2 border-[#E5E5E5] p-3.5 opacity-50 cursor-not-allowed">
                     <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-[#E5E5E5] rounded-xl flex items-center justify-center text-lg flex-shrink-0">🔒</div>
+                        <div className="w-10 h-10 bg-[#E5E5E5] rounded-xl flex items-center justify-center text-lg flex-shrink-0">ðŸ”’</div>
                         <div className="flex-grow min-w-0">
-                            <span className="text-[9px] font-black text-[#AFAFAF] uppercase tracking-wider">🧩 Reto de código</span>
+                            <span className="text-[9px] font-black text-[#AFAFAF] uppercase tracking-wider">ðŸ§© Reto de cÃ³digo</span>
                             <h3 className="text-[13px] font-black text-[#AFAFAF] truncate">{challenge.title}</h3>
                         </div>
-                        <div className="px-3 py-1.5 rounded-xl text-[10px] font-black text-white bg-[#CDCDCD]">🔒</div>
+                        <div className="px-3 py-1.5 rounded-xl text-[10px] font-black text-white bg-[#CDCDCD]">ðŸ”’</div>
                     </div>
                 </div>
             </div>
@@ -3166,14 +3166,14 @@ const InlineChallengeNode = ({ challenge, onStart, isCompleted, isLocked }) => {
                 <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0 border-b-2 group-hover:scale-110 transition-transform"
                         style={{ backgroundColor: bgColor, borderColor: bgColor + 'CC' }}>
-                        <span className="text-white text-sm">{isCompleted ? '✓' : challenge.icon}</span>
+                        <span className="text-white text-sm">{isCompleted ? 'âœ“' : challenge.icon}</span>
                     </div>
                     <div className="flex-grow min-w-0">
-                        <span className="text-[9px] font-black text-[#FF4B4B] uppercase tracking-wider">🧩 Reto de código</span>
+                        <span className="text-[9px] font-black text-[#FF4B4B] uppercase tracking-wider">ðŸ§© Reto de cÃ³digo</span>
                         <h3 className="text-[13px] font-black text-[#3C3C3C] truncate">{challenge.title}</h3>
                     </div>
                     <div className={`px-3 py-1.5 rounded-xl text-[10px] font-black text-white ${isCompleted ? 'bg-[#58CC02]' : 'bg-[#FF4B4B]'}`}>
-                        {isCompleted ? '✓ Hecho' : '¡IR!'}
+                        {isCompleted ? 'âœ“ Hecho' : 'Â¡IR!'}
                     </div>
                 </div>
             </div>
@@ -3187,13 +3187,13 @@ const InlineCircuitNode = ({ circuitId, title, difficulty, onStart, isLocked }) 
             <div className="relative z-10 w-full flex justify-center">
                 <div className="w-full max-w-[300px] bg-[#F7F7F7] rounded-2xl border-2 border-[#E5E5E5] p-3.5 opacity-50 cursor-not-allowed">
                     <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-[#E5E5E5] rounded-xl flex items-center justify-center text-lg flex-shrink-0">🔒</div>
+                        <div className="w-10 h-10 bg-[#E5E5E5] rounded-xl flex items-center justify-center text-lg flex-shrink-0">ðŸ”’</div>
                         <div className="flex-grow min-w-0">
-                            <span className="text-[9px] font-black text-[#AFAFAF] uppercase tracking-wider">⚡ Circuito</span>
+                            <span className="text-[9px] font-black text-[#AFAFAF] uppercase tracking-wider">âš¡ Circuito</span>
                             <h3 className="text-[13px] font-black text-[#AFAFAF] truncate">{title}</h3>
                             <span className="text-[10px] font-bold text-[#CDCDCD]">{difficulty}</span>
                         </div>
-                        <div className="px-3 py-1.5 rounded-xl text-[10px] font-black text-white bg-[#CDCDCD]">🔒</div>
+                        <div className="px-3 py-1.5 rounded-xl text-[10px] font-black text-white bg-[#CDCDCD]">ðŸ”’</div>
                     </div>
                 </div>
             </div>
@@ -3206,15 +3206,15 @@ const InlineCircuitNode = ({ circuitId, title, difficulty, onStart, isLocked }) 
                 className="w-full max-w-[300px] bg-white rounded-2xl border-2 border-[#2563EB]/20 hover:border-[#2563EB] hover:shadow-md p-3.5 cursor-pointer transition-all active:scale-[0.97] group">
                 <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-gradient-to-br from-[#2563EB] to-[#1D4ED8] rounded-xl flex items-center justify-center text-lg flex-shrink-0 border-b-2 border-[#1E40AF] group-hover:scale-110 transition-transform">
-                        <span className="text-white text-sm">⚡</span>
+                        <span className="text-white text-sm">âš¡</span>
                     </div>
                     <div className="flex-grow min-w-0">
-                        <span className="text-[9px] font-black text-[#2563EB] uppercase tracking-wider">⚡ Circuito</span>
+                        <span className="text-[9px] font-black text-[#2563EB] uppercase tracking-wider">âš¡ Circuito</span>
                         <h3 className="text-[13px] font-black text-[#3C3C3C] truncate">{title}</h3>
                         <span className="text-[10px] font-bold text-[#AFAFAF]">{difficulty}</span>
                     </div>
                     <div className="px-3 py-1.5 rounded-xl text-[10px] font-black text-white bg-[#2563EB]">
-                        ¡IR!
+                        Â¡IR!
                     </div>
                 </div>
             </div>
@@ -3236,8 +3236,8 @@ const LibraryScreen = ({ startLesson, userId, userScores, onShowAchievements, on
 
     // Circuit challenges info
     const worldCircuitIds = world.circuitIds || [];
-    const circuitDifficultyLabels = { 1: 'Fácil', 2: 'Fácil', 3: 'Medio', 4: 'Medio', 5: 'Difícil', 6: 'Difícil', 7: 'Experto', 8: 'Libre' };
-    const circuitTitles = { 1: 'Mi Primer Circuito', 2: 'Protege tu LED', 3: 'Control con Interruptor', 4: 'Semáforo Simple', 5: 'Motor en Acción', 6: 'Alarma Sonora', 7: 'Arduino LED', 8: 'Modo Libre' };
+    const circuitDifficultyLabels = { 1: 'FÃ¡cil', 2: 'FÃ¡cil', 3: 'Medio', 4: 'Medio', 5: 'DifÃ­cil', 6: 'DifÃ­cil', 7: 'Experto', 8: 'Libre' };
+    const circuitTitles = { 1: 'Mi Primer Circuito', 2: 'Protege tu LED', 3: 'Control con Interruptor', 4: 'SemÃ¡foro Simple', 5: 'Motor en AcciÃ³n', 6: 'Alarma Sonora', 7: 'Arduino LED', 8: 'Modo Libre' };
 
     // Glossary terms for this world
     const worldGlossaryTerms = (world.glossaryTermIds || []).map(id => GLOSSARY_TERMS_DATA.find(t => t.id === id)).filter(Boolean);
@@ -3309,8 +3309,8 @@ const LibraryScreen = ({ startLesson, userId, userScores, onShowAchievements, on
             <div className="max-w-xl mx-auto relative z-10">
                 {userProfile && (
                     <div className="flex items-center gap-2 mb-2">
-                        <p className="text-sm font-black text-white/90">¡Hola, {userProfile.userName}!</p>
-                        <span className="animate-bounce-in inline-block">👋</span>
+                        <p className="text-sm font-black text-white/90">Â¡Hola, {userProfile.userName}!</p>
+                        <span className="animate-bounce-in inline-block">ðŸ‘‹</span>
                     </div>
                 )}
                 <div className="flex items-center justify-between mb-4">
@@ -3321,10 +3321,10 @@ const LibraryScreen = ({ startLesson, userId, userScores, onShowAchievements, on
                         </h2>
                         <p className="text-xs text-white/70 font-bold mt-0.5">
                             {completedModulesCount === 0 
-                                ? '¡Empieza tu aventura! 🌟' 
+                                ? 'Â¡Empieza tu aventura! ðŸŒŸ' 
                                 : completedModulesCount === totalModules 
-                                    ? '¡FELICIDADES! ¡Mundo completado! 🏆' 
-                                    : `${totalModules - completedModulesCount} módulos por conquistar`
+                                    ? 'Â¡FELICIDADES! Â¡Mundo completado! ðŸ†' 
+                                    : `${totalModules - completedModulesCount} mÃ³dulos por conquistar`
                             }
                         </p>
                     </div>
@@ -3338,7 +3338,7 @@ const LibraryScreen = ({ startLesson, userId, userScores, onShowAchievements, on
                         </svg>
                         <div className="absolute inset-0 flex items-center justify-center">
                             {overallProgress === 100 
-                                ? <span className="text-lg animate-pulse-soft">⭐</span>
+                                ? <span className="text-lg animate-pulse-soft">â­</span>
                                 : <span className="text-sm font-black text-white">{overallProgress}%</span>
                             }
                         </div>
@@ -3355,11 +3355,11 @@ const LibraryScreen = ({ startLesson, userId, userScores, onShowAchievements, on
                         </div>
                     </div>
                     <div className="flex justify-between mt-2">
-                        <div className="flex flex-col items-center"><span className={`text-sm ${overallProgress >= 0 ? 'grayscale-0' : 'grayscale opacity-50'}`}>🌱</span><span className="text-[9px] font-bold text-white/50">Inicio</span></div>
-                        <div className="flex flex-col items-center"><span className={`text-sm ${overallProgress >= 25 ? 'grayscale-0' : 'grayscale opacity-50'}`}>⚡</span><span className="text-[9px] font-bold text-white/50">25%</span></div>
-                        <div className="flex flex-col items-center"><span className={`text-sm ${overallProgress >= 50 ? 'grayscale-0' : 'grayscale opacity-50'}`}>🔧</span><span className="text-[9px] font-bold text-white/50">50%</span></div>
-                        <div className="flex flex-col items-center"><span className={`text-sm ${overallProgress >= 75 ? 'grayscale-0' : 'grayscale opacity-50'}`}>🚀</span><span className="text-[9px] font-bold text-white/50">75%</span></div>
-                        <div className="flex flex-col items-center"><span className={`text-sm ${overallProgress >= 100 ? 'grayscale-0 animate-bounce-in' : 'grayscale opacity-50'}`}>🏆</span><span className="text-[9px] font-bold text-white/50">Experto</span></div>
+                        <div className="flex flex-col items-center"><span className={`text-sm ${overallProgress >= 0 ? 'grayscale-0' : 'grayscale opacity-50'}`}>ðŸŒ±</span><span className="text-[9px] font-bold text-white/50">Inicio</span></div>
+                        <div className="flex flex-col items-center"><span className={`text-sm ${overallProgress >= 25 ? 'grayscale-0' : 'grayscale opacity-50'}`}>âš¡</span><span className="text-[9px] font-bold text-white/50">25%</span></div>
+                        <div className="flex flex-col items-center"><span className={`text-sm ${overallProgress >= 50 ? 'grayscale-0' : 'grayscale opacity-50'}`}>ðŸ”§</span><span className="text-[9px] font-bold text-white/50">50%</span></div>
+                        <div className="flex flex-col items-center"><span className={`text-sm ${overallProgress >= 75 ? 'grayscale-0' : 'grayscale opacity-50'}`}>ðŸš€</span><span className="text-[9px] font-bold text-white/50">75%</span></div>
+                        <div className="flex flex-col items-center"><span className={`text-sm ${overallProgress >= 100 ? 'grayscale-0 animate-bounce-in' : 'grayscale opacity-50'}`}>ðŸ†</span><span className="text-[9px] font-bold text-white/50">Experto</span></div>
                     </div>
                 </div>
             </div>
@@ -3398,7 +3398,7 @@ const LibraryScreen = ({ startLesson, userId, userScores, onShowAchievements, on
                     }
                 });
 
-                // Determine the "frontier" — the first module that is unlocked but not completed (robot position)
+                // Determine the "frontier" â€” the first module that is unlocked but not completed (robot position)
                 const sectionCompletedCount = sectionModules.filter(m => isModuleCompleted(userScores, m.id)).length;
                 const allSectionCompleted = sectionCompletedCount === sectionModules.length;
 
@@ -3524,9 +3524,9 @@ const LibraryScreen = ({ startLesson, userId, userScores, onShowAchievements, on
             <div className="text-center py-6">
                 <div className="inline-flex flex-col items-center gap-2">
                     <div className="w-16 h-16 bg-gradient-to-br from-[#FFC800] to-[#FF9600] rounded-full flex items-center justify-center text-3xl shadow-lg border-b-4 border-[#E58600]">
-                        🎓
+                        ðŸŽ“
                     </div>
-                    <span className="text-xs font-black text-[#AFAFAF]">¡Completa todos los módulos!</span>
+                    <span className="text-xs font-black text-[#AFAFAF]">Â¡Completa todos los mÃ³dulos!</span>
                 </div>
             </div>
         </div>
@@ -3536,17 +3536,17 @@ const LibraryScreen = ({ startLesson, userId, userScores, onShowAchievements, on
 const PlaceholderScreen = ({ title, color, goToMenu }) => (
     <div className="p-6 min-h-full bg-white flex flex-col items-center justify-center text-center animate-fade-in">
         <div className="w-20 h-20 bg-[#E5E5E5] rounded-full flex items-center justify-center mb-4 border-4 border-[#AFAFAF]">
-            <span className="text-4xl">🚧</span>
+            <span className="text-4xl">ðŸš§</span>
         </div>
         <h1 className="text-2xl font-black text-[#3C3C3C] mb-2">{title}</h1>
-        <p className="text-sm text-[#AFAFAF] mb-6 max-w-xs font-bold">Esta sección está lista para ser implementada.</p>
+        <p className="text-sm text-[#AFAFAF] mb-6 max-w-xs font-bold">Esta secciÃ³n estÃ¡ lista para ser implementada.</p>
         {goToMenu && <button onClick={goToMenu} className="py-3 px-8 btn-3d btn-3d-green rounded-2xl text-sm">
-            Volver al Menú
+            Volver al MenÃº
         </button>}
     </div>
 );
 const ChallengeCard = ({ challenge, onStart, isCompleted }) => {
-    const difficultyStars = '⭐'.repeat(challenge.difficulty || 1);
+    const difficultyStars = 'â­'.repeat(challenge.difficulty || 1);
     const difficultyLabel = ['', 'Principiante', 'Aprendiz', 'Intermedio', 'Avanzado'][challenge.difficulty || 1];
     const langColors = { 'Python': { bg: '#3776AB', light: '#E8F4FD' }, 'Arduino': { bg: '#00979D', light: '#E0F7F8' }, 'C++': { bg: '#659AD2', light: '#EAF0F9' } };
     const lc = langColors[challenge.name] || { bg: '#FF4B4B', light: '#FFE8E8' };
@@ -3571,7 +3571,7 @@ const ChallengeCard = ({ challenge, onStart, isCompleted }) => {
                     </div>
                     {isCompleted && (
                         <div className="w-7 h-7 bg-[#58CC02] rounded-full flex items-center justify-center flex-shrink-0">
-                            <span className="text-xs text-white font-black">✓</span>
+                            <span className="text-xs text-white font-black">âœ“</span>
                         </div>
                     )}
                 </div>
@@ -3581,7 +3581,7 @@ const ChallengeCard = ({ challenge, onStart, isCompleted }) => {
                     <span className="text-[10px] font-bold text-[#AFAFAF] bg-[#F7F7F7] px-2 py-1 rounded-lg">{challenge.solution.length} bloques</span>
                 </div>
                 <button className="w-full py-2.5 btn-3d btn-3d-green rounded-xl text-sm text-center mt-3">
-                    {isCompleted ? '🔄 REPETIR' : '▶️ ¡EMPEZAR!'}
+                    {isCompleted ? 'ðŸ”„ REPETIR' : 'â–¶ï¸ Â¡EMPEZAR!'}
                 </button>
             </div>
         </div>
@@ -3592,11 +3592,11 @@ const ChallengeListScreen = ({ startChallenge, userScores, userStats }) => {
     const [selectedLang, setSelectedLang] = useState('Todos');
     
     const difficulties = [
-        { label: '🌟 Todos', value: 0 },
-        { label: '🌱 Principiante', value: 1 },
-        { label: '⭐ Aprendiz', value: 2 },
-        { label: '🚀 Intermedio', value: 3 },
-        { label: '🏆 Avanzado', value: 4 },
+        { label: 'ðŸŒŸ Todos', value: 0 },
+        { label: 'ðŸŒ± Principiante', value: 1 },
+        { label: 'â­ Aprendiz', value: 2 },
+        { label: 'ðŸš€ Intermedio', value: 3 },
+        { label: 'ðŸ† Avanzado', value: 4 },
     ];
     const languages = ['Todos', 'Python', 'Arduino', 'C++'];
     
@@ -3624,21 +3624,21 @@ const ChallengeListScreen = ({ startChallenge, userScores, userStats }) => {
     
     // Milestone markers
     const milestones = [
-        { at: 1, icon: '🧩', label: 'Primer Reto' },
-        { at: 5, icon: '🔥', label: 'Racha de 5' },
-        { at: 12, icon: '⚡', label: '50% Retos' },
-        { at: 24, icon: '🏆', label: '¡Todos!' },
+        { at: 1, icon: 'ðŸ§©', label: 'Primer Reto' },
+        { at: 5, icon: 'ðŸ”¥', label: 'Racha de 5' },
+        { at: 12, icon: 'âš¡', label: '50% Retos' },
+        { at: 24, icon: 'ðŸ†', label: 'Â¡Todos!' },
     ];
 
     return (
         <div className="pb-24 min-h-full bg-[#F7F7F7] w-full animate-fade-in"> 
             {/* Header */}
             <div className="bg-gradient-to-br from-[#FF4B4B] to-[#EA2B2B] px-6 pt-8 pb-10 text-center relative overflow-hidden">
-                <div className="absolute top-2 right-4 text-7xl opacity-10 rotate-12">🧩</div>
-                <div className="absolute bottom-2 left-4 text-5xl opacity-10 -rotate-12">💻</div>
-                <span className="text-5xl mb-2 block animate-float">🧩</span>
+                <div className="absolute top-2 right-4 text-7xl opacity-10 rotate-12">ðŸ§©</div>
+                <div className="absolute bottom-2 left-4 text-5xl opacity-10 -rotate-12">ðŸ’»</div>
+                <span className="text-5xl mb-2 block animate-float">ðŸ§©</span>
                 <h1 className="text-3xl font-black text-white">Zona de Retos</h1>
-                <p className="text-white/80 text-sm font-bold mt-1">¡Aprende programación ordenando bloques de código!</p>
+                <p className="text-white/80 text-sm font-bold mt-1">Â¡Aprende programaciÃ³n ordenando bloques de cÃ³digo!</p>
                 <div className="mt-3 flex justify-center gap-3">
                     <div className="bg-white/20 px-3 py-1.5 rounded-xl">
                         <span className="text-white text-xs font-black">{totalChallenges} Retos</span>
@@ -3657,7 +3657,7 @@ const ChallengeListScreen = ({ startChallenge, userScores, userStats }) => {
                 <div className="bg-white rounded-2xl border-2 border-[#E5E5E5] p-4 mb-4 shadow-sm">
                     {/* Overall progress bar */}
                     <div className="flex items-center gap-3 mb-3">
-                        <span className="text-2xl">📊</span>
+                        <span className="text-2xl">ðŸ“Š</span>
                         <div className="flex-grow">
                             <div className="flex justify-between items-center mb-1">
                                 <p className="text-sm font-black text-[#3C3C3C]">Tu Progreso</p>
@@ -3686,7 +3686,7 @@ const ChallengeListScreen = ({ startChallenge, userScores, userStats }) => {
                     <div className="grid grid-cols-3 gap-2">
                         <div className="bg-[#3776AB]/5 rounded-xl p-2">
                             <div className="flex items-center gap-1 mb-1">
-                                <span className="text-xs">🐍</span>
+                                <span className="text-xs">ðŸ</span>
                                 <span className="text-[10px] font-black text-[#3776AB]">Python</span>
                                 <span className="text-[10px] font-bold text-[#AFAFAF] ml-auto">{pyDone}/{pyTotal}</span>
                             </div>
@@ -3696,7 +3696,7 @@ const ChallengeListScreen = ({ startChallenge, userScores, userStats }) => {
                         </div>
                         <div className="bg-[#00979D]/5 rounded-xl p-2">
                             <div className="flex items-center gap-1 mb-1">
-                                <span className="text-xs">🔷</span>
+                                <span className="text-xs">ðŸ”·</span>
                                 <span className="text-[10px] font-black text-[#00979D]">Arduino</span>
                                 <span className="text-[10px] font-bold text-[#AFAFAF] ml-auto">{ardDone}/{ardTotal}</span>
                             </div>
@@ -3706,7 +3706,7 @@ const ChallengeListScreen = ({ startChallenge, userScores, userStats }) => {
                         </div>
                         <div className="bg-[#659AD2]/5 rounded-xl p-2">
                             <div className="flex items-center gap-1 mb-1">
-                                <span className="text-xs">⚙️</span>
+                                <span className="text-xs">âš™ï¸</span>
                                 <span className="text-[10px] font-black text-[#659AD2]">C++</span>
                                 <span className="text-[10px] font-bold text-[#AFAFAF] ml-auto">{cppDone}/{cppTotal}</span>
                             </div>
@@ -3726,7 +3726,7 @@ const ChallengeListScreen = ({ startChallenge, userScores, userStats }) => {
                             }`}>
                                 <span>{m.icon}</span>
                                 <span>{m.label}</span>
-                                {totalCompleted >= m.at && <span>✓</span>}
+                                {totalCompleted >= m.at && <span>âœ“</span>}
                             </div>
                         ))}
                     </div>
@@ -3737,13 +3737,13 @@ const ChallengeListScreen = ({ startChallenge, userScores, userStats }) => {
             <div className="px-4 max-w-4xl mx-auto">
                 <div className="bg-white rounded-2xl border-2 border-[#E5E5E5] p-4 mb-4 shadow-sm">
                     <div className="flex items-start gap-3">
-                        <span className="text-2xl">💡</span>
+                        <span className="text-2xl">ðŸ’¡</span>
                         <div>
-                            <p className="text-sm font-black text-[#3C3C3C]">¿Cómo funcionan los retos?</p>
+                            <p className="text-sm font-black text-[#3C3C3C]">Â¿CÃ³mo funcionan los retos?</p>
                             <p className="text-xs text-[#777] font-semibold mt-1 leading-relaxed">
-                                Arrastra los bloques de código en el <b className="text-[#1CB0F6]">orden correcto</b> para armar el programa. 
-                                Cada bloque tiene una <b className="text-[#FF9600]">explicación</b> de lo que hace. 
-                                ¡Gana <b className="text-[#58CC02]">logros</b> al completar retos! 🏆
+                                Arrastra los bloques de cÃ³digo en el <b className="text-[#1CB0F6]">orden correcto</b> para armar el programa. 
+                                Cada bloque tiene una <b className="text-[#FF9600]">explicaciÃ³n</b> de lo que hace. 
+                                Â¡Gana <b className="text-[#58CC02]">logros</b> al completar retos! ðŸ†
                             </p>
                         </div>
                     </div>
@@ -3767,7 +3767,7 @@ const ChallengeListScreen = ({ startChallenge, userScores, userStats }) => {
                 {/* Language filter */}
                 <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
                     {languages.map(lang => {
-                        const langEmoji = { 'Todos': '🌐', 'Python': '🐍', 'Arduino': '🔷', 'C++': '⚙️' }[lang];
+                        const langEmoji = { 'Todos': 'ðŸŒ', 'Python': 'ðŸ', 'Arduino': 'ðŸ”·', 'C++': 'âš™ï¸' }[lang];
                         return (
                             <button key={lang} onClick={() => setSelectedLang(lang)}
                                 className={`px-3 py-1.5 rounded-xl text-xs font-black whitespace-nowrap transition-all active:scale-95
@@ -3784,7 +3784,7 @@ const ChallengeListScreen = ({ startChallenge, userScores, userStats }) => {
             <div className="px-4 w-full max-w-4xl mx-auto relative z-10">
                 {filteredChallenges.length === 0 ? (
                     <div className="text-center py-12">
-                        <span className="text-5xl block mb-3">🔍</span>
+                        <span className="text-5xl block mb-3">ðŸ”</span>
                         <p className="text-lg font-black text-[#AFAFAF]">No hay retos con estos filtros</p>
                         <p className="text-sm text-[#CDCDCD] font-bold mt-1">Prueba cambiando los filtros</p>
                     </div>
@@ -3836,13 +3836,13 @@ const ChallengeBlock = ({ block, onClick, isSolutionBlock, challengeStatus, show
             >
                 <div className="flex items-center gap-2">
                     {isSolutionBlock && challengeStatus === 'active' && (
-                        <span className="text-[10px] text-[#1CB0F6] flex-shrink-0">✕</span>
+                        <span className="text-[10px] text-[#1CB0F6] flex-shrink-0">âœ•</span>
                     )}
                     {!isSolutionBlock && !isWrong && challengeStatus === 'active' && (
                         <span className="text-[10px] text-[#58CC02] flex-shrink-0">+</span>
                     )}
                     {isWrong && challengeStatus !== 'active' && (
-                        <span className="text-[10px] flex-shrink-0">🚫</span>
+                        <span className="text-[10px] flex-shrink-0">ðŸš«</span>
                     )}
                     <span className="flex-grow">{block.text.trim()}</span>
                 </div>
@@ -3856,7 +3856,7 @@ const ChallengeBlock = ({ block, onClick, isSolutionBlock, challengeStatus, show
             {/* Show why wrong for incorrect blocks */}
             {showExplanation && isWrong && challengeStatus !== 'active' && block.whyWrong && (
                 <div className="ml-4 mt-1 mb-1 px-3 py-1.5 bg-[#FF4B4B]/5 rounded-lg border-l-3 border-[#FF4B4B]/20 animate-fade-in">
-                    <p className="text-[10px] text-[#FF4B4B]/80 font-semibold leading-relaxed">🚫 {block.whyWrong}</p>
+                    <p className="text-[10px] text-[#FF4B4B]/80 font-semibold leading-relaxed">ðŸš« {block.whyWrong}</p>
                 </div>
             )}
         </div>
@@ -3968,7 +3968,6 @@ const ChallengeView = ({ currentChallengeId, startChallenge, goToMenu, userScore
                     syncUserStats(userId, {
                         addChallengesCompleted: 1,
                         addPoints: xpEarned,
-                        newTotalPoints: (userStats?.totalPoints || 0) + xpEarned,
                     }).catch(console.error);
                 }
             }
@@ -3976,7 +3975,7 @@ const ChallengeView = ({ currentChallengeId, startChallenge, goToMenu, userScore
     };
 
     const boldReplace = (text) => text.replace(/\*\*(.*?)\*\*/g, '<b class="text-[#3C3C3C]">$1</b>');
-    const difficultyStars = '⭐'.repeat(currentChallenge.difficulty || 1);
+    const difficultyStars = 'â­'.repeat(currentChallenge.difficulty || 1);
     const langColors = { 'Python': '#3776AB', 'Arduino': '#00979D', 'C++': '#659AD2' };
     const lc = langColors[currentChallenge.name] || '#FF4B4B';
 
@@ -4013,11 +4012,11 @@ const ChallengeView = ({ currentChallengeId, startChallenge, goToMenu, userScore
                         <button onClick={() => setShowConcept(!showConcept)}
                             className="w-full mb-3 bg-white rounded-2xl border-2 border-[#FFC800]/30 overflow-hidden transition-all active:scale-[0.99]">
                             <div className="px-4 py-3 flex items-center gap-2">
-                                <span className="text-lg">💡</span>
+                                <span className="text-lg">ðŸ’¡</span>
                                 <span className="text-sm font-black text-[#FF9600] flex-grow text-left">
-                                    {showConcept ? 'Ocultar explicación' : '¿Qué aprendo aquí? (Toca para ver)'}
+                                    {showConcept ? 'Ocultar explicaciÃ³n' : 'Â¿QuÃ© aprendo aquÃ­? (Toca para ver)'}
                                 </span>
-                                <span className={`text-sm transition-transform ${showConcept ? 'rotate-180' : ''}`}>▼</span>
+                                <span className={`text-sm transition-transform ${showConcept ? 'rotate-180' : ''}`}>â–¼</span>
                             </div>
                             {showConcept && (
                                 <div className="px-4 pb-4 animate-fade-in">
@@ -4025,7 +4024,7 @@ const ChallengeView = ({ currentChallengeId, startChallenge, goToMenu, userScore
                                         <p className="text-xs text-[#555] font-semibold leading-relaxed" dangerouslySetInnerHTML={{ __html: boldReplace(currentChallenge.concept) }} />
                                     </div>
                                     {currentChallenge.funFact && (
-                                        <div className="bg-[#CE82FF]/10 p-3 rounded-xl">
+                                        <div className="bg-[#60A5FA]/10 p-3 rounded-xl">
                                             <p className="text-xs text-[#777] font-semibold leading-relaxed">{currentChallenge.funFact}</p>
                                         </div>
                                     )}
@@ -4045,20 +4044,20 @@ const ChallengeView = ({ currentChallengeId, startChallenge, goToMenu, userScore
                                         : 'bg-white border-[#1CB0F6]/30 hover:border-[#1CB0F6]'
                                 }`}>
                                 <div className="flex items-center gap-2">
-                                    <span className="text-lg">🔍</span>
+                                    <span className="text-lg">ðŸ”</span>
                                     <span className={`text-sm font-black flex-grow ${hintIndex >= currentChallenge.hints.length - 1 ? 'text-[#AFAFAF]' : 'text-[#1CB0F6]'}`}>
-                                        {hintIndex < 0 ? '¿Necesitas una pista? (Toca aquí)' : 
+                                        {hintIndex < 0 ? 'Â¿Necesitas una pista? (Toca aquÃ­)' : 
                                          hintIndex < currentChallenge.hints.length - 1 ? `Ver siguiente pista (${hintIndex + 1}/${currentChallenge.hints.length})` :
-                                         `Todas las pistas mostradas ✓`}
+                                         `Todas las pistas mostradas âœ“`}
                                     </span>
-                                    {hintIndex < currentChallenge.hints.length - 1 && <span className="text-[#1CB0F6] text-xs font-bold">💡</span>}
+                                    {hintIndex < currentChallenge.hints.length - 1 && <span className="text-[#1CB0F6] text-xs font-bold">ðŸ’¡</span>}
                                 </div>
                             </button>
                             {hintIndex >= 0 && (
                                 <div className="mt-2 space-y-2 animate-fade-in">
                                     {currentChallenge.hints.slice(0, hintIndex + 1).map((hint, i) => (
                                         <div key={i} className="flex items-start gap-2 bg-[#1CB0F6]/5 border border-[#1CB0F6]/20 px-4 py-2.5 rounded-xl">
-                                            <span className="text-xs font-black text-[#1CB0F6] shrink-0 mt-0.5">💡{i + 1}.</span>
+                                            <span className="text-xs font-black text-[#1CB0F6] shrink-0 mt-0.5">ðŸ’¡{i + 1}.</span>
                                             <p className="text-xs text-[#555] font-semibold leading-relaxed">{hint}</p>
                                         </div>
                                     ))}
@@ -4074,13 +4073,13 @@ const ChallengeView = ({ currentChallengeId, startChallenge, goToMenu, userScore
                                 ? 'bg-[#58CC02]/10 text-[#58CC02] border-[#58CC02]/30' 
                                 : 'bg-[#FF4B4B]/10 text-[#FF4B4B] border-[#FF4B4B]/30'
                         }`}>
-                            <span className="text-2xl block mb-1">{challengeStatus === 'correct' ? '🎉' : '🤔'}</span>
+                            <span className="text-2xl block mb-1">{challengeStatus === 'correct' ? 'ðŸŽ‰' : 'ðŸ¤”'}</span>
                             {challengeStatus === 'correct' 
-                                ? '¡PERFECTO! ¡Código correcto!' 
-                                : '¡Casi! Revisa el orden de los bloques.'
+                                ? 'Â¡PERFECTO! Â¡CÃ³digo correcto!' 
+                                : 'Â¡Casi! Revisa el orden de los bloques.'
                             }
                             {challengeStatus === 'correct' && (
-                                <p className="text-xs font-semibold text-[#777] mt-1">👇 Lee las explicaciones de cada línea abajo</p>
+                                <p className="text-xs font-semibold text-[#777] mt-1">ðŸ‘‡ Lee las explicaciones de cada lÃ­nea abajo</p>
                             )}
                         </div>
                     )}
@@ -4088,7 +4087,7 @@ const ChallengeView = ({ currentChallengeId, startChallenge, goToMenu, userScore
                     {/* Solution area */}
                     <div className="bg-white p-4 rounded-2xl border-2 border-[#E5E5E5] mb-3 flex flex-col min-h-[160px] overflow-hidden">
                         <h2 className="text-xs font-black text-[#1CB0F6] mb-2 flex items-center gap-1">
-                            <Target size={14}/> Tu Solución 
+                            <Target size={14}/> Tu SoluciÃ³n 
                             <span className="text-[#AFAFAF] font-bold ml-1">({userSolution.length}/{currentChallenge.solution.length} bloques)</span>
                         </h2>
                         <div className="space-y-1.5 overflow-y-auto flex-grow">
@@ -4098,9 +4097,9 @@ const ChallengeView = ({ currentChallengeId, startChallenge, goToMenu, userScore
                         </div>
                         {userSolution.length === 0 && (
                             <div className="flex flex-col items-center justify-center py-6 text-center">
-                                <span className="text-3xl mb-2">👆</span>
-                                <p className="text-[#CDCDCD] text-sm font-bold">Toca los bloques de abajo para agregarlos aquí</p>
-                                <p className="text-[#E5E5E5] text-xs font-semibold mt-1">¡El orden importa!</p>
+                                <span className="text-3xl mb-2">ðŸ‘†</span>
+                                <p className="text-[#CDCDCD] text-sm font-bold">Toca los bloques de abajo para agregarlos aquÃ­</p>
+                                <p className="text-[#E5E5E5] text-xs font-semibold mt-1">Â¡El orden importa!</p>
                             </div>
                         )}
                     </div>
@@ -4111,7 +4110,7 @@ const ChallengeView = ({ currentChallengeId, startChallenge, goToMenu, userScore
                             <Terminal size={14}/> Bloques Disponibles 
                             <span className="text-[#AFAFAF] font-bold ml-1">({challengeBlocks.length})</span>
                             {challengeBlocks.some(b => b.type === 'wrong') && challengeStatus === 'active' && (
-                                <span className="text-[10px] text-[#FF9600] bg-[#FF9600]/10 px-2 py-0.5 rounded-full ml-auto">⚠️ ¡Hay bloques trampa!</span>
+                                <span className="text-[10px] text-[#FF9600] bg-[#FF9600]/10 px-2 py-0.5 rounded-full ml-auto">âš ï¸ Â¡Hay bloques trampa!</span>
                             )}
                         </h2>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
@@ -4124,7 +4123,7 @@ const ChallengeView = ({ currentChallengeId, startChallenge, goToMenu, userScore
                     {/* Concept summary after completion */}
                     {challengeStatus === 'correct' && currentChallenge.concept && (
                         <div className="bg-gradient-to-br from-[#58CC02]/10 to-[#2563EB]/10 p-4 rounded-2xl border-2 border-[#58CC02]/20 mb-3 animate-scale-in">
-                            <h3 className="text-sm font-black text-[#58CC02] mb-2 flex items-center gap-2">🧠 ¿Qué aprendiste?</h3>
+                            <h3 className="text-sm font-black text-[#58CC02] mb-2 flex items-center gap-2">ðŸ§  Â¿QuÃ© aprendiste?</h3>
                             <p className="text-xs text-[#555] font-semibold leading-relaxed" dangerouslySetInnerHTML={{ __html: boldReplace(currentChallenge.concept) }} />
                         </div>
                     )}
@@ -4142,8 +4141,8 @@ const ChallengeView = ({ currentChallengeId, startChallenge, goToMenu, userScore
                                         ${userSolution.length > 0 ? 'btn-3d btn-3d-green' : 'bg-[#E5E5E5] text-[#AFAFAF] border-b-4 border-[#CDCDCD] cursor-not-allowed font-extrabold'}`}
                         >
                             {userSolution.length > 0 
-                                ? `✅ VERIFICAR CÓDIGO (${userSolution.length}/${currentChallenge.solution.length})` 
-                                : '👆 Selecciona bloques primero'}
+                                ? `âœ… VERIFICAR CÃ“DIGO (${userSolution.length}/${currentChallenge.solution.length})` 
+                                : 'ðŸ‘† Selecciona bloques primero'}
                         </button>
                     )}
                     {challengeStatus !== 'active' && (
@@ -4152,14 +4151,14 @@ const ChallengeView = ({ currentChallengeId, startChallenge, goToMenu, userScore
                                 onClick={() => startChallenge(currentChallengeId)}
                                 className="flex-1 py-3 btn-3d btn-3d-yellow rounded-xl text-sm"
                             >
-                                🔄 Reintentar
+                                ðŸ”„ Reintentar
                             </button>
                             {challengeStatus === 'correct' && nextChallenge && (
                                 <button
                                     onClick={() => startChallenge(nextChallenge.id)}
                                     className="flex-1 py-3 btn-3d btn-3d-green rounded-xl text-sm"
                                 >
-                                    ▶️ Siguiente Reto
+                                    â–¶ï¸ Siguiente Reto
                                 </button>
                             )}
                             {challengeStatus === 'incorrect' && (
@@ -4173,7 +4172,7 @@ const ChallengeView = ({ currentChallengeId, startChallenge, goToMenu, userScore
                                     }}
                                     className="flex-1 py-3 bg-[#FFC800] text-white font-extrabold rounded-xl text-sm border-b-4 border-[#E5B800] active:scale-95 transition"
                                 >
-                                    {currentChallenge.hints && hintIndex < currentChallenge.hints.length - 1 ? '🔍 Ver Pista' : '💡 Ver Ayuda'}
+                                    {currentChallenge.hints && hintIndex < currentChallenge.hints.length - 1 ? 'ðŸ” Ver Pista' : 'ðŸ’¡ Ver Ayuda'}
                                 </button>
                             )}
                         </div>
@@ -4257,7 +4256,7 @@ const BottomNavBar = ({ currentTab, onSelectTab, setViewMode }) => {
 };
 
 
-// --- COMPONENTE PRINCIPAL DE LA APLICACIÓN ---
+// --- COMPONENTE PRINCIPAL DE LA APLICACIÃ“N ---
 export default function App() {
     const [currentTab, setCurrentTab] = useState('Biblioteca'); 
     const [viewMode, setViewMode] = useState('menu'); 
@@ -4354,6 +4353,11 @@ export default function App() {
             setFirebaseProfile(profile);
             // Sync Firestore totalPoints back to local userStats to avoid mismatch
             if (profile && profile.totalPoints !== undefined) {
+                // Recalcular nivel si estÃ¡ desincronizado
+                const lv = calculateLevel(profile.totalPoints);
+                if (profile.level !== lv.level || profile.levelTitle !== lv.title) {
+                    updateUserProfile(userId, { level: lv.level, levelTitle: lv.title }).catch(console.error);
+                }
                 setUserStats(prev => {
                     if (prev.totalPoints !== profile.totalPoints) {
                         return { ...prev, totalPoints: profile.totalPoints, modulesCompleted: profile.modulesCompleted ?? prev.modulesCompleted };
@@ -4396,10 +4400,10 @@ export default function App() {
             await loginUser(email, password);
         } catch (err) {
             const msg = err.code === 'auth/user-not-found' ? 'Usuario no encontrado. Verifica tu email o nombre de usuario.'
-                : err.code === 'auth/wrong-password' ? 'Contraseña incorrecta.'
-                : err.code === 'auth/invalid-email' ? 'Email inválido.'
-                : err.code === 'auth/invalid-credential' ? 'Credenciales inválidas. Verifica tu email/usuario y contraseña.'
-                : err.message || 'Error al iniciar sesión.';
+                : err.code === 'auth/wrong-password' ? 'ContraseÃ±a incorrecta.'
+                : err.code === 'auth/invalid-email' ? 'Email invÃ¡lido.'
+                : err.code === 'auth/invalid-credential' ? 'Credenciales invÃ¡lidas. Verifica tu email/usuario y contraseÃ±a.'
+                : err.message || 'Error al iniciar sesiÃ³n.';
             setAuthError(msg);
             setAuthLoading(false);
         }
@@ -4411,8 +4415,8 @@ export default function App() {
         try {
             await registerUser(email, password, username, fullName, userProfile?.robotConfig, userProfile?.robotName);
         } catch (err) {
-            const msg = err.code === 'auth/email-already-in-use' ? 'Este email ya está registrado.'
-                : err.code === 'auth/weak-password' ? 'La contraseña es muy débil.'
+            const msg = err.code === 'auth/email-already-in-use' ? 'Este email ya estÃ¡ registrado.'
+                : err.code === 'auth/weak-password' ? 'La contraseÃ±a es muy dÃ©bil.'
                 : err.message || 'Error al registrarse.';
             setAuthError(msg);
             setAuthLoading(false);
@@ -4452,7 +4456,6 @@ export default function App() {
             syncUserStats(userId, {
                 addModulesCompleted: 1,
                 addPoints: xpEarned,
-                newTotalPoints: (userStats.totalPoints || 0) + xpEarned,
             }).catch(console.error);
         }
 
@@ -4537,7 +4540,7 @@ export default function App() {
                         <img src={CULTIVATEC_LOGO_PATH} alt="Logo" className="w-full h-full object-contain" onError={(e) => { e.target.style.display='none'; }} />
                     </div>
                     <h1 className="text-4xl font-black mb-1 tracking-tight">CultivaTec</h1>
-                    <p className="text-sm text-white/80 font-bold mb-6">¡Aprende Robótica Jugando!</p>
+                    <p className="text-sm text-white/80 font-bold mb-6">Â¡Aprende RobÃ³tica Jugando!</p>
                     <div className="flex items-center justify-center gap-2">
                         <div className="w-3 h-3 bg-white rounded-full animate-bounce" style={{animationDelay:'0ms'}}></div>
                         <div className="w-3 h-3 bg-white rounded-full animate-bounce" style={{animationDelay:'150ms'}}></div>
@@ -4576,15 +4579,15 @@ export default function App() {
         const moduleIdx = currentWorldModules.findIndex(m => m.id === moduleId);
         if (moduleIdx > 0 && !isModuleUnlocked(userScores, moduleIdx, currentWorldModules)) {
             const prevModule = currentWorldModules[moduleIdx - 1];
-            const prevName = prevModule?.titulo || 'el módulo anterior';
-            alert(`🔒 Este módulo está bloqueado.\n\nPrimero completa: "${prevName}"`);
+            const prevName = prevModule?.titulo || 'el mÃ³dulo anterior';
+            alert(`ðŸ”’ Este mÃ³dulo estÃ¡ bloqueado.\n\nPrimero completa: "${prevName}"`);
             return;
         }
         
         setCurrentModuleId(moduleId);
         const moduleData = currentWorldModules.find(m => m.id === moduleId) || ALL_MODULES.find(m => m.id === moduleId);
         
-        // --- LÓGICA DE VISTAS ESPECIALES ACTUALIZADA ---
+        // --- LÃ“GICA DE VISTAS ESPECIALES ACTUALIZADA ---
         if (moduleData?.specialView === 'Module1View') {
             setViewMode('module1_view');
         } else if (moduleData?.specialView === 'InteractiveLEDGuide') {
@@ -4626,12 +4629,12 @@ export default function App() {
         }
 
         // Sync quiz stats to Firebase
+        const quizXp = percentage >= 70 ? correct * 5 : 0;
         if (userId) {
             syncUserStats(userId, {
                 addQuizzesCompleted: 1,
                 addPerfectQuizzes: percentage === 100 ? 1 : 0,
-                newTotalPoints: userStats.totalPoints + (percentage >= 70 ? correct * 5 : 0),
-                addPoints: percentage >= 70 ? correct * 5 : 0,
+                addPoints: quizXp,
             }).catch(console.error);
         }
 
@@ -4639,6 +4642,7 @@ export default function App() {
             ...prev,
             quizzesCompleted: prev.quizzesCompleted + 1,
             perfectQuizzes: percentage === 100 ? prev.perfectQuizzes + 1 : prev.perfectQuizzes,
+            totalPoints: (prev.totalPoints || 0) + quizXp,
             quizScores: { ...prev.quizScores, [moduleId]: percentage },
         }));
     };
@@ -4656,7 +4660,7 @@ export default function App() {
                             onModuleComplete={handleModuleComplete}
                         />;
     } else if (viewMode === 'led_guide') {
-        // Renderiza el nuevo componente de la guía de proyecto
+        // Renderiza el nuevo componente de la guÃ­a de proyecto
         ScreenContent = <InteractiveLEDGuide 
                             onBack={() => goToMenu('Biblioteca')}
                             onModuleComplete={handleModuleComplete}
@@ -4784,7 +4788,7 @@ export default function App() {
                 }
                 break;
             case 'Taller':
-                ScreenContent = <WorkshopScreen goToMenu={goToMenu} />; // <-- El taller de código
+                ScreenContent = <WorkshopScreen goToMenu={goToMenu} />; // <-- El taller de cÃ³digo
                 break;
             case 'Simulador':
                 ScreenContent = <RobotSimulator onBack={() => goToMenu('Biblioteca')} />;
@@ -4808,7 +4812,7 @@ export default function App() {
                     setUserStats={setUserStats}
                     onAwardXp={(xp, source) => {
                         setUserStats(prev => ({ ...prev, totalPoints: (prev.totalPoints || 0) + xp, [`${source}Count`]: (prev[`${source}Count`] || 0) + 1 }));
-                        if (userId) syncUserStats(userId, { addPoints: xp, newTotalPoints: (userStats?.totalPoints || 0) + xp }).catch(console.error);
+                        if (userId) syncUserStats(userId, { addPoints: xp }).catch(console.error);
                     }}
                 />;
                 break;
@@ -4821,7 +4825,7 @@ export default function App() {
                     setUserStats={setUserStats}
                     onAwardXp={(xp, source) => {
                         setUserStats(prev => ({ ...prev, totalPoints: (prev.totalPoints || 0) + xp, [`${source}Count`]: (prev[`${source}Count`] || 0) + 1 }));
-                        if (userId) syncUserStats(userId, { addPoints: xp, newTotalPoints: (userStats?.totalPoints || 0) + xp }).catch(console.error);
+                        if (userId) syncUserStats(userId, { addPoints: xp }).catch(console.error);
                     }}
                 />;
                 break;
