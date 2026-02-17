@@ -247,7 +247,7 @@ const GlossaryScreen = ({ robotConfig, robotName = 'Robi' }) => {
   const getCategoryData = (catId) => CATEGORIES.find(c => c.id === catId) || CATEGORIES[0];
 
   return (
-    <div className="pb-24 min-h-full bg-gradient-to-b from-[#0B1120] via-[#0E1A30] to-[#0F172A] flex flex-col animate-fade-in relative overflow-hidden">
+    <div className="pb-24 min-h-full bg-gradient-to-b from-[#0B1120] via-[#0E1A30] to-[#0F172A] flex flex-col animate-fade-in relative overflow-hidden" style={{ fontFamily: "'Press Start 2P', cursive" }}>
       {/* ====== GALAXY BACKGROUND ====== */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute opacity-30" style={{ width: '300px', height: '300px', background: 'radial-gradient(circle, rgba(147,197,253,0.2) 0%, rgba(56,189,248,0.06) 40%, transparent 70%)', right: '-5%', top: '3%', animation: 'nebula-drift 22s ease-in-out infinite' }}></div>
@@ -293,23 +293,23 @@ const GlossaryScreen = ({ robotConfig, robotName = 'Robi' }) => {
           <div className="mt-3 bg-[#1E293B]/90 backdrop-blur-sm rounded-2xl px-4 py-2.5 max-w-[280px] relative border border-[#334155]"
             style={{ boxShadow: '0 0 20px rgba(147,197,253,0.08)' }}>
             <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-[#1E293B]/90 rotate-45 rounded-sm border-l border-t border-[#334155]"></div>
-            <p className={`text-xs font-bold text-center relative z-10 ${robotMood === 'speaking' ? 'text-[#93C5FD]' : 'text-[#94A3B8]'}`}>
+            <p className={`text-[7px] leading-relaxed font-bold text-center relative z-10 ${robotMood === 'speaking' ? 'text-[#93C5FD]' : 'text-[#94A3B8]'}`}>
               {robotMood === 'speaking' && <span className="inline-block mr-1 animate-pulse">🔊</span>}
               {robotPhrase}
             </p>
           </div>
 
           {/* PIXEL TITLE */}
-          <h1 className="mt-4 text-center" style={{ fontFamily: "'Press Start 2P', cursive" }}>
+          <h1 className="mt-4 text-center">
             <span className="text-[11px] sm:text-sm text-transparent bg-clip-text leading-relaxed"
               style={{ backgroundImage: 'linear-gradient(135deg, #93C5FD 0%, #A78BFA 40%, #22D3EE 80%, #4ADE80 100%)' }}>
               GLOSARIO
             </span>
           </h1>
-          <h2 className="text-sm font-black text-[#93C5FD] mt-1.5">
+          <h2 className="text-[8px] font-black text-[#93C5FD] mt-2 leading-relaxed">
             Diccionario de {robotName || 'Robi'}
           </h2>
-          <p className="text-[#64748B] text-[10px] font-bold mt-0.5">{GLOSSARY_TERMS.length} términos galácticos · ¡Presiona 🔊 para escuchar!</p>
+          <p className="text-[#64748B] text-[6px] font-bold mt-1 leading-relaxed">{GLOSSARY_TERMS.length} términos galácticos · ¡Presiona 🔊 para escuchar!</p>
         </div>
       </div>
 
@@ -323,7 +323,8 @@ const GlossaryScreen = ({ robotConfig, robotName = 'Robi' }) => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder='Buscar término... (ej: "LED", "sensor")'
-            className="w-full pl-10 pr-4 py-3 rounded-2xl bg-[#1E293B]/80 backdrop-blur-sm border-2 border-[#334155] focus:border-[#93C5FD] focus:ring-2 focus:ring-[#93C5FD]/20 outline-none text-sm font-bold text-[#E2E8F0] transition placeholder-[#475569]"
+            className="w-full pl-10 pr-4 py-3 rounded-2xl bg-[#1E293B]/80 backdrop-blur-sm border-2 border-[#334155] focus:border-[#93C5FD] focus:ring-2 focus:ring-[#93C5FD]/20 outline-none text-[8px] font-bold text-[#E2E8F0] transition placeholder-[#475569]"
+            style={{ fontFamily: "'Press Start 2P', cursive" }}
           />
         </div>
 
@@ -336,7 +337,7 @@ const GlossaryScreen = ({ robotConfig, robotName = 'Robi' }) => {
               <button
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.id)}
-                className={`flex-shrink-0 px-3 py-2 rounded-2xl font-black text-xs transition-all duration-200 active:scale-95 flex items-center gap-1.5 border-2 ${
+                className={`flex-shrink-0 px-3 py-2 rounded-2xl font-black text-[7px] transition-all duration-200 active:scale-95 flex items-center gap-1.5 border-2 ${
                   isActive
                     ? 'shadow-lg scale-[1.03]'
                     : 'bg-[#1E293B]/60 text-[#94A3B8] border-[#334155] hover:border-[#475569]'
@@ -350,7 +351,7 @@ const GlossaryScreen = ({ robotConfig, robotName = 'Robi' }) => {
               >
                 <span>{cat.emoji}</span>
                 <span>{cat.name}</span>
-                <span className={`text-[10px] px-1.5 py-0.5 rounded-full ${isActive ? 'bg-white/15' : 'bg-[#0F172A]'}`}>{count}</span>
+                <span className={`text-[6px] px-1.5 py-0.5 rounded-full ${isActive ? 'bg-white/15' : 'bg-[#0F172A]'}`}>{count}</span>
               </button>
             );
           })}
@@ -358,10 +359,10 @@ const GlossaryScreen = ({ robotConfig, robotName = 'Robi' }) => {
 
         {/* Counter + controls */}
         <div className="flex justify-between items-center mb-2.5">
-          <p className="text-[11px] text-[#64748B] font-bold">{filteredTerms.length} de {GLOSSARY_TERMS.length} términos</p>
+          <p className="text-[6px] text-[#64748B] font-bold leading-relaxed">{filteredTerms.length} de {GLOSSARY_TERMS.length} términos</p>
           <div className="flex items-center gap-2">
             <button onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
-              className={`flex items-center gap-1 text-[10px] font-black px-2.5 py-1 rounded-full active:scale-95 transition border ${
+              className={`flex items-center gap-1 text-[6px] font-black px-2.5 py-1 rounded-full active:scale-95 transition border ${
                 showFavoritesOnly
                   ? 'bg-[#FFC800]/15 text-[#FFC800] border-[#FFC800]/30'
                   : 'bg-[#1E293B]/60 text-[#64748B] border-[#334155]'
@@ -369,7 +370,7 @@ const GlossaryScreen = ({ robotConfig, robotName = 'Robi' }) => {
               <Star size={10} fill={showFavoritesOnly ? '#FFC800' : 'none'} /> Favoritos
             </button>
             {isSpeaking && (
-              <button onClick={stopSpeaking} className="flex items-center gap-1 text-[10px] font-black text-red-400 bg-red-500/10 px-2.5 py-1 rounded-full border border-red-500/20 active:scale-95 transition">
+              <button onClick={stopSpeaking} className="flex items-center gap-1 text-[6px] font-black text-red-400 bg-red-500/10 px-2.5 py-1 rounded-full border border-red-500/20 active:scale-95 transition">
                 <VolumeX size={10} /> Detener
               </button>
             )}
@@ -381,8 +382,8 @@ const GlossaryScreen = ({ robotConfig, robotName = 'Robi' }) => {
           {filteredTerms.length === 0 ? (
             <div className="text-center py-12">
               <span className="text-5xl block mb-3">🔭</span>
-              <p className="text-base font-black text-[#64748B]">No se encontraron términos</p>
-              <p className="text-xs text-[#475569] font-bold mt-1">Intenta con otra palabra o categoría</p>
+              <p className="text-[8px] font-black text-[#64748B] leading-relaxed">No se encontraron términos</p>
+              <p className="text-[6px] text-[#475569] font-bold mt-2 leading-relaxed">Intenta con otra palabra o categoría</p>
             </div>
           ) : (
             filteredTerms.map(term => {
@@ -413,8 +414,8 @@ const GlossaryScreen = ({ robotConfig, robotName = 'Robi' }) => {
                     </div>
 
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-sm font-black text-[#E2E8F0] truncate">{term.term}</h3>
-                      <span className="inline-block px-2 py-0.5 rounded-md text-[8px] font-black mt-0.5 uppercase tracking-wider"
+                      <h3 className="text-[8px] font-black text-[#E2E8F0] truncate leading-relaxed">{term.term}</h3>
+                      <span className="inline-block px-2 py-0.5 rounded-md text-[5px] font-black mt-1 uppercase tracking-wider"
                         style={{ backgroundColor: `${catData.color}15`, color: catData.color, border: `1px solid ${catData.color}30` }}>
                         {term.category}
                       </span>
@@ -462,23 +463,23 @@ const GlossaryScreen = ({ robotConfig, robotName = 'Robi' }) => {
                           )}
                         </div>
                         <div className="flex-1 bg-[#0F172A]/60 p-3 rounded-2xl rounded-tl-md border" style={{ borderColor: `${catData.color}20` }}>
-                          <h4 className="font-black text-[10px] mb-1 uppercase tracking-wider flex items-center gap-1" style={{ color: catData.color }}>
+                          <h4 className="font-black text-[6px] mb-1.5 uppercase tracking-wider flex items-center gap-1 leading-relaxed" style={{ color: catData.color }}>
                             <Lightbulb size={10} /> Definición
                           </h4>
-                          <p className="text-[#CBD5E1] text-xs leading-relaxed font-semibold">{term.definition}</p>
+                          <p className="text-[#CBD5E1] text-[6px] leading-[1.8] font-semibold">{term.definition}</p>
                         </div>
                       </div>
 
                       <div className="ml-10">
                         <div className="bg-[#0F172A]/60 p-3 rounded-2xl border border-[#22C55E]/20">
-                          <h4 className="font-black text-[10px] text-[#4ADE80] mb-1 uppercase tracking-wider">💡 Ejemplo</h4>
-                          <p className="text-[#94A3B8] text-xs italic leading-relaxed font-semibold">{term.example}</p>
+                          <h4 className="font-black text-[6px] text-[#4ADE80] mb-1.5 uppercase tracking-wider leading-relaxed">💡 Ejemplo</h4>
+                          <p className="text-[#94A3B8] text-[6px] italic leading-[1.8] font-semibold">{term.example}</p>
                         </div>
                       </div>
 
                       <button
                         onClick={() => speakTerm(term)}
-                        className={`mt-3 w-full py-2.5 rounded-xl font-black text-xs flex items-center justify-center gap-2 transition-all active:scale-[0.98] border ${
+                        className={`mt-3 w-full py-2.5 rounded-xl font-black text-[7px] flex items-center justify-center gap-2 transition-all active:scale-[0.98] border ${
                           isCurrentlySpeaking
                             ? 'bg-red-500/20 text-red-400 border-red-500/30'
                             : ''
@@ -511,8 +512,8 @@ const GlossaryScreen = ({ robotConfig, robotName = 'Robi' }) => {
             <div className="flex items-start gap-3 relative z-10">
               <span className="text-2xl">💡</span>
               <div>
-                <h4 className="text-xs font-black text-[#93C5FD] mb-1">¿Sabías que...?</h4>
-                <p className="text-[11px] text-[#94A3B8] font-semibold leading-relaxed">
+                <h4 className="text-[7px] font-black text-[#93C5FD] mb-2 leading-relaxed">¿Sabías que...?</h4>
+                <p className="text-[6px] text-[#94A3B8] font-semibold leading-[1.8]">
                   La palabra "robot" viene del checo "robota" que significa "trabajo forzado". Fue usada por primera vez en 1920 por el escritor Karel Čapek.
                 </p>
               </div>
@@ -525,8 +526,8 @@ const GlossaryScreen = ({ robotConfig, robotName = 'Robi' }) => {
             <div className="flex items-start gap-3 relative z-10">
               <span className="text-2xl">🚀</span>
               <div>
-                <h4 className="text-xs font-black text-[#A78BFA] mb-1">Dato espacial</h4>
-                <p className="text-[11px] text-[#94A3B8] font-semibold leading-relaxed">
+                <h4 className="text-[7px] font-black text-[#A78BFA] mb-2 leading-relaxed">Dato espacial</h4>
+                <p className="text-[6px] text-[#94A3B8] font-semibold leading-[1.8]">
                   El rover Perseverance en Marte usa un procesador similar al de tu PlayStation 1. ¡Un robot en otro planeta con tecnología que puedes aprender aquí!
                 </p>
               </div>
