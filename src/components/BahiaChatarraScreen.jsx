@@ -411,6 +411,27 @@ const generateRobotPDF = async (robot) => {
   const contentWidth = pageWidth - margin * 2;
   let y = margin;
 
+  // Helper: strip emojis — jsPDF standard fonts don't support emoji glyphs
+  const stripEmoji = (text) => {
+    if (!text) return '';
+    return text
+      .replace(/[\u{1F600}-\u{1F64F}]/gu, '')   // emoticons
+      .replace(/[\u{1F300}-\u{1F5FF}]/gu, '')   // misc symbols & pictographs
+      .replace(/[\u{1F680}-\u{1F6FF}]/gu, '')   // transport & map
+      .replace(/[\u{1F1E0}-\u{1F1FF}]/gu, '')   // flags
+      .replace(/[\u{2600}-\u{26FF}]/gu, '')      // misc symbols
+      .replace(/[\u{2700}-\u{27BF}]/gu, '')      // dingbats
+      .replace(/[\u{FE00}-\u{FE0F}]/gu, '')      // variation selectors
+      .replace(/[\u{1F900}-\u{1F9FF}]/gu, '')   // supplemental symbols
+      .replace(/[\u{1FA00}-\u{1FA6F}]/gu, '')   // chess symbols
+      .replace(/[\u{1FA70}-\u{1FAFF}]/gu, '')   // symbols extended-A
+      .replace(/[\u{200D}]/gu, '')                // zero-width joiner
+      .replace(/[\u{20E3}]/gu, '')                // combining enclosing keycap
+      .replace(/[\u{E0020}-\u{E007F}]/gu, '')   // tags
+      .replace(/\s{2,}/g, ' ')                    // collapse multiple spaces
+      .trim();
+  };
+
   // Color palette
   const colors = {
     primary: [30, 64, 175],      // Blue
@@ -515,16 +536,16 @@ const generateRobotPDF = async (robot) => {
     return false;
   };
 
-  // --- Draw a section title with icon ---
-  const drawSectionTitle = (title, icon) => {
+  // --- Draw a section title ---
+  const drawSectionTitle = (title) => {
     checkNewPage(14);
     // Left accent bar
     pdf.setFillColor(...colors.primary);
     pdf.roundedRect(margin, y, 3, 9, 1, 1, 'F');
-    // Icon + Title
+    // Title
     pdf.setFontSize(13);
     pdf.setTextColor(...colors.primary);
-    pdf.text(`${icon}  ${title}`, margin + 7, y + 7);
+    pdf.text(title, margin + 7, y + 7);
     // Underline
     pdf.setDrawColor(...colors.primaryLight);
     pdf.setLineWidth(0.3);
@@ -571,10 +592,10 @@ const generateRobotPDF = async (robot) => {
     titleY += 12;
   });
 
-  // Emoji big
+  // Subtitle
   pdf.setFontSize(14);
   pdf.setTextColor(255, 255, 255);
-  pdf.text(`${robot.emoji}  Guia de Construccion Paso a Paso`, pageWidth / 2, 65, { align: 'center' });
+  pdf.text('Guia de Construccion Paso a Paso', pageWidth / 2, 65, { align: 'center' });
 
   y = 82;
 
@@ -609,7 +630,7 @@ const generateRobotPDF = async (robot) => {
   // Description box
   pdf.setFillColor(...colors.grayBg);
   pdf.setDrawColor(...colors.grayBorder);
-  const descTextLines = pdf.splitTextToSize(robot.descripcion, contentWidth - 16);
+  const descTextLines = pdf.splitTextToSize(stripEmoji(robot.descripcion), contentWidth - 16);
   const descBoxH = descTextLines.length * 5 + 8;
   pdf.roundedRect(margin, y, contentWidth, descBoxH, 2, 2, 'FD');
   pdf.setFontSize(10);
@@ -639,7 +660,7 @@ const generateRobotPDF = async (robot) => {
   // ========================================
   // MATERIALS SECTION
   // ========================================
-  drawSectionTitle('Materiales Necesarios', '');
+  drawSectionTitle('Materiales Necesarios');
 
   // Materials count badge
   pdf.setFillColor(...colors.primaryBg);
@@ -668,15 +689,15 @@ const generateRobotPDF = async (robot) => {
     pdf.setTextColor(255, 255, 255);
     pdf.text(`${idx + 1}`, margin + 5, y + 5.5, { align: 'center' });
 
-    // Material emoji + name
+    // Material name
     pdf.setFontSize(9);
     pdf.setTextColor(...colors.text);
-    pdf.text(`${mat.emoji}  ${mat.nombre}`, margin + 12, y + 4);
+    pdf.text(stripEmoji(mat.nombre), margin + 12, y + 4);
 
     // Note below
     pdf.setFontSize(7.5);
     pdf.setTextColor(...colors.textMuted);
-    const notaLines = pdf.splitTextToSize(mat.nota, contentWidth - 18);
+    const notaLines = pdf.splitTextToSize(stripEmoji(mat.nota), contentWidth - 18);
     pdf.text(notaLines[0] || '', margin + 12, y + 9);
 
     y += rowH + 1;
@@ -696,12 +717,12 @@ const generateRobotPDF = async (robot) => {
   // ========================================
   // STEPS SECTION
   // ========================================
-  drawSectionTitle(`Instrucciones Paso a Paso (${robot.pasos.length} pasos)`, '');
+  drawSectionTitle(`Instrucciones Paso a Paso (${robot.pasos.length} pasos)`);
 
   robot.pasos.forEach((paso, idx) => {
     // Calculate needed space for this step
-    const instrLines = pdf.splitTextToSize(paso.instruccion, contentWidth - 20);
-    const tipLines = paso.consejo ? pdf.splitTextToSize(`${paso.consejo}`, contentWidth - 28) : [];
+    const instrLines = pdf.splitTextToSize(stripEmoji(paso.instruccion), contentWidth - 20);
+    const tipLines = paso.consejo ? pdf.splitTextToSize(stripEmoji(paso.consejo), contentWidth - 28) : [];
     const stepH = 18 + instrLines.length * 5 + (tipLines.length > 0 ? tipLines.length * 4 + 12 : 0);
 
     checkNewPage(Math.min(stepH, 60)); // at least try to fit the header
@@ -723,7 +744,7 @@ const generateRobotPDF = async (robot) => {
     // Step title
     pdf.setFontSize(12);
     pdf.setTextColor(...colors.primary);
-    pdf.text(`${paso.emoji}  ${paso.titulo}`, margin + 17, y + 7);
+    pdf.text(stripEmoji(paso.titulo), margin + 17, y + 7);
 
     // Title underline
     y += 11;
