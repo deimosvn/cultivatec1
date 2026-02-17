@@ -4455,6 +4455,9 @@ export default function App() {
     // Handle module completion
     const handleModuleComplete = useCallback((moduleId, xpEarned = 0) => {
         if (completedModules.has(moduleId)) return;
+        // Double-check with userScores to prevent stale closure exploits
+        const existing = userScores[moduleId];
+        if (existing && existing.total > 0 && Math.round((existing.score / existing.total) * 100) >= 100) return;
         
         // Mark module as completed in userScores
         const moduleData = ALL_MODULES.find(m => m.id === moduleId) || MODULOS_DE_ROBOTICA.find(m => m.id === moduleId);
@@ -4507,7 +4510,7 @@ export default function App() {
             }
             return newStats;
         });
-    }, [completedModules]);
+    }, [completedModules, userScores]);
 
     // Rastrear secciones visitadas
     useEffect(() => {
@@ -4631,8 +4634,13 @@ export default function App() {
     const handleQuizComplete = (moduleId, correct, total, score) => {
         const percentage = Math.round((correct / total) * 100);
         
-        // Update userScores with quiz result
-        if (percentage >= 70) {
+        // Check if module was already completed — no XP for retakes
+        const alreadyCompleted = completedModules.has(moduleId) || 
+            (userScores[moduleId] && userScores[moduleId].total > 0 && 
+             Math.round((userScores[moduleId].score / userScores[moduleId].total) * 100) >= 100);
+        
+        // Update userScores with quiz result (only if better score)
+        if (percentage >= 70 && !alreadyCompleted) {
             const quizScoreData = { score: correct, total: total };
             setUserScores(prev => {
                 const newScores = { ...prev, [moduleId]: quizScoreData };
@@ -4649,23 +4657,25 @@ export default function App() {
             }
         }
 
-        // Sync quiz stats to Firebase
-        if (userId) {
-            syncUserStats(userId, {
-                addQuizzesCompleted: 1,
-                addPerfectQuizzes: percentage === 100 ? 1 : 0,
-                addPoints: percentage >= 70 ? correct * 5 : 0,
-            }).catch(console.error);
-        }
+        // Only award XP and stats for first completion
+        if (!alreadyCompleted) {
+            if (userId) {
+                syncUserStats(userId, {
+                    addQuizzesCompleted: 1,
+                    addPerfectQuizzes: percentage === 100 ? 1 : 0,
+                    addPoints: percentage >= 70 ? correct * 5 : 0,
+                }).catch(console.error);
+            }
 
-        const quizXp = percentage >= 70 ? correct * 5 : 0;
-        setUserStats(prev => ({
-            ...prev,
-            quizzesCompleted: prev.quizzesCompleted + 1,
-            perfectQuizzes: percentage === 100 ? prev.perfectQuizzes + 1 : prev.perfectQuizzes,
-            totalPoints: prev.totalPoints + quizXp,
-            quizScores: { ...prev.quizScores, [moduleId]: percentage },
-        }));
+            const quizXp = percentage >= 70 ? correct * 5 : 0;
+            setUserStats(prev => ({
+                ...prev,
+                quizzesCompleted: prev.quizzesCompleted + 1,
+                perfectQuizzes: percentage === 100 ? prev.perfectQuizzes + 1 : prev.perfectQuizzes,
+                totalPoints: prev.totalPoints + quizXp,
+                quizScores: { ...prev.quizScores, [moduleId]: percentage },
+            }));
+        }
     };
 
 
