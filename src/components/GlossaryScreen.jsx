@@ -247,7 +247,7 @@ const GlossaryScreen = ({ robotConfig, robotName = 'Robi' }) => {
   const getCategoryData = (catId) => CATEGORIES.find(c => c.id === catId) || CATEGORIES[0];
 
   return (
-    <div className="pb-24 min-h-full bg-gradient-to-b from-[#0B1120] via-[#0E1A30] to-[#0F172A] flex flex-col animate-fade-in relative overflow-hidden" style={{ fontFamily: "'Press Start 2P', cursive" }}>
+    <div className="pb-24 min-h-full bg-gradient-to-b from-[#0B1120] via-[#0E1A30] to-[#0F172A] flex flex-col animate-fade-in relative overflow-hidden">
       {/* ====== GALAXY BACKGROUND ====== */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute opacity-30" style={{ width: '300px', height: '300px', background: 'radial-gradient(circle, rgba(147,197,253,0.2) 0%, rgba(56,189,248,0.06) 40%, transparent 70%)', right: '-5%', top: '3%', animation: 'nebula-drift 22s ease-in-out infinite' }}></div>
@@ -324,7 +324,6 @@ const GlossaryScreen = ({ robotConfig, robotName = 'Robi' }) => {
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder='Buscar término... (ej: "LED", "sensor")'
             className="w-full pl-10 pr-4 py-3 rounded-2xl bg-[#1E293B]/80 backdrop-blur-sm border-2 border-[#334155] focus:border-[#93C5FD] focus:ring-2 focus:ring-[#93C5FD]/20 outline-none text-[8px] font-bold text-[#E2E8F0] transition placeholder-[#475569]"
-            style={{ fontFamily: "'Press Start 2P', cursive" }}
           />
         </div>
 
