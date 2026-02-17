@@ -29,10 +29,10 @@ const ACHIEVEMENTS = [
 ];
 
 const RARITY_CONFIG = {
-  'común': { gradient: 'from-gray-400 to-gray-500', bg: 'bg-gradient-to-br from-gray-50 to-gray-100', border: 'border-gray-200', badge: 'bg-gray-400', glow: '', stars: 1 },
-  'raro': { gradient: 'from-[#1CB0F6] to-[#0D8ECF]', bg: 'bg-gradient-to-br from-blue-50 to-cyan-50', border: 'border-[#1CB0F6]/40', badge: 'bg-[#1CB0F6]', glow: 'shadow-[0_0_15px_rgba(28,176,246,0.2)]', stars: 2 },
-  'épico': { gradient: 'from-[#60A5FA] to-[#2563EB]', bg: 'bg-gradient-to-br from-purple-50 to-fuchsia-50', border: 'border-[#60A5FA]/40', badge: 'bg-[#60A5FA]', glow: 'shadow-[0_0_20px_rgba(206,130,255,0.25)]', stars: 3 },
-  'legendario': { gradient: 'from-[#FFC800] to-[#FF9600]', bg: 'bg-gradient-to-br from-yellow-50 to-orange-50', border: 'border-[#FFC800]/50', badge: 'bg-gradient-to-r from-[#FFC800] to-[#FF9600]', glow: 'shadow-[0_0_25px_rgba(255,200,0,0.3)]', stars: 4 },
+  'común': { gradient: 'from-[#475569] to-[#334155]', bg: '', border: '', badge: 'bg-[#475569]', glow: '', stars: 1, bgStyle: { background: '#1E293B99', borderColor: '#33415580' } },
+  'raro': { gradient: 'from-[#0891B2] to-[#0E7490]', bg: '', border: '', badge: 'bg-[#0891B2]', glow: 'shadow-[0_0_15px_rgba(8,145,178,0.15)]', stars: 2, bgStyle: { background: 'linear-gradient(135deg, #1E293BCC, #164E6315)', borderColor: '#0891B240' } },
+  'épico': { gradient: 'from-[#7C3AED] to-[#6D28D9]', bg: '', border: '', badge: 'bg-[#7C3AED]', glow: 'shadow-[0_0_20px_rgba(124,58,237,0.15)]', stars: 3, bgStyle: { background: 'linear-gradient(135deg, #1E293BCC, #4C1D9515)', borderColor: '#7C3AED40' } },
+  'legendario': { gradient: 'from-[#FFC800] to-[#FF9600]', bg: '', border: '', badge: 'bg-gradient-to-r from-[#FFC800] to-[#FF9600]', glow: 'shadow-[0_0_25px_rgba(255,200,0,0.15)]', stars: 4, bgStyle: { background: 'linear-gradient(135deg, #1E293BCC, #78350F15)', borderColor: '#FFC80040' } },
 };
 const CATEGORY_ICONS = { 'Aprendizaje': '📚', 'Quiz': '❓', 'Programación': '💻', 'Retos': '🧩', 'Práctica': '🔧', 'Especial': '⭐' };
 
@@ -58,32 +58,32 @@ const AchievementCard = ({ achievement, isUnlocked, onCelebrate, animDelay }) =>
   return (
     <div className="animate-scale-in" style={{ animationDelay: `${animDelay}ms` }}>
       <button onClick={() => isUnlocked && onCelebrate?.(achievement)}
-        className={`w-full text-left transition-all duration-500 rounded-2xl overflow-hidden ${isUnlocked ? `${rarity.bg} ${rarity.glow} hover:scale-[1.02] active:scale-[0.98] cursor-pointer` : 'bg-[#F0F0F0] opacity-60 cursor-default'}`}>
-        <div className={`p-4 border-2 rounded-2xl transition-all ${isUnlocked ? rarity.border : 'border-[#E0E0E0]'}`}>
+        className={`w-full text-left transition-all duration-500 rounded-2xl overflow-hidden ${isUnlocked ? `${rarity.glow} hover:scale-[1.02] active:scale-[0.98] cursor-pointer` : 'opacity-50 cursor-default'}`}>
+        <div className="p-4 border rounded-2xl transition-all" style={isUnlocked ? rarity.bgStyle : { background: '#0F172A88', borderColor: '#1E293B' }}>
           <div className="flex items-center gap-3">
-            <div className={`relative w-14 h-14 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0 ${isUnlocked ? `bg-gradient-to-br ${rarity.gradient} shadow-lg` : 'bg-[#D5D5D5]'}`}>
+            <div className={`relative w-14 h-14 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0 ${isUnlocked ? `bg-gradient-to-br ${rarity.gradient} shadow-lg` : 'bg-[#1E293B]'}`}>
               {isUnlocked ? (
                 <><span className="relative z-10">{achievement.icon}</span>
-                <div className="absolute inset-0 rounded-2xl overflow-hidden"><div className="absolute -inset-full bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-12 animate-shimmer-slide" /></div></>
-              ) : <Lock size={20} className="text-white/70" />}
+                <div className="absolute inset-0 rounded-2xl overflow-hidden"><div className="absolute -inset-full bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12 animate-shimmer-slide" /></div></>
+              ) : <Lock size={20} className="text-[#475569]" />}
               <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 flex gap-0.5">
-                {Array.from({ length: rarity.stars }).map((_, i) => <span key={i} className={`text-[8px] ${isUnlocked ? 'opacity-100' : 'opacity-30'}`}>⭐</span>)}
+                {Array.from({ length: rarity.stars }).map((_, i) => <span key={i} className={`text-[8px] ${isUnlocked ? 'opacity-100' : 'opacity-20'}`}>⭐</span>)}
               </div>
             </div>
             <div className="flex-grow min-w-0">
               <div className="flex items-center gap-2 mb-0.5">
-                <h3 className={`text-sm font-black truncate ${isUnlocked ? 'text-[#3C3C3C]' : 'text-[#AFAFAF]'}`}>{achievement.title}</h3>
+                <h3 className={`text-sm font-black truncate ${isUnlocked ? 'text-[#E2E8F0]' : 'text-[#475569]'}`}>{achievement.title}</h3>
                 <span className={`flex-shrink-0 px-2 py-0.5 rounded-full text-white text-[9px] font-black uppercase tracking-wider ${rarity.badge}`}>{achievement.rarity}</span>
               </div>
-              <p className={`text-[11px] font-semibold leading-snug ${isUnlocked ? 'text-[#777]' : 'text-[#CDCDCD]'}`}>{achievement.description}</p>
+              <p className={`text-[11px] font-semibold leading-snug ${isUnlocked ? 'text-[#94A3B8]' : 'text-[#334155]'}`}>{achievement.description}</p>
               <div className="flex items-center gap-2 mt-1.5">
                 {isUnlocked 
-                  ? <span className="flex items-center gap-1 bg-[#D7FFB8] text-[#58CC02] px-2 py-0.5 rounded-lg text-[10px] font-black"><CheckCircle size={10} /> +{achievement.points} XP</span>
-                  : <span className="text-[#CDCDCD] text-[10px] font-black">🔒 {achievement.points} XP</span>}
-                <span className="text-[10px] font-bold text-[#AFAFAF]">{CATEGORY_ICONS[achievement.category]} {achievement.category}</span>
+                  ? <span className="flex items-center gap-1 bg-[#052E16CC] text-[#22C55E] px-2 py-0.5 rounded-lg text-[10px] font-black border border-[#22C55E30]"><CheckCircle size={10} /> +{achievement.points} XP</span>
+                  : <span className="text-[#475569] text-[10px] font-black">🔒 {achievement.points} XP</span>}
+                <span className="text-[10px] font-bold text-[#64748B]">{CATEGORY_ICONS[achievement.category]} {achievement.category}</span>
               </div>
             </div>
-            {isUnlocked && <div className="flex-shrink-0 w-9 h-9 bg-[#D7FFB8] rounded-xl flex items-center justify-center"><CheckCircle size={18} className="text-[#58CC02]" /></div>}
+            {isUnlocked && <div className="flex-shrink-0 w-9 h-9 bg-[#052E16CC] rounded-xl flex items-center justify-center border border-[#22C55E30]"><CheckCircle size={18} className="text-[#22C55E]" /></div>}
           </div>
         </div>
       </button>
@@ -124,34 +124,36 @@ const AchievementsScreen = ({ onBack, userStats, onShowRanking, onShowFriends, p
   const handleCelebrate = (a) => { setCelebratingAchievement(a); setShowConfetti(true); setTimeout(() => setShowConfetti(false), 3000); };
 
   return (
-    <div className="pb-24 min-h-full bg-[#F7F7F7] flex flex-col animate-fade-in">
+    <div className="pb-24 min-h-full flex flex-col animate-fade-in" style={{ background: 'linear-gradient(180deg, #0B1120 0%, #0E1A30 50%, #0F172A 100%)' }}>
       {showConfetti && <div className="fixed inset-0 z-[60] pointer-events-none overflow-hidden">{Array.from({ length: 50 }).map((_, i) => <ConfettiParticle key={i} index={i} />)}</div>}
       <div className="relative overflow-hidden">
-        <div className="bg-gradient-to-br from-[#FFC800] via-[#FFD84D] to-[#FF9600] px-6 pt-6 pb-12">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2" />
-          <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2" />
-          {onBack && <button onClick={onBack} className="text-[#3C3C3C]/50 hover:text-[#3C3C3C] mb-4 flex items-center text-sm font-black active:scale-95 transition relative z-10"><ArrowLeft size={18} className="mr-1" /> Volver</button>}
+        <div className="px-6 pt-6 pb-12" style={{ background: 'linear-gradient(135deg, #78350F 0%, #451A03 30%, #0B1120 100%)' }}>
+          {/* Decorative grid */}
+          <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'linear-gradient(#FFC800 1px, transparent 1px), linear-gradient(90deg, #FFC800 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
+          <div className="absolute top-0 right-0 w-40 h-40 bg-[#FFC800]/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl" />
+          <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#FF9600]/5 rounded-full translate-y-1/2 -translate-x-1/2 blur-2xl" />
+          {onBack && <button onClick={onBack} className="text-[#94A3B8] hover:text-white mb-4 flex items-center text-sm font-black active:scale-95 transition relative z-10"><ArrowLeft size={18} className="mr-1" /> Volver</button>}
           <div className="relative z-10 flex items-center gap-4">
             <div className="relative">
-              <div className="w-20 h-20 bg-white rounded-3xl flex items-center justify-center text-4xl shadow-xl border-b-4 border-white/50 animate-pulse-soft">{lv.emoji}</div>
-              <div className="absolute -top-2 -right-2 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md border-2" style={{ borderColor: lv.color }}><span className="text-xs font-black" style={{ color: lv.color }}>{lv.level}</span></div>
+              <div className="w-20 h-20 rounded-3xl flex items-center justify-center text-4xl shadow-xl border border-[#FFC800]/30 animate-pulse-soft" style={{ background: 'linear-gradient(135deg, #1E293B, #0F172A)' }}>{lv.emoji}</div>
+              <div className="absolute -top-2 -right-2 w-8 h-8 rounded-full flex items-center justify-center shadow-md border-2" style={{ background: '#0F172A', borderColor: lv.color }}><span className="text-xs font-black" style={{ color: lv.color }}>{lv.level}</span></div>
             </div>
             <div className="flex-grow">
-              <p className="text-[10px] text-[#3C3C3C]/50 font-black uppercase tracking-wider">Nivel {lv.level}</p>
-              <h2 className="text-xl font-black text-[#3C3C3C]">{lv.title}</h2>
-              <div className="flex items-center gap-2 mt-1"><Star size={14} className="text-[#3C3C3C]/60" /><span className="text-sm font-black text-[#3C3C3C]/80">{totalPoints} XP</span></div>
+              <p className="text-[10px] text-[#94A3B8] font-black uppercase tracking-wider">Nivel {lv.level}</p>
+              <h2 className="text-xl font-black text-white">{lv.title}</h2>
+              <div className="flex items-center gap-2 mt-1"><Star size={14} className="text-[#FFC800]" /><span className="text-sm font-black text-[#FFC800]">{totalPoints} XP</span></div>
             </div>
           </div>
           <div className="mt-4 relative z-10">
-            <div className="flex justify-between text-[10px] text-[#3C3C3C]/50 font-black mb-1"><span>Nv. {lv.level}</span><span>{lv.nextAt ? `${totalPoints}/${lv.nextAt} XP` : '¡Nivel Máximo!'}</span>{lv.nextAt && <span>Nv. {lv.level + 1}</span>}</div>
-            <div className="w-full bg-[#3C3C3C]/10 rounded-full h-3 overflow-hidden"><div className="h-full rounded-full transition-all duration-1000 relative overflow-hidden" style={{ width: `${Math.max(lvProg, 5)}%`, backgroundColor: lv.color }}><div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/30 to-white/0 animate-shimmer-slide" /></div></div>
+            <div className="flex justify-between text-[10px] text-[#64748B] font-black mb-1"><span>Nv. {lv.level}</span><span>{lv.nextAt ? `${totalPoints}/${lv.nextAt} XP` : '¡Nivel Máximo!'}</span>{lv.nextAt && <span>Nv. {lv.level + 1}</span>}</div>
+            <div className="w-full bg-[#0F172A] rounded-full h-3 overflow-hidden border border-[#334155]/50"><div className="h-full rounded-full transition-all duration-1000 relative overflow-hidden" style={{ width: `${Math.max(lvProg, 5)}%`, backgroundColor: lv.color }}><div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 animate-shimmer-slide" /></div></div>
           </div>
         </div>
         <div className="px-4 -mt-6 relative z-10">
           <div className="grid grid-cols-3 gap-2">
-            <div className="bg-white rounded-2xl p-3 text-center border-2 border-[#E5E5E5] shadow-sm"><span className="text-2xl block mb-0.5">🏅</span><span className="text-lg font-black text-[#3C3C3C]">{unlockedIds.length}</span><span className="text-[9px] font-bold text-[#AFAFAF] block">Logros</span></div>
-            <div className="bg-white rounded-2xl p-3 text-center border-2 border-[#E5E5E5] shadow-sm"><span className="text-2xl block mb-0.5">⭐</span><span className="text-lg font-black text-[#3C3C3C]">{totalPoints}</span><span className="text-[9px] font-bold text-[#AFAFAF] block">Puntos XP</span></div>
-            <div className="bg-white rounded-2xl p-3 text-center border-2 border-[#E5E5E5] shadow-sm"><span className="text-2xl block mb-0.5">📊</span><span className="text-lg font-black text-[#3C3C3C]">{progressPercent}%</span><span className="text-[9px] font-bold text-[#AFAFAF] block">Progreso</span></div>
+            <div className="rounded-2xl p-3 text-center border shadow-sm" style={{ background: '#1E293BEE', borderColor: '#33415580' }}><span className="text-2xl block mb-0.5">🏅</span><span className="text-lg font-black text-[#E2E8F0]">{unlockedIds.length}</span><span className="text-[9px] font-bold text-[#64748B] block">Logros</span></div>
+            <div className="rounded-2xl p-3 text-center border shadow-sm" style={{ background: '#1E293BEE', borderColor: '#33415580' }}><span className="text-2xl block mb-0.5">⭐</span><span className="text-lg font-black text-[#E2E8F0]">{totalPoints}</span><span className="text-[9px] font-bold text-[#64748B] block">Puntos XP</span></div>
+            <div className="rounded-2xl p-3 text-center border shadow-sm" style={{ background: '#1E293BEE', borderColor: '#33415580' }}><span className="text-2xl block mb-0.5">📊</span><span className="text-lg font-black text-[#E2E8F0]">{progressPercent}%</span><span className="text-[9px] font-bold text-[#64748B] block">Progreso</span></div>
           </div>
         </div>
       </div>
@@ -184,36 +186,36 @@ const AchievementsScreen = ({ onBack, userStats, onShowRanking, onShowFriends, p
         </div>
       </div>
       <div className="px-4 pt-2 pb-2">
-        <div className="bg-white rounded-2xl p-4 border-2 border-[#E5E5E5]">
-          <div className="flex items-center gap-3 mb-2"><Trophy size={18} className="text-[#FFC800]" /><span className="text-sm font-black text-[#3C3C3C]">Progreso Total</span><span className="ml-auto text-xs font-black text-[#AFAFAF]">{unlockedIds.length}/{ACHIEVEMENTS.length}</span></div>
-          <div className="w-full bg-[#E5E5E5] rounded-full h-4 overflow-hidden"><div className="h-full bg-gradient-to-r from-[#58CC02] to-[#46A302] rounded-full transition-all duration-1000 relative" style={{ width: `${Math.max(progressPercent, 3)}%` }}><div className="absolute right-1 top-1/2 -translate-y-1/2 text-[8px]">🏃</div></div></div>
+        <div className="rounded-2xl p-4 border" style={{ background: '#1E293BCC', borderColor: '#33415580' }}>
+          <div className="flex items-center gap-3 mb-2"><Trophy size={18} className="text-[#FFC800]" /><span className="text-sm font-black text-[#E2E8F0]">Progreso Total</span><span className="ml-auto text-xs font-black text-[#64748B]">{unlockedIds.length}/{ACHIEVEMENTS.length}</span></div>
+          <div className="w-full bg-[#0F172A] rounded-full h-4 overflow-hidden border border-[#334155]/50"><div className="h-full bg-gradient-to-r from-[#22C55E] to-[#16A34A] rounded-full transition-all duration-1000 relative" style={{ width: `${Math.max(progressPercent, 3)}%` }}><div className="absolute right-1 top-1/2 -translate-y-1/2 text-[8px]">🏃</div></div></div>
         </div>
       </div>
       <div className="px-4">
         <div className="flex gap-2 overflow-x-auto pb-3 scrollbar-hide">
-          {categories.map(cat => <button key={cat} onClick={() => setSelectedCategory(cat)} className={`flex-shrink-0 px-3.5 py-2 rounded-2xl font-black text-xs transition-all active:scale-95 border-2 whitespace-nowrap ${selectedCategory === cat ? 'bg-[#3C3C3C] text-white border-[#3C3C3C] shadow-md' : 'bg-white text-[#AFAFAF] border-[#E5E5E5]'}`}>{cat === 'all' ? '🌟 Todos' : `${CATEGORY_ICONS[cat] || '📋'} ${cat}`}</button>)}
+          {categories.map(cat => <button key={cat} onClick={() => setSelectedCategory(cat)} className={`flex-shrink-0 px-3.5 py-2 rounded-2xl font-black text-xs transition-all active:scale-95 border whitespace-nowrap ${selectedCategory === cat ? 'bg-[#22D3EE] text-[#0F172A] border-[#22D3EE] shadow-md shadow-[#22D3EE]/20' : 'text-[#64748B] border-[#334155] bg-[#1E293B]/60'}`}>{cat === 'all' ? '🌟 Todos' : `${CATEGORY_ICONS[cat] || '📋'} ${cat}`}</button>)}
         </div>
         <div className="flex gap-2 mb-4">
-          <button onClick={() => setShowUnlockedOnly(false)} className={`px-3 py-1.5 rounded-xl text-[11px] font-black transition border-2 ${!showUnlockedOnly ? 'bg-[#58CC02] text-white border-[#46A302]' : 'bg-white text-[#AFAFAF] border-[#E5E5E5]'}`}>📋 Todos ({filteredAchievements.length})</button>
-          <button onClick={() => setShowUnlockedOnly(true)} className={`px-3 py-1.5 rounded-xl text-[11px] font-black transition border-2 ${showUnlockedOnly ? 'bg-[#58CC02] text-white border-[#46A302]' : 'bg-white text-[#AFAFAF] border-[#E5E5E5]'}`}>✅ Desbloqueados ({filteredAchievements.filter(a => unlockedIds.includes(a.id)).length})</button>
+          <button onClick={() => setShowUnlockedOnly(false)} className={`px-3 py-1.5 rounded-xl text-[11px] font-black transition border ${!showUnlockedOnly ? 'bg-[#22C55E] text-white border-[#16A34A] shadow-md shadow-green-500/20' : 'text-[#64748B] border-[#334155] bg-[#1E293B]/60'}`}>📋 Todos ({filteredAchievements.length})</button>
+          <button onClick={() => setShowUnlockedOnly(true)} className={`px-3 py-1.5 rounded-xl text-[11px] font-black transition border ${showUnlockedOnly ? 'bg-[#22C55E] text-white border-[#16A34A] shadow-md shadow-green-500/20' : 'text-[#64748B] border-[#334155] bg-[#1E293B]/60'}`}>✅ Desbloqueados ({filteredAchievements.filter(a => unlockedIds.includes(a.id)).length})</button>
         </div>
       </div>
       <div className="px-4 space-y-3 pb-6">
-        {sorted.length === 0 && <div className="text-center py-12"><span className="text-5xl block mb-3">🔍</span><p className="text-sm font-black text-[#AFAFAF]">No hay logros aquí aún</p></div>}
+        {sorted.length === 0 && <div className="text-center py-12"><span className="text-5xl block mb-3">🔍</span><p className="text-sm font-black text-[#64748B]">No hay logros aquí aún</p></div>}
         {sorted.map((a, idx) => <AchievementCard key={a.id} achievement={a} isUnlocked={unlockedIds.includes(a.id)} onCelebrate={handleCelebrate} animDelay={idx * 60} />)}
       </div>
       {celebratingAchievement && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in" onClick={() => setCelebratingAchievement(null)}>
-          <div className="bg-white rounded-3xl p-8 max-w-sm w-full text-center border-2 border-[#E5E5E5] animate-bounce-in shadow-2xl" onClick={e => e.stopPropagation()}>
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in" onClick={() => setCelebratingAchievement(null)}>
+          <div className="rounded-3xl p-8 max-w-sm w-full text-center border shadow-2xl animate-bounce-in" style={{ background: 'linear-gradient(180deg, #1E293B, #0F172A)', borderColor: '#334155' }} onClick={e => e.stopPropagation()}>
             <div className="relative mx-auto w-24 h-24 mb-4">
               <div className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${RARITY_CONFIG[celebratingAchievement.rarity].gradient} opacity-20 animate-ping`} />
               <div className={`relative w-full h-full rounded-3xl bg-gradient-to-br ${RARITY_CONFIG[celebratingAchievement.rarity].gradient} flex items-center justify-center shadow-xl`}><span className="text-5xl">{celebratingAchievement.icon}</span></div>
             </div>
             <div className="flex justify-center gap-1 mb-2">{Array.from({ length: RARITY_CONFIG[celebratingAchievement.rarity].stars }).map((_, i) => <span key={i} className="text-lg animate-bounce" style={{ animationDelay: `${i * 100}ms` }}>⭐</span>)}</div>
             <h2 className="text-2xl font-black text-[#FFC800] mb-1">¡Logro Desbloqueado!</h2>
-            <p className="text-lg font-black text-[#3C3C3C]">{celebratingAchievement.title}</p>
-            <p className="text-[#AFAFAF] text-sm font-semibold mt-1 mb-3">{celebratingAchievement.description}</p>
-            <div className="inline-flex items-center gap-2 bg-[#D7FFB8] text-[#58CC02] px-4 py-2 rounded-xl mb-4"><Zap size={16} /><span className="text-lg font-black">+{celebratingAchievement.points} XP</span></div>
+            <p className="text-lg font-black text-[#E2E8F0]">{celebratingAchievement.title}</p>
+            <p className="text-[#94A3B8] text-sm font-semibold mt-1 mb-3">{celebratingAchievement.description}</p>
+            <div className="inline-flex items-center gap-2 bg-[#052E16CC] text-[#22C55E] px-4 py-2 rounded-xl mb-4 border border-[#22C55E30]"><Zap size={16} /><span className="text-lg font-black">+{celebratingAchievement.points} XP</span></div>
             <div><button onClick={() => setCelebratingAchievement(null)} className="w-full py-3.5 btn-3d btn-3d-green rounded-xl text-sm">¡Genial! 🎉</button></div>
           </div>
         </div>
@@ -236,18 +238,18 @@ const AchievementUnlockPopup = ({ achievements, onDismiss }) => {
     <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 animate-fade-in" onClick={onDismiss}>
       <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
       <div className="absolute inset-0 overflow-hidden pointer-events-none">{Array.from({ length: 40 }).map((_, i) => <ConfettiParticle key={i} index={i} />)}</div>
-      <div className="relative bg-white rounded-3xl p-8 max-w-xs w-full text-center shadow-2xl animate-bounce-in" onClick={e => e.stopPropagation()}>
+      <div className="relative rounded-3xl p-8 max-w-xs w-full text-center shadow-2xl animate-bounce-in border" style={{ background: 'linear-gradient(180deg, #1E293B, #0F172A)', borderColor: '#334155' }} onClick={e => e.stopPropagation()}>
         <div className="relative mx-auto w-28 h-28 mb-5">
           <div className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${r.gradient} opacity-20 animate-ping`} />
           <div className={`absolute inset-2 rounded-2xl bg-gradient-to-br ${r.gradient} opacity-30 animate-pulse`} />
           <div className={`relative w-full h-full rounded-3xl bg-gradient-to-br ${r.gradient} flex items-center justify-center shadow-2xl border-b-4 border-black/10`}><span className="text-6xl drop-shadow-lg">{a.icon}</span></div>
         </div>
-        <p className="text-xs font-black text-[#AFAFAF] uppercase tracking-widest mb-1">🎊 ¡Nuevo Logro!</p>
-        <h2 className="text-2xl font-black text-[#3C3C3C] mb-1">{a.title}</h2>
-        <p className="text-sm text-[#777] font-semibold mb-3">{a.description}</p>
+        <p className="text-xs font-black text-[#64748B] uppercase tracking-widest mb-1">🎊 ¡Nuevo Logro!</p>
+        <h2 className="text-2xl font-black text-[#E2E8F0] mb-1">{a.title}</h2>
+        <p className="text-sm text-[#94A3B8] font-semibold mb-3">{a.description}</p>
         <div className="flex justify-center gap-1 mb-3">{Array.from({ length: r.stars }).map((_, i) => <span key={i} className="text-xl animate-bounce" style={{ animationDelay: `${i * 150}ms` }}>⭐</span>)}</div>
-        <div className="inline-flex items-center gap-2 bg-[#D7FFB8] text-[#58CC02] px-5 py-2.5 rounded-2xl mb-5"><Zap size={18} /><span className="text-xl font-black">+{a.points} XP</span></div>
-        {achievements.length > 1 && <p className="text-[10px] font-bold text-[#AFAFAF] mb-3">Logro {idx + 1} de {achievements.length}</p>}
+        <div className="inline-flex items-center gap-2 bg-[#052E16CC] text-[#22C55E] px-5 py-2.5 rounded-2xl mb-5 border border-[#22C55E30]"><Zap size={18} /><span className="text-xl font-black">+{a.points} XP</span></div>
+        {achievements.length > 1 && <p className="text-[10px] font-bold text-[#64748B] mb-3">Logro {idx + 1} de {achievements.length}</p>}
         <button onClick={onDismiss} className="w-full py-3.5 btn-3d btn-3d-green rounded-2xl text-sm">{idx < achievements.length - 1 ? '¡Siguiente! →' : '¡Increíble! 🎉'}</button>
       </div>
     </div>
@@ -259,9 +261,9 @@ const AchievementToast = ({ achievement, onDismiss }) => {
   if (!achievement) return null;
   return (
     <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 animate-slide-up">
-      <div className="bg-gradient-to-r from-[#FFC800] to-[#FF9600] text-[#3C3C3C] px-5 py-3 rounded-2xl border-b-4 border-[#E58600] flex items-center gap-3 font-black shadow-2xl">
-        <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-2xl shadow-inner">{achievement.icon}</div>
-        <div><p className="text-[9px] text-[#3C3C3C]/50 uppercase tracking-wider font-black">¡Logro Desbloqueado!</p><p className="font-black text-sm">{achievement.title}</p><p className="text-[10px] text-[#3C3C3C]/70 font-bold">+{achievement.points} XP</p></div>
+      <div className="px-5 py-3 rounded-2xl border flex items-center gap-3 font-black shadow-2xl" style={{ background: 'linear-gradient(135deg, #1E293BEE, #0F172AEE)', borderColor: '#FFC80040', boxShadow: '0 8px 32px #0B112080, 0 0 20px #FFC80015' }}>
+        <div className="w-10 h-10 rounded-xl flex items-center justify-center text-2xl" style={{ background: 'linear-gradient(135deg, #78350F, #451A03)' }}>{achievement.icon}</div>
+        <div><p className="text-[9px] text-[#FFC800] uppercase tracking-wider font-black">¡Logro Desbloqueado!</p><p className="font-black text-sm text-[#E2E8F0]">{achievement.title}</p><p className="text-[10px] text-[#64748B] font-bold">+{achievement.points} XP</p></div>
         <span className="text-2xl animate-bounce">🎉</span>
       </div>
     </div>

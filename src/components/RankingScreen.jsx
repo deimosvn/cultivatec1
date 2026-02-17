@@ -39,8 +39,8 @@ const RankingAvatar = ({ config, size = 36, highlight = false }) => {
     return (
       <div className="rounded-xl flex items-center justify-center" style={{
         width: fallbackSize, height: fallbackSize,
-        background: 'linear-gradient(135deg, #3B82F6, #3B82F688)',
-        border: '2px solid #3B82F666',
+        background: 'linear-gradient(135deg, #1E293B, #0F172A)',
+        border: '2px solid #334155',
       }}>
         <span style={{ fontSize: fallbackSize * 0.5 }}>🤖</span>
       </div>
@@ -50,10 +50,10 @@ const RankingAvatar = ({ config, size = 36, highlight = false }) => {
     <div className="rounded-xl flex items-center justify-center overflow-hidden" style={{
       width: size, height: size,
       background: highlight
-        ? 'linear-gradient(135deg, #2563EB, #3B82F6)'
-        : 'linear-gradient(135deg, #EEF2FF, #E0E7FF)',
-      border: highlight ? '2.5px solid #60A5FA' : '2px solid #C7D2FE',
-      boxShadow: highlight ? '0 0 12px #3B82F680, 0 0 24px #2563EB40' : 'none',
+        ? 'linear-gradient(135deg, #0E7490, #164E63)'
+        : 'linear-gradient(135deg, #1E293B, #0F172A)',
+      border: highlight ? '2.5px solid #22D3EE' : '2px solid #334155',
+      boxShadow: highlight ? '0 0 18px #22D3EE80, 0 0 36px #06B6D440' : 'none',
     }}>
       <RobotAvatar config={config} size={size * 0.85} />
     </div>
@@ -61,10 +61,10 @@ const RankingAvatar = ({ config, size = 36, highlight = false }) => {
 };
 
 const RankBadge = ({ rank }) => {
-  if (rank === 1) return <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#FFC800] to-[#FF9600] flex items-center justify-center shadow-lg"><Crown size={16} className="text-white" /></div>;
-  if (rank === 2) return <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#C0C0C0] to-[#A0A0A0] flex items-center justify-center shadow-lg"><Medal size={16} className="text-white" /></div>;
-  if (rank === 3) return <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#CD7F32] to-[#A0522D] flex items-center justify-center shadow-lg"><Medal size={16} className="text-white" /></div>;
-  return <div className="w-8 h-8 rounded-full bg-[#E5E5E5] flex items-center justify-center"><span className="text-xs font-black text-[#777]">{rank}</span></div>;
+  if (rank === 1) return <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#FFC800] to-[#FF9600] flex items-center justify-center shadow-lg shadow-amber-500/30 border border-amber-400/50"><Crown size={16} className="text-white" /></div>;
+  if (rank === 2) return <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#C0C0C0] to-[#A0A0A0] flex items-center justify-center shadow-lg shadow-gray-400/20 border border-gray-300/50"><Medal size={16} className="text-white" /></div>;
+  if (rank === 3) return <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#CD7F32] to-[#A0522D] flex items-center justify-center shadow-lg shadow-orange-700/20 border border-orange-600/50"><Medal size={16} className="text-white" /></div>;
+  return <div className="w-8 h-8 rounded-full bg-[#1E293B] border border-[#334155] flex items-center justify-center"><span className="text-xs font-black text-[#64748B]">{rank}</span></div>;
 };
 
 // ============================================
@@ -112,12 +112,12 @@ const AdminActionModal = ({ player, onClose, onDelete, onGiftBadge, onGiftSkin }
   };
 
   return (
-    <div className="fixed inset-0 bg-black/60 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 animate-fade-in" onClick={onClose}>
-      <div className="bg-white w-full sm:max-w-md sm:rounded-3xl rounded-t-3xl max-h-[85vh] flex flex-col overflow-hidden animate-slide-up" onClick={e => e.stopPropagation()}>
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 animate-fade-in" onClick={onClose}>
+      <div className="w-full sm:max-w-md sm:rounded-3xl rounded-t-3xl max-h-[85vh] flex flex-col overflow-hidden animate-slide-up" style={{ background: 'linear-gradient(180deg, #1E293B, #0F172A)' }} onClick={e => e.stopPropagation()}>
         {/* Header */}
-        <div className="bg-gradient-to-r from-[#1E40AF] to-[#3B82F6] px-5 py-4 flex items-center justify-between">
+        <div className="px-5 py-4 flex items-center justify-between" style={{ background: 'linear-gradient(135deg, #0E7490, #164E63)' }}>
           <div className="flex items-center gap-3">
-            <RankingAvatar config={player.robotConfig} size={40} />
+            <RankingAvatar config={player.robotConfig} size={44} />
             <div>
               <div className="flex items-center gap-1.5">
                 <p className="text-sm font-black text-white">{player.username || 'Anónimo'}</p>
@@ -135,13 +135,13 @@ const AdminActionModal = ({ player, onClose, onDelete, onGiftBadge, onGiftSkin }
               )}
             </div>
           </div>
-          <button onClick={onClose} className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center active:scale-90 transition">
+          <button onClick={onClose} className="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center active:scale-90 transition">
             <X size={16} className="text-white" />
           </button>
         </div>
 
         {/* Tabs */}
-        <div className="flex border-b border-[#E5E5E5]">
+        <div className="flex border-b border-[#334155]">
           {[
             { id: 'actions', icon: <Shield size={14} />, label: 'Acciones' },
             { id: 'badges', icon: <Award size={14} />, label: 'Insignias' },
@@ -149,7 +149,7 @@ const AdminActionModal = ({ player, onClose, onDelete, onGiftBadge, onGiftSkin }
           ].map(t => (
             <button key={t.id} onClick={() => setActiveTab(t.id)}
               className={`flex-1 flex items-center justify-center gap-1.5 py-3 text-xs font-black transition-all border-b-2 ${
-                activeTab === t.id ? 'text-[#2563EB] border-[#2563EB]' : 'text-[#AFAFAF] border-transparent'
+                activeTab === t.id ? 'text-[#22D3EE] border-[#22D3EE]' : 'text-[#64748B] border-transparent'
               }`}>
               {t.icon} {t.label}
             </button>
@@ -200,24 +200,24 @@ const AdminActionModal = ({ player, onClose, onDelete, onGiftBadge, onGiftSkin }
               )}
 
               {/* User Info */}
-              <div className="p-4 bg-[#F0F9FF] rounded-2xl border-2 border-[#BAE6FD]">
-                <p className="text-sm font-black text-[#1E40AF] mb-2">📋 Información del Usuario</p>
-                <div className="space-y-1.5 text-xs font-semibold text-[#555]">
-                  <p>👤 Username: <span className="font-black text-[#3C3C3C]">{player.username}</span></p>
-                  <p>📧 Email: <span className="font-black text-[#3C3C3C]">{player.email || 'N/A'}</span></p>
-                  <p>⭐ XP: <span className="font-black text-[#3C3C3C]">{(player.totalPoints || 0).toLocaleString()}</span></p>
-                  <p>📚 Módulos: <span className="font-black text-[#3C3C3C]">{player.modulesCompleted || 0}</span></p>
-                  <p>👥 Amigos: <span className="font-black text-[#3C3C3C]">{player.friendsCount || 0}</span></p>
-                  <p>🔥 Racha: <span className="font-black text-[#3C3C3C]">{player.currentStreak || 0} días</span></p>
+              <div className="p-4 rounded-2xl border" style={{ background: '#0F172ACC', borderColor: '#334155' }}>
+                <p className="text-sm font-black text-[#22D3EE] mb-2">📋 Información del Usuario</p>
+                <div className="space-y-1.5 text-xs font-semibold text-[#94A3B8]">
+                  <p>👤 Username: <span className="font-black text-[#E2E8F0]">{player.username}</span></p>
+                  <p>📧 Email: <span className="font-black text-[#E2E8F0]">{player.email || 'N/A'}</span></p>
+                  <p>⭐ XP: <span className="font-black text-[#E2E8F0]">{(player.totalPoints || 0).toLocaleString()}</span></p>
+                  <p>📚 Módulos: <span className="font-black text-[#E2E8F0]">{player.modulesCompleted || 0}</span></p>
+                  <p>👥 Amigos: <span className="font-black text-[#E2E8F0]">{player.friendsCount || 0}</span></p>
+                  <p>🔥 Racha: <span className="font-black text-[#E2E8F0]">{player.currentStreak || 0} días</span></p>
                   {player.adminBadges?.length > 0 && (
-                    <p>🏅 Insignias: <span className="font-black text-[#3C3C3C]">{player.adminBadges.map(b => b.emoji).join(' ')}</span></p>
+                    <p>🏅 Insignias: <span className="font-black text-[#E2E8F0]">{player.adminBadges.map(b => b.emoji).join(' ')}</span></p>
                   )}
                 </div>
               </div>
             </div>
           ) : activeTab === 'badges' ? (
             <div>
-              <p className="text-xs font-bold text-[#AFAFAF] mb-3">Selecciona una insignia para regalar a <span className="font-black text-[#3C3C3C]">{player.username}</span>:</p>
+              <p className="text-xs font-bold text-[#64748B] mb-3">Selecciona una insignia para regalar a <span className="font-black text-[#E2E8F0]">{player.username}</span>:</p>
               <div className="grid grid-cols-2 gap-2">
                 {AVAILABLE_BADGES.map(badge => {
                   const alreadyHas = player.adminBadges?.some(b => b.id === badge.id);
@@ -226,15 +226,16 @@ const AdminActionModal = ({ player, onClose, onDelete, onGiftBadge, onGiftSkin }
                   return (
                     <button key={badge.id} onClick={() => !alreadyHas && !isGifting && handleGiftBadge(badge)}
                       disabled={alreadyHas || isGifting}
-                      className={`p-3 rounded-2xl border-2 text-left transition-all active:scale-95 ${
-                        justGifted ? 'bg-[#DCFCE7] border-[#22C55E]/50' :
-                        alreadyHas ? 'bg-[#F0F0F0] border-[#E5E5E5] opacity-50' :
-                        'bg-white border-[#E5E5E5] hover:border-[#3B82F6]/50 hover:bg-[#EFF6FF]'
-                      }`}>
+                      className={`p-3 rounded-2xl border text-left transition-all active:scale-95 ${
+                        justGifted ? 'border-[#22C55E]/50' :
+                        alreadyHas ? 'opacity-40' :
+                        'hover:border-[#22D3EE]/50'
+                      }`}
+                      style={{ background: justGifted ? '#052E1688' : '#0F172A99', borderColor: justGifted ? undefined : '#33415580' }}>
                       <div className="flex items-center gap-2">
                         <span className="text-2xl">{badge.emoji}</span>
                         <div>
-                          <p className="text-xs font-black text-[#3C3C3C]">{badge.name}</p>
+                          <p className="text-xs font-black text-[#E2E8F0]">{badge.name}</p>
                           <p className="text-[9px] font-bold" style={{ color: badge.color }}>
                             {justGifted ? '✅ Regalada' : alreadyHas ? 'Ya la tiene' : isGifting ? '⏳ Enviando...' : 'Tap para regalar'}
                           </p>
@@ -247,24 +248,24 @@ const AdminActionModal = ({ player, onClose, onDelete, onGiftBadge, onGiftSkin }
             </div>
           ) : activeTab === 'skins' ? (
             <div>
-              <p className="text-xs font-bold text-[#AFAFAF] mb-3">Regala una skin a <span className="font-black text-[#3C3C3C]">{player.username}</span> (se aplicará automáticamente):</p>
+              <p className="text-xs font-bold text-[#64748B] mb-3">Regala una skin a <span className="font-black text-[#E2E8F0]">{player.username}</span> (se aplicará automáticamente):</p>
               <div className="grid grid-cols-2 gap-2">
                 {ROBOT_SKINS.map(skin => {
                   const isGifting = giftingSkin === skin.id;
                   const justGifted = actionDone === `skin_${skin.id}`;
-                  const rarityBgs = { common: '#DCFCE7', rare: '#DBEAFE', epic: '#FEE2E2', legendary: '#FEF3C7' };
                   return (
                     <button key={skin.id} onClick={() => !isGifting && handleGiftSkin(skin)}
                       disabled={isGifting}
-                      className={`p-3 rounded-2xl border-2 transition-all active:scale-95 ${
-                        justGifted ? 'bg-[#DCFCE7] border-[#22C55E]/50' : 'bg-white border-[#E5E5E5] hover:border-[#3B82F6]/50'
-                      }`}>
+                      className={`p-3 rounded-2xl border transition-all active:scale-95 ${
+                        justGifted ? 'border-[#22C55E]/50' : 'hover:border-[#22D3EE]/50'
+                      }`}
+                      style={{ background: justGifted ? '#052E1688' : '#0F172A99', borderColor: justGifted ? undefined : '#33415580' }}>
                       <div className="flex flex-col items-center gap-1.5">
-                        <div className="w-12 h-12 rounded-xl flex items-center justify-center overflow-hidden" style={{ background: `${rarityBgs[skin.rarity] || '#F0F0F0'}` }}>
+                        <div className="w-12 h-12 rounded-xl flex items-center justify-center overflow-hidden" style={{ background: '#1E293B' }}>
                           <RobotAvatar config={skin.config} size={40} />
                         </div>
                         <div className="text-center">
-                          <p className="text-[10px] font-black text-[#3C3C3C]">{skin.name}</p>
+                          <p className="text-[10px] font-black text-[#E2E8F0]">{skin.name}</p>
                           <p className="text-[8px] font-black uppercase" style={{ color: skin.rarityColor }}>{skin.rarityLabel}</p>
                           {justGifted && <p className="text-[8px] font-black text-[#22C55E]">✅ Regalada</p>}
                           {isGifting && <p className="text-[8px] font-black text-[#3B82F6]">⏳ Enviando...</p>}
@@ -287,11 +288,6 @@ const AdminActionModal = ({ player, onClose, onDelete, onGiftBadge, onGiftSkin }
 // ============================================
 const RankingEntry = ({ player, rank, isCurrentUser, index, isAdmin, onAdminAction }) => {
   const lv = calculateLevel(player.totalPoints || 0);
-  const bgClass = isCurrentUser
-    ? 'border-[#2563EB]/60'
-    : rank <= 3
-      ? 'bg-gradient-to-r from-[#FFC800]/5 to-transparent border-[#FFC800]/20'
-      : 'bg-white border-[#E5E5E5]';
 
   return (
     <div className="animate-scale-in" style={{
@@ -300,39 +296,49 @@ const RankingEntry = ({ player, rank, isCurrentUser, index, isAdmin, onAdminActi
         position: 'relative',
         zIndex: 2,
         transform: 'scale(1.03)',
-        filter: 'drop-shadow(0 0 8px #2563EB50)',
       } : {}),
     }}>
-      {/* Glow ring behind current user */}
+      {/* Animated glow ring behind current user */}
       {isCurrentUser && (
         <div style={{
-          position: 'absolute', inset: -2, borderRadius: 18,
-          background: 'linear-gradient(135deg, #2563EB44, #3B82F622, #60A5FA44)',
-          animation: 'pulseGlow 2.5s ease-in-out infinite',
+          position: 'absolute', inset: -3, borderRadius: 20,
+          background: 'linear-gradient(135deg, #22D3EE55, #06B6D433, #22D3EE55)',
+          animation: 'pulseGlow 2s ease-in-out infinite',
           zIndex: -1,
         }} />
       )}
       <div
-        className={`flex items-center gap-3 rounded-2xl border-2 transition-all ${bgClass}`}
+        className="flex items-center gap-3 rounded-2xl border transition-all"
         style={{
-          padding: isCurrentUser ? '10px 12px' : '12px',
-          ...(isCurrentUser ? {
-            background: 'linear-gradient(135deg, #1E3A8A18, #2563EB14, #3B82F610)',
-            boxShadow: '0 4px 20px #2563EB30, inset 0 1px 0 #60A5FA30',
-          } : {}),
+          padding: isCurrentUser ? '12px 14px' : '12px',
+          background: isCurrentUser
+            ? 'linear-gradient(135deg, #164E6320, #0E749018, #06B6D410)'
+            : rank <= 3
+              ? 'linear-gradient(135deg, #1E293BCC, #0F172ACC)'
+              : '#1E293B99',
+          borderColor: isCurrentUser
+            ? '#22D3EE60'
+            : rank <= 3
+              ? '#FFC80030'
+              : '#33415580',
+          boxShadow: isCurrentUser
+            ? '0 4px 24px #22D3EE30, inset 0 1px 0 #22D3EE20'
+            : rank <= 3
+              ? '0 2px 12px #FFC80010'
+              : 'none',
         }}
       >
         <RankBadge rank={rank} />
-        <RankingAvatar config={player.robotConfig} size={isCurrentUser ? 50 : 40} highlight={isCurrentUser} />
+        <RankingAvatar config={player.robotConfig} size={isCurrentUser ? 60 : 42} highlight={isCurrentUser} />
         <div className="flex-grow min-w-0">
           <div className="flex items-center gap-1.5 flex-wrap">
-            <span className={`font-black truncate ${isCurrentUser ? 'text-[15px] text-[#1E40AF]' : 'text-sm text-[#3C3C3C]'}`}>
+            <span className={`font-black truncate ${isCurrentUser ? 'text-[15px] text-[#22D3EE]' : 'text-sm text-[#E2E8F0]'}`}>
               {player.username || 'Anónimo'}
             </span>
             {isCurrentUser && (
-              <span className="px-2 py-0.5 text-white text-[8px] font-black rounded-md uppercase" style={{
-                background: 'linear-gradient(135deg, #2563EB, #1D4ED8)',
-                boxShadow: '0 2px 8px #2563EB60',
+              <span className="px-2 py-0.5 text-[#0F172A] text-[8px] font-black rounded-md uppercase" style={{
+                background: 'linear-gradient(135deg, #22D3EE, #06B6D4)',
+                boxShadow: '0 2px 10px #22D3EE60',
                 animation: 'pulseBadge 2s ease-in-out infinite',
                 letterSpacing: '0.5px',
               }}>⭐ Tú</span>
@@ -340,30 +346,31 @@ const RankingEntry = ({ player, rank, isCurrentUser, index, isAdmin, onAdminActi
             {isAdminEmail(player.email) && (
               <span className="px-1.5 py-0.5 bg-gradient-to-r from-[#FF4B4B] to-[#FF9600] text-white text-[7px] font-black rounded-md uppercase tracking-wider">ADMIN</span>
             )}
-            {/* Admin badges */}
             {player.adminBadges?.map(b => (
               <span key={b.id} title={b.name} className="text-sm">{b.emoji}</span>
             ))}
           </div>
           <div className="flex items-center gap-2 mt-0.5">
-            <span className="text-[10px] font-bold text-[#AFAFAF]">{lv.emoji} Nv.{lv.level}</span>
-            <span className="text-[10px] font-bold text-[#CDCDCD]">·</span>
-            <span className="text-[10px] font-bold text-[#AFAFAF] truncate">{lv.title}</span>
+            <span className="text-[10px] font-bold text-[#64748B]">{lv.emoji} Nv.{lv.level}</span>
+            <span className="text-[10px] font-bold text-[#475569]">·</span>
+            <span className="text-[10px] font-bold text-[#64748B] truncate">{lv.title}</span>
           </div>
           {/* XP Progress bar */}
           <div className="mt-1 flex items-center gap-1.5">
-            <div className="flex-grow h-1.5 bg-[#E5E5E5] rounded-full overflow-hidden">
+            <div className="flex-grow h-1.5 bg-[#0F172A] rounded-full overflow-hidden border border-[#334155]/50">
               <div
                 className="h-full rounded-full transition-all duration-500"
                 style={{
                   width: `${lv.progress * 100}%`,
                   background: lv.isMaxLevel
                     ? 'linear-gradient(90deg, #FFC800, #FF9600)'
-                    : 'linear-gradient(90deg, #3B82F6, #2563EB)',
+                    : isCurrentUser
+                      ? 'linear-gradient(90deg, #22D3EE, #06B6D4)'
+                      : 'linear-gradient(90deg, #3B82F6, #2563EB)',
                 }}
               />
             </div>
-            <span className="text-[8px] font-bold text-[#CDCDCD] flex-shrink-0">
+            <span className="text-[8px] font-bold text-[#475569] flex-shrink-0">
               {lv.isMaxLevel ? 'MAX' : `${Math.round(lv.progress * 100)}%`}
             </span>
           </div>
@@ -372,14 +379,13 @@ const RankingEntry = ({ player, rank, isCurrentUser, index, isAdmin, onAdminActi
           <div className="text-right flex-shrink-0">
             <div className="flex items-center gap-1">
               <Star size={isCurrentUser ? 14 : 12} className="text-[#FFC800]" />
-              <span className={`font-black ${isCurrentUser ? 'text-[15px] text-[#1E3A8A]' : 'text-sm text-[#3C3C3C]'}`}>{(player.totalPoints || 0).toLocaleString()}</span>
+              <span className={`font-black ${isCurrentUser ? 'text-[15px] text-[#22D3EE]' : 'text-sm text-[#E2E8F0]'}`}>{(player.totalPoints || 0).toLocaleString()}</span>
             </div>
-            <span className="text-[9px] font-bold text-[#AFAFAF]">XP</span>
+            <span className="text-[9px] font-bold text-[#475569]">XP</span>
           </div>
-          {/* Admin action button */}
           {isAdmin && !isCurrentUser && (
             <button onClick={() => onAdminAction(player)}
-              className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#6366F1] to-[#4F46E5] flex items-center justify-center shadow-md active:scale-90 transition border border-[#4338CA]/50">
+              className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#6366F1] to-[#4F46E5] flex items-center justify-center shadow-md active:scale-90 transition border border-[#818CF8]/30">
               <Shield size={14} className="text-white" />
             </button>
           )}
@@ -485,34 +491,41 @@ const RankingScreen = ({ onBack, currentUserId, currentUserProfile, isAdmin = fa
   const currentUserRank = currentRanking.find(p => p.uid === currentUserId);
 
   return (
-    <div className="pb-24 min-h-full bg-[#F7F7F7] flex flex-col animate-fade-in">
+    <div className="pb-24 min-h-full flex flex-col animate-fade-in" style={{ background: 'linear-gradient(180deg, #0B1120 0%, #0E1A30 50%, #0F172A 100%)' }}>
       {/* Keyframes for current user highlight animations */}
       <style>{`
         @keyframes pulseGlow {
-          0%, 100% { opacity: 0.5; transform: scale(1); }
-          50% { opacity: 1; transform: scale(1.02); }
+          0%, 100% { opacity: 0.4; transform: scale(1); }
+          50% { opacity: 1; transform: scale(1.01); }
         }
         @keyframes pulseBadge {
-          0%, 100% { transform: scale(1); box-shadow: 0 2px 8px #2563EB60; }
-          50% { transform: scale(1.1); box-shadow: 0 2px 14px #2563EB90; }
+          0%, 100% { transform: scale(1); box-shadow: 0 2px 10px #22D3EE60; }
+          50% { transform: scale(1.1); box-shadow: 0 2px 16px #22D3EE90; }
+        }
+        @keyframes float {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-4px); }
         }
       `}</style>
+
       {/* Header */}
       <div className="relative overflow-hidden">
-        <div className="bg-gradient-to-br from-[#2563EB] via-[#3B82F6] to-[#60A5FA] px-6 pt-6 pb-12">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2" />
-          <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2" />
+        <div className="px-6 pt-6 pb-14" style={{ background: 'linear-gradient(135deg, #0E7490 0%, #164E63 40%, #0B1120 100%)' }}>
+          {/* Decorative grid lines */}
+          <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'linear-gradient(#22D3EE 1px, transparent 1px), linear-gradient(90deg, #22D3EE 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
+          <div className="absolute top-0 right-0 w-40 h-40 bg-[#22D3EE]/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl" />
+          <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#06B6D4]/5 rounded-full translate-y-1/2 -translate-x-1/2 blur-2xl" />
 
           {onBack && (
-            <button onClick={onBack} className="text-white/60 hover:text-white mb-4 flex items-center text-sm font-black active:scale-95 transition relative z-10">
+            <button onClick={onBack} className="text-[#94A3B8] hover:text-white mb-4 flex items-center text-sm font-black active:scale-95 transition relative z-10">
               <ArrowLeft size={18} className="mr-1" /> Volver
             </button>
           )}
 
           <div className="relative z-10 text-center">
-            <div className="text-5xl mb-2">🏆</div>
+            <div className="text-5xl mb-2" style={{ animation: 'float 3s ease-in-out infinite' }}>🏆</div>
             <h1 className="text-2xl font-black text-white tracking-tight">Ranking</h1>
-            <p className="text-white/60 text-xs font-bold mt-1">
+            <p className="text-[#94A3B8] text-xs font-bold mt-1">
               {isAdmin ? '🛡️ Modo Administrador Activo' : 'Compite con la comunidad'}
             </p>
           </div>
@@ -522,13 +535,14 @@ const RankingScreen = ({ onBack, currentUserId, currentUserProfile, isAdmin = fa
         {currentUserRank && (() => {
           const myLv = calculateLevel(currentUserProfile?.totalPoints || 0);
           return (
-          <div className="px-4 -mt-6 relative z-10">
-            <div className="bg-white rounded-2xl p-4 border-2 border-[#2563EB]/20 shadow-lg">
+          <div className="px-4 -mt-7 relative z-10">
+            <div className="rounded-2xl p-4 border shadow-xl" style={{ background: 'linear-gradient(135deg, #1E293BEE, #0F172AEE)', borderColor: '#22D3EE40', boxShadow: '0 8px 32px #0B112080, 0 0 20px #22D3EE15' }}>
               <div className="flex items-center gap-3">
                 <RankBadge rank={currentUserRank.rank} />
+                <RankingAvatar config={currentUserProfile?.robotConfig} size={48} highlight={true} />
                 <div className="flex-grow min-w-0">
                   <div className="flex items-center gap-1.5">
-                    <p className="text-sm font-black text-[#3C3C3C]">{currentUserProfile?.username || 'Tú'}</p>
+                    <p className="text-sm font-black text-[#E2E8F0]">{currentUserProfile?.username || 'Tú'}</p>
                     {isAdmin && (
                       <span className="px-1.5 py-0.5 bg-gradient-to-r from-[#FF4B4B] to-[#FF9600] text-white text-[7px] font-black rounded-md uppercase tracking-wider">ADMIN</span>
                     )}
@@ -536,44 +550,44 @@ const RankingScreen = ({ onBack, currentUserId, currentUserProfile, isAdmin = fa
                       <span key={b.id} title={b.name} className="text-sm">{b.emoji}</span>
                     ))}
                   </div>
-                  <p className="text-[10px] font-bold text-[#AFAFAF]">Posición #{currentUserRank.rank} de {currentRanking.length}</p>
+                  <p className="text-[10px] font-bold text-[#64748B]">Posición #{currentUserRank.rank} de {currentRanking.length}</p>
                   <div className="flex items-center gap-1.5 mt-1">
-                    <span className="text-[10px] font-bold text-[#2563EB]">{myLv.emoji} Nv.{myLv.level}</span>
-                    <span className="text-[10px] font-bold text-[#94A3B8]">{myLv.title}</span>
+                    <span className="text-[10px] font-bold text-[#22D3EE]">{myLv.emoji} Nv.{myLv.level}</span>
+                    <span className="text-[10px] font-bold text-[#64748B]">{myLv.title}</span>
                   </div>
                 </div>
                 <div className="text-right flex-shrink-0">
                   <div className="flex items-center gap-1">
                     <Star size={14} className="text-[#FFC800]" />
-                    <span className="text-lg font-black text-[#2563EB]">{(currentUserProfile?.totalPoints || 0).toLocaleString()}</span>
+                    <span className="text-lg font-black text-[#22D3EE]">{(currentUserProfile?.totalPoints || 0).toLocaleString()}</span>
                   </div>
-                  <span className="text-[9px] font-bold text-[#AFAFAF]">XP Totales</span>
+                  <span className="text-[9px] font-bold text-[#475569]">XP Totales</span>
                 </div>
               </div>
               {/* Level progress bar */}
-              <div className="mt-3 pt-3 border-t border-[#E5E5E5]">
+              <div className="mt-3 pt-3 border-t border-[#334155]">
                 <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-[10px] font-bold text-[#777]">Nv.{myLv.level}</span>
-                  <span className="text-[10px] font-bold text-[#AFAFAF]">
+                  <span className="text-[10px] font-bold text-[#64748B]">Nv.{myLv.level}</span>
+                  <span className="text-[10px] font-bold text-[#475569]">
                     {myLv.isMaxLevel
                       ? '¡Nivel máximo alcanzado!'
                       : `${myLv.xpInLevel.toLocaleString()} / ${myLv.xpNeeded.toLocaleString()} XP`}
                   </span>
-                  <span className="text-[10px] font-bold text-[#777]">{myLv.isMaxLevel ? `Nv.${myLv.level}` : `Nv.${myLv.level + 1}`}</span>
+                  <span className="text-[10px] font-bold text-[#64748B]">{myLv.isMaxLevel ? `Nv.${myLv.level}` : `Nv.${myLv.level + 1}`}</span>
                 </div>
-                <div className="w-full h-2.5 bg-[#E5E5E5] rounded-full overflow-hidden">
+                <div className="w-full h-2.5 bg-[#0F172A] rounded-full overflow-hidden border border-[#334155]/50">
                   <div
                     className="h-full rounded-full transition-all duration-700 ease-out"
                     style={{
                       width: `${myLv.progress * 100}%`,
                       background: myLv.isMaxLevel
                         ? 'linear-gradient(90deg, #FFC800, #FF9600, #FFC800)'
-                        : 'linear-gradient(90deg, #3B82F6, #2563EB, #1E40AF)',
+                        : 'linear-gradient(90deg, #22D3EE, #06B6D4, #0891B2)',
                     }}
                   />
                 </div>
                 {!myLv.isMaxLevel && (
-                  <p className="text-[9px] font-bold text-[#CDCDCD] text-center mt-1">
+                  <p className="text-[9px] font-bold text-[#475569] text-center mt-1">
                     Faltan {(myLv.xpNeeded - myLv.xpInLevel).toLocaleString()} XP para Nv.{myLv.level + 1}
                   </p>
                 )}
@@ -586,30 +600,30 @@ const RankingScreen = ({ onBack, currentUserId, currentUserProfile, isAdmin = fa
 
       {/* Tabs + Refresh */}
       <div className="px-4 pt-4 pb-2 flex items-center gap-2">
-        <div className="flex gap-2 flex-grow">
+        <div className="flex gap-2 flex-grow bg-[#0F172A]/80 rounded-2xl p-1.5 border border-[#334155]/50">
           <button
             onClick={() => setTab('global')}
-            className={`flex items-center gap-1.5 px-4 py-2.5 rounded-2xl text-xs font-black transition-all active:scale-95 border-2 ${
+            className={`flex items-center gap-1.5 flex-1 justify-center py-2.5 rounded-xl text-xs font-black transition-all active:scale-95 ${
               tab === 'global'
-                ? 'bg-[#2563EB] text-white border-[#1E40AF] shadow-md'
-                : 'bg-white text-[#AFAFAF] border-[#E5E5E5]'
+                ? 'bg-[#22D3EE] text-[#0F172A] shadow-lg shadow-[#22D3EE]/30'
+                : 'text-[#64748B] hover:text-[#94A3B8]'
             }`}
           >
             <Globe size={14} /> Global
           </button>
           <button
             onClick={() => setTab('friends')}
-            className={`flex items-center gap-1.5 px-4 py-2.5 rounded-2xl text-xs font-black transition-all active:scale-95 border-2 ${
+            className={`flex items-center gap-1.5 flex-1 justify-center py-2.5 rounded-xl text-xs font-black transition-all active:scale-95 ${
               tab === 'friends'
-                ? 'bg-[#2563EB] text-white border-[#1E40AF] shadow-md'
-                : 'bg-white text-[#AFAFAF] border-[#E5E5E5]'
+                ? 'bg-[#22D3EE] text-[#0F172A] shadow-lg shadow-[#22D3EE]/30'
+                : 'text-[#64748B] hover:text-[#94A3B8]'
             }`}
           >
             <Users size={14} /> Amigos
           </button>
         </div>
-        <button onClick={handleRefresh} className={`w-10 h-10 rounded-xl bg-white border-2 border-[#E5E5E5] flex items-center justify-center transition-all active:scale-90 ${refreshing ? 'animate-spin' : ''}`}>
-          <RefreshCw size={16} className="text-[#AFAFAF]" />
+        <button onClick={handleRefresh} className={`w-10 h-10 rounded-xl bg-[#1E293B] border border-[#334155] flex items-center justify-center transition-all active:scale-90 ${refreshing ? 'animate-spin' : ''}`}>
+          <RefreshCw size={16} className="text-[#64748B]" />
         </button>
       </div>
 
@@ -617,13 +631,13 @@ const RankingScreen = ({ onBack, currentUserId, currentUserProfile, isAdmin = fa
       <div className="px-4 space-y-2 pb-6">
         {loading ? (
           <div className="text-center py-16">
-            <div className="w-12 h-12 border-4 border-[#2563EB] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-            <p className="text-sm font-black text-[#AFAFAF]">Cargando ranking...</p>
+            <div className="w-12 h-12 border-4 border-[#22D3EE] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+            <p className="text-sm font-black text-[#64748B]">Cargando ranking...</p>
           </div>
         ) : currentRanking.length === 0 ? (
           <div className="text-center py-16">
             <span className="text-5xl block mb-3">{tab === 'friends' ? '👥' : '🏆'}</span>
-            <p className="text-sm font-black text-[#AFAFAF]">
+            <p className="text-sm font-black text-[#64748B]">
               {tab === 'friends'
                 ? 'Agrega amigos para ver su ranking'
                 : 'Sé el primero en el ranking'}
@@ -633,28 +647,28 @@ const RankingScreen = ({ onBack, currentUserId, currentUserProfile, isAdmin = fa
           <>
             {/* Top 3 podium (only global) */}
             {tab === 'global' && currentRanking.length >= 3 && (
-              <div className="bg-white rounded-2xl p-4 border-2 border-[#FFC800]/20 mb-3">
+              <div className="rounded-2xl p-4 border mb-3" style={{ background: 'linear-gradient(135deg, #1E293BCC, #0F172ACC)', borderColor: '#FFC80025' }}>
                 <div className="flex items-end justify-center gap-4">
                   {/* 2nd place */}
                   <div className="text-center">
-                    <RankingAvatar config={currentRanking[1]?.robotConfig} size={44} />
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#C0C0C0] to-[#A0A0A0] flex items-center justify-center mx-auto mt-1 shadow-md">
+                    <RankingAvatar config={currentRanking[1]?.robotConfig} size={48} />
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#C0C0C0] to-[#A0A0A0] flex items-center justify-center mx-auto mt-1 shadow-md shadow-gray-500/20">
                       <span className="text-xs font-black text-white">2</span>
                     </div>
-                    <p className="text-[10px] font-black text-[#777] mt-1 truncate max-w-[70px]">{currentRanking[1]?.username}</p>
-                    <p className="text-[9px] font-bold text-[#AFAFAF]">{currentRanking[1]?.totalPoints} XP</p>
+                    <p className="text-[10px] font-black text-[#94A3B8] mt-1 truncate max-w-[70px]">{currentRanking[1]?.username}</p>
+                    <p className="text-[9px] font-bold text-[#475569]">{currentRanking[1]?.totalPoints} XP</p>
                     {currentRanking[1]?.adminBadges?.length > 0 && (
                       <div className="flex justify-center gap-0.5">{currentRanking[1].adminBadges.map(b => <span key={b.id} className="text-xs">{b.emoji}</span>)}</div>
                     )}
                   </div>
                   {/* 1st place */}
                   <div className="text-center -mb-2">
-                    <div className="text-2xl mb-1">👑</div>
-                    <RankingAvatar config={currentRanking[0]?.robotConfig} size={56} />
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#FFC800] to-[#FF9600] flex items-center justify-center mx-auto mt-1 shadow-lg">
+                    <div className="text-2xl mb-1" style={{ animation: 'float 2s ease-in-out infinite' }}>👑</div>
+                    <RankingAvatar config={currentRanking[0]?.robotConfig} size={62} />
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#FFC800] to-[#FF9600] flex items-center justify-center mx-auto mt-1 shadow-lg shadow-amber-500/30">
                       <span className="text-sm font-black text-white">1</span>
                     </div>
-                    <p className="text-xs font-black text-[#3C3C3C] mt-1 truncate max-w-[80px]">{currentRanking[0]?.username}</p>
+                    <p className="text-xs font-black text-[#E2E8F0] mt-1 truncate max-w-[80px]">{currentRanking[0]?.username}</p>
                     <p className="text-[10px] font-bold text-[#FFC800]">{currentRanking[0]?.totalPoints} XP</p>
                     {currentRanking[0]?.adminBadges?.length > 0 && (
                       <div className="flex justify-center gap-0.5">{currentRanking[0].adminBadges.map(b => <span key={b.id} className="text-xs">{b.emoji}</span>)}</div>
@@ -662,12 +676,12 @@ const RankingScreen = ({ onBack, currentUserId, currentUserProfile, isAdmin = fa
                   </div>
                   {/* 3rd place */}
                   <div className="text-center">
-                    <RankingAvatar config={currentRanking[2]?.robotConfig} size={44} />
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#CD7F32] to-[#A0522D] flex items-center justify-center mx-auto mt-1 shadow-md">
+                    <RankingAvatar config={currentRanking[2]?.robotConfig} size={48} />
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#CD7F32] to-[#A0522D] flex items-center justify-center mx-auto mt-1 shadow-md shadow-orange-700/20">
                       <span className="text-xs font-black text-white">3</span>
                     </div>
-                    <p className="text-[10px] font-black text-[#777] mt-1 truncate max-w-[70px]">{currentRanking[2]?.username}</p>
-                    <p className="text-[9px] font-bold text-[#AFAFAF]">{currentRanking[2]?.totalPoints} XP</p>
+                    <p className="text-[10px] font-black text-[#94A3B8] mt-1 truncate max-w-[70px]">{currentRanking[2]?.username}</p>
+                    <p className="text-[9px] font-bold text-[#475569]">{currentRanking[2]?.totalPoints} XP</p>
                     {currentRanking[2]?.adminBadges?.length > 0 && (
                       <div className="flex justify-center gap-0.5">{currentRanking[2].adminBadges.map(b => <span key={b.id} className="text-xs">{b.emoji}</span>)}</div>
                     )}
