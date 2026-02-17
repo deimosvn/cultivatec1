@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Zap, Home, BookOpen, Settings, Sun, Moon, ArrowLeft, Lightbulb, Play, Target, Code, Terminal, BatteryCharging, Power, RadioTower, Component, Link, Minus, Plus, Bot, Send, Trophy, ChevronDown, Map, Calendar, Puzzle, Cpu, Dumbbell, Monitor, GraduationCap, Wrench, Rocket, Star } from 'lucide-react';
+import { Zap, Home, BookOpen, Settings, Sun, Moon, ArrowLeft, Lightbulb, Play, Target, Code, Terminal, BatteryCharging, Power, RadioTower, Component, Link, Minus, Plus, Bot, Send, Trophy, ChevronDown, Map, Calendar, Puzzle, Cpu, Dumbbell, Monitor, GraduationCap, Wrench, Rocket, Star, CheckCircle, RotateCcw } from 'lucide-react';
 import QuizScreen from './components/QuizScreen';
 import GlossaryScreen, { GLOSSARY_TERMS as GLOSSARY_TERMS_DATA } from './components/GlossaryScreen';
 import ClassroomScreen from './components/ClassroomScreen';
@@ -387,13 +387,152 @@ const DAILY_CIRCUIT_STORIES = [
 ];
 
 const DAILY_PROGRAMMING_STORIES = [
-    { id: 'dp_1', title: '🚀 ¿Alcanza el Combustible?', story: '¡La nave CultivaTec-7 necesita viajar al siguiente planeta! El tanque tiene 500 litros de combustible y la nave gasta 12 litros por hora. El viaje son 38 horas. ¿Llegamos o nos quedamos flotando? 😱', task: '¡Calcula si el combustible alcanza y cuántos litros sobran o faltan!', starterCode: 'tanque = 500\nconsumo_hora = 12\nhoras_viaje = 38\n\ntotal_necesario = consumo_hora * horas_viaje\nprint("⛽ Combustible necesario:", total_necesario, "litros")\nprint("🛢️ Combustible en tanque:", tanque, "litros\\n")\n\nif tanque >= total_necesario:\n    sobra = tanque - total_necesario\n    print("✅ ¡SÍ alcanza! ¡Vámonos! 🚀")\n    print("🎉 Sobran", sobra, "litros")\nelse:\n    falta = total_necesario - tanque\n    print("❌ ¡No alcanza! 😱")\n    print("Faltan", falta, "litros")' },
-    { id: 'dp_2', title: '🛸 ¡La Clave Secreta!', story: '¡La puerta del laboratorio espacial está cerrada con contraseña! El código secreto es 7294. Tenemos 3 intentos para abrirla... ¿lo lograremos? 🔐', task: '¡Simula los intentos de desbloqueo!', starterCode: 'codigo_secreto = 7294\nintentos = [1234, 5678, 7294]\n\nprint("🔐 Sistema de Seguridad Espacial")\nprint("=" * 30, "\\n")\n\nfor i in range(len(intentos)):\n    codigo = intentos[i]\n    print("Intento", i + 1, "- Código:", codigo)\n    if codigo == codigo_secreto:\n        print("  🔓 ¡ACCESO CONCEDIDO! ¡Bienvenido! 🎉\\n")\n    else:\n        print("  🔒 Nop... Acceso denegado ❌\\n")' },
-    { id: 'dp_3', title: '🌟 ¡El Reactor se Calienta!', story: '¡El reactor de la nave mide su temperatura cada segundo! Si pasa de 90°C hay que enfriarlo rápido. Si baja de 30°C hay que calentarlo. ¡Tú eres el ingeniero a cargo! 🌡️', task: '¡Monitorea el reactor y toma las decisiones correctas!', starterCode: 'import random\n\nprint("🌡️ Monitor de Temperatura del Reactor")\nprint("=" * 40, "\\n")\n\nfor segundo in range(8):\n    temp = random.randint(20, 100)\n    print("⏱️ Segundo", segundo + 1, "- Temp:", temp, "°C", end=" ")\n    if temp > 90:\n        print("🔥 ¡ALERTA! ¡Enfriando ya!")\n    elif temp < 30:\n        print("❄️ ¡Muy frío! Calentando...")\n    else:\n        print("✅ ¡Todo normal!")' },
-    { id: 'dp_4', title: '🔧 ¡Inventario de Emergencia!', story: '¡El mecánico de la nave necesita revisar las piezas de repuesto! Si quedan menos de 10 de algo, hay que comprar más en la siguiente estación espacial. 🛒', task: '¡Revisa el inventario y alerta sobre lo que falta!', starterCode: 'inventario = {\n    "tornillos": 45,\n    "tuercas": 12,\n    "cables": 8,\n    "fusibles": 3,\n    "motores": 2\n}\n\nprint("🔧 Inventario de la Nave CultivaTec-7")\nprint("=" * 35, "\\n")\n\nalerta = []\nfor pieza, cantidad in inventario.items():\n    if cantidad < 10:\n        estado = "⚠️ ¡POCAS!"\n        alerta.append(pieza)\n    else:\n        estado = "✅ Bien"\n    print(f"  {pieza}: {cantidad} - {estado}")\n\nif alerta:\n    print(f"\\n🚨 ¡Hay que comprar: {alerta}!")\nelse:\n    print("\\n🎉 ¡Todo en orden, capitán!")' },
-    { id: 'dp_5', title: '💡 ¡Secuencia de Aterrizaje!', story: '¡La nave va a aterrizar en un planeta! Hay que seguir 6 pasos EXACTOS o nos estrellamos. Cada paso reduce la velocidad. ¡Tú programas la secuencia! 🌍', task: '¡Programa los pasos de aterrizaje uno por uno!', starterCode: 'pasos = [\n    "Encender retrocohetes 🔥",\n    "Desplegar tren de aterrizaje 🦿",\n    "Reducir velocidad 🐢",\n    "Activar sensores 📡",\n    "Toque de superficie 🌍",\n    "Apagar motores ⚡"\n]\n\nvelocidad = 300\n\nprint("🚀 ¡Iniciando aterrizaje!")\nprint("=" * 40, "\\n")\n\nfor i in range(len(pasos)):\n    print(f"Paso {i + 1}: {pasos[i]}")\n    velocidad = velocidad - 50\n    if velocidad > 0:\n        print(f"  🏎️ Velocidad: {velocidad} km/h\\n")\n    else:\n        print("  ✅ ¡Nave detenida!\\n")\n\nprint("🎉🎉 ¡¡ATERRIZAJE EXITOSO!! 🎉🎉")' },
-    { id: 'dp_6', title: '⚡ ¡Repartiendo Energía!', story: '¡La nave tiene 1000W de energía y hay que repartirla bien! Navegación necesita mínimo 300W, soporte vital 400W, comunicaciones 150W. ¡Lo que sobre va para los escudos! 🛡️', task: '¡Calcula cuánta energía queda para los escudos!', starterCode: 'energia_total = 1000\n\nnavegacion = 300\nsoporte_vital = 400\ncomunicaciones = 150\n\nusado = navegacion + soporte_vital + comunicaciones\nescudos = energia_total - usado\n\nprint("⚡ Control de Energía de la Nave")\nprint("=" * 35, "\\n")\nprint(f"  🧭 Navegación: {navegacion}W")\nprint(f"  💗 Soporte vital: {soporte_vital}W")\nprint(f"  📡 Comunicaciones: {comunicaciones}W")\nprint(f"  🛡️ Escudos: {escudos}W")\nprint(f"\\n  Total: {usado}W de {energia_total}W\\n")\n\nif escudos < 100:\n    print("⚠️ ¡Escudos muy bajos! ¡Peligro! 😱")\nelse:\n    print("✅ ¡Energía bien repartida! 🎉")' },
-    { id: 'dp_7', title: '🛰️ ¡SOS en Código Morse!', story: '¡La antena de la nave está rota y solo puede enviar pulsos! Necesitamos enviar "SOS" en código Morse. S = "..." (3 pulsos cortos) y O = "---" (3 pulsos largos). ¡Repite 3 veces para que nos escuchen! 📡', task: '¡Genera la señal SOS en código Morse!', starterCode: 'morse = {\n    "S": "...",\n    "O": "---"\n}\n\nmensaje = "SOS"\n\nprint("📡 ¡Transmitiendo señal de emergencia!")\nprint("=" * 35, "\\n")\n\nfor repeticion in range(3):\n    senal = ""\n    for letra in mensaje:\n        senal = senal + morse[letra] + " "\n    print(f"  Transmisión {repeticion + 1}: {senal} 📻")\n\nprint("\\n📡 ¡Señal SOS enviada 3 veces!")\nprint("🛸 Esperando respuesta... 🤞")' },
+    {
+        id: 'dp_1', title: '🚀 ¿Alcanza el Combustible?',
+        story: '¡La nave CultivaTec-7 necesita viajar al siguiente planeta! El tanque tiene 500 litros y la nave gasta 12 litros por hora. El viaje son 38 horas. ¿Llegamos o nos quedamos flotando? 😱',
+        task: '¡Ordena los bloques para calcular si el combustible alcanza!',
+        concept: '**Variables y comparaciones**: Primero guardas datos en variables, luego haces una operación matemática y usas **if/else** para tomar una decisión según el resultado.',
+        funFact: '🚀 ¡Los ingenieros de la NASA hacen estos cálculos antes de cada misión real! Si el combustible no alcanza, la nave se queda flotando en el espacio.',
+        hints: ['Primero crea las variables con los datos del problema', 'Después calcula cuánto combustible se necesita multiplicando consumo por horas', 'Usa if/else para comparar el tanque con lo que necesitas'],
+        solution: [
+            { id: 1, text: 'tanque = 500', type: 'setup', explanation: '📦 Guardamos los litros de combustible en la variable "tanque".' },
+            { id: 2, text: 'consumo = 12 * 38', type: 'setup', explanation: '🧮 Calculamos el consumo total: 12 litros/hora × 38 horas = 456 litros.' },
+            { id: 3, text: 'if tanque >= consumo:', type: 'setup', explanation: '🤔 Preguntamos: ¿el tanque (500) es mayor o igual al consumo (456)? ¡Sí! 500 >= 456.' },
+            { id: 4, text: '    print("✅ ¡Sí alcanza! 🚀")', type: 'output', explanation: '🎉 Como 500 >= 456, se ejecuta esta línea. ¡El combustible sí alcanza!' },
+            { id: 5, text: 'else:', type: 'setup', explanation: '↩️ Si NO alcanzara, se ejecutaría lo de abajo.' },
+            { id: 6, text: '    print("❌ ¡No alcanza! 😱")', type: 'output', explanation: '😱 Esta línea solo se ejecuta si tanque < consumo. ¡En este caso NO se ejecuta!' },
+        ],
+        extra_blocks: [
+            { id: 7, text: 'consumo = "12 * 38"', type: 'wrong', whyWrong: '¡Con comillas Python piensa que es texto! No haría la multiplicación, guardaría literalmente "12 * 38".' },
+            { id: 8, text: 'if tanque == consumo:', type: 'wrong', whyWrong: '== verifica si son EXACTAMENTE iguales. Necesitas >= (mayor o igual) porque si sobra combustible también alcanza.' },
+            { id: 9, text: 'elif tanque:', type: 'wrong', whyWrong: 'elif necesita una condición completa y aquí solo hay dos opciones: alcanza o no. Con else es suficiente.' },
+        ],
+    },
+    {
+        id: 'dp_2', title: '🛸 ¡La Clave Secreta!',
+        story: '¡La puerta del laboratorio espacial está cerrada con contraseña! El código secreto es 7294. Tenemos 3 intentos para abrirla... ¿lo lograremos? 🔐',
+        task: '¡Ordena los bloques para simular el sistema de seguridad!',
+        concept: '**Listas y bucle for**: Una lista guarda varios valores. El **for** recorre la lista uno por uno y con **if** comparamos cada intento contra el código secreto.',
+        funFact: '🔐 Los sistemas de seguridad reales funcionan exactamente así: comparan tu contraseña con la guardada. ¡Pero usan cifrado para que nadie pueda leer el código!',
+        hints: ['Primero define el código secreto y la lista de intentos', 'Usa un for para recorrer cada intento de la lista', 'Dentro del for, compara cada código con el secreto usando =='],
+        solution: [
+            { id: 1, text: 'codigo_secreto = 7294', type: 'setup', explanation: '🔑 Guardamos el código correcto en una variable.' },
+            { id: 2, text: 'intentos = [1234, 5678, 7294]', type: 'setup', explanation: '📋 Lista con 3 intentos. Los corchetes [] crean una lista.' },
+            { id: 3, text: 'for codigo in intentos:', type: 'setup', explanation: '🔄 El for toma cada número de la lista: primero 1234, luego 5678, luego 7294.' },
+            { id: 4, text: '    if codigo == codigo_secreto:', type: 'setup', explanation: '🤔 ¿Este código es igual al secreto? == compara dos valores.' },
+            { id: 5, text: '        print("🔓 ¡Acceso concedido!")', type: 'output', explanation: '✅ Solo se ejecuta cuando codigo == 7294. ¡El tercer intento abre la puerta!' },
+        ],
+        extra_blocks: [
+            { id: 6, text: 'if codigo = codigo_secreto:', type: 'wrong', whyWrong: '¡Un solo = es para GUARDAR, no comparar! Necesitas == (doble igual) para comparar.' },
+            { id: 7, text: 'for codigo in range(intentos):', type: 'wrong', whyWrong: 'range() necesita un número, no una lista. Para recorrer una lista usa "for x in lista:" directamente.' },
+            { id: 8, text: 'if codigo != codigo_secreto:', type: 'wrong', whyWrong: '!= significa "diferente a". Queremos detectar cuando SÍ son iguales, no cuando son diferentes.' },
+        ],
+    },
+    {
+        id: 'dp_3', title: '🌟 ¡El Reactor se Calienta!',
+        story: '¡El reactor de la nave mide su temperatura! Si pasa de 90°C hay que enfriarlo. Si baja de 30°C hay que calentarlo. ¡Tú eres el ingeniero a cargo! 🌡️',
+        task: '¡Ordena los bloques para monitorear la temperatura del reactor!',
+        concept: '**if/elif/else**: Cuando hay más de 2 opciones, usamos **elif** (else if) para agregar condiciones extra. Python revisa de arriba a abajo y ejecuta el PRIMER bloque que sea verdadero.',
+        funFact: '🌡️ ¡Los reactores nucleares reales tienen sistemas así! Si la temperatura sube demasiado, se activan automáticamente los sistemas de enfriamiento.',
+        hints: ['El orden de las condiciones importa: primero la más peligrosa (caliente)', 'elif es "si no, pero si..." — agrega otra condición', 'else atrapa todo lo que no cumplió las condiciones anteriores'],
+        solution: [
+            { id: 1, text: 'temp = 75', type: 'setup', explanation: '📦 Guardamos la temperatura del reactor. 75°C es un valor de prueba.' },
+            { id: 2, text: 'if temp > 90:', type: 'setup', explanation: '🔥 Primera pregunta: ¿la temperatura pasa de 90? Si sí, ¡hay que enfriar!' },
+            { id: 3, text: '    print("🔥 ¡Enfriando ya!")', type: 'output', explanation: '❄️ Solo se ejecuta si temp > 90. Con temp = 75 NO se ejecuta.' },
+            { id: 4, text: 'elif temp < 30:', type: 'setup', explanation: '❄️ Segunda pregunta: ¿está por debajo de 30? Si sí, hay que calentar.' },
+            { id: 5, text: '    print("❄️ ¡Calentando!")', type: 'output', explanation: '🔥 Solo si temp < 30. Con temp = 75 tampoco se ejecuta.' },
+            { id: 6, text: 'else:', type: 'setup', explanation: '✅ Si no es ni > 90 ni < 30, está en rango normal.' },
+            { id: 7, text: '    print("✅ ¡Normal!")', type: 'output', explanation: '🎉 75 no es > 90 ni < 30, así que cae aquí. ¡El reactor está bien!' },
+        ],
+        extra_blocks: [
+            { id: 8, text: 'if temp > 30:', type: 'wrong', whyWrong: 'temp > 30 incluye casi todo (31, 50, 100...). No es una alerta útil, queremos detectar lo peligroso.' },
+            { id: 9, text: 'else temp < 30:', type: 'wrong', whyWrong: 'else NO lleva condición. Si quieres otra condición usa elif. else = "todo lo demás".' },
+            { id: 10, text: 'elseif temp < 30:', type: 'wrong', whyWrong: 'En Python se escribe "elif", no "elseif". Cada lenguaje tiene su propia forma.' },
+        ],
+    },
+    {
+        id: 'dp_4', title: '🔧 ¡Inventario de Emergencia!',
+        story: '¡El mecánico necesita revisar las piezas de repuesto! Si quedan menos de 10 de algo, hay que comprar más en la siguiente estación espacial. 🛒',
+        task: '¡Ordena los bloques para revisar el inventario pieza por pieza!',
+        concept: '**Diccionarios y .items()**: Un diccionario guarda pares de "nombre: valor". Con **.items()** y **for** puedes recorrer todos los pares y revisar cada uno.',
+        funFact: '📦 Los almacenes de Amazon usan programas así para detectar productos con poco stock y pedir más automáticamente. ¡Miles de verificaciones por segundo!',
+        hints: ['Un diccionario usa llaves {} y pares nombre: valor separados por comas', '.items() te da tanto el nombre como la cantidad de cada pieza', 'Compara cada cantidad con 10 para saber si hay pocas'],
+        solution: [
+            { id: 1, text: 'inventario = {"cables": 8, "fusibles": 3}', type: 'setup', explanation: '📖 Diccionario con piezas y cantidades. Las llaves {} crean un diccionario.' },
+            { id: 2, text: 'for pieza, cantidad in inventario.items():', type: 'setup', explanation: '🔄 .items() nos da cada par (pieza, cantidad). El for los recorre uno por uno.' },
+            { id: 3, text: '    if cantidad < 10:', type: 'setup', explanation: '🤔 ¿Hay menos de 10 unidades? Si sí, ¡alerta!' },
+            { id: 4, text: '        print(f"⚠️ {pieza}: ¡pocas!")', type: 'output', explanation: '🚨 f-string con {pieza} muestra el nombre. ¡Cables: 8, Fusibles: 3, ambos < 10!' },
+            { id: 5, text: '    else:', type: 'setup', explanation: '✅ Si hay 10 o más, todo bien con esa pieza.' },
+            { id: 6, text: '        print(f"✅ {pieza}: suficientes")', type: 'output', explanation: '👍 Esta línea se ejecutaría si la cantidad fuera >= 10.' },
+        ],
+        extra_blocks: [
+            { id: 7, text: 'for pieza in inventario:', type: 'wrong', whyWrong: 'Sin .items() solo obtienes los nombres (claves), no las cantidades. Necesitas .items() para ambos.' },
+            { id: 8, text: 'if cantidad < "10":', type: 'wrong', whyWrong: '"10" con comillas es texto, no número. Python no puede comparar un número con texto correctamente.' },
+            { id: 9, text: 'inventario.values()', type: 'wrong', whyWrong: '.values() solo da las cantidades (8, 3) sin los nombres. ¡No sabrías qué pieza falta!' },
+        ],
+    },
+    {
+        id: 'dp_5', title: '💡 ¡Secuencia de Aterrizaje!',
+        story: '¡La nave va a aterrizar! Hay que seguir los pasos EXACTOS o nos estrellamos. Cada paso reduce la velocidad. ¡Tú programas la secuencia! 🌍',
+        task: '¡Ordena los bloques para programar el aterrizaje paso a paso!',
+        concept: '**Listas + range(len())**: Para recorrer una lista con su número de posición, usamos **range(len(lista))**. len() cuenta los elementos y range() genera los números.',
+        funFact: '🛬 Los pilotos reales siguen checklists (listas de verificación) para aterrizar. ¡Un avión comercial tiene más de 30 pasos de aterrizaje!',
+        hints: ['Primero crea la lista de pasos y la variable de velocidad', 'range(len(pasos)) genera 0, 1, 2... hasta el último paso', 'Dentro del for, muestra cada paso y reduce la velocidad'],
+        solution: [
+            { id: 1, text: 'pasos = ["Retrocohetes 🔥", "Sensores 📡", "Aterrizar 🌍"]', type: 'setup', explanation: '📋 Lista con los pasos de aterrizaje en orden.' },
+            { id: 2, text: 'velocidad = 300', type: 'setup', explanation: '🏎️ La nave empieza a 300 km/h.' },
+            { id: 3, text: 'for i in range(len(pasos)):', type: 'setup', explanation: '🔄 len(pasos) = 3, así que range(3) genera 0, 1, 2. "i" es el número de paso.' },
+            { id: 4, text: '    print(f"Paso {i+1}: {pasos[i]}")', type: 'output', explanation: '📝 i+1 para que muestre Paso 1, Paso 2, Paso 3 (no desde 0). pasos[i] accede a cada paso.' },
+            { id: 5, text: '    velocidad = velocidad - 100', type: 'setup', explanation: '🐢 Cada paso reduce 100 km/h. De 300→200→100→0. ¡Al final la nave se detiene!' },
+            { id: 6, text: 'print("🎉 ¡Aterrizaje exitoso!")', type: 'output', explanation: '🎊 Fuera del for (sin indentación), se ejecuta después de todos los pasos.' },
+        ],
+        extra_blocks: [
+            { id: 7, text: 'for i in range(pasos):', type: 'wrong', whyWrong: 'range() necesita un número, no una lista. Usa range(len(pasos)) para convertir la lista a número.' },
+            { id: 8, text: 'velocidad = velocidad + 100', type: 'wrong', whyWrong: '¡Al aterrizar hay que REDUCIR la velocidad, no aumentarla! Usa - 100, no + 100.' },
+            { id: 9, text: 'for paso in range(3):', type: 'wrong', whyWrong: 'Esto da 0, 1, 2 pero no accedes a la lista de pasos. Necesitas usar i y pasos[i].' },
+        ],
+    },
+    {
+        id: 'dp_6', title: '⚡ ¡Repartiendo Energía!',
+        story: '¡La nave tiene 1000W de energía! Navegación necesita 300W, soporte vital 400W, comunicaciones 150W. ¡Lo que sobre va para los escudos! 🛡️',
+        task: '¡Ordena los bloques para calcular cuánta energía queda para los escudos!',
+        concept: '**Restas con variables**: Guardas cada gasto en una variable y luego restas todo del total. La variable final tiene lo que sobra. ¡Así de fácil!',
+        funFact: '⚡ ¡La Estación Espacial Internacional genera ~100,000W con sus paneles solares! Los ingenieros usan programas así para repartir la energía entre todos los sistemas.',
+        hints: ['Crea una variable para la energía total y otra para cada sistema', 'Resta cada uso del total para saber cuánto queda', 'Muestra el resultado con print y una f-string'],
+        solution: [
+            { id: 1, text: 'energia = 1000', type: 'setup', explanation: '⚡ La nave tiene 1000 vatios de energía total.' },
+            { id: 2, text: 'navegacion = 300', type: 'setup', explanation: '🧭 Navegación consume 300W. Guardamos en variable.' },
+            { id: 3, text: 'soporte = 400', type: 'setup', explanation: '💗 Soporte vital consume 400W. ¡Es lo más importante!' },
+            { id: 4, text: 'comunicaciones = 150', type: 'setup', explanation: '📡 Comunicaciones consume 150W.' },
+            { id: 5, text: 'escudos = energia - navegacion - soporte - comunicaciones', type: 'setup', explanation: '🛡️ 1000 - 300 - 400 - 150 = 150W para escudos.' },
+            { id: 6, text: 'print(f"🛡️ Escudos: {escudos}W")', type: 'output', explanation: '📺 Muestra "🛡️ Escudos: 150W". ¡Quedan 150W para los escudos!' },
+        ],
+        extra_blocks: [
+            { id: 7, text: 'escudos = navegacion + soporte + comunicaciones', type: 'wrong', whyWrong: '¡Eso suma lo que GASTAN los otros sistemas (850W)! Los escudos son lo que SOBRA, no lo que se usa.' },
+            { id: 8, text: 'escudos = energia + navegacion', type: 'wrong', whyWrong: '¡Sumar más energía no tiene sentido! Los escudos usan lo que SOBRA después de restar los otros sistemas.' },
+            { id: 9, text: 'print(escudos)', type: 'wrong', whyWrong: 'Funciona pero solo muestra "150" sin contexto. Con f-string mostramos una etiqueta bonita: "🛡️ Escudos: 150W".' },
+        ],
+    },
+    {
+        id: 'dp_7', title: '🛰️ ¡SOS en Código Morse!',
+        story: '¡La antena está rota y solo puede enviar pulsos! S = "..." (pulsos cortos) y O = "---" (pulsos largos). ¡Tenemos que enviar SOS! 📡',
+        task: '¡Ordena los bloques para traducir SOS a Código Morse!',
+        concept: '**Diccionarios como traductores**: Un diccionario puede convertir letras a Morse. Recorres el mensaje letra por letra y buscas cada una en el diccionario.',
+        funFact: '📡 ¡SOS se escogió como señal de emergencia porque es fácil de recordar en Morse! ... --- ... Aunque en realidad no significa nada, ¡no es "Save Our Souls"!',
+        hints: ['Crea un diccionario que traduzca cada letra a su código Morse', 'El mensaje "SOS" es un texto que puedes recorrer letra por letra con for', 'Usa el diccionario como traductor: morse[letra] te da el código de esa letra'],
+        solution: [
+            { id: 1, text: 'morse = {"S": "...", "O": "---"}', type: 'setup', explanation: '📖 Diccionario traductor: S → tres puntos, O → tres rayas.' },
+            { id: 2, text: 'mensaje = "SOS"', type: 'setup', explanation: '💬 El mensaje que queremos traducir a Morse.' },
+            { id: 3, text: 'for letra in mensaje:', type: 'setup', explanation: '🔄 Recorre "SOS" letra por letra: primero S, luego O, luego S.' },
+            { id: 4, text: '    print(morse[letra])', type: 'output', explanation: '📡 Busca cada letra en el diccionario. Imprime: "..." luego "---" luego "...".' },
+            { id: 5, text: 'print("📡 ¡SOS enviado!")', type: 'output', explanation: '✅ Fuera del for, confirma que se envió el mensaje completo.' },
+        ],
+        extra_blocks: [
+            { id: 6, text: 'morse = ["...", "---"]', type: 'wrong', whyWrong: '¡Una lista no tiene nombres! No podrías buscar por letra. El diccionario usa {"S": "..."} para asociar letra → código.' },
+            { id: 7, text: 'for letra in morse:', type: 'wrong', whyWrong: 'Esto recorre las LLAVES del diccionario (S, O), no el mensaje "SOS". Queremos recorrer el mensaje.' },
+            { id: 8, text: 'print(morse)', type: 'wrong', whyWrong: 'Esto imprime todo el diccionario de golpe, no traduce letra por letra. Necesitas el for y morse[letra].' },
+        ],
+    },
 ];
 
 // Helper to get today's date key
@@ -785,16 +924,131 @@ const PROGRAMMING_TUTORIALS = [
 ];
 
 const PRACTICE_CHALLENGES = [
-    { id: 'pc_1', title: '🧮 Calculadora Espacial', emoji: '🧮', difficulty: 1, description: '¡Haz una calculadora que sume, reste y más!', starterCode: 'a = 10\nb = 3\n\nprint("🧮 Calculadora Espacial")\nprint("========================")\nprint("Suma:", a, "+", b, "=", a + b)\nprint("Resta:", a, "-", b, "=", a - b)\n# ¡Completa la multiplicación y división!\n# print("Multiplicación:", a, "x", b, "=", ???)\n# print("División:", a, "÷", b, "=", ???)\n' },
-    { id: 'pc_2', title: '✖️ Tabla de Multiplicar', emoji: '✖️', difficulty: 1, description: '¡Genera la tabla de multiplicar de tu número favorito!', starterCode: 'numero = 7\n\nprint("✖️ Tabla del", numero)\nprint("==================")\nfor i in range(1, 11):\n    resultado = numero * i\n    print(numero, "x", i, "=", resultado, "⭐")' },
-    { id: 'pc_3', title: '🔢 ¡Pares o Impares!', emoji: '🔢', difficulty: 2, description: '¡Descubre qué números del 1 al 20 son pares!', starterCode: 'print("🔢 ¡Detector de Pares e Impares!\\n")\n\npares = 0\nimpares = 0\nfor n in range(1, 21):\n    if n % 2 == 0:\n        print(n, "es PAR ✅")\n        pares = pares + 1\n    else:\n        print(n, "es IMPAR ❌")\n        impares = impares + 1\n\nprint("\\n📊 Resultado: ", pares, "pares y", impares, "impares")' },
-    { id: 'pc_4', title: '🐚 Fibonacci del Robot', emoji: '🐚', difficulty: 3, description: '¡Genera la secuencia mágica de Fibonacci!', starterCode: 'a = 0\nb = 1\n\nprint("🐚 Secuencia Fibonacci")\nprint("¡Cada número es la suma de los 2 anteriores!\\n")\ncontador = 1\nwhile a <= 100:\n    print("Paso", contador, ":", a, "🌟")\n    temp = a + b\n    a = b\n    b = temp\n    contador = contador + 1\n\nprint("\\n¡Estos números aparecen en la naturaleza! 🌻")' },
-    { id: 'pc_5', title: '✂️ Piedra, Papel, Tijera', emoji: '✂️', difficulty: 2, description: '¡Juega contra el robot! ¿Quién ganará?', starterCode: 'import random\n\nopciones = ["piedra", "papel", "tijera"]\nemojis = {"piedra": "🪨", "papel": "📄", "tijera": "✂️"}\n\njugador = "piedra"\nrobot = random.choice(opciones)\n\nprint("🎮 ¡Piedra, Papel o Tijera!")\nprint("========================")\nprint("Tú elegiste:", emojis[jugador], jugador)\nprint("Robot eligió:", emojis[robot], robot)\nprint("")\n\nif jugador == robot:\n    print("🤝 ¡Empate! Ambos pensaron igual")\nelif (jugador == "piedra" and robot == "tijera") or (jugador == "papel" and robot == "piedra") or (jugador == "tijera" and robot == "papel"):\n    print("🎉 ¡¡GANASTE!! ¡Eres el mejor!")\nelse:\n    print("🤖 El robot ganó esta vez... ¡Inténtalo de nuevo!")' },
-    { id: 'pc_6', title: '📋 Inventario del Robot', emoji: '📋', difficulty: 3, description: '¡Revisa las partes de tu robot y detecta lo que falta!', starterCode: 'inventario = {\n    "motores": 4,\n    "sensores": 3,\n    "LEDs": 10,\n    "cables": 20,\n    "baterias": 2\n}\n\nprint("📋 Inventario del Robot CultivaTec")\nprint("=" * 35)\n\nalerta = []\nfor parte, cantidad in inventario.items():\n    if cantidad < 5:\n        estado = "⚠️ ¡POCAS!"\n        alerta.append(parte)\n    else:\n        estado = "✅ Bien"\n    print(f"  {parte}: {cantidad} - {estado}")\n\ntotal = sum(inventario.values())\nprint(f"\\n🔧 Total de partes: {total}")\n\nif alerta:\n    print(f"\\n🚨 ¡Hay que comprar más: {alerta}!")\nelse:\n    print("\\n🎉 ¡Todo en orden! Robot listo")' },
+    {
+        id: 'pc_1', title: '🧮 Calculadora Espacial', emoji: '🧮', difficulty: 1,
+        description: '¡Haz una calculadora con las 4 operaciones!',
+        instructions: 'Ordena los bloques para crear una calculadora que sume, reste, multiplique y divida.',
+        concept: '**Operadores matemáticos**: Python puede hacer las 4 operaciones básicas: + (suma), - (resta), * (multiplicación), / (división). ¡Los números van SIN comillas!',
+        funFact: '🖥️ ¡Las computadoras pueden hacer mil millones de operaciones por segundo! Tu calculadora de Python es más rápida que cualquier calculadora de bolsillo.',
+        hints: ['Primero crea las dos variables con números', 'Usa print() para mostrar cada operación', 'Recuerda: * es multiplicar y / es dividir en Python'],
+        solution: [
+            { id: 1, text: 'a = 10', type: 'setup', explanation: '📦 Guardamos el primer número en la variable "a".' },
+            { id: 2, text: 'b = 3', type: 'setup', explanation: '📦 Guardamos el segundo número en la variable "b".' },
+            { id: 3, text: 'print("Suma:", a + b)', type: 'output', explanation: '➕ 10 + 3 = 13. print muestra "Suma: 13".' },
+            { id: 4, text: 'print("Resta:", a - b)', type: 'output', explanation: '➖ 10 - 3 = 7. print muestra "Resta: 7".' },
+            { id: 5, text: 'print("Multiplicación:", a * b)', type: 'output', explanation: '✖️ 10 × 3 = 30. El asterisco * es multiplicar en Python.' },
+        ],
+        extra_blocks: [
+            { id: 6, text: 'print("Suma:", a + "b")', type: 'wrong', whyWrong: '"b" con comillas es texto, no la variable. Python no puede sumar un número + texto.' },
+            { id: 7, text: 'a + b', type: 'wrong', whyWrong: 'Esto suma pero no muestra el resultado. Sin print() nadie lo ve. ¡El resultado se pierde!' },
+            { id: 8, text: 'print("Multiplicación:", a x b)', type: 'wrong', whyWrong: '¡En Python la multiplicación usa asterisco * no la letra x! a * b, no a x b.' },
+        ],
+    },
+    {
+        id: 'pc_2', title: '✖️ Tabla de Multiplicar', emoji: '✖️', difficulty: 1,
+        description: '¡Genera la tabla de multiplicar automáticamente!',
+        instructions: 'Ordena los bloques para que Python imprima la tabla del 7.',
+        concept: '**for + range()**: El ciclo for con range(1, 11) cuenta del 1 al 10 automáticamente. Dentro puedes calcular y mostrar cada multiplicación.',
+        funFact: '📊 Si sabes hacer una tabla de multiplicar en código, puedes hacer CUALQUIER tabla cambiando solo un número. ¡Eso es el poder de la programación!',
+        hints: ['Define el número cuya tabla quieres calcular', 'Usa range(1, 11) para contar del 1 al 10', 'Dentro del for, multiplica y muestra el resultado'],
+        solution: [
+            { id: 1, text: 'numero = 7', type: 'setup', explanation: '📦 Elegimos hacer la tabla del 7. Puedes cambiar a cualquier número.' },
+            { id: 2, text: 'for i in range(1, 11):', type: 'setup', explanation: '🔄 range(1, 11) genera 1, 2, 3... 10. El 11 NO se incluye.' },
+            { id: 3, text: '    resultado = numero * i', type: 'setup', explanation: '✖️ Calcula 7×1=7, 7×2=14, 7×3=21... hasta 7×10=70.' },
+            { id: 4, text: '    print(f"{numero} x {i} = {resultado}")', type: 'output', explanation: '📺 Muestra "7 x 1 = 7", "7 x 2 = 14", etc. f-string mezcla texto y variables.' },
+        ],
+        extra_blocks: [
+            { id: 5, text: 'for i in range(10):', type: 'wrong', whyWrong: 'range(10) empieza en 0, no en 1. La tabla mostraría "7 x 0 = 0" al inicio. Usa range(1, 11).' },
+            { id: 6, text: 'resultado = numero + i', type: 'wrong', whyWrong: '¡La tabla de multiplicar usa × (asterisco *), no suma (+)! numero * i, no numero + i.' },
+            { id: 7, text: 'for i in range(1, 10):', type: 'wrong', whyWrong: 'range(1, 10) solo llega al 9. ¡Falta el 10! Necesitas range(1, 11) para incluirlo.' },
+        ],
+    },
+    {
+        id: 'pc_3', title: '🔢 ¡Pares o Impares!', emoji: '🔢', difficulty: 2,
+        description: '¡Descubre si un número es par o impar!',
+        instructions: 'Ordena los bloques para clasificar números del 1 al 20 como pares o impares.',
+        concept: '**El operador % (módulo)**: % da el RESTO de una división. Si un número % 2 == 0, ¡es par! Porque al dividir entre 2 no sobra nada. Si sobra 1, es impar.',
+        funFact: '🎲 Los números pares e impares se usan en criptografía (códigos secretos). ¡Los hackers y programadores de seguridad los usan para proteger datos!',
+        hints: ['% es el operador módulo: da el resto de una división', 'Si n % 2 es 0, no sobra nada al dividir entre 2, ¡es par!', 'Usa if/else para clasificar cada número'],
+        solution: [
+            { id: 1, text: 'for n in range(1, 21):', type: 'setup', explanation: '🔄 range(1, 21) genera del 1 al 20. El 21 no se incluye.' },
+            { id: 2, text: '    if n % 2 == 0:', type: 'setup', explanation: '🤔 % 2 da el resto al dividir entre 2. Si es 0, ¡el número es par!' },
+            { id: 3, text: '        print(f"{n} es PAR ✅")', type: 'output', explanation: '✅ Números como 2, 4, 6... tienen resto 0 al dividir entre 2.' },
+            { id: 4, text: '    else:', type: 'setup', explanation: '↩️ Si el resto no es 0, el número es impar.' },
+            { id: 5, text: '        print(f"{n} es IMPAR ❌")', type: 'output', explanation: '❌ Números como 1, 3, 5... tienen resto 1 al dividir entre 2.' },
+        ],
+        extra_blocks: [
+            { id: 6, text: 'if n / 2 == 0:', type: 'wrong', whyWrong: '/ es división normal. 4/2 = 2 (no es 0). Necesitas % (módulo) que da el RESTO: 4%2 = 0.' },
+            { id: 7, text: 'if n % 2 == 1:', type: 'wrong', whyWrong: 'Esto detecta IMpares, no pares. n%2==0 es par, n%2==1 es impar. ¡Al revés!' },
+            { id: 8, text: 'for n in range(20):', type: 'wrong', whyWrong: 'range(20) empieza en 0 y termina en 19. ¡Falta el 20 y sobra el 0! Usa range(1, 21).' },
+        ],
+    },
+    {
+        id: 'pc_4', title: '🐚 Fibonacci del Robot', emoji: '🐚', difficulty: 3,
+        description: '¡Genera la secuencia mágica de Fibonacci!',
+        instructions: 'Ordena los bloques para generar la secuencia de Fibonacci hasta 100.',
+        concept: '**while + intercambio de variables**: La secuencia de Fibonacci suma los 2 números anteriores para obtener el siguiente: 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89...',
+        funFact: '🌻 ¡La secuencia de Fibonacci aparece en la naturaleza! Los pétalos de las flores, las espirales de los caracoles y las ramas de los árboles siguen este patrón.',
+        hints: ['Empieza con a=0 y b=1, los dos primeros números de Fibonacci', 'while a <= 100 repite mientras el número sea menor o igual a 100', 'La magia: a, b = b, a + b intercambia los valores en una línea'],
+        solution: [
+            { id: 1, text: 'a = 0', type: 'setup', explanation: '📦 Primer número de Fibonacci: 0.' },
+            { id: 2, text: 'b = 1', type: 'setup', explanation: '📦 Segundo número de Fibonacci: 1.' },
+            { id: 3, text: 'while a <= 100:', type: 'setup', explanation: '🔄 Repite mientras "a" sea 100 o menos. Cuando pase de 100, se detiene.' },
+            { id: 4, text: '    print(a)', type: 'output', explanation: '📺 Muestra el número actual: 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89.' },
+            { id: 5, text: '    a, b = b, a + b', type: 'setup', explanation: '🔄 ¡Magia! a toma el valor de b, y b toma a+b. Así avanza la secuencia.' },
+        ],
+        extra_blocks: [
+            { id: 6, text: 'a, b = a + b, a', type: 'wrong', whyWrong: '¡El orden está al revés! Primero a debe tomar b, luego b toma a+b. Si inviertes, ¡la secuencia sale mal!' },
+            { id: 7, text: 'for i in range(100):', type: 'wrong', whyWrong: 'Esto repite 100 veces, pero Fibonacci crece rápido. while a <= 100 se detiene cuando el VALOR pasa de 100.' },
+            { id: 8, text: 'a = a + 1', type: 'wrong', whyWrong: 'Esto solo cuenta de 1 en 1 (0, 1, 2, 3...). ¡Fibonacci suma los 2 anteriores, no solo suma 1!' },
+        ],
+    },
+    {
+        id: 'pc_5', title: '✂️ Piedra, Papel, Tijera', emoji: '✂️', difficulty: 2,
+        description: '¡Juega contra el robot! ¿Quién ganará?',
+        instructions: 'Ordena los bloques para simular un juego de Piedra, Papel o Tijera.',
+        concept: '**random.choice() + comparaciones**: random.choice() elige un elemento al azar de una lista. Luego comparas la elección del jugador con la del robot.',
+        funFact: '🎮 ¡Los torneos profesionales de Piedra, Papel, Tijera existen de verdad! Hay campeonatos mundiales donde el premio puede ser miles de dólares.',
+        hints: ['Primero importa random y crea la lista de opciones', 'random.choice() elige una opción al azar para el robot', 'Usa if para comparar: si son iguales, ¡es empate!'],
+        solution: [
+            { id: 1, text: 'import random', type: 'setup', explanation: '📚 Importamos la librería random para poder elegir cosas al azar.' },
+            { id: 2, text: 'opciones = ["piedra", "papel", "tijera"]', type: 'setup', explanation: '📋 Lista con las 3 opciones del juego.' },
+            { id: 3, text: 'jugador = "piedra"', type: 'setup', explanation: '🧑 El jugador elige piedra. ¡Puedes cambiar a "papel" o "tijera"!' },
+            { id: 4, text: 'robot = random.choice(opciones)', type: 'setup', explanation: '🤖 El robot elige al AZAR una de las 3 opciones. ¡Nunca sabes qué elegirá!' },
+            { id: 5, text: 'if jugador == robot:', type: 'setup', explanation: '🤔 ¿Ambos eligieron lo mismo? Entonces es empate.' },
+            { id: 6, text: '    print("🤝 ¡Empate!")', type: 'output', explanation: '🤝 Si eligen lo mismo (ej: piedra vs piedra), ¡nadie gana!' },
+        ],
+        extra_blocks: [
+            { id: 7, text: 'robot = opciones[0]', type: 'wrong', whyWrong: 'Esto siempre elige el primer elemento ("piedra"). ¡El robot siempre elegiría piedra! Necesitas random.choice().' },
+            { id: 8, text: 'if jugador = robot:', type: 'wrong', whyWrong: 'Un solo = GUARDA un valor. Para COMPARAR necesitas == (doble igual). ¡Error muy común!' },
+            { id: 9, text: 'from random import *', type: 'wrong', whyWrong: 'Funciona pero importar TODO (*) no es buena práctica. Mejor "import random" y usar random.choice().' },
+        ],
+    },
+    {
+        id: 'pc_6', title: '📋 Inventario del Robot', emoji: '📋', difficulty: 3,
+        description: '¡Revisa las partes de tu robot y detecta lo que falta!',
+        instructions: 'Ordena los bloques para revisar el inventario y alertar sobre partes con pocas unidades.',
+        concept: '**Diccionarios + for + condicionales**: Combinas todo lo aprendido — diccionarios para guardar datos, for para recorrer, if para decidir. ¡Es programación de verdad!',
+        funFact: '🏭 Las fábricas usan exactamente este tipo de programas para manejar su inventario. ¡Amazon revisa millones de productos así cada segundo!',
+        hints: ['Crea un diccionario con las partes del robot y sus cantidades', 'Usa .items() para obtener tanto el nombre como la cantidad', 'Compara cada cantidad: si tiene menos de 5, ¡alerta!'],
+        solution: [
+            { id: 1, text: 'inventario = {"motores": 4, "LEDs": 10}', type: 'setup', explanation: '📖 Diccionario con partes y cantidades del robot.' },
+            { id: 2, text: 'for parte, cantidad in inventario.items():', type: 'setup', explanation: '🔄 .items() da pares (parte, cantidad). El for los recorre uno por uno.' },
+            { id: 3, text: '    if cantidad < 5:', type: 'setup', explanation: '🤔 ¿Hay menos de 5 unidades? Si sí, ¡necesitamos más!' },
+            { id: 4, text: '        print(f"⚠️ {parte}: ¡pocas!")', type: 'output', explanation: '🚨 motores = 4, que es < 5. ¡Alerta de pocas unidades!' },
+            { id: 5, text: '    else:', type: 'setup', explanation: '✅ Si tiene 5 o más unidades, todo bien.' },
+            { id: 6, text: '        print(f"✅ {parte}: bien")', type: 'output', explanation: '👍 LEDs = 10, que es >= 5. ¡Todo en orden con los LEDs!' },
+        ],
+        extra_blocks: [
+            { id: 7, text: 'inventario.keys()', type: 'wrong', whyWrong: '.keys() solo da los nombres ("motores", "LEDs"), sin las cantidades. ¡No podrías comparar!' },
+            { id: 8, text: 'if cantidad > 5:', type: 'wrong', whyWrong: '¡Al revés! Queremos alertar cuando hay POCAS (< 5), no cuando hay muchas (> 5).' },
+            { id: 9, text: 'for parte in inventario:', type: 'wrong', whyWrong: 'Sin .items() solo obtienes los nombres (claves), no las cantidades. Necesitas .items() para ambos datos.' },
+        ],
+    },
 ];
 
 const ProgrammingStationScreen = ({ onBack, startChallenge, userScores, userId, userStats, setUserStats, onAwardXp }) => {
-    const [tab, setTab] = useState('daily'); // 'daily' | 'tutorials' | 'practice' | 'free' | 'tutorial_detail'
+    const [tab, setTab] = useState('daily'); // 'daily' | 'tutorials' | 'practice' | 'free' | 'tutorial_detail' | 'daily_detail' | 'practice_detail'
     const [selectedTutorial, setSelectedTutorial] = useState(null);
     const [currentStep, setCurrentStep] = useState(0);
     const [code, setCode] = useState('');
@@ -804,6 +1058,19 @@ const ProgrammingStationScreen = ({ onBack, startChallenge, userScores, userId, 
         try { const saved = localStorage.getItem('cultivatec_daily_prog'); return saved === getTodayKey(); } catch { return false; }
     });
     const [dailyProgRan, setDailyProgRan] = useState(false);
+
+    // Block challenge state (shared for daily and practice)
+    const [blockChallenge, setBlockChallenge] = useState(null);
+    const [blockAvailable, setBlockAvailable] = useState([]);
+    const [blockSolution, setBlockSolution] = useState([]);
+    const [blockStatus, setBlockStatus] = useState('active');
+    const [blockShowExplanations, setBlockShowExplanations] = useState(false);
+    const [blockHintIndex, setBlockHintIndex] = useState(-1);
+    const [blockShowConcept, setBlockShowConcept] = useState(false);
+    const [selectedPractice, setSelectedPractice] = useState(null);
+    const [completedPracticeIds, setCompletedPracticeIds] = useState(() => {
+        try { return JSON.parse(localStorage.getItem('cultivatec_practice_completed') || '[]'); } catch { return []; }
+    });
 
     const progStars = React.useMemo(() =>
         Array.from({ length: 40 }, (_, i) => ({
@@ -890,10 +1157,15 @@ const ProgrammingStationScreen = ({ onBack, startChallenge, userScores, userId, 
     };
 
     const openPractice = (challenge) => {
-        setCode(challenge.starterCode);
-        setOutput('');
-        setSelectedTutorial(challenge);
-        setTab('free');
+        setSelectedPractice(challenge);
+        setBlockChallenge(challenge);
+        setBlockAvailable(shuffleArray([...challenge.solution, ...challenge.extra_blocks]));
+        setBlockSolution([]);
+        setBlockStatus('active');
+        setBlockShowExplanations(false);
+        setBlockHintIndex(-1);
+        setBlockShowConcept(false);
+        setTab('practice_detail');
     };
 
     const completedChallengeIds = Object.keys(userScores || {}).filter(k => k.startsWith('challenge_') && userScores[k]?.completed);
@@ -901,22 +1173,72 @@ const ProgrammingStationScreen = ({ onBack, startChallenge, userScores, userId, 
     const dailyProgProblem = DAILY_PROGRAMMING_STORIES[getDailyIndex(DAILY_PROGRAMMING_STORIES)];
 
     const openDailyProblem = () => {
-        setCode(dailyProgProblem.starterCode);
-        setOutput('');
+        setBlockChallenge(dailyProgProblem);
+        setBlockAvailable(shuffleArray([...dailyProgProblem.solution, ...dailyProgProblem.extra_blocks]));
+        setBlockSolution([]);
+        setBlockStatus('active');
+        setBlockShowExplanations(false);
+        setBlockHintIndex(-1);
+        setBlockShowConcept(false);
         setDailyProgRan(false);
         setTab('daily_detail');
     };
 
-    const runDailyCode = () => {
-        executeCode(code);
-        setDailyProgRan(true);
-        const wasAlreadySolved = dailyProgSolved;
-        try { localStorage.setItem('cultivatec_daily_prog', getTodayKey()); setDailyProgSolved(true); } catch {}
-        // Award XP for daily programming problem (first time today)
-        if (!wasAlreadySolved && onAwardXp) {
-            onAwardXp(DAILY_PROG_XP, 'dailyProg');
+    // Block challenge handlers
+    const handleBlockSelect = useCallback((blockId) => {
+        if (blockStatus !== 'active') return;
+        const block = blockAvailable.find(b => b.id === blockId);
+        if (!block || block.type === 'wrong') return;
+        setBlockAvailable(prev => prev.filter(b => b.id !== blockId));
+        setBlockSolution(prev => [...prev, block]);
+    }, [blockAvailable, blockStatus]);
+
+    const handleBlockUnselect = useCallback((blockId) => {
+        if (blockStatus !== 'active') return;
+        const block = blockSolution.find(b => b.id === blockId);
+        if (!block) return;
+        setBlockSolution(prev => prev.filter(b => b.id !== blockId));
+        setBlockAvailable(prev => [...prev, block]);
+    }, [blockSolution, blockStatus]);
+
+    const checkBlockSolution = (isDaily) => {
+        if (!blockChallenge) return;
+        const solutionIds = blockChallenge.solution.map(b => b.id);
+        const userIds = blockSolution.map(b => b.id);
+        if (userIds.length !== solutionIds.length) {
+            setBlockStatus('incorrect');
+            return;
+        }
+        const isCorrect = userIds.every((id, index) => id === solutionIds[index]);
+        setBlockStatus(isCorrect ? 'correct' : 'incorrect');
+        if (isCorrect) {
+            setBlockShowExplanations(true);
+            if (isDaily) {
+                const wasAlreadySolved = dailyProgSolved;
+                try { localStorage.setItem('cultivatec_daily_prog', getTodayKey()); setDailyProgSolved(true); } catch {}
+                if (!wasAlreadySolved && onAwardXp) {
+                    onAwardXp(DAILY_PROG_XP, 'dailyProg');
+                }
+            } else if (selectedPractice) {
+                if (!completedPracticeIds.includes(selectedPractice.id)) {
+                    const newCompleted = [...completedPracticeIds, selectedPractice.id];
+                    setCompletedPracticeIds(newCompleted);
+                    try { localStorage.setItem('cultivatec_practice_completed', JSON.stringify(newCompleted)); } catch {}
+                }
+            }
         }
     };
+
+    const resetBlockChallenge = () => {
+        if (!blockChallenge) return;
+        setBlockAvailable(shuffleArray([...blockChallenge.solution, ...blockChallenge.extra_blocks]));
+        setBlockSolution([]);
+        setBlockStatus('active');
+        setBlockShowExplanations(false);
+        setBlockHintIndex(-1);
+    };
+
+    const boldReplace = (text) => text.replace(/\*\*(.*?)\*\*/g, '<b class="text-white">$1</b>');
 
     return (
         <div className="pb-24 min-h-full bg-gradient-to-b from-[#0B1120] via-[#0E1A30] to-[#0F172A] w-full relative overflow-hidden">
@@ -962,7 +1284,7 @@ const ProgrammingStationScreen = ({ onBack, startChallenge, userScores, userId, 
             </div>
 
             {/* Tab selector */}
-            {tab !== 'tutorial_detail' && tab !== 'daily_detail' && (
+            {tab !== 'tutorial_detail' && tab !== 'daily_detail' && tab !== 'practice_detail' && (
                 <div className="px-4 pb-2 max-w-xl mx-auto relative z-10">
                     <div className="flex gap-1.5 bg-[#0F172A]/80 backdrop-blur-sm rounded-2xl p-1.5 border border-blue-500/15">
                         {[
@@ -989,13 +1311,13 @@ const ProgrammingStationScreen = ({ onBack, startChallenge, userScores, userId, 
                             <div className="bg-[#22C55E]/10 border-2 border-[#22C55E]/30 rounded-2xl p-6 text-center space-y-3">
                                 <div className="text-5xl">🎉</div>
                                 <h2 className="text-xl font-black text-[#22C55E]">¡Misión Completada!</h2>
-                                <p className="text-sm text-[#94A3B8] font-bold">¡Genial! Resolviste el desafío de programación de hoy. 🌟</p>
+                                <p className="text-sm text-[#94A3B8] font-bold">¡Genial! Resolviste el desafío de bloques de hoy. 🌟</p>
                                 <div className="flex items-center justify-center gap-2 mt-1">
                                     <span className="px-3 py-1 bg-[#FFC800]/20 text-[#FFC800] text-xs font-black rounded-full border border-[#FFC800]/30">+{DAILY_PROG_XP} XP ganados 🏆</span>
                                 </div>
                                 <div className="bg-[#1E293B] rounded-xl p-4 border border-[#334155]">
-                                    <p className="text-xs text-[#64748B] font-bold">🕐 ¡Vuelve mañana para un nuevo reto de código!</p>
-                                    <p className="text-[10px] text-[#475569] font-semibold mt-1">Cada día la nave CultivaTec-7 tiene un nuevo desafío de programación 🚀</p>
+                                    <p className="text-xs text-[#64748B] font-bold">🕐 ¡Vuelve mañana para un nuevo reto de bloques!</p>
+                                    <p className="text-[10px] text-[#475569] font-semibold mt-1">Cada día la nave CultivaTec-7 tiene un nuevo desafío de programación con bloques 🚀</p>
                                 </div>
                                 <button onClick={() => { setDailyProgSolved(false); openDailyProblem(); }}
                                     className="text-[10px] font-bold text-[#93C5FD] underline mt-2">Volver a practicar el problema</button>
@@ -1003,7 +1325,7 @@ const ProgrammingStationScreen = ({ onBack, startChallenge, userScores, userId, 
                         ) : (
                             <div className="space-y-4">
                                 <div className="text-center mb-2">
-                                    <span className="text-[10px] font-black text-[#93C5FD] bg-[#93C5FD]/10 px-3 py-1 rounded-full border border-[#93C5FD]/20 flex items-center gap-1 mx-auto w-fit"><Calendar size={11} /> 🐍 MISIÓN DIARIA DE PROGRAMACIÓN</span>
+                                    <span className="text-[10px] font-black text-[#93C5FD] bg-[#93C5FD]/10 px-3 py-1 rounded-full border border-[#93C5FD]/20 flex items-center gap-1 mx-auto w-fit"><Calendar size={11} /> 🧩 MISIÓN DIARIA DE BLOQUES</span>
                                 </div>
                                 <div className="bg-gradient-to-br from-[#1E293B] to-[#0F172A] rounded-2xl border-2 border-[#93C5FD]/20 p-5 space-y-4">
                                     <h2 className="text-lg font-black text-white">{dailyProgProblem.title}</h2>
@@ -1015,7 +1337,7 @@ const ProgrammingStationScreen = ({ onBack, startChallenge, userScores, userId, 
                                     </div>
                                     <button onClick={openDailyProblem}
                                         className="w-full py-3.5 bg-[#93C5FD] text-white rounded-xl text-sm font-black flex items-center justify-center gap-2 active:scale-95 transition shadow-lg shadow-[#93C5FD]/20">
-                                        <Code size={16} /> Abrir en el Editor
+                                        <Puzzle size={16} /> 🧩 ¡Ordenar los Bloques!
                                     </button>
                                 </div>
                             </div>
@@ -1023,56 +1345,160 @@ const ProgrammingStationScreen = ({ onBack, startChallenge, userScores, userId, 
                     </div>
                 )}
 
-                {/* DAILY DETAIL - code editor for daily problem */}
-                {tab === 'daily_detail' && (
-                    <div className="space-y-4">
+                {/* DAILY DETAIL - Block challenge for daily problem */}
+                {tab === 'daily_detail' && blockChallenge && (
+                    <div className="space-y-3">
                         <div className="flex items-center gap-3 mb-2">
                             <button onClick={() => setTab('daily')} className="bg-[#334155] p-2 rounded-xl hover:bg-[#475569] transition active:scale-95">
                                 <ArrowLeft size={16} className="text-white" />
                             </button>
                             <div>
-                                <h2 className="text-base font-black text-white">{dailyProgProblem.title}</h2>
-                                <p className="text-[11px] text-[#93C5FD] font-bold">Misión diaria de programación</p>
+                                <h2 className="text-base font-black text-white">{blockChallenge.title}</h2>
+                                <p className="text-[11px] text-[#93C5FD] font-bold">🧩 Misión diaria de bloques</p>
                             </div>
+                        </div>
+
+                        {/* Story and task */}
+                        <div className="bg-[#0F172A]/60 rounded-xl p-3 border border-[#334155]">
+                            <p className="text-xs text-[#E2E8F0] font-semibold leading-relaxed">📖 {blockChallenge.story}</p>
                         </div>
                         <div className="bg-[#93C5FD]/10 rounded-xl p-3 border border-[#93C5FD]/20">
-                            <p className="text-xs font-bold text-[#93C5FD]">🎯 {dailyProgProblem.task}</p>
+                            <p className="text-xs font-bold text-[#93C5FD]">🎯 {blockChallenge.task}</p>
                         </div>
-                        {/* Code editor */}
-                        <div className="bg-[#1E293B] rounded-2xl overflow-hidden border-2 border-[#334155]">
-                            <div className="bg-[#0F172A] px-4 py-2.5 flex items-center border-b border-[#334155]">
-                                <div className="flex gap-1.5 mr-3">
-                                    <div className="w-2.5 h-2.5 rounded-full bg-[#EF4444]"></div>
-                                    <div className="w-2.5 h-2.5 rounded-full bg-[#F59E0B]"></div>
-                                    <div className="w-2.5 h-2.5 rounded-full bg-[#22C55E]"></div>
+
+                        {/* Concept toggle */}
+                        {blockChallenge.concept && (
+                            <button onClick={() => setBlockShowConcept(!blockShowConcept)}
+                                className="w-full bg-[#1E293B] rounded-2xl border-2 border-[#FFC800]/20 overflow-hidden transition-all active:scale-[0.99]">
+                                <div className="px-4 py-3 flex items-center gap-2">
+                                    <span className="text-lg">💡</span>
+                                    <span className="text-xs font-black text-[#FFC800] flex-grow text-left">
+                                        {blockShowConcept ? 'Ocultar explicación' : '¿Qué aprendo aquí? (Toca para ver)'}
+                                    </span>
+                                    <span className={`text-xs text-[#FFC800] transition-transform ${blockShowConcept ? 'rotate-180' : ''}`}>▼</span>
                                 </div>
-                                <span className="text-[10px] font-black text-[#64748B]">mision_diaria.py</span>
-                            </div>
-                            <textarea value={code} onChange={(e) => setCode(e.target.value)}
-                                className="w-full font-mono text-sm resize-none outline-none border-none p-4 min-h-[200px] bg-[#1E293B] text-[#E2E8F0]"
-                                spellCheck={false} />
-                        </div>
-                        {/* Output */}
-                        <div className="bg-[#0F172A] rounded-2xl overflow-hidden border-2 border-[#334155]">
-                            <div className="bg-[#0F172A] px-4 py-2 flex items-center border-b border-[#334155]">
-                                <Terminal size={12} className="mr-2 text-[#93C5FD]" />
-                                <span className="text-[10px] font-black text-[#64748B]">Consola</span>
-                            </div>
-                            <pre className="font-mono text-sm p-4 min-h-[60px] whitespace-pre-wrap text-[#93C5FD]">
-                                {output || <span className="text-[#475569] italic">Corre el código para resolver la misión...</span>}
-                            </pre>
-                        </div>
-                        <button onClick={runDailyCode}
-                            disabled={isLoading}
-                            className="w-full py-3.5 bg-[#93C5FD] text-white rounded-xl text-sm font-black flex items-center justify-center gap-2 active:scale-95 transition disabled:opacity-50 shadow-lg shadow-[#93C5FD]/20">
-                            <Play size={16} /> {isLoading ? 'Ejecutando...' : '▶ Correr y Resolver Misión'}
-                        </button>
-                        {dailyProgRan && output && !output.startsWith('Error') && (
-                            <div className="bg-[#22C55E]/10 border-2 border-[#22C55E]/30 rounded-2xl p-4 text-center space-y-2">
-                                <p className="text-sm font-black text-[#22C55E]">🎉 ¡Misión completada!</p>
-                                <p className="text-xs text-[#94A3B8] font-bold">Todos los problemas resueltos por hoy. ¡Vuelve mañana para consultar si hay más problemas!</p>
+                                {blockShowConcept && (
+                                    <div className="px-4 pb-4 text-left" onClick={e => e.stopPropagation()}>
+                                        <div className="bg-[#FFC800]/10 p-3 rounded-xl mb-2">
+                                            <p className="text-xs text-[#94A3B8] font-semibold leading-relaxed" dangerouslySetInnerHTML={{ __html: boldReplace(blockChallenge.concept) }} />
+                                        </div>
+                                        {blockChallenge.funFact && (
+                                            <div className="bg-[#60A5FA]/10 p-3 rounded-xl">
+                                                <p className="text-xs text-[#94A3B8] font-semibold leading-relaxed">{blockChallenge.funFact}</p>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                            </button>
+                        )}
+
+                        {/* Hints */}
+                        {blockChallenge.hints && blockChallenge.hints.length > 0 && blockStatus !== 'correct' && (
+                            <div>
+                                <button onClick={() => setBlockHintIndex(prev => Math.min(prev + 1, blockChallenge.hints.length - 1))}
+                                    disabled={blockHintIndex >= blockChallenge.hints.length - 1}
+                                    className={`w-full px-4 py-2.5 rounded-2xl border-2 text-left transition active:scale-[0.99] ${
+                                        blockHintIndex >= blockChallenge.hints.length - 1
+                                            ? 'bg-[#1E293B] border-[#334155]'
+                                            : 'bg-[#1E293B] border-[#1CB0F6]/30 hover:border-[#1CB0F6]'
+                                    }`}>
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-base">🔍</span>
+                                        <span className={`text-xs font-black flex-grow ${blockHintIndex >= blockChallenge.hints.length - 1 ? 'text-[#64748B]' : 'text-[#1CB0F6]'}`}>
+                                            {blockHintIndex < 0 ? '¿Necesitas una pista?' :
+                                             blockHintIndex < blockChallenge.hints.length - 1 ? `Pista ${blockHintIndex + 1}/${blockChallenge.hints.length}` :
+                                             'Todas las pistas mostradas ✓'}
+                                        </span>
+                                    </div>
+                                </button>
+                                {blockHintIndex >= 0 && (
+                                    <div className="mt-2 space-y-1.5">
+                                        {blockChallenge.hints.slice(0, blockHintIndex + 1).map((hint, i) => (
+                                            <div key={i} className="flex items-start gap-2 bg-[#1CB0F6]/5 border border-[#1CB0F6]/20 px-3 py-2 rounded-xl">
+                                                <span className="text-[10px] font-black text-[#1CB0F6] shrink-0 mt-0.5">💡{i + 1}.</span>
+                                                <p className="text-[11px] text-[#94A3B8] font-semibold leading-relaxed">{hint}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
                         )}
+
+                        {/* Status message */}
+                        {blockStatus !== 'active' && (
+                            <div className={`p-4 rounded-2xl font-black text-sm text-center border-2 ${
+                                blockStatus === 'correct'
+                                    ? 'bg-[#22C55E]/10 text-[#22C55E] border-[#22C55E]/30'
+                                    : 'bg-[#FF4B4B]/10 text-[#FF4B4B] border-[#FF4B4B]/30'
+                            }`}>
+                                <span className="text-2xl block mb-1">{blockStatus === 'correct' ? '🎉' : '🤔'}</span>
+                                {blockStatus === 'correct'
+                                    ? '¡PERFECTO! ¡Código correcto!'
+                                    : '¡Casi! Revisa el orden de los bloques.'}
+                                {blockStatus === 'correct' && (
+                                    <p className="text-xs font-semibold text-[#94A3B8] mt-1">👇 Lee las explicaciones de cada línea</p>
+                                )}
+                            </div>
+                        )}
+
+                        {/* Solution area */}
+                        <div className="bg-[#1E293B] p-4 rounded-2xl border-2 border-[#334155] flex flex-col min-h-[130px]">
+                            <h2 className="text-xs font-black text-[#93C5FD] mb-2 flex items-center gap-1">
+                                <Target size={14}/> Tu Solución
+                                <span className="text-[#64748B] font-bold ml-1">({blockSolution.length}/{blockChallenge.solution.length} bloques)</span>
+                            </h2>
+                            <div className="space-y-1.5 flex-grow">
+                                {blockSolution.map(block => (
+                                    <ChallengeBlock key={block.id} block={block} onClick={handleBlockUnselect} isSolutionBlock={true} challengeStatus={blockStatus} showExplanation={blockShowExplanations} />
+                                ))}
+                            </div>
+                            {blockSolution.length === 0 && (
+                                <div className="flex flex-col items-center justify-center py-4 text-center">
+                                    <span className="text-2xl mb-1">👆</span>
+                                    <p className="text-[#64748B] text-xs font-bold">Toca los bloques de abajo para agregarlos aquí</p>
+                                    <p className="text-[#475569] text-[10px] font-semibold mt-0.5">¡El orden importa!</p>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Available blocks */}
+                        <div className="bg-[#1E293B] p-4 rounded-2xl border-2 border-[#334155] min-h-[80px]">
+                            <h2 className="text-xs font-black text-[#64748B] mb-2 flex items-center gap-1">
+                                <Terminal size={14}/> Bloques Disponibles
+                                <span className="text-[#475569] font-bold ml-1">({blockAvailable.length})</span>
+                                {blockAvailable.some(b => b.type === 'wrong') && blockStatus === 'active' && (
+                                    <span className="text-[10px] text-[#FF9600] bg-[#FF9600]/10 px-2 py-0.5 rounded-full ml-auto">⚠️ ¡Hay bloques trampa!</span>
+                                )}
+                            </h2>
+                            <div className="grid grid-cols-1 gap-1.5">
+                                {blockAvailable.map(block => (
+                                    <ChallengeBlock key={block.id} block={block} onClick={handleBlockSelect} isSolutionBlock={false} challengeStatus={blockStatus} showExplanation={blockShowExplanations} />
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Actions */}
+                        <div className="flex gap-3">
+                            {blockStatus === 'active' && (
+                                <button onClick={() => checkBlockSolution(true)}
+                                    disabled={blockSolution.length !== blockChallenge.solution.length}
+                                    className="flex-1 py-3.5 bg-[#93C5FD] text-white rounded-xl text-sm font-black flex items-center justify-center gap-2 active:scale-95 transition disabled:opacity-40 shadow-lg shadow-[#93C5FD]/20">
+                                    <CheckCircle size={16} /> Verificar Solución
+                                </button>
+                            )}
+                            {blockStatus === 'incorrect' && (
+                                <button onClick={resetBlockChallenge}
+                                    className="flex-1 py-3.5 bg-[#F59E0B] text-[#0F172A] rounded-xl text-sm font-black flex items-center justify-center gap-2 active:scale-95 transition shadow-lg shadow-[#F59E0B]/20">
+                                    <RotateCcw size={16} /> Intentar de Nuevo
+                                </button>
+                            )}
+                            {blockStatus === 'correct' && (
+                                <button onClick={() => setTab('daily')}
+                                    className="flex-1 py-3.5 bg-[#22C55E] text-white rounded-xl text-sm font-black flex items-center justify-center gap-2 active:scale-95 transition shadow-lg shadow-[#22C55E]/20">
+                                    ✅ ¡Misión Completada!
+                                </button>
+                            )}
+                        </div>
                     </div>
                 )}
 
@@ -1183,28 +1609,33 @@ const ProgrammingStationScreen = ({ onBack, startChallenge, userScores, userId, 
                 {tab === 'practice' && (
                     <div className="space-y-3">
                         <div className="text-center mb-4">
-                            <h2 className="text-xl font-black text-white flex items-center justify-center gap-2"><Dumbbell size={20} className="text-[#93C5FD]" /> 💪 Retos de Práctica</h2>
-                            <p className="text-xs text-[#94A3B8] font-bold mt-1">¡Pon a prueba tus habilidades de programador espacial!</p>
+                            <h2 className="text-xl font-black text-white flex items-center justify-center gap-2"><Dumbbell size={20} className="text-[#93C5FD]" /> 🧩 Retos de Práctica</h2>
+                            <p className="text-xs text-[#94A3B8] font-bold mt-1">¡Ordena los bloques de código y pon a prueba tus habilidades!</p>
                         </div>
                         {PRACTICE_CHALLENGES.map((ch, idx) => (
                             <button key={ch.id} onClick={() => openPractice(ch)}
                                 className="w-full bg-gradient-to-r from-[#1E293B] to-[#1E293B]/80 rounded-2xl border-2 border-[#334155] hover:border-[#93C5FD] p-4 flex items-center gap-4 transition-all active:scale-[0.98] group text-left hover:shadow-lg hover:shadow-blue-500/10">
-                                <div className="w-14 h-14 bg-gradient-to-br from-[#93C5FD]/20 to-[#6366F1]/10 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0 group-hover:scale-110 transition-transform border border-[#93C5FD]/25 shadow-inner"
+                                <div className="w-14 h-14 bg-gradient-to-br from-[#93C5FD]/20 to-[#6366F1]/10 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0 group-hover:scale-110 transition-transform border border-[#93C5FD]/25 shadow-inner relative"
                                     style={{ animation: `float-planet ${6 + idx * 0.5}s ease-in-out infinite ${idx * 0.4}s` }}>
                                     {ch.emoji}
+                                    {completedPracticeIds.includes(ch.id) && <div className="absolute -top-1 -right-1 w-5 h-5 bg-[#22C55E] rounded-full flex items-center justify-center text-[10px] border-2 border-[#0F172A]">✅</div>}
                                 </div>
                                 <div className="flex-grow min-w-0">
                                     <h3 className="text-sm font-black text-white truncate">{ch.title}</h3>
                                     <p className="text-[11px] text-[#94A3B8] font-semibold mt-0.5">{ch.description}</p>
                                     <span className="text-[10px] font-bold text-[#64748B]">{'⭐'.repeat(ch.difficulty)}</span>
                                 </div>
-                                <div className="px-3 py-2 rounded-xl bg-gradient-to-r from-[#93C5FD] to-[#6366F1] text-[10px] font-black text-white flex-shrink-0 shadow-lg shadow-blue-500/20">PRACTICAR</div>
+                                <div className={`px-3 py-2 rounded-xl text-[10px] font-black flex-shrink-0 shadow-lg ${
+                                    completedPracticeIds.includes(ch.id)
+                                        ? 'bg-gradient-to-r from-[#22C55E] to-[#16A34A] text-white shadow-green-500/20'
+                                        : 'bg-gradient-to-r from-[#93C5FD] to-[#6366F1] text-white shadow-blue-500/20'
+                                }`}>{completedPracticeIds.includes(ch.id) ? '✅ HECHO' : '🧩 RESOLVER'}</div>
                             </button>
                         ))}
 
                         {/* Link to module challenges */}
                         <div className="mt-6 border-t border-[#334155] pt-4">
-                            <p className="text-xs text-[#64748B] font-bold text-center mb-3">🧩 Retos de Bloques de Código (de los mundos)</p>
+                            <p className="text-xs text-[#64748B] font-bold text-center mb-3">🧩 Retos de Bloques de los Mundos</p>
                             <div className="grid grid-cols-2 gap-2">
                                 {CODE_CHALLENGES.slice(0, 6).map(ch => (
                                     <button key={ch.id} onClick={() => startChallenge(ch.id)}
@@ -1220,6 +1651,160 @@ const ProgrammingStationScreen = ({ onBack, startChallenge, userScores, userId, 
                                     </button>
                                 ))}
                             </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* PRACTICE DETAIL - Block challenge for practice */}
+                {tab === 'practice_detail' && blockChallenge && (
+                    <div className="space-y-3">
+                        <div className="flex items-center gap-3 mb-2">
+                            <button onClick={() => setTab('practice')} className="bg-[#334155] p-2 rounded-xl hover:bg-[#475569] transition active:scale-95">
+                                <ArrowLeft size={16} className="text-white" />
+                            </button>
+                            <div>
+                                <h2 className="text-base font-black text-white">{blockChallenge.emoji} {blockChallenge.title}</h2>
+                                <p className="text-[11px] text-[#93C5FD] font-bold">🧩 Reto de práctica • {'⭐'.repeat(blockChallenge.difficulty)}</p>
+                            </div>
+                        </div>
+
+                        {/* Instructions */}
+                        <div className="bg-[#93C5FD]/10 rounded-xl p-3 border border-[#93C5FD]/20">
+                            <p className="text-xs font-bold text-[#93C5FD]">📝 {blockChallenge.instructions}</p>
+                        </div>
+
+                        {/* Concept toggle */}
+                        {blockChallenge.concept && (
+                            <button onClick={() => setBlockShowConcept(!blockShowConcept)}
+                                className="w-full bg-[#1E293B] rounded-2xl border-2 border-[#FFC800]/20 overflow-hidden transition-all active:scale-[0.99]">
+                                <div className="px-4 py-3 flex items-center gap-2">
+                                    <span className="text-lg">💡</span>
+                                    <span className="text-xs font-black text-[#FFC800] flex-grow text-left">
+                                        {blockShowConcept ? 'Ocultar explicación' : '¿Qué aprendo aquí? (Toca para ver)'}
+                                    </span>
+                                    <span className={`text-xs text-[#FFC800] transition-transform ${blockShowConcept ? 'rotate-180' : ''}`}>▼</span>
+                                </div>
+                                {blockShowConcept && (
+                                    <div className="px-4 pb-4 text-left" onClick={e => e.stopPropagation()}>
+                                        <div className="bg-[#FFC800]/10 p-3 rounded-xl mb-2">
+                                            <p className="text-xs text-[#94A3B8] font-semibold leading-relaxed" dangerouslySetInnerHTML={{ __html: boldReplace(blockChallenge.concept) }} />
+                                        </div>
+                                        {blockChallenge.funFact && (
+                                            <div className="bg-[#60A5FA]/10 p-3 rounded-xl">
+                                                <p className="text-xs text-[#94A3B8] font-semibold leading-relaxed">{blockChallenge.funFact}</p>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                            </button>
+                        )}
+
+                        {/* Hints */}
+                        {blockChallenge.hints && blockChallenge.hints.length > 0 && blockStatus !== 'correct' && (
+                            <div>
+                                <button onClick={() => setBlockHintIndex(prev => Math.min(prev + 1, blockChallenge.hints.length - 1))}
+                                    disabled={blockHintIndex >= blockChallenge.hints.length - 1}
+                                    className={`w-full px-4 py-2.5 rounded-2xl border-2 text-left transition active:scale-[0.99] ${
+                                        blockHintIndex >= blockChallenge.hints.length - 1
+                                            ? 'bg-[#1E293B] border-[#334155]'
+                                            : 'bg-[#1E293B] border-[#1CB0F6]/30 hover:border-[#1CB0F6]'
+                                    }`}>
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-base">🔍</span>
+                                        <span className={`text-xs font-black flex-grow ${blockHintIndex >= blockChallenge.hints.length - 1 ? 'text-[#64748B]' : 'text-[#1CB0F6]'}`}>
+                                            {blockHintIndex < 0 ? '¿Necesitas una pista?' :
+                                             blockHintIndex < blockChallenge.hints.length - 1 ? `Pista ${blockHintIndex + 1}/${blockChallenge.hints.length}` :
+                                             'Todas las pistas mostradas ✓'}
+                                        </span>
+                                    </div>
+                                </button>
+                                {blockHintIndex >= 0 && (
+                                    <div className="mt-2 space-y-1.5">
+                                        {blockChallenge.hints.slice(0, blockHintIndex + 1).map((hint, i) => (
+                                            <div key={i} className="flex items-start gap-2 bg-[#1CB0F6]/5 border border-[#1CB0F6]/20 px-3 py-2 rounded-xl">
+                                                <span className="text-[10px] font-black text-[#1CB0F6] shrink-0 mt-0.5">💡{i + 1}.</span>
+                                                <p className="text-[11px] text-[#94A3B8] font-semibold leading-relaxed">{hint}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
+                        {/* Status message */}
+                        {blockStatus !== 'active' && (
+                            <div className={`p-4 rounded-2xl font-black text-sm text-center border-2 ${
+                                blockStatus === 'correct'
+                                    ? 'bg-[#22C55E]/10 text-[#22C55E] border-[#22C55E]/30'
+                                    : 'bg-[#FF4B4B]/10 text-[#FF4B4B] border-[#FF4B4B]/30'
+                            }`}>
+                                <span className="text-2xl block mb-1">{blockStatus === 'correct' ? '🎉' : '🤔'}</span>
+                                {blockStatus === 'correct'
+                                    ? '¡PERFECTO! ¡Código correcto!'
+                                    : '¡Casi! Revisa el orden de los bloques.'}
+                                {blockStatus === 'correct' && (
+                                    <p className="text-xs font-semibold text-[#94A3B8] mt-1">👇 Lee las explicaciones de cada línea</p>
+                                )}
+                            </div>
+                        )}
+
+                        {/* Solution area */}
+                        <div className="bg-[#1E293B] p-4 rounded-2xl border-2 border-[#334155] flex flex-col min-h-[130px]">
+                            <h2 className="text-xs font-black text-[#93C5FD] mb-2 flex items-center gap-1">
+                                <Target size={14}/> Tu Solución
+                                <span className="text-[#64748B] font-bold ml-1">({blockSolution.length}/{blockChallenge.solution.length} bloques)</span>
+                            </h2>
+                            <div className="space-y-1.5 flex-grow">
+                                {blockSolution.map(block => (
+                                    <ChallengeBlock key={block.id} block={block} onClick={handleBlockUnselect} isSolutionBlock={true} challengeStatus={blockStatus} showExplanation={blockShowExplanations} />
+                                ))}
+                            </div>
+                            {blockSolution.length === 0 && (
+                                <div className="flex flex-col items-center justify-center py-4 text-center">
+                                    <span className="text-2xl mb-1">👆</span>
+                                    <p className="text-[#64748B] text-xs font-bold">Toca los bloques de abajo para agregarlos aquí</p>
+                                    <p className="text-[#475569] text-[10px] font-semibold mt-0.5">¡El orden importa!</p>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Available blocks */}
+                        <div className="bg-[#1E293B] p-4 rounded-2xl border-2 border-[#334155] min-h-[80px]">
+                            <h2 className="text-xs font-black text-[#64748B] mb-2 flex items-center gap-1">
+                                <Terminal size={14}/> Bloques Disponibles
+                                <span className="text-[#475569] font-bold ml-1">({blockAvailable.length})</span>
+                                {blockAvailable.some(b => b.type === 'wrong') && blockStatus === 'active' && (
+                                    <span className="text-[10px] text-[#FF9600] bg-[#FF9600]/10 px-2 py-0.5 rounded-full ml-auto">⚠️ ¡Hay bloques trampa!</span>
+                                )}
+                            </h2>
+                            <div className="grid grid-cols-1 gap-1.5">
+                                {blockAvailable.map(block => (
+                                    <ChallengeBlock key={block.id} block={block} onClick={handleBlockSelect} isSolutionBlock={false} challengeStatus={blockStatus} showExplanation={blockShowExplanations} />
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Actions */}
+                        <div className="flex gap-3">
+                            {blockStatus === 'active' && (
+                                <button onClick={() => checkBlockSolution(false)}
+                                    disabled={blockSolution.length !== blockChallenge.solution.length}
+                                    className="flex-1 py-3.5 bg-[#93C5FD] text-white rounded-xl text-sm font-black flex items-center justify-center gap-2 active:scale-95 transition disabled:opacity-40 shadow-lg shadow-[#93C5FD]/20">
+                                    <CheckCircle size={16} /> Verificar Solución
+                                </button>
+                            )}
+                            {blockStatus === 'incorrect' && (
+                                <button onClick={resetBlockChallenge}
+                                    className="flex-1 py-3.5 bg-[#F59E0B] text-[#0F172A] rounded-xl text-sm font-black flex items-center justify-center gap-2 active:scale-95 transition shadow-lg shadow-[#F59E0B]/20">
+                                    <RotateCcw size={16} /> Intentar de Nuevo
+                                </button>
+                            )}
+                            {blockStatus === 'correct' && (
+                                <button onClick={() => setTab('practice')}
+                                    className="flex-1 py-3.5 bg-[#22C55E] text-white rounded-xl text-sm font-black flex items-center justify-center gap-2 active:scale-95 transition shadow-lg shadow-[#22C55E]/20">
+                                    ✅ ¡Reto Completado!
+                                </button>
+                            )}
                         </div>
                     </div>
                 )}
