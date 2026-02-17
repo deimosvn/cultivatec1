@@ -1,20 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronRight, ChevronLeft, Sparkles, Star, Zap, RotateCcw, Check } from 'lucide-react';
 
-// Lazy-imported after definition to avoid circular — using inline ROBOT_SKINS_ONBOARDING
+// PNG-based robot skins for onboarding
 const ROBOT_SKINS_ONBOARDING = [
-  { id: 'chispitas', name: 'Chispitas', icon: '⚡', rarity: 'common', rarityColor: '#58CC02', config: { head: 'round', eyes: 'round', mouth: 'smile', body: 'box', accessory: 'antenna', color: 'blue', arms: 'normal', legs: 'normal', pattern: 'lightning' } },
-  { id: 'galaxia', name: 'Galaxia', icon: '🌌', rarity: 'rare', rarityColor: '#3B82F6', config: { head: 'alien', eyes: 'star_eyes', mouth: 'open', body: 'rounded', accessory: 'halo', color: 'purple', arms: 'wings', legs: 'hover', pattern: 'dots' } },
-  { id: 'guerrero', name: 'Guerrero', icon: '⚔️', rarity: 'epic', rarityColor: '#FF4B4B', config: { head: 'shield', eyes: 'angry', mouth: 'grr', body: 'armor', accessory: 'horns', color: 'red', arms: 'claws', legs: 'treads', pattern: 'star_emblem' } },
-  { id: 'dulce', name: 'Dulce', icon: '💖', rarity: 'rare', rarityColor: '#3B82F6', config: { head: 'bunny', eyes: 'heart', mouth: 'kiss', body: 'rounded', accessory: 'bow', color: 'pink', arms: 'normal', legs: 'springs', pattern: 'heart_emblem' } },
-  { id: 'ninja', name: 'Ninja', icon: '🥷', rarity: 'epic', rarityColor: '#FF4B4B', config: { head: 'square', eyes: 'angry', mouth: 'line', body: 'slim', accessory: 'goggles', color: 'gray', arms: 'claws', legs: 'spider', pattern: 'none' } },
-  { id: 'cientifico', name: 'Científico', icon: '🔬', rarity: 'rare', rarityColor: '#3B82F6', config: { head: 'square', eyes: 'glasses', mouth: 'zigzag', body: 'mech', accessory: 'antenna', color: 'cyan', arms: 'pincers', legs: 'normal', pattern: 'circuit' } },
-  { id: 'naturaleza', name: 'Naturaleza', icon: '🌿', rarity: 'common', rarityColor: '#58CC02', config: { head: 'bear', eyes: 'happy', mouth: 'tongue', body: 'rounded', accessory: 'flower', color: 'green', arms: 'normal', legs: 'normal', pattern: 'dots' } },
-  { id: 'rey_dorado', name: 'Rey Dorado', icon: '👑', rarity: 'legendary', rarityColor: '#FFC800', config: { head: 'diamond', eyes: 'star_eyes', mouth: 'teeth', body: 'armor', accessory: 'crown', color: 'gold', arms: 'muscles', legs: 'hover', pattern: 'gear' } },
-  { id: 'mecanico', name: 'Mecánico', icon: '🔧', rarity: 'common', rarityColor: '#58CC02', config: { head: 'square', eyes: 'screen', mouth: 'line', body: 'tank', accessory: 'headphones', color: 'orange', arms: 'pincers', legs: 'wheels', pattern: 'gear' } },
-  { id: 'astronauta', name: 'Astronauta', icon: '🚀', rarity: 'epic', rarityColor: '#FF4B4B', config: { head: 'octagon', eyes: 'big', mouth: 'open', body: 'mech', accessory: 'propeller', color: 'sky', arms: 'wings', legs: 'hover', pattern: 'star_emblem' } },
-  { id: 'hada', name: 'Hada Digital', icon: '🧚', rarity: 'legendary', rarityColor: '#FFC800', config: { head: 'cat', eyes: 'heart', mouth: 'smile', body: 'slim', accessory: 'halo', color: 'pink', arms: 'wings', legs: 'hover', pattern: 'heart_emblem' } },
-  { id: 'explorador', name: 'Explorador', icon: '🧭', rarity: 'common', rarityColor: '#58CC02', config: { head: 'helmet', eyes: 'wink', mouth: 'smile', body: 'barrel', accessory: 'goggles', color: 'teal', arms: 'normal', legs: 'treads', pattern: 'stripes' } },
+  { id: 'skin_default', name: 'Original', icon: '🤖', rarity: 'common', rarityColor: '#58CC02', config: { skinImage: '/skin.png' } },
+  { id: 'skin_1', name: 'Explorador', icon: '🧭', rarity: 'common', rarityColor: '#58CC02', config: { skinImage: '/skin1.png' } },
+  { id: 'skin_2', name: 'Guerrero', icon: '⚔️', rarity: 'rare', rarityColor: '#3B82F6', config: { skinImage: '/skin2.png' } },
+  { id: 'skin_3', name: 'Científico', icon: '🔬', rarity: 'rare', rarityColor: '#3B82F6', config: { skinImage: '/skin3.png' } },
+  { id: 'skin_4', name: 'Galaxia', icon: '🌌', rarity: 'epic', rarityColor: '#FF4B4B', config: { skinImage: '/skin4.png' } },
+  { id: 'skin_5', name: 'Ninja', icon: '🥷', rarity: 'epic', rarityColor: '#FF4B4B', config: { skinImage: '/skin5.png' } },
+  { id: 'skin_6', name: 'Naturaleza', icon: '🌿', rarity: 'common', rarityColor: '#58CC02', config: { skinImage: '/skin6.png' } },
+  { id: 'skin_7', name: 'Rey Dorado', icon: '👑', rarity: 'legendary', rarityColor: '#FFC800', config: { skinImage: '/skin7.png' } },
+  { id: 'skin_8', name: 'Mecánico', icon: '🔧', rarity: 'common', rarityColor: '#58CC02', config: { skinImage: '/skin8.png' } },
+  { id: 'skin_9', name: 'Astronauta', icon: '🚀', rarity: 'epic', rarityColor: '#FF4B4B', config: { skinImage: '/skin9.png' } },
+  { id: 'skin_10', name: 'Fantasma', icon: '👻', rarity: 'rare', rarityColor: '#3B82F6', config: { skinImage: '/skin10.png' } },
+  { id: 'skin_11', name: 'Rockero', icon: '🎸', rarity: 'epic', rarityColor: '#FF4B4B', config: { skinImage: '/skin11.png' } },
+  { id: 'skin_12', name: 'Pirata', icon: '🏴‍☠️', rarity: 'rare', rarityColor: '#3B82F6', config: { skinImage: '/skin12.png' } },
+  { id: 'skin_13', name: 'Samurai', icon: '🏯', rarity: 'legendary', rarityColor: '#FFC800', config: { skinImage: '/skin13.png' } },
+  { id: 'skin_14', name: 'Hada Digital', icon: '🧚', rarity: 'legendary', rarityColor: '#FFC800', config: { skinImage: '/skin14.png' } },
+  { id: 'skin_15', name: 'Polar', icon: '❄️', rarity: 'rare', rarityColor: '#3B82F6', config: { skinImage: '/skin15.png' } },
+  { id: 'skin_16', name: 'Capitán', icon: '🎖️', rarity: 'epic', rarityColor: '#FF4B4B', config: { skinImage: '/skin16.png' } },
+  { id: 'skin_17', name: 'Dulce', icon: '💖', rarity: 'rare', rarityColor: '#3B82F6', config: { skinImage: '/skin17.png' } },
+  { id: 'skin_18', name: 'Volcánico', icon: '🌋', rarity: 'legendary', rarityColor: '#FFC800', config: { skinImage: '/skin18.png' } },
 ];
 
 // ============================================
@@ -145,6 +152,22 @@ const COLORS = [
 
 export const RobotAvatar = ({ config, size = 120, animate = false }) => {
   if (!config) return null;
+
+  // PNG skin mode: render image instead of SVG
+  if (config.skinImage) {
+    return (
+      <img
+        src={config.skinImage}
+        alt="Robot Skin"
+        width={size}
+        height={size}
+        className={animate ? 'animate-float' : ''}
+        style={{ objectFit: 'contain', imageRendering: 'auto' }}
+        draggable={false}
+      />
+    );
+  }
+
   const head = HEADS.find(h => h.id === config.head) || HEADS[0];
   const eyes = EYES.find(e => e.id === config.eyes) || EYES[0];
   const mouth = MOUTHS.find(m => m.id === config.mouth) || MOUTHS[0];
@@ -183,6 +206,18 @@ export const RobotAvatar = ({ config, size = 120, animate = false }) => {
 // Mini version for nav/header
 export const RobotMini = ({ config, size = 36 }) => {
   if (!config) return <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center text-lg">🤖</div>;
+
+  // PNG skin mode
+  if (config.skinImage) {
+    return (
+      <div className="rounded-full overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center border-2 border-blue-200"
+        style={{ width: size, height: size }}>
+        <img src={config.skinImage} alt="Robot" width={size * 0.85} height={size * 0.85}
+          style={{ objectFit: 'contain' }} draggable={false} />
+      </div>
+    );
+  }
+
   return (
     <div className="rounded-full overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center border-2 border-blue-200"
       style={{ width: size, height: size }}>
@@ -393,11 +428,9 @@ const OnboardingScreen = ({ onComplete, firebaseProfile }) => {
   const userName = firebaseProfile?.username || 'Explorador';
   const fullName = firebaseProfile?.fullName || userName;
   const [robotConfig, setRobotConfig] = useState({
-    head: 'round', eyes: 'round', mouth: 'smile', body: 'box',
-    accessory: 'antenna', color: 'blue', arms: 'normal', legs: 'normal', pattern: 'none'
+    skinImage: '/skin.png'
   });
   const [robotName, setRobotName] = useState('');
-  const [builderTab, setBuilderTab] = useState('skins');
   const [selectedSkin, setSelectedSkin] = useState(null);
 
   const handleComplete = () => {
@@ -411,44 +444,10 @@ const OnboardingScreen = ({ onComplete, firebaseProfile }) => {
   };
 
   const randomize = () => {
-    setRobotConfig({
-      head: HEADS[Math.floor(Math.random() * HEADS.length)].id,
-      eyes: EYES[Math.floor(Math.random() * EYES.length)].id,
-      mouth: MOUTHS[Math.floor(Math.random() * MOUTHS.length)].id,
-      body: BODIES[Math.floor(Math.random() * BODIES.length)].id,
-      accessory: ACCESSORIES[Math.floor(Math.random() * ACCESSORIES.length)].id,
-      color: COLORS[Math.floor(Math.random() * COLORS.length)].id,
-      arms: ARMS[Math.floor(Math.random() * ARMS.length)].id,
-      legs: LEGS[Math.floor(Math.random() * LEGS.length)].id,
-      pattern: PATTERNS[Math.floor(Math.random() * PATTERNS.length)].id,
-    });
+    const randomSkin = ROBOT_SKINS_ONBOARDING[Math.floor(Math.random() * ROBOT_SKINS_ONBOARDING.length)];
+    setSelectedSkin(randomSkin.id);
+    setRobotConfig({ ...randomSkin.config });
   };
-
-  const builderTabs = [
-    { id: 'skins', label: '🌟', fullLabel: 'Skins', items: [], key: 'skins' },
-    { id: 'head', label: '🗣️', fullLabel: 'Cabeza', items: HEADS, key: 'head' },
-    { id: 'eyes', label: '👀', fullLabel: 'Ojos', items: EYES, key: 'eyes' },
-    { id: 'mouth', label: '👄', fullLabel: 'Boca', items: MOUTHS, key: 'mouth' },
-    { id: 'body', label: '🦾', fullLabel: 'Cuerpo', items: BODIES, key: 'body' },
-    { id: 'arms', label: '💪', fullLabel: 'Brazos', items: ARMS, key: 'arms' },
-    { id: 'legs', label: '🦵', fullLabel: 'Piernas', items: LEGS, key: 'legs' },
-    { id: 'pattern', label: '⭐', fullLabel: 'Emblema', items: PATTERNS, key: 'pattern' },
-    { id: 'accessory', label: '🎩', fullLabel: 'Accesorio', items: ACCESSORIES, key: 'accessory' },
-    { id: 'color', label: '🎨', fullLabel: 'Color', items: COLORS, key: 'color' },
-  ];
-
-  const getPreviewViewBox = (category) => {
-    switch(category) {
-      case 'arms': return '-15 60 50 60';
-      case 'legs': return '18 108 64 28';
-      case 'pattern': return '28 5 44 40';
-      case 'accessory': return '10 -30 80 50';
-      case 'body': return '12 -5 76 62';
-      default: return '0 0 100 70';
-    }
-  };
-
-  const totalCombinations = HEADS.length * EYES.length * MOUTHS.length * BODIES.length * ARMS.length * LEGS.length * PATTERNS.length * ACCESSORIES.length * COLORS.length;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#1E40AF] via-[#3B82F6] to-[#1E3A8A] text-white flex flex-col">
@@ -496,13 +495,13 @@ const OnboardingScreen = ({ onComplete, firebaseProfile }) => {
             </button>
           </div>
         )}
-        {/* Step 1: Robot Builder */}
+        {/* Step 1: Robot Builder - Skins Only */}
         {step === 1 && (
           <div className="max-w-lg w-full animate-scale-in">
             {/* Header */}
             <div className="text-center mb-3">
-              <h2 className="text-2xl font-black mb-1">🤖 Crea tu Robot Compañero</h2>
-              <p className="text-blue-300 text-sm">Personaliza cada detalle — ¡hay más de {totalCombinations.toLocaleString()} combinaciones!</p>
+              <h2 className="text-2xl font-black mb-1">🤖 Elige tu Robot Compañero</h2>
+              <p className="text-blue-300 text-sm">Selecciona una skin para tu robot — ¡hay {ROBOT_SKINS_ONBOARDING.length} para elegir!</p>
             </div>
 
             {/* Robot Preview with Pedestal */}
@@ -510,7 +509,7 @@ const OnboardingScreen = ({ onComplete, firebaseProfile }) => {
               <div className="relative">
                 {/* Glow effect behind robot */}
                 <div className="absolute inset-0 rounded-3xl blur-xl opacity-30"
-                  style={{ background: `radial-gradient(circle, ${COLORS.find(c=>c.id===robotConfig.color)?.hex || '#3B82F6'}88, transparent 70%)` }}/>
+                  style={{ background: `radial-gradient(circle, #3B82F688, transparent 70%)` }}/>
                 <div className="relative w-44 h-44 bg-gradient-to-b from-white/10 to-white/5 backdrop-blur rounded-3xl border-2 border-white/20 flex items-center justify-center p-2 shadow-2xl">
                   <RobotAvatar config={robotConfig} size={140} animate />
                 </div>
@@ -537,101 +536,41 @@ const OnboardingScreen = ({ onComplete, firebaseProfile }) => {
               </button>
             </div>
 
-            {/* Builder Category Tabs - Compact with emoji + mini label */}
-            <div className="flex gap-1 overflow-x-auto pb-2 mb-2 scrollbar-hide">
-              {builderTabs.map(tab => {
-                const isActive = builderTab === tab.id;
-                return (
-                  <button key={tab.id} onClick={() => setBuilderTab(tab.id)}
-                    className={`flex flex-col items-center min-w-[52px] py-1.5 px-2 rounded-xl text-xs font-bold transition-all
-                      ${isActive 
-                        ? 'bg-gradient-to-b from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/30 scale-105' 
-                        : 'bg-white/8 text-blue-300 hover:bg-white/15 active:scale-95'}`}>
-                    <span className="text-base leading-none">{tab.label}</span>
-                    <span className={`text-[9px] mt-0.5 ${isActive ? 'text-blue-100' : 'text-blue-400'}`}>{tab.fullLabel}</span>
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Part Options */}
-            <div className="bg-white/5 rounded-2xl p-2.5 border border-white/10 mb-3" style={{ maxHeight: '200px', overflowY: 'auto' }}>
-              {builderTab === 'skins' ? (
-                /* PREDEFINED SKINS GRID */
-                <div className="grid grid-cols-3 gap-2">
-                  {ROBOT_SKINS_ONBOARDING.map(skin => {
-                    const isSkinSelected = selectedSkin === skin.id;
-                    return (
-                      <button key={skin.id}
-                        onClick={() => {
-                          setSelectedSkin(skin.id);
-                          setRobotConfig({ ...skin.config });
-                        }}
-                        className={`relative flex flex-col items-center py-2 px-1 rounded-xl transition-all
-                          ${isSkinSelected 
-                            ? 'bg-blue-500/30 ring-2 ring-cyan-400 scale-[1.03]' 
-                            : 'bg-white/5 hover:bg-white/10 active:scale-95'}`}>
-                        <div className="absolute top-0.5 right-0.5 text-[7px] font-black px-1 py-0.5 rounded-full text-white"
-                          style={{ backgroundColor: skin.rarityColor }}>
-                          {skin.rarity === 'legendary' ? '★★★' : skin.rarity === 'epic' ? '★★' : skin.rarity === 'rare' ? '★' : ''}
+            {/* Skins Grid */}
+            <div className="bg-white/5 rounded-2xl p-2.5 border border-white/10 mb-3" style={{ maxHeight: '250px', overflowY: 'auto' }}>
+              <div className="grid grid-cols-3 gap-2">
+                {ROBOT_SKINS_ONBOARDING.map(skin => {
+                  const isSkinSelected = selectedSkin === skin.id;
+                  return (
+                    <button key={skin.id}
+                      onClick={() => {
+                        setSelectedSkin(skin.id);
+                        setRobotConfig({ ...skin.config });
+                      }}
+                      className={`relative flex flex-col items-center py-2 px-1 rounded-xl transition-all
+                        ${isSkinSelected 
+                          ? 'bg-blue-500/30 ring-2 ring-cyan-400 scale-[1.03]' 
+                          : 'bg-white/5 hover:bg-white/10 active:scale-95'}`}>
+                      <div className="absolute top-0.5 right-0.5 text-[7px] font-black px-1 py-0.5 rounded-full text-white"
+                        style={{ backgroundColor: skin.rarityColor }}>
+                        {skin.rarity === 'legendary' ? '★★★' : skin.rarity === 'epic' ? '★★' : skin.rarity === 'rare' ? '★' : ''}
+                      </div>
+                      <div className="w-12 h-12 flex items-center justify-center">
+                        <RobotAvatar config={skin.config} size={45} />
+                      </div>
+                      <div className="flex items-center gap-0.5 mt-0.5">
+                        <span className="text-xs">{skin.icon}</span>
+                        <span className="text-[9px] font-bold leading-tight">{skin.name}</span>
+                      </div>
+                      {isSkinSelected && (
+                        <div className="absolute -top-1 -left-1 w-4 h-4 bg-cyan-400 rounded-full flex items-center justify-center">
+                          <Check size={10} className="text-white" />
                         </div>
-                        <div className="w-12 h-12 flex items-center justify-center">
-                          <RobotAvatar config={skin.config} size={45} />
-                        </div>
-                        <div className="flex items-center gap-0.5 mt-0.5">
-                          <span className="text-xs">{skin.icon}</span>
-                          <span className="text-[9px] font-bold leading-tight">{skin.name}</span>
-                        </div>
-                        {isSkinSelected && (
-                          <div className="absolute -top-1 -left-1 w-4 h-4 bg-cyan-400 rounded-full flex items-center justify-center">
-                            <Check size={10} className="text-white" />
-                          </div>
-                        )}
-                      </button>
-                    );
-                  })}
-                </div>
-              ) : builderTab === 'color' ? (
-                <div className="grid grid-cols-4 gap-1.5">
-                  {COLORS.map(c => (
-                    <button key={c.id} onClick={() => { setRobotConfig(prev => ({ ...prev, color: c.id })); setSelectedSkin(null); }}                      className={`flex items-center gap-1.5 py-2 px-2 rounded-xl transition-all
-                        ${robotConfig.color === c.id ? 'bg-white/20 ring-2 ring-cyan-400 scale-[1.03]' : 'bg-white/5 hover:bg-white/10 active:scale-95'}`}>
-                      <div className="w-6 h-6 rounded-full border-2 flex-shrink-0" 
-                        style={{ backgroundColor: c.hex, borderColor: robotConfig.color === c.id ? '#22D3EE' : 'rgba(255,255,255,0.2)' }}/>
-                      <span className="text-[10px] font-bold truncate">{c.label}</span>
+                      )}
                     </button>
-                  ))}
-                </div>
-              ) : (
-                <div className={`grid gap-1.5 ${builderTab === 'pattern' ? 'grid-cols-4' : 'grid-cols-3'}`}>
-                  {builderTabs.find(t => t.id === builderTab)?.items.map(item => {
-                    const isSelected = (builderTab === 'arms' || builderTab === 'legs' || builderTab === 'pattern')
-                      ? robotConfig[builderTab] === item.id
-                      : robotConfig[builderTab] === item.id;
-                    const currentColor = COLORS.find(c=>c.id===robotConfig.color)?.hex || '#3B82F6';
-                    const viewBox = getPreviewViewBox(builderTab);
-                    return (
-                      <button key={item.id}
-                        onClick={() => { setRobotConfig(prev => ({ ...prev, [builderTab]: item.id })); setSelectedSkin(null); }}
-                        className={`flex flex-col items-center py-2 px-1 rounded-xl transition-all
-                          ${isSelected 
-                            ? 'bg-blue-500/30 ring-2 ring-cyan-400 scale-[1.03]' 
-                            : 'bg-white/5 hover:bg-white/10 active:scale-95'}`}>
-                        {item.id === 'none' && builderTab === 'pattern' ? (
-                          <div className="w-10 h-10 flex items-center justify-center text-white/40 text-lg">✕</div>
-                        ) : item.id === 'none' && builderTab === 'accessory' ? (
-                          <div className="w-10 h-10 flex items-center justify-center text-white/40 text-lg">✕</div>
-                        ) : (
-                          <svg width="42" height="42" viewBox={viewBox}>
-                            <g dangerouslySetInnerHTML={{ __html: item.path(currentColor) }}/>
-                          </svg>
-                        )}
-                        <span className="text-[9px] font-bold mt-0.5 leading-tight text-center">{item.label}</span>
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
+                  );
+                })}
+              </div>
             </div>
 
             {/* Navigation */}

@@ -5,8 +5,8 @@
 // ================================================================
 
 import React, { useState, useEffect } from 'react';
-import { X, Sparkles, RotateCcw, ChevronLeft, ChevronRight, Check, Palette, Star, Crown, Zap, Heart, Shield, Flame, Ghost, Music, Rocket, Bug, Leaf, Snowflake, BookOpen } from 'lucide-react';
-import { RobotAvatar, HEADS, EYES, MOUTHS, BODIES, ACCESSORIES, ARMS, LEGS, PATTERNS, COLORS } from '../Onboarding';
+import { X, Sparkles, RotateCcw, ChevronLeft, ChevronRight, Check, Palette, Star, BookOpen } from 'lucide-react';
+import { RobotAvatar } from '../Onboarding';
 
 // ============================================
 // ROBOT STORY DIALOGUE (same as onboarding)
@@ -27,184 +27,194 @@ const ROBOT_STORY_LINES = [
 
 export const ROBOT_SKINS = [
   {
-    id: 'chispitas',
-    name: 'Chispitas',
-    description: 'Un robot eléctrico lleno de energía ⚡',
-    icon: '⚡',
+    id: 'skin_default',
+    name: 'Original',
+    description: 'El robot original de CultivaTec ⚡',
+    icon: '🤖',
+    rarity: 'common',
+    rarityLabel: 'Inicial',
+    rarityColor: '#58CC02',
+    config: { skinImage: '/skin.png' },
+  },
+  {
+    id: 'skin_1',
+    name: 'Explorador',
+    description: 'Robot aventurero listo para descubrir 🧭',
+    icon: '🧭',
     rarity: 'common',
     rarityLabel: 'Común',
     rarityColor: '#58CC02',
-    config: { head: 'round', eyes: 'round', mouth: 'smile', body: 'box', accessory: 'antenna', color: 'blue', arms: 'normal', legs: 'normal', pattern: 'lightning' },
+    config: { skinImage: '/skin1.png' },
   },
   {
-    id: 'galaxia',
-    name: 'Galaxia',
-    description: 'Viajero intergaláctico con poderes cósmicos 🌌',
-    icon: '🌌',
-    rarity: 'rare',
-    rarityLabel: 'Raro',
-    rarityColor: '#3B82F6',
-    config: { head: 'alien', eyes: 'star_eyes', mouth: 'open', body: 'rounded', accessory: 'halo', color: 'purple', arms: 'wings', legs: 'hover', pattern: 'dots' },
-  },
-  {
-    id: 'guerrero',
+    id: 'skin_2',
     name: 'Guerrero',
-    description: 'Robot de combate listo para la batalla 🗡️',
+    description: 'Robot de combate con armadura épica ⚔️',
     icon: '⚔️',
-    rarity: 'epic',
-    rarityLabel: 'Épico',
-    rarityColor: '#FF4B4B',
-    config: { head: 'shield', eyes: 'angry', mouth: 'grr', body: 'armor', accessory: 'horns', color: 'red', arms: 'claws', legs: 'treads', pattern: 'star_emblem' },
-  },
-  {
-    id: 'dulce',
-    name: 'Dulce',
-    description: 'El robot más tierno y adorable del laboratorio 💖',
-    icon: '💖',
     rarity: 'rare',
     rarityLabel: 'Raro',
     rarityColor: '#3B82F6',
-    config: { head: 'bunny', eyes: 'heart', mouth: 'kiss', body: 'rounded', accessory: 'bow', color: 'pink', arms: 'normal', legs: 'springs', pattern: 'heart_emblem' },
+    config: { skinImage: '/skin2.png' },
   },
   {
-    id: 'ninja',
-    name: 'Ninja',
-    description: 'Silencioso, rápido e invisible en las sombras 🥷',
-    icon: '🥷',
-    rarity: 'epic',
-    rarityLabel: 'Épico',
-    rarityColor: '#FF4B4B',
-    config: { head: 'square', eyes: 'angry', mouth: 'line', body: 'slim', accessory: 'goggles', color: 'gray', arms: 'claws', legs: 'spider', pattern: 'none' },
-  },
-  {
-    id: 'capitan',
-    name: 'Capitán',
-    description: 'Líder nato que inspira a todos los robots 🎖️',
-    icon: '🎖️',
-    rarity: 'epic',
-    rarityLabel: 'Épico',
-    rarityColor: '#FF4B4B',
-    config: { head: 'helmet', eyes: 'big', mouth: 'smile', body: 'armor', accessory: 'cap', color: 'indigo', arms: 'muscles', legs: 'normal', pattern: 'star_emblem' },
-  },
-  {
-    id: 'cientifico',
+    id: 'skin_3',
     name: 'Científico',
     description: 'Genio del laboratorio con circuitos avanzados 🔬',
     icon: '🔬',
     rarity: 'rare',
     rarityLabel: 'Raro',
     rarityColor: '#3B82F6',
-    config: { head: 'square', eyes: 'glasses', mouth: 'zigzag', body: 'mech', accessory: 'antenna', color: 'cyan', arms: 'pincers', legs: 'normal', pattern: 'circuit' },
+    config: { skinImage: '/skin3.png' },
   },
   {
-    id: 'naturaleza',
+    id: 'skin_4',
+    name: 'Galaxia',
+    description: 'Viajero intergaláctico con poderes cósmicos 🌌',
+    icon: '🌌',
+    rarity: 'epic',
+    rarityLabel: 'Épico',
+    rarityColor: '#FF4B4B',
+    config: { skinImage: '/skin4.png' },
+  },
+  {
+    id: 'skin_5',
+    name: 'Ninja',
+    description: 'Silencioso, rápido e invisible en las sombras 🥷',
+    icon: '🥷',
+    rarity: 'epic',
+    rarityLabel: 'Épico',
+    rarityColor: '#FF4B4B',
+    config: { skinImage: '/skin5.png' },
+  },
+  {
+    id: 'skin_6',
     name: 'Naturaleza',
     description: 'Robot ecológico conectado con la naturaleza 🌿',
     icon: '🌿',
     rarity: 'common',
     rarityLabel: 'Común',
     rarityColor: '#58CC02',
-    config: { head: 'bear', eyes: 'happy', mouth: 'tongue', body: 'rounded', accessory: 'flower', color: 'green', arms: 'normal', legs: 'normal', pattern: 'dots' },
+    config: { skinImage: '/skin6.png' },
   },
   {
-    id: 'rey_dorado',
+    id: 'skin_7',
     name: 'Rey Dorado',
-    description: 'El robot más raro y majestuoso del reino ✨',
+    description: 'El robot más majestuoso del reino ✨',
     icon: '👑',
     rarity: 'legendary',
     rarityLabel: 'Legendario',
     rarityColor: '#FFC800',
-    config: { head: 'diamond', eyes: 'star_eyes', mouth: 'teeth', body: 'armor', accessory: 'crown', color: 'gold', arms: 'muscles', legs: 'hover', pattern: 'gear' },
+    config: { skinImage: '/skin7.png' },
   },
   {
-    id: 'mecanico',
+    id: 'skin_8',
     name: 'Mecánico',
     description: 'Experto en reparar y construir cualquier cosa 🔧',
     icon: '🔧',
     rarity: 'common',
     rarityLabel: 'Común',
     rarityColor: '#58CC02',
-    config: { head: 'square', eyes: 'screen', mouth: 'line', body: 'tank', accessory: 'headphones', color: 'orange', arms: 'pincers', legs: 'wheels', pattern: 'gear' },
+    config: { skinImage: '/skin8.png' },
   },
   {
-    id: 'fantasma',
-    name: 'Fantasma',
-    description: 'Robot etéreo que flota entre dimensiones 👻',
-    icon: '👻',
-    rarity: 'rare',
-    rarityLabel: 'Raro',
-    rarityColor: '#3B82F6',
-    config: { head: 'cat', eyes: 'sleepy', mouth: 'whistle', body: 'slim', accessory: 'halo', color: 'mint', arms: 'tentacles', legs: 'hover', pattern: 'dots' },
-  },
-  {
-    id: 'rockero',
-    name: 'Rockero',
-    description: 'Robot musical que agita el laboratorio 🎸',
-    icon: '🎸',
-    rarity: 'epic',
-    rarityLabel: 'Épico',
-    rarityColor: '#FF4B4B',
-    config: { head: 'star', eyes: 'x_eyes', mouth: 'grr', body: 'slim', accessory: 'horns', color: 'crimson', arms: 'muscles', legs: 'springs', pattern: 'lightning' },
-  },
-  {
-    id: 'explorador',
-    name: 'Explorador',
-    description: 'Aventurero que descubre mundos desconocidos 🧭',
-    icon: '🧭',
-    rarity: 'common',
-    rarityLabel: 'Común',
-    rarityColor: '#58CC02',
-    config: { head: 'helmet', eyes: 'wink', mouth: 'smile', body: 'barrel', accessory: 'goggles', color: 'teal', arms: 'normal', legs: 'treads', pattern: 'stripes' },
-  },
-  {
-    id: 'astronauta',
+    id: 'skin_9',
     name: 'Astronauta',
     description: 'Explorador del espacio exterior 🚀',
     icon: '🚀',
     rarity: 'epic',
     rarityLabel: 'Épico',
     rarityColor: '#FF4B4B',
-    config: { head: 'octagon', eyes: 'big', mouth: 'open', body: 'mech', accessory: 'propeller', color: 'sky', arms: 'wings', legs: 'hover', pattern: 'star_emblem' },
+    config: { skinImage: '/skin9.png' },
   },
   {
-    id: 'pirata',
+    id: 'skin_10',
+    name: 'Fantasma',
+    description: 'Robot etéreo que flota entre dimensiones 👻',
+    icon: '👻',
+    rarity: 'rare',
+    rarityLabel: 'Raro',
+    rarityColor: '#3B82F6',
+    config: { skinImage: '/skin10.png' },
+  },
+  {
+    id: 'skin_11',
+    name: 'Rockero',
+    description: 'Robot musical que agita el laboratorio 🎸',
+    icon: '🎸',
+    rarity: 'epic',
+    rarityLabel: 'Épico',
+    rarityColor: '#FF4B4B',
+    config: { skinImage: '/skin11.png' },
+  },
+  {
+    id: 'skin_12',
     name: 'Pirata',
     description: 'Robot corsario surcando mares digitales 🏴‍☠️',
     icon: '🏴‍☠️',
     rarity: 'rare',
     rarityLabel: 'Raro',
     rarityColor: '#3B82F6',
-    config: { head: 'triangle', eyes: 'wink', mouth: 'fangs', body: 'barrel', accessory: 'cap', color: 'orange', arms: 'claws', legs: 'normal', pattern: 'stripes' },
+    config: { skinImage: '/skin12.png' },
   },
   {
-    id: 'samurai',
+    id: 'skin_13',
     name: 'Samurai',
     description: 'Robot honorable con espíritu de guerrero 🏯',
     icon: '🏯',
     rarity: 'legendary',
     rarityLabel: 'Legendario',
     rarityColor: '#FFC800',
-    config: { head: 'helmet', eyes: 'angry', mouth: 'line', body: 'armor', accessory: 'crown', color: 'crimson', arms: 'claws', legs: 'normal', pattern: 'lightning' },
+    config: { skinImage: '/skin13.png' },
   },
   {
-    id: 'hada',
+    id: 'skin_14',
     name: 'Hada Digital',
     description: 'Robot mágico con poderes de programación ✨',
     icon: '🧚',
     rarity: 'legendary',
     rarityLabel: 'Legendario',
     rarityColor: '#FFC800',
-    config: { head: 'cat', eyes: 'heart', mouth: 'smile', body: 'slim', accessory: 'halo', color: 'pink', arms: 'wings', legs: 'hover', pattern: 'heart_emblem' },
+    config: { skinImage: '/skin14.png' },
   },
   {
-    id: 'polar',
+    id: 'skin_15',
     name: 'Polar',
     description: 'Robot helado del polo norte digital ❄️',
     icon: '❄️',
     rarity: 'rare',
     rarityLabel: 'Raro',
     rarityColor: '#3B82F6',
-    config: { head: 'bear', eyes: 'big', mouth: 'braces', body: 'rounded', accessory: 'goggles', color: 'sky', arms: 'normal', legs: 'normal', pattern: 'dots' },
+    config: { skinImage: '/skin15.png' },
+  },
+  {
+    id: 'skin_16',
+    name: 'Capitán',
+    description: 'Líder nato que inspira a todos los robots 🎖️',
+    icon: '🎖️',
+    rarity: 'epic',
+    rarityLabel: 'Épico',
+    rarityColor: '#FF4B4B',
+    config: { skinImage: '/skin16.png' },
+  },
+  {
+    id: 'skin_17',
+    name: 'Dulce',
+    description: 'El robot más tierno y adorable del laboratorio 💖',
+    icon: '💖',
+    rarity: 'rare',
+    rarityLabel: 'Raro',
+    rarityColor: '#3B82F6',
+    config: { skinImage: '/skin17.png' },
+  },
+  {
+    id: 'skin_18',
+    name: 'Volcánico',
+    description: 'Robot de fuego con energía volcánica 🌋',
+    icon: '🌋',
+    rarity: 'legendary',
+    rarityLabel: 'Legendario',
+    rarityColor: '#FFC800',
+    config: { skinImage: '/skin18.png' },
   },
 ];
 
@@ -307,24 +317,21 @@ const RobotStoryTab = ({ robotConfig, robotName, userName, storyIndex, setStoryI
 // ============================================
 
 const RobotSkinEditor = ({ isOpen, onClose, currentConfig, currentName, onSave, userName }) => {
-  const [mode, setMode] = useState('skins'); // 'skins' | 'custom' | 'story'
+  const [mode, setMode] = useState('skins'); // 'skins' | 'story'
   const [storyIndex, setStoryIndex] = useState(0);
   const [storyTyping, setStoryTyping] = useState(false);
   const [storyText, setStoryText] = useState('');
   const [robotConfig, setRobotConfig] = useState(currentConfig || {
-    head: 'round', eyes: 'round', mouth: 'smile', body: 'box',
-    accessory: 'antenna', color: 'blue', arms: 'normal', legs: 'normal', pattern: 'none'
+    skinImage: '/skin.png'
   });
   const [robotName, setRobotName] = useState(currentName || '');
-  const [builderTab, setBuilderTab] = useState('head');
   const [selectedSkin, setSelectedSkin] = useState(null);
   const [showSavedMessage, setShowSavedMessage] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
       setRobotConfig(currentConfig || {
-        head: 'round', eyes: 'round', mouth: 'smile', body: 'box',
-        accessory: 'antenna', color: 'blue', arms: 'normal', legs: 'normal', pattern: 'none'
+        skinImage: '/skin.png'
       });
       setRobotName(currentName || '');
       setSelectedSkin(null);
@@ -349,41 +356,9 @@ const RobotSkinEditor = ({ isOpen, onClose, currentConfig, currentName, onSave, 
   };
 
   const randomize = () => {
-    setSelectedSkin(null);
-    setRobotConfig({
-      head: HEADS[Math.floor(Math.random() * HEADS.length)].id,
-      eyes: EYES[Math.floor(Math.random() * EYES.length)].id,
-      mouth: MOUTHS[Math.floor(Math.random() * MOUTHS.length)].id,
-      body: BODIES[Math.floor(Math.random() * BODIES.length)].id,
-      accessory: ACCESSORIES[Math.floor(Math.random() * ACCESSORIES.length)].id,
-      color: COLORS[Math.floor(Math.random() * COLORS.length)].id,
-      arms: ARMS[Math.floor(Math.random() * ARMS.length)].id,
-      legs: LEGS[Math.floor(Math.random() * LEGS.length)].id,
-      pattern: PATTERNS[Math.floor(Math.random() * PATTERNS.length)].id,
-    });
-  };
-
-  const builderTabs = [
-    { id: 'head', label: '🗣️', fullLabel: 'Cabeza', items: HEADS, key: 'head' },
-    { id: 'eyes', label: '👀', fullLabel: 'Ojos', items: EYES, key: 'eyes' },
-    { id: 'mouth', label: '👄', fullLabel: 'Boca', items: MOUTHS, key: 'mouth' },
-    { id: 'body', label: '🦾', fullLabel: 'Cuerpo', items: BODIES, key: 'body' },
-    { id: 'arms', label: '💪', fullLabel: 'Brazos', items: ARMS, key: 'arms' },
-    { id: 'legs', label: '🦵', fullLabel: 'Piernas', items: LEGS, key: 'legs' },
-    { id: 'pattern', label: '⭐', fullLabel: 'Emblema', items: PATTERNS, key: 'pattern' },
-    { id: 'accessory', label: '🎩', fullLabel: 'Accesorio', items: ACCESSORIES, key: 'accessory' },
-    { id: 'color', label: '🎨', fullLabel: 'Color', items: COLORS, key: 'color' },
-  ];
-
-  const getPreviewViewBox = (category) => {
-    switch(category) {
-      case 'arms': return '-15 60 50 60';
-      case 'legs': return '18 108 64 28';
-      case 'pattern': return '28 5 44 40';
-      case 'accessory': return '10 -30 80 50';
-      case 'body': return '12 -5 76 62';
-      default: return '0 0 100 70';
-    }
+    const randomSkin = ROBOT_SKINS[Math.floor(Math.random() * ROBOT_SKINS.length)];
+    setSelectedSkin(randomSkin.id);
+    setRobotConfig({ ...randomSkin.config });
   };
 
   const getRarityBorder = (rarity) => {
@@ -425,7 +400,7 @@ const RobotSkinEditor = ({ isOpen, onClose, currentConfig, currentName, onSave, 
         <div className="flex flex-col items-center py-4 bg-gradient-to-b from-[#F0F7FF] to-white flex-shrink-0">
           <div className="relative">
             <div className="absolute inset-0 rounded-3xl blur-xl opacity-20"
-              style={{ background: `radial-gradient(circle, ${COLORS.find(c=>c.id===robotConfig.color)?.hex || '#3B82F6'}88, transparent 70%)` }}/>
+              style={{ background: `radial-gradient(circle, #3B82F688, transparent 70%)` }}/>
             <div className="relative w-32 h-32 bg-white rounded-3xl border-2 border-[#E5E5E5] flex items-center justify-center p-2 shadow-lg">
               <RobotAvatar config={robotConfig} size={110} animate />
             </div>
@@ -452,12 +427,6 @@ const RobotSkinEditor = ({ isOpen, onClose, currentConfig, currentName, onSave, 
             }`}>
             <Star size={14} /> Skins
           </button>
-          <button onClick={() => setMode('custom')}
-            className={`flex-1 py-2.5 text-sm font-black transition-all flex items-center justify-center gap-1.5 ${
-              mode === 'custom' ? 'text-[#2563EB] border-b-3 border-[#2563EB] bg-[#2563EB]/5' : 'text-[#AFAFAF]'
-            }`}>
-            <Palette size={14} /> Personalizar
-          </button>
           <button onClick={() => { setMode('story'); setStoryIndex(0); setStoryTyping(true); setStoryText(''); }}
             className={`flex-1 py-2.5 text-sm font-black transition-all flex items-center justify-center gap-1.5 ${
               mode === 'story' ? 'text-[#2563EB] border-b-3 border-[#2563EB] bg-[#2563EB]/5' : 'text-[#AFAFAF]'
@@ -481,7 +450,7 @@ const RobotSkinEditor = ({ isOpen, onClose, currentConfig, currentName, onSave, 
               storyText={storyText}
               setStoryText={setStoryText}
             />
-          ) : mode === 'skins' ? (
+          ) : (
             /* SKINS GRID */
             <div className="p-4 grid grid-cols-2 gap-2.5">
               {ROBOT_SKINS.map(skin => {
@@ -522,68 +491,6 @@ const RobotSkinEditor = ({ isOpen, onClose, currentConfig, currentName, onSave, 
                   </button>
                 );
               })}
-            </div>
-          ) : (
-            /* CUSTOM BUILDER */
-            <div className="p-3">
-              {/* Builder Category Tabs */}
-              <div className="flex gap-1 overflow-x-auto pb-2 mb-2 scrollbar-hide">
-                {builderTabs.map(tab => {
-                  const isActive = builderTab === tab.id;
-                  return (
-                    <button key={tab.id} onClick={() => setBuilderTab(tab.id)}
-                      className={`flex flex-col items-center min-w-[48px] py-1.5 px-1.5 rounded-xl text-xs font-bold transition-all
-                        ${isActive 
-                          ? 'bg-[#2563EB] text-white shadow-lg shadow-[#2563EB]/30 scale-105' 
-                          : 'bg-[#F7F7F7] text-[#777] hover:bg-[#E5E5E5] active:scale-95'}`}>
-                      <span className="text-base leading-none">{tab.label}</span>
-                      <span className={`text-[8px] mt-0.5 ${isActive ? 'text-blue-100' : 'text-[#AFAFAF]'}`}>{tab.fullLabel}</span>
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Part Options */}
-              <div className="bg-[#F7F7F7] rounded-2xl p-2.5 border border-[#E5E5E5]" style={{ maxHeight: '220px', overflowY: 'auto' }}>
-                {builderTab === 'color' ? (
-                  <div className="grid grid-cols-4 gap-1.5">
-                    {COLORS.map(c => (
-                      <button key={c.id} onClick={() => { setRobotConfig(prev => ({ ...prev, color: c.id })); setSelectedSkin(null); }}
-                        className={`flex items-center gap-1.5 py-2 px-2 rounded-xl transition-all
-                          ${robotConfig.color === c.id ? 'bg-white ring-2 ring-[#2563EB] scale-[1.03] shadow-sm' : 'bg-white/50 hover:bg-white active:scale-95'}`}>
-                        <div className="w-5 h-5 rounded-full border-2 flex-shrink-0" 
-                          style={{ backgroundColor: c.hex, borderColor: robotConfig.color === c.id ? '#2563EB' : '#E5E5E5' }}/>
-                        <span className="text-[10px] font-bold text-[#3C3C3C] truncate">{c.label}</span>
-                      </button>
-                    ))}
-                  </div>
-                ) : (
-                  <div className={`grid gap-1.5 ${builderTab === 'pattern' ? 'grid-cols-4' : 'grid-cols-3'}`}>
-                    {builderTabs.find(t => t.id === builderTab)?.items.map(item => {
-                      const isItemSelected = robotConfig[builderTab] === item.id;
-                      const currentColor = COLORS.find(c=>c.id===robotConfig.color)?.hex || '#3B82F6';
-                      const viewBox = getPreviewViewBox(builderTab);
-                      return (
-                        <button key={item.id}
-                          onClick={() => { setRobotConfig(prev => ({ ...prev, [builderTab]: item.id })); setSelectedSkin(null); }}
-                          className={`flex flex-col items-center py-2 px-1 rounded-xl transition-all
-                            ${isItemSelected 
-                              ? 'bg-white ring-2 ring-[#2563EB] scale-[1.03] shadow-sm' 
-                              : 'bg-white/50 hover:bg-white active:scale-95'}`}>
-                          {(item.id === 'none' && (builderTab === 'pattern' || builderTab === 'accessory')) ? (
-                            <div className="w-10 h-10 flex items-center justify-center text-[#AFAFAF] text-lg">✕</div>
-                          ) : (
-                            <svg width="42" height="42" viewBox={viewBox}>
-                              <g dangerouslySetInnerHTML={{ __html: item.path(currentColor) }}/>
-                            </svg>
-                          )}
-                          <span className="text-[9px] font-bold mt-0.5 leading-tight text-center text-[#3C3C3C]">{item.label}</span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
             </div>
           )}
         </div>
