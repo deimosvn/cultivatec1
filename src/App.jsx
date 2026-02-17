@@ -4200,9 +4200,9 @@ const BottomNavBar = ({ currentTab, onSelectTab, setViewMode }) => {
     ];
 
     return (
-        <div className="fixed bottom-0 left-0 right-0 z-30 px-4 pb-2" style={{ paddingBottom: 'calc(var(--sab, 0px) + 8px)' }}>
+        <div className="fixed bottom-0 left-0 right-0 z-30 px-3 pb-2" style={{ paddingBottom: 'calc(var(--sab, 0px) + 6px)' }}>
             <div className="max-w-md mx-auto">
-                <div className="nav-dock flex items-end justify-around rounded-2xl py-1">
+                <div className="nav-dock flex items-end justify-around rounded-xl py-1.5 px-1">
                     {tabs.map(tab => {
                         const isActive = tab.isAchievements
                             ? currentTab === 'Logros'
@@ -4216,18 +4216,19 @@ const BottomNavBar = ({ currentTab, onSelectTab, setViewMode }) => {
                                 <button
                                     key={tab.id}
                                     onClick={() => { onSelectTab(tab.id); setViewMode('menu'); }}
-                                    className="relative -mt-5 group"
+                                    className="pixel-nav-center relative -mt-6 flex flex-col items-center"
                                 >
-                                    <div className={`w-[56px] h-[56px] rounded-2xl flex items-center justify-center transition-all duration-300 shadow-lg
+                                    <div className={`pixel-center-box w-[54px] h-[54px] rounded-lg flex items-center justify-center border-[3px] transition-all
                                         ${isActive 
-                                            ? 'bg-gradient-to-br from-[#2563EB] to-[#3B82F6] shadow-[#2563EB]/40 scale-105' 
-                                            : 'bg-gradient-to-br from-[#3B82F6] to-[#8B5CF6] shadow-[#3B82F6]/25 group-hover:scale-105 group-active:scale-95'}`}>
-                                        <Icon size={26} className="text-white" strokeWidth={2.5} />
+                                            ? 'bg-[#2563EB] border-[#1E40AF] shadow-[0_4px_0_0_#1E3A8A]' 
+                                            : 'bg-gradient-to-b from-[#3B82F6] to-[#2563EB] border-[#1D4ED8] shadow-[0_4px_0_0_#1E3A8A]'}`}
+                                    >
+                                        <Icon size={24} className="text-white drop-shadow-[0_1px_0_rgba(0,0,0,0.3)]" strokeWidth={2.5} />
                                     </div>
                                     {isActive && (
-                                        <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-5 h-1 bg-[#2563EB] rounded-full" />
+                                        <div className="pixel-dot-active mt-1.5 w-2 h-2 bg-[#2563EB] rounded-sm border border-[#1D4ED8]" />
                                     )}
-                                    <span className={`block text-[9px] font-extrabold mt-1 text-center transition-colors duration-200 ${isActive ? 'text-[#2563EB]' : 'text-[#9CA3AF]'}`}>{tab.label}</span>
+                                    <span className={`block text-[9px] font-black mt-0.5 text-center tracking-wide ${isActive ? 'text-[#1D4ED8]' : 'text-[#6B7280]'}`}>{tab.label}</span>
                                 </button>
                             );
                         }
@@ -4245,15 +4246,25 @@ const BottomNavBar = ({ currentTab, onSelectTab, setViewMode }) => {
                                         setViewMode('menu');
                                     }
                                 }}
-                                className="flex flex-col items-center justify-center py-2 px-1 flex-1 transition-all duration-200 group active:scale-90 relative"
+                                className="pixel-nav-btn flex flex-col items-center justify-center py-1.5 px-1 flex-1 relative"
                             >
-                                <div className={`relative p-2 rounded-xl transition-all duration-300 ${isActive ? 'bg-[#2563EB]/10' : 'group-hover:bg-gray-100'}`}>
-                                    <Icon size={22} className={`transition-colors duration-200 ${isActive ? 'text-[#2563EB]' : 'text-[#9CA3AF] group-hover:text-[#6B7280]'}`} strokeWidth={isActive ? 2.5 : 2} />
+                                <div 
+                                    className={`pixel-btn-icon relative w-10 h-10 rounded-lg flex items-center justify-center border-[2.5px] transition-all
+                                        ${isActive 
+                                            ? 'bg-[#DBEAFE] border-[#2563EB] shadow-[0_3px_0_0_#1D4ED8]' 
+                                            : 'bg-white border-[#CBD5E1] shadow-[0_3px_0_0_#94A3B8]'}`}
+                                    style={{ '--pb-dark': isActive ? '#1D4ED8' : '#94A3B8' }}
+                                >
+                                    <Icon 
+                                        size={20} 
+                                        className={`transition-colors duration-150 ${isActive ? 'text-[#2563EB]' : 'text-[#94A3B8]'}`} 
+                                        strokeWidth={isActive ? 2.5 : 2} 
+                                    />
                                     {isActive && (
-                                        <div className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-[#2563EB] rounded-full border-2 border-white" />
+                                        <div className="pixel-dot-active absolute -top-1 -right-1 w-2.5 h-2.5 bg-[#2563EB] rounded-sm border-2 border-[#EFF6FF]" />
                                     )}
                                 </div>
-                                <span className={`text-[9px] font-extrabold leading-tight mt-0.5 transition-colors duration-200 ${isActive ? 'text-[#2563EB]' : 'text-[#9CA3AF]'}`}>{tab.label}</span>
+                                <span className={`text-[9px] font-black leading-tight mt-1 tracking-wide transition-colors duration-150 ${isActive ? 'text-[#1D4ED8]' : 'text-[#94A3B8]'}`}>{tab.label}</span>
                             </button>
                         );
                     })}
