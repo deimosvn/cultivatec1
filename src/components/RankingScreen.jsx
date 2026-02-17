@@ -33,7 +33,7 @@ const AVAILABLE_BADGES = [
 ];
 
 // Robot avatar for ranking
-const RankingAvatar = ({ config, size = 36 }) => {
+const RankingAvatar = ({ config, size = 36, highlight = false }) => {
   if (!config) {
     const fallbackSize = size;
     return (
@@ -49,8 +49,11 @@ const RankingAvatar = ({ config, size = 36 }) => {
   return (
     <div className="rounded-xl flex items-center justify-center overflow-hidden" style={{
       width: size, height: size,
-      background: 'linear-gradient(135deg, #EEF2FF, #E0E7FF)',
-      border: '2px solid #C7D2FE',
+      background: highlight
+        ? 'linear-gradient(135deg, #2563EB, #3B82F6)'
+        : 'linear-gradient(135deg, #EEF2FF, #E0E7FF)',
+      border: highlight ? '2.5px solid #60A5FA' : '2px solid #C7D2FE',
+      boxShadow: highlight ? '0 0 12px #3B82F680, 0 0 24px #2563EB40' : 'none',
     }}>
       <RobotAvatar config={config} size={size * 0.85} />
     </div>
@@ -285,23 +288,54 @@ const AdminActionModal = ({ player, onClose, onDelete, onGiftBadge, onGiftSkin }
 const RankingEntry = ({ player, rank, isCurrentUser, index, isAdmin, onAdminAction }) => {
   const lv = calculateLevel(player.totalPoints || 0);
   const bgClass = isCurrentUser
-    ? 'bg-gradient-to-r from-[#2563EB]/10 to-[#3B82F6]/5 border-[#2563EB]/30'
+    ? 'border-[#2563EB]/60'
     : rank <= 3
       ? 'bg-gradient-to-r from-[#FFC800]/5 to-transparent border-[#FFC800]/20'
       : 'bg-white border-[#E5E5E5]';
 
   return (
-    <div className="animate-scale-in" style={{ animationDelay: `${index * 40}ms` }}>
-      <div className={`flex items-center gap-3 p-3 rounded-2xl border-2 transition-all ${bgClass} ${isCurrentUser ? 'shadow-md' : ''}`}>
+    <div className="animate-scale-in" style={{
+      animationDelay: `${index * 40}ms`,
+      ...(isCurrentUser ? {
+        position: 'relative',
+        zIndex: 2,
+        transform: 'scale(1.03)',
+        filter: 'drop-shadow(0 0 8px #2563EB50)',
+      } : {}),
+    }}>
+      {/* Glow ring behind current user */}
+      {isCurrentUser && (
+        <div style={{
+          position: 'absolute', inset: -2, borderRadius: 18,
+          background: 'linear-gradient(135deg, #2563EB44, #3B82F622, #60A5FA44)',
+          animation: 'pulseGlow 2.5s ease-in-out infinite',
+          zIndex: -1,
+        }} />
+      )}
+      <div
+        className={`flex items-center gap-3 rounded-2xl border-2 transition-all ${bgClass}`}
+        style={{
+          padding: isCurrentUser ? '10px 12px' : '12px',
+          ...(isCurrentUser ? {
+            background: 'linear-gradient(135deg, #1E3A8A18, #2563EB14, #3B82F610)',
+            boxShadow: '0 4px 20px #2563EB30, inset 0 1px 0 #60A5FA30',
+          } : {}),
+        }}
+      >
         <RankBadge rank={rank} />
-        <RankingAvatar config={player.robotConfig} size={40} />
+        <RankingAvatar config={player.robotConfig} size={isCurrentUser ? 50 : 40} highlight={isCurrentUser} />
         <div className="flex-grow min-w-0">
           <div className="flex items-center gap-1.5 flex-wrap">
-            <span className={`text-sm font-black truncate ${isCurrentUser ? 'text-[#2563EB]' : 'text-[#3C3C3C]'}`}>
+            <span className={`font-black truncate ${isCurrentUser ? 'text-[15px] text-[#1E40AF]' : 'text-sm text-[#3C3C3C]'}`}>
               {player.username || 'Anónimo'}
             </span>
             {isCurrentUser && (
-              <span className="px-1.5 py-0.5 bg-[#2563EB] text-white text-[8px] font-black rounded-md uppercase">Tú</span>
+              <span className="px-2 py-0.5 text-white text-[8px] font-black rounded-md uppercase" style={{
+                background: 'linear-gradient(135deg, #2563EB, #1D4ED8)',
+                boxShadow: '0 2px 8px #2563EB60',
+                animation: 'pulseBadge 2s ease-in-out infinite',
+                letterSpacing: '0.5px',
+              }}>⭐ Tú</span>
             )}
             {isAdminEmail(player.email) && (
               <span className="px-1.5 py-0.5 bg-gradient-to-r from-[#FF4B4B] to-[#FF9600] text-white text-[7px] font-black rounded-md uppercase tracking-wider">ADMIN</span>
@@ -337,8 +371,8 @@ const RankingEntry = ({ player, rank, isCurrentUser, index, isAdmin, onAdminActi
         <div className="flex items-center gap-2">
           <div className="text-right flex-shrink-0">
             <div className="flex items-center gap-1">
-              <Star size={12} className="text-[#FFC800]" />
-              <span className="text-sm font-black text-[#3C3C3C]">{(player.totalPoints || 0).toLocaleString()}</span>
+              <Star size={isCurrentUser ? 14 : 12} className="text-[#FFC800]" />
+              <span className={`font-black ${isCurrentUser ? 'text-[15px] text-[#1E3A8A]' : 'text-sm text-[#3C3C3C]'}`}>{(player.totalPoints || 0).toLocaleString()}</span>
             </div>
             <span className="text-[9px] font-bold text-[#AFAFAF]">XP</span>
           </div>
@@ -452,6 +486,17 @@ const RankingScreen = ({ onBack, currentUserId, currentUserProfile, isAdmin = fa
 
   return (
     <div className="pb-24 min-h-full bg-[#F7F7F7] flex flex-col animate-fade-in">
+      {/* Keyframes for current user highlight animations */}
+      <style>{`
+        @keyframes pulseGlow {
+          0%, 100% { opacity: 0.5; transform: scale(1); }
+          50% { opacity: 1; transform: scale(1.02); }
+        }
+        @keyframes pulseBadge {
+          0%, 100% { transform: scale(1); box-shadow: 0 2px 8px #2563EB60; }
+          50% { transform: scale(1.1); box-shadow: 0 2px 14px #2563EB90; }
+        }
+      `}</style>
       {/* Header */}
       <div className="relative overflow-hidden">
         <div className="bg-gradient-to-br from-[#2563EB] via-[#3B82F6] to-[#60A5FA] px-6 pt-6 pb-12">
