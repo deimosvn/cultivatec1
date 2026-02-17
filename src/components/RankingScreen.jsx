@@ -4,8 +4,8 @@
 // ================================================================
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { ArrowLeft, Trophy, Medal, Crown, Users, Globe, RefreshCw, Star, Zap, Trash2, Gift, X, Award, Palette, Shield, AlertTriangle, Flame, BookOpen, ScrollText } from 'lucide-react';
-import { getGlobalRanking, onRankingChange, getFriendsList, adminDeleteUser, adminGiftBadge, adminGiftSkin, isAdminEmail } from '../firebase/firestore';
+import { ArrowLeft, Trophy, Medal, Crown, Users, Globe, RefreshCw, Star, Zap, Trash2, Gift, X, Award, Palette, Shield, AlertTriangle, Flame, BookOpen, ScrollText, UserPlus, Bell, Check, Clock, UserCheck } from 'lucide-react';
+import { getGlobalRanking, onRankingChange, getFriendsList, adminDeleteUser, adminGiftBadge, adminGiftSkin, isAdminEmail, sendFriendRequest, onPendingRequestsChange, acceptFriendRequest, rejectFriendRequest } from '../firebase/firestore';
 import { calculateLevel, LEVEL_THRESHOLDS } from '../firebase/firestore';
 import { RobotMini, RobotAvatar } from '../Onboarding';
 import { ROBOT_SKINS } from './RobotSkinEditor';
@@ -284,131 +284,257 @@ const AdminActionModal = ({ player, onClose, onDelete, onGiftBadge, onGiftSkin }
 };
 
 // ============================================
-// USER PROFILE CARD (for non-admin users)
+// NOTIFICATIONS PANEL (Friend Requests)
 // ============================================
-const UserProfileCard = ({ player, onClose }) => {
-  const lv = calculateLevel(player.totalPoints || 0);
-  const skinData = ROBOT_SKINS.find(s => JSON.stringify(s.config) === JSON.stringify(player.robotConfig)) || ROBOT_SKINS[0];
+const NotificationsPanel = ({ requests, onAccept, onReject, onClose }) => {
+  const [processing, setProcessing] = useState({});
 
-  // Estimate current module name based on modulesCompleted
-  const MODULE_NAMES = [
-    'Introducción a la Robótica', 'Partes de un Robot', 'Primer Proyecto',
-    'Electricidad Básica', 'Electrónica', 'Programación General',
-    'Mecánica', 'Arduino', 'C++', 'Python',
-    'Robótica Avanzada', 'Componentes', 'Control',
-    'Programación Avanzada', 'Diseño', 'Primer LED',
-  ];
-  const WORLD_NAMES = ['Mundo 1: Fundamentos', 'Mundo 2: Electrónica', 'Mundo 3: Programación', 'Mundo 4: Avanzado', 'Mundo 5: Maestría'];
-  const completedMods = player.modulesCompleted || 0;
-  const currentModName = completedMods >= MODULE_NAMES.length ? 'Todos completados ✅' : MODULE_NAMES[completedMods] || 'Sin iniciar';
-  const currentWorldIdx = Math.min(Math.floor(completedMods / 3), WORLD_NAMES.length - 1);
-  const currentWorldName = completedMods >= MODULE_NAMES.length ? 'Graduado 🎓' : WORLD_NAMES[currentWorldIdx];
+  const handleAccept = async (req) => {
+    setProcessing(prev => ({ ...prev, [req.id]: 'accepting' }));
+    try { await onAccept(req); } catch (e) { console.error(e); }
+    setProcessing(prev => ({ ...prev, [req.id]: 'done' }));
+  };
+
+  const handleReject = async (req) => {
+    setProcessing(prev => ({ ...prev, [req.id]: 'rejecting' }));
+    try { await onReject(req); } catch (e) { console.error(e); }
+    setProcessing(prev => ({ ...prev, [req.id]: 'done' }));
+  };
 
   return (
-    <div className="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in" onClick={onClose}>
-      <div className="w-full max-w-sm rounded-3xl overflow-hidden animate-scale-in" style={{ background: 'linear-gradient(180deg, #1E293B, #0F172A)' }} onClick={e => e.stopPropagation()}>
-        {/* Gradient header */}
-        <div className="relative px-5 pt-5 pb-8 text-center" style={{ background: 'linear-gradient(135deg, #0E7490, #164E63, #0B1120)' }}>
-          <button onClick={onClose} className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/15 flex items-center justify-center active:scale-90 transition">
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 animate-fade-in" onClick={onClose}>
+      <div className="w-full sm:max-w-md sm:rounded-3xl rounded-t-3xl max-h-[75vh] flex flex-col overflow-hidden animate-slide-up" style={{ background: 'linear-gradient(180deg, #1E293B, #0F172A)' }} onClick={e => e.stopPropagation()}>
+        {/* Header */}
+        <div className="px-5 py-4 flex items-center justify-between border-b border-[#334155]" style={{ background: 'linear-gradient(135deg, #7C3AED, #5B21B6)' }}>
+          <div className="flex items-center gap-2.5">
+            <div className="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center">
+              <Bell size={20} className="text-white" />
+            </div>
+            <div>
+              <p className="text-sm font-black text-white">Notificaciones</p>
+              <p className="text-[10px] font-bold text-white/60">{requests.length} solicitud{requests.length !== 1 ? 'es' : ''} pendiente{requests.length !== 1 ? 's' : ''}</p>
+            </div>
+          </div>
+          <button onClick={onClose} className="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center active:scale-90 transition">
             <X size={16} className="text-white" />
           </button>
+        </div>
+
+        {/* Content */}
+        <div className="flex-grow overflow-y-auto p-4 space-y-3">
+          {requests.length === 0 ? (
+            <div className="text-center py-12">
+              <div className="text-5xl mb-3">🔔</div>
+              <p className="text-sm font-black text-[#64748B]">Sin notificaciones</p>
+              <p className="text-xs font-bold text-[#475569] mt-1">Cuando alguien te envíe una solicitud, aparecerá aquí</p>
+            </div>
+          ) : (
+            requests.map((req, idx) => {
+              const status = processing[req.id];
+              return (
+                <div key={req.id} className="p-4 rounded-2xl border border-[#334155] animate-scale-in" style={{ background: 'linear-gradient(135deg, #1E293BCC, #0F172ACC)', animationDelay: `${idx * 60}ms` }}>
+                  <div className="flex items-center gap-3">
+                    <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#7C3AED]/20 to-[#5B21B6]/10 flex items-center justify-center border border-[#7C3AED]/30">
+                      <UserPlus size={20} className="text-purple-400" />
+                    </div>
+                    <div className="flex-grow min-w-0">
+                      <p className="text-sm font-black text-[#E2E8F0] truncate">{req.fromUsername}</p>
+                      <p className="text-[10px] font-bold text-[#64748B]">Quiere ser tu amigo</p>
+                    </div>
+                    {status === 'done' ? (
+                      <div className="w-9 h-9 rounded-xl bg-[#059669]/20 flex items-center justify-center">
+                        <Check size={18} className="text-emerald-400" />
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-1.5">
+                        <button onClick={() => handleAccept(req)} disabled={!!status}
+                          className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#22C55E] to-[#16A34A] flex items-center justify-center active:scale-90 transition shadow-md shadow-green-500/20 disabled:opacity-50">
+                          {status === 'accepting' ? (
+                            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                          ) : (
+                            <Check size={16} className="text-white" />
+                          )}
+                        </button>
+                        <button onClick={() => handleReject(req)} disabled={!!status}
+                          className="w-9 h-9 rounded-xl bg-[#1E293B] border border-[#334155] flex items-center justify-center active:scale-90 transition disabled:opacity-50">
+                          {status === 'rejecting' ? (
+                            <div className="w-4 h-4 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
+                          ) : (
+                            <X size={16} className="text-[#64748B]" />
+                          )}
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ============================================
+// USER PROFILE CARD (for non-admin users)
+// ============================================
+const UserProfileCard = ({ player, onClose, currentUserId, currentUserProfile, friendsUids = [] }) => {
+  const lv = calculateLevel(player.totalPoints || 0);
+  const skinData = ROBOT_SKINS.find(s => JSON.stringify(s.config) === JSON.stringify(player.robotConfig)) || ROBOT_SKINS[0];
+  const [sendingRequest, setSendingRequest] = useState(false);
+  const [requestStatus, setRequestStatus] = useState(null);
+
+  const isSelf = player.uid === currentUserId;
+  const isFriend = friendsUids.includes(player.uid);
+
+  const WORLD_NAMES = ['Taller del Inventor', 'Fábrica de Autómatas', 'Selva Cibernética', 'Estación Orbital', 'Desierto de los Rovers', 'Aero-Biosfera'];
+  const completedMods = player.modulesCompleted || 0;
+  const currentWorldIdx = Math.min(Math.floor(completedMods / 16), WORLD_NAMES.length - 1);
+  const currentWorldName = completedMods >= 96 ? 'Graduado 🎓' : WORLD_NAMES[currentWorldIdx];
+
+  const handleAddFriend = async () => {
+    if (!currentUserId || !currentUserProfile || isSelf || isFriend || requestStatus) return;
+    setSendingRequest(true);
+    try {
+      await sendFriendRequest(currentUserId, currentUserProfile.username, player.uid, player.username);
+      setRequestStatus('sent');
+    } catch (e) {
+      if (e.message?.includes('Ya son amigos')) setRequestStatus('already_friends');
+      else if (e.message?.includes('Ya enviaste')) setRequestStatus('already_sent');
+      else setRequestStatus('error');
+    }
+    setSendingRequest(false);
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-fade-in" onClick={onClose}>
+      <div className="w-full max-w-sm rounded-3xl overflow-hidden animate-scale-in" style={{ background: 'linear-gradient(180deg, #1E293B, #0F172A)' }} onClick={e => e.stopPropagation()}>
+        {/* Gradient header with robot */}
+        <div className="relative px-5 pt-5 pb-10 text-center overflow-hidden" style={{ background: 'linear-gradient(135deg, #0E7490, #164E63, #0B1120)' }}>
+          {/* Floating particles */}
+          <div className="absolute top-4 left-8 w-1.5 h-1.5 rounded-full bg-cyan-400/40" style={{ animation: 'float 3s ease-in-out infinite' }} />
+          <div className="absolute top-12 right-12 w-1 h-1 rounded-full bg-cyan-300/30" style={{ animation: 'float 4s ease-in-out infinite 0.5s' }} />
+          <div className="absolute bottom-8 left-16 w-1 h-1 rounded-full bg-blue-400/30" style={{ animation: 'float 3.5s ease-in-out infinite 1s' }} />
+          <div className="absolute top-6 right-20 w-2 h-2 rounded-full bg-purple-400/20" style={{ animation: 'float 5s ease-in-out infinite 0.3s' }} />
+
+          <button onClick={onClose} className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/15 flex items-center justify-center active:scale-90 transition z-10">
+            <X size={16} className="text-white" />
+          </button>
+
           {/* Large robot skin */}
-          <div className="relative mx-auto mb-3" style={{ width: 140, height: 140 }}>
-            <div className="absolute inset-0 rounded-[24px]" style={{ background: `radial-gradient(circle, ${skinData.rarityColor}30, transparent 70%)` }} />
-            <div className="w-full h-full rounded-[24px] border-2 flex items-center justify-center overflow-hidden" style={{
+          <div className="relative mx-auto mb-3" style={{ width: 150, height: 150 }}>
+            <div className="absolute inset-[-16px] rounded-full animate-pulse" style={{ background: `radial-gradient(circle, ${skinData.rarityColor}35, transparent 70%)` }} />
+            <div className="w-full h-full rounded-[28px] border-2 flex items-center justify-center overflow-hidden" style={{
               background: 'linear-gradient(135deg, #1E293B, #0F172A)',
               borderColor: `${skinData.rarityColor}50`,
-              boxShadow: `0 0 30px ${skinData.rarityColor}25, 0 0 60px ${skinData.rarityColor}10`,
+              boxShadow: `0 0 40px ${skinData.rarityColor}30, 0 0 80px ${skinData.rarityColor}15`,
             }}>
-              <RobotAvatar config={player.robotConfig} size={120} />
+              <RobotAvatar config={player.robotConfig} size={130} />
             </div>
             {/* Rarity badge */}
-            <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full text-[8px] font-black text-white" style={{ backgroundColor: skinData.rarityColor }}>
+            <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full text-[8px] font-black text-white whitespace-nowrap shadow-lg" style={{ backgroundColor: skinData.rarityColor }}>
               {skinData.name} · {skinData.rarityLabel}
             </div>
           </div>
         </div>
 
         {/* Profile info */}
-        <div className="px-5 -mt-3">
-          {/* Username & level */}
+        <div className="px-5 -mt-4">
+          {/* Username & level & badges */}
           <div className="text-center mb-4">
-            <div className="flex items-center justify-center gap-2">
+            <div className="flex items-center justify-center gap-2 flex-wrap">
               <h3 className="text-xl font-black text-white">{player.username || 'Anónimo'}</h3>
+              {isAdminEmail(player.email) && (
+                <span className="px-1.5 py-0.5 bg-gradient-to-r from-[#FF4B4B] to-[#FF9600] text-white text-[7px] font-black rounded-md uppercase">ADMIN</span>
+              )}
               {player.adminBadges?.map(b => (
                 <span key={b.id} title={b.name} className="text-lg">{b.emoji}</span>
               ))}
             </div>
             <p className="text-xs font-bold text-cyan-400 mt-0.5">{lv.emoji} Nivel {lv.level} · {lv.title}</p>
-          </div>
-
-          {/* Stats grid */}
-          <div className="grid grid-cols-2 gap-2 mb-4">
-            {/* Streak */}
-            <div className="p-3 rounded-2xl border border-orange-500/20" style={{ background: 'linear-gradient(135deg, #7C2D1210, #9A341208)' }}>
-              <div className="flex items-center gap-2 mb-1">
-                <div className="w-7 h-7 rounded-lg bg-orange-500/15 flex items-center justify-center">
-                  <Flame size={14} className="text-orange-400" />
-                </div>
-                <span className="text-[10px] font-bold text-gray-400">Racha</span>
+            {/* Level progress */}
+            <div className="mt-2 flex items-center gap-2 max-w-[200px] mx-auto">
+              <div className="flex-grow h-1.5 bg-[#0F172A] rounded-full overflow-hidden border border-[#334155]/50">
+                <div className="h-full rounded-full transition-all" style={{
+                  width: `${lv.progress * 100}%`,
+                  background: lv.isMaxLevel ? 'linear-gradient(90deg, #FFC800, #FF9600)' : 'linear-gradient(90deg, #22D3EE, #06B6D4)',
+                }} />
               </div>
-              <p className="text-lg font-black text-orange-300">{player.currentStreak || 0} <span className="text-[10px] font-bold text-gray-500">días</span></p>
-            </div>
-
-            {/* XP */}
-            <div className="p-3 rounded-2xl border border-cyan-500/20" style={{ background: 'linear-gradient(135deg, #0E749010, #164E6308)' }}>
-              <div className="flex items-center gap-2 mb-1">
-                <div className="w-7 h-7 rounded-lg bg-cyan-500/15 flex items-center justify-center">
-                  <Star size={14} className="text-cyan-400" />
-                </div>
-                <span className="text-[10px] font-bold text-gray-400">XP Total</span>
-              </div>
-              <p className="text-lg font-black text-cyan-300">{(player.totalPoints || 0).toLocaleString()}</p>
-            </div>
-
-            {/* Licenses (= modules completed) */}
-            <div className="p-3 rounded-2xl border border-green-500/20" style={{ background: 'linear-gradient(135deg, #14532D10, #16653408)' }}>
-              <div className="flex items-center gap-2 mb-1">
-                <div className="w-7 h-7 rounded-lg bg-green-500/15 flex items-center justify-center">
-                  <ScrollText size={14} className="text-green-400" />
-                </div>
-                <span className="text-[10px] font-bold text-gray-400">Licencias</span>
-              </div>
-              <p className="text-lg font-black text-green-300">{completedMods} <span className="text-[10px] font-bold text-gray-500">/ 16</span></p>
-            </div>
-
-            {/* Modules */}
-            <div className="p-3 rounded-2xl border border-purple-500/20" style={{ background: 'linear-gradient(135deg, #581C8710, #6B21A808)' }}>
-              <div className="flex items-center gap-2 mb-1">
-                <div className="w-7 h-7 rounded-lg bg-purple-500/15 flex items-center justify-center">
-                  <BookOpen size={14} className="text-purple-400" />
-                </div>
-                <span className="text-[10px] font-bold text-gray-400">Módulos</span>
-              </div>
-              <p className="text-lg font-black text-purple-300">{completedMods}</p>
+              <span className="text-[8px] font-bold text-[#475569]">{lv.isMaxLevel ? 'MAX' : `${Math.round(lv.progress * 100)}%`}</span>
             </div>
           </div>
 
-          {/* Current progress */}
-          <div className="p-3.5 rounded-2xl border border-[#334155] mb-4" style={{ background: '#0F172ACC' }}>
-            <p className="text-[10px] font-black text-gray-400 uppercase tracking-wider mb-2">📍 Progreso Actual</p>
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-gray-400">Mundo:</span>
-                <span className="text-xs font-black text-cyan-300">{currentWorldName}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-gray-400">Siguiente módulo:</span>
-                <span className="text-xs font-black text-white truncate ml-2 max-w-[180px]">{currentModName}</span>
-              </div>
+          {/* Stats grid - 4 columns */}
+          <div className="grid grid-cols-4 gap-1.5 mb-4">
+            <div className="p-2.5 rounded-xl border border-orange-500/20 text-center" style={{ background: 'linear-gradient(135deg, #7C2D1210, #9A341208)' }}>
+              <Flame size={16} className="text-orange-400 mx-auto mb-0.5" />
+              <p className="text-sm font-black text-orange-300">{player.currentStreak || 0}</p>
+              <p className="text-[8px] font-bold text-gray-500">Racha</p>
+            </div>
+            <div className="p-2.5 rounded-xl border border-cyan-500/20 text-center" style={{ background: 'linear-gradient(135deg, #0E749010, #164E6308)' }}>
+              <Star size={16} className="text-cyan-400 mx-auto mb-0.5" />
+              <p className="text-sm font-black text-cyan-300">{((player.totalPoints || 0) / 1000).toFixed(1)}k</p>
+              <p className="text-[8px] font-bold text-gray-500">XP</p>
+            </div>
+            <div className="p-2.5 rounded-xl border border-green-500/20 text-center" style={{ background: 'linear-gradient(135deg, #14532D10, #16653408)' }}>
+              <BookOpen size={16} className="text-green-400 mx-auto mb-0.5" />
+              <p className="text-sm font-black text-green-300">{completedMods}</p>
+              <p className="text-[8px] font-bold text-gray-500">Módulos</p>
+            </div>
+            <div className="p-2.5 rounded-xl border border-purple-500/20 text-center" style={{ background: 'linear-gradient(135deg, #581C8710, #6B21A808)' }}>
+              <Users size={16} className="text-purple-400 mx-auto mb-0.5" />
+              <p className="text-sm font-black text-purple-300">{player.friendsCount || 0}</p>
+              <p className="text-[8px] font-bold text-gray-500">Amigos</p>
             </div>
           </div>
 
-          {/* Close button */}
-          <button onClick={onClose}
-            className="w-full py-3 mb-5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-black text-sm active:scale-95 transition-all shadow-lg shadow-cyan-500/20">
-            Cerrar
-          </button>
+          {/* Current world */}
+          <div className="p-3 rounded-xl border border-[#334155] mb-4" style={{ background: '#0F172ACC' }}>
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-bold text-gray-400">📍 Mundo actual</span>
+              <span className="text-xs font-black text-cyan-300">{currentWorldName}</span>
+            </div>
+          </div>
+
+          {/* Action buttons */}
+          <div className="space-y-2 mb-5">
+            {!isSelf && (
+              isFriend || requestStatus === 'already_friends' ? (
+                <div className="w-full py-3 rounded-xl bg-[#059669]/15 border border-[#059669]/30 text-center">
+                  <div className="flex items-center justify-center gap-2">
+                    <UserCheck size={16} className="text-emerald-400" />
+                    <span className="text-sm font-black text-emerald-400">Ya son amigos</span>
+                  </div>
+                </div>
+              ) : requestStatus === 'sent' || requestStatus === 'already_sent' ? (
+                <div className="w-full py-3 rounded-xl bg-[#22D3EE]/10 border border-[#22D3EE]/30 text-center">
+                  <div className="flex items-center justify-center gap-2">
+                    <Clock size={16} className="text-cyan-400" />
+                    <span className="text-sm font-black text-cyan-400">Solicitud enviada</span>
+                  </div>
+                </div>
+              ) : requestStatus === 'error' ? (
+                <div className="w-full py-3 rounded-xl bg-red-500/10 border border-red-500/30 text-center">
+                  <span className="text-sm font-black text-red-400">Error al enviar solicitud</span>
+                </div>
+              ) : (
+                <button onClick={handleAddFriend} disabled={sendingRequest}
+                  className="w-full py-3 rounded-xl bg-gradient-to-r from-[#58CC02] to-[#4CAF00] text-white font-black text-sm active:scale-95 transition-all shadow-lg shadow-green-500/20 flex items-center justify-center gap-2 disabled:opacity-50">
+                  {sendingRequest ? (
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  ) : (
+                    <><UserPlus size={16} /> Agregar Amigo</>
+                  )}
+                </button>
+              )
+            )}
+
+            <button onClick={onClose}
+              className="w-full py-3 rounded-xl bg-[#1E293B] border border-[#334155] text-gray-400 font-black text-sm active:scale-95 transition-all">
+              Cerrar
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -547,6 +673,9 @@ const RankingScreen = ({ onBack, currentUserId, currentUserProfile, isAdmin = fa
   const [refreshing, setRefreshing] = useState(false);
   const [adminTarget, setAdminTarget] = useState(null);
   const [profileTarget, setProfileTarget] = useState(null); // user profile card for non-admin view
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [pendingRequests, setPendingRequests] = useState([]);
+  const [friendsUids, setFriendsUids] = useState([]);
 
   // Cargar ranking global en tiempo real
   useEffect(() => {
@@ -557,6 +686,27 @@ const RankingScreen = ({ onBack, currentUserId, currentUserProfile, isAdmin = fa
     });
     return () => unsubscribe();
   }, []);
+
+  // Listen for pending friend requests in real-time
+  useEffect(() => {
+    if (!currentUserId) return;
+    const unsub = onPendingRequestsChange(currentUserId, (reqs) => {
+      setPendingRequests(reqs);
+    });
+    return () => unsub();
+  }, [currentUserId]);
+
+  // Load friends UIDs for profile card
+  useEffect(() => {
+    if (!currentUserId) return;
+    const loadFriendsUids = async () => {
+      try {
+        const friends = await getFriendsList(currentUserId);
+        setFriendsUids(friends.map(f => f.uid));
+      } catch (e) { console.warn(e); }
+    };
+    loadFriendsUids();
+  }, [currentUserId]);
 
   // Cargar ranking de amigos
   const loadFriendsRanking = useCallback(async () => {
@@ -629,6 +779,22 @@ const RankingScreen = ({ onBack, currentUserId, currentUserProfile, isAdmin = fa
     setAdminTarget(prev => prev && prev.uid === uid ? { ...prev, robotConfig: skin.config } : prev);
   };
 
+  // Notification handlers
+  const handleNotifAccept = async (req) => {
+    try {
+      await acceptFriendRequest(req.id, req.fromUid, req.toUid, req.fromUsername, currentUserProfile?.username);
+      // Refresh friends list
+      const friends = await getFriendsList(currentUserId);
+      setFriendsUids(friends.map(f => f.uid));
+    } catch (e) { console.error('Error accepting request:', e); }
+  };
+
+  const handleNotifReject = async (req) => {
+    try {
+      await rejectFriendRequest(req.id);
+    } catch (e) { console.error('Error rejecting request:', e); }
+  };
+
   const currentRanking = tab === 'global' ? globalRanking : friendsRanking;
   const currentUserRank = currentRanking.find(p => p.uid === currentUserId);
 
@@ -663,6 +829,16 @@ const RankingScreen = ({ onBack, currentUserId, currentUserProfile, isAdmin = fa
               <ArrowLeft size={18} className="mr-1" /> Volver
             </button>
           )}
+
+          {/* Notification Bell */}
+          <button onClick={() => setShowNotifications(true)} className="absolute top-6 right-6 z-20 w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center active:scale-90 transition-all hover:bg-white/15">
+            <Bell size={20} className="text-white/80" />
+            {pendingRequests.length > 0 && (
+              <div className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 rounded-full flex items-center justify-center shadow-lg shadow-red-500/50" style={{ animation: 'pulseBadge 2s ease-in-out infinite' }}>
+                <span className="text-[9px] font-black text-white px-1">{pendingRequests.length}</span>
+              </div>
+            )}
+          </button>
 
           <div className="relative z-10 text-center">
             <div className="text-5xl mb-2" style={{ animation: 'float 3s ease-in-out infinite' }}>🏆</div>
@@ -860,11 +1036,24 @@ const RankingScreen = ({ onBack, currentUserId, currentUserProfile, isAdmin = fa
         />
       )}
 
+      {/* Notifications Panel */}
+      {showNotifications && (
+        <NotificationsPanel
+          requests={pendingRequests}
+          onAccept={handleNotifAccept}
+          onReject={handleNotifReject}
+          onClose={() => setShowNotifications(false)}
+        />
+      )}
+
       {/* User Profile Card Modal */}
       {profileTarget && (
         <UserProfileCard
           player={profileTarget}
           onClose={() => setProfileTarget(null)}
+          currentUserId={currentUserId}
+          currentUserProfile={currentUserProfile}
+          friendsUids={friendsUids}
         />
       )}
     </div>

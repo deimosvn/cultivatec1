@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Zap, Home, BookOpen, Settings, Sun, Moon, ArrowLeft, Lightbulb, Play, Target, Code, Terminal, BatteryCharging, Power, RadioTower, Component, Link, Minus, Plus, Bot, Send, Trophy, ChevronDown, Map, Calendar, Puzzle, Cpu, Dumbbell, Monitor, GraduationCap, Wrench, Rocket, Star, CheckCircle, CheckCircle2, RotateCcw, AlertTriangle, X } from 'lucide-react';
 import QuizScreen from './components/QuizScreen';
 import GlossaryScreen, { GLOSSARY_TERMS as GLOSSARY_TERMS_DATA } from './components/GlossaryScreen';
@@ -6234,6 +6234,33 @@ export default function App() {
         return getUnlockedSkinIds(completedModulesCount, completedWorldIndices, giftedSkinIds, admin, unlockedWorldIndices, enteredWorldIndices);
     }, [completedModules, userScores, firebaseProfile]);
 
+    // === SKIN UNLOCK ANIMATION ===
+    const prevUnlockedSkinIdsRef = useRef(null);
+    const [skinUnlockPopup, setSkinUnlockPopup] = useState(null);
+    const [skinUnlockQueue, setSkinUnlockQueue] = useState([]);
+
+    useEffect(() => {
+        if (!computedUnlockedSkinIds) return;
+        const currentIds = [...computedUnlockedSkinIds];
+        const prevIds = prevUnlockedSkinIdsRef.current;
+        prevUnlockedSkinIdsRef.current = currentIds;
+        if (prevIds === null) return; // first render, skip
+        const newIds = currentIds.filter(id => !prevIds.includes(id));
+        if (newIds.length > 0) {
+            const newSkins = newIds.map(id => ROBOT_SKINS.find(s => s.id === id)).filter(Boolean);
+            if (newSkins.length > 0) {
+                setSkinUnlockQueue(prev => [...prev, ...newSkins]);
+            }
+        }
+    }, [computedUnlockedSkinIds]);
+
+    useEffect(() => {
+        if (!skinUnlockPopup && skinUnlockQueue.length > 0) {
+            setSkinUnlockPopup(skinUnlockQueue[0]);
+            setSkinUnlockQueue(prev => prev.slice(1));
+        }
+    }, [skinUnlockPopup, skinUnlockQueue]);
+
     // Show loading screen while Firebase Auth initializes
     if (authLoading) {
         return (
@@ -6640,6 +6667,73 @@ export default function App() {
                     </div>
                 </div>
             )}
+            {/* Skin Unlock Animation */}
+            {skinUnlockPopup && (() => {
+                const skin = skinUnlockPopup;
+                return (
+                    <div className="fixed inset-0 z-[200] flex items-center justify-center" onClick={() => setSkinUnlockPopup(null)}>
+                        <div className="absolute inset-0 bg-black/85 backdrop-blur-md" />
+                        <style>{`
+                            @keyframes skinUnlockPulse {
+                                0%, 100% { transform: scale(1); box-shadow: 0 0 40px ${skin.rarityColor}30, 0 0 80px ${skin.rarityColor}15; }
+                                50% { transform: scale(1.04); box-shadow: 0 0 60px ${skin.rarityColor}50, 0 0 120px ${skin.rarityColor}25; }
+                            }
+                            @keyframes skinSparkle {
+                                0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
+                                50% { opacity: 1; transform: scale(1) rotate(180deg); }
+                            }
+                            @keyframes skinFloat {
+                                0%, 100% { transform: translateY(0); }
+                                50% { transform: translateY(-10px); }
+                            }
+                            @keyframes skinFadeUp {
+                                from { opacity: 0; transform: translateY(20px); }
+                                to { opacity: 1; transform: translateY(0); }
+                            }
+                        `}</style>
+                        {/* Sparkle particles */}
+                        {Array.from({ length: 24 }).map((_, i) => (
+                            <div key={i} className="absolute rounded-full" style={{
+                                width: `${3 + Math.random() * 5}px`,
+                                height: `${3 + Math.random() * 5}px`,
+                                backgroundColor: i % 3 === 0 ? skin.rarityColor : i % 3 === 1 ? '#FFC800' : '#FFFFFF',
+                                top: `${10 + Math.random() * 80}%`,
+                                left: `${10 + Math.random() * 80}%`,
+                                animation: `skinSparkle ${1.5 + Math.random() * 2}s ease-in-out ${Math.random() * 1.5}s infinite`,
+                            }} />
+                        ))}
+                        {/* Content */}
+                        <div className="relative z-10 flex flex-col items-center" onClick={e => e.stopPropagation()} style={{ animation: 'skinFadeUp 0.6s ease-out' }}>
+                            {/* Glow ring */}
+                            <div className="relative mb-6" style={{ animation: 'skinFloat 3s ease-in-out infinite' }}>
+                                <div className="absolute inset-[-24px] rounded-full" style={{ background: `radial-gradient(circle, ${skin.rarityColor}40, transparent 70%)`, animation: 'skinUnlockPulse 2s ease-in-out infinite' }} />
+                                <div className="w-44 h-44 rounded-[32px] border-2 flex items-center justify-center overflow-hidden" style={{
+                                    background: 'linear-gradient(135deg, #1E293B, #0F172A)',
+                                    borderColor: `${skin.rarityColor}60`,
+                                    animation: 'skinUnlockPulse 2s ease-in-out infinite',
+                                }}>
+                                    <RobotAvatar config={skin.config} size={140} />
+                                </div>
+                            </div>
+                            {/* Text */}
+                            <p className="text-2xl font-black text-white text-center mb-1" style={{ animation: 'skinFadeUp 0.6s ease-out 0.2s both' }}>🎉 ¡Skin Desbloqueada!</p>
+                            <div className="flex items-center justify-center gap-2 mb-2" style={{ animation: 'skinFadeUp 0.6s ease-out 0.35s both' }}>
+                                <span className="text-2xl">{skin.icon}</span>
+                                <span className="text-xl font-black text-white">{skin.name}</span>
+                            </div>
+                            <div className="flex justify-center mb-3" style={{ animation: 'skinFadeUp 0.6s ease-out 0.5s both' }}>
+                                <span className="px-4 py-1 rounded-full text-xs font-black text-white shadow-lg" style={{ backgroundColor: skin.rarityColor, boxShadow: `0 0 20px ${skin.rarityColor}40` }}>{skin.rarityLabel}</span>
+                            </div>
+                            <p className="text-xs text-gray-400 font-bold text-center max-w-[250px] mb-6" style={{ animation: 'skinFadeUp 0.6s ease-out 0.6s both' }}>{skin.description}</p>
+                            <button onClick={() => setSkinUnlockPopup(null)} style={{ animation: 'skinFadeUp 0.6s ease-out 0.7s both' }}
+                                className="px-10 py-3.5 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-black text-sm active:scale-95 transition-all shadow-lg shadow-cyan-500/30 border-b-4 border-blue-700">
+                                ¡Genial! 🌟
+                            </button>
+                        </div>
+                    </div>
+                );
+            })()}
+
             {/* Robot Skin Editor Modal */}
             <RobotSkinEditor
                 isOpen={showRobotEditor}
