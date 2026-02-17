@@ -159,14 +159,9 @@ body {
 
 /* ===== PIXEL-ART DOCK NAV ===== */
 .nav-dock {
-  background: linear-gradient(180deg, #EFF6FF 0%, #DBEAFE 100%);
-  border: 3px solid #1D4ED8;
-  box-shadow:
-    0 -3px 0 0 #1E40AF,
-    0 3px 0 0 #93C5FD,
-    inset 0 2px 0 rgba(255, 255, 255, 0.7),
-    0 4px 20px rgba(30, 64, 175, 0.15);
-  image-rendering: pixelated;
+  background: transparent;
+  border: none;
+  box-shadow: none;
 }
 
 /* Pixel nav button */
