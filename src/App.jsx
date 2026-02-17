@@ -4408,58 +4408,62 @@ const WorldMapScreen = ({ userScores, onSelectWorld, userProfile, firebaseProfil
 
             {/* Station Ships */}
             <div className="px-4 max-w-xl mx-auto relative z-10 mb-8">
-                <div className="flex justify-between gap-6 items-start">
+                <div className="flex justify-between gap-4 items-start">
                     {/* Left Ship - Circuit Lab */}
-                    <div className="flex-1 flex flex-col items-center gap-2">
+                    <div className="flex-1 flex flex-col items-center gap-1">
                         <button onClick={onGoToCircuits}
                             className="group relative active:scale-90 transition-transform duration-200 focus:outline-none"
                             style={{ animation: 'ship-fly 6s ease-in-out infinite' }}>
                             {/* Outer glow ring */}
-                            <div className="absolute inset-[-16px] rounded-full pointer-events-none opacity-60 group-hover:opacity-100 transition-opacity duration-500"
-                                style={{ background: 'radial-gradient(circle, rgba(34,211,238,0.4) 0%, rgba(34,211,238,0.1) 40%, transparent 70%)', filter: 'blur(8px)' }}></div>
+                            <div className="absolute inset-[-20px] rounded-full pointer-events-none opacity-60 group-hover:opacity-100 transition-opacity duration-500"
+                                style={{ background: 'radial-gradient(circle, rgba(34,211,238,0.45) 0%, rgba(34,211,238,0.15) 40%, transparent 70%)', filter: 'blur(10px)' }}></div>
                             {/* Ship image */}
                             <img src="/electronica.png" alt="Laboratorio de Circuitos"
-                                className="w-28 h-28 sm:w-32 sm:h-32 object-contain relative z-10 group-hover:scale-110 transition-transform duration-300"
-                                style={{ filter: 'drop-shadow(0 0 18px rgba(34,211,238,0.6)) drop-shadow(0 0 40px rgba(34,211,238,0.3))' }} />
+                                className="w-36 h-36 sm:w-40 sm:h-40 object-contain relative z-10 group-hover:scale-110 transition-transform duration-300"
+                                style={{ filter: 'drop-shadow(0 0 22px rgba(34,211,238,0.7)) drop-shadow(0 0 50px rgba(34,211,238,0.35))' }} />
                             {/* Thruster glow */}
-                            <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-14 h-5 rounded-full bg-[#22D3EE]/50 blur-lg z-0" style={{ animation: 'twinkle 1.5s ease-in-out infinite' }}></div>
+                            <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-16 h-6 rounded-full bg-[#22D3EE]/50 blur-lg z-0" style={{ animation: 'twinkle 1.5s ease-in-out infinite' }}></div>
                             {/* Sparkles around ship */}
-                            <div className="absolute top-0 right-0 w-2 h-2 bg-[#22D3EE]/70 rounded-full" style={{ animation: 'twinkle 2s ease-in-out infinite' }}></div>
-                            <div className="absolute bottom-4 left-0 w-1.5 h-1.5 bg-white/50 rounded-full" style={{ animation: 'twinkle 2.5s ease-in-out infinite 0.5s' }}></div>
-                            <div className="absolute top-6 left-1 w-1 h-1 bg-[#22D3EE]/50 rounded-full" style={{ animation: 'twinkle 3s ease-in-out infinite 1s' }}></div>
+                            <div className="absolute top-0 right-0 w-2.5 h-2.5 bg-[#22D3EE]/70 rounded-full" style={{ animation: 'twinkle 2s ease-in-out infinite' }}></div>
+                            <div className="absolute bottom-6 left-0 w-2 h-2 bg-white/50 rounded-full" style={{ animation: 'twinkle 2.5s ease-in-out infinite 0.5s' }}></div>
+                            <div className="absolute top-8 left-1 w-1.5 h-1.5 bg-[#22D3EE]/50 rounded-full" style={{ animation: 'twinkle 3s ease-in-out infinite 1s' }}></div>
                         </button>
                         {/* Info below */}
-                        <div className="text-center mt-1">
-                            <h3 className="text-xs font-black text-[#22D3EE] leading-tight">Laboratorio</h3>
-                            <h3 className="text-xs font-black text-[#22D3EE] leading-tight">de Circuitos</h3>
-                            <span className="text-[9px] font-bold text-purple-200/50 mt-0.5 block">Practica libremente</span>
+                        <div className="text-center mt-2 px-1">
+                            <div className="inline-flex items-center gap-1 bg-[#22D3EE]/10 border border-[#22D3EE]/25 rounded-full px-3 py-1 mb-1">
+                                <div className="w-1.5 h-1.5 rounded-full bg-[#22D3EE] animate-pulse"></div>
+                                <h3 className="text-[11px] font-black text-[#22D3EE] leading-tight">Laboratorio de Circuitos</h3>
+                            </div>
+                            <span className="text-[9px] font-bold text-purple-200/50 block">Practica libremente</span>
                         </div>
                     </div>
 
                     {/* Right Ship - Programming Station */}
-                    <div className="flex-1 flex flex-col items-center gap-2">
+                    <div className="flex-1 flex flex-col items-center gap-1">
                         <button onClick={onGoToProgramming}
                             className="group relative active:scale-90 transition-transform duration-200 focus:outline-none"
                             style={{ animation: 'ship-fly 7s ease-in-out infinite 0.8s' }}>
                             {/* Outer glow ring */}
-                            <div className="absolute inset-[-16px] rounded-full pointer-events-none opacity-60 group-hover:opacity-100 transition-opacity duration-500"
-                                style={{ background: 'radial-gradient(circle, rgba(167,139,250,0.4) 0%, rgba(167,139,250,0.1) 40%, transparent 70%)', filter: 'blur(8px)' }}></div>
+                            <div className="absolute inset-[-20px] rounded-full pointer-events-none opacity-60 group-hover:opacity-100 transition-opacity duration-500"
+                                style={{ background: 'radial-gradient(circle, rgba(167,139,250,0.45) 0%, rgba(167,139,250,0.15) 40%, transparent 70%)', filter: 'blur(10px)' }}></div>
                             {/* Ship image */}
                             <img src="/programacion.png" alt="Estación de Programación"
-                                className="w-28 h-28 sm:w-32 sm:h-32 object-contain relative z-10 group-hover:scale-110 transition-transform duration-300"
-                                style={{ filter: 'drop-shadow(0 0 18px rgba(167,139,250,0.6)) drop-shadow(0 0 40px rgba(167,139,250,0.3))' }} />
+                                className="w-36 h-36 sm:w-40 sm:h-40 object-contain relative z-10 group-hover:scale-110 transition-transform duration-300"
+                                style={{ filter: 'drop-shadow(0 0 22px rgba(167,139,250,0.7)) drop-shadow(0 0 50px rgba(167,139,250,0.35))' }} />
                             {/* Thruster glow */}
-                            <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-14 h-5 rounded-full bg-[#93C5FD]/50 blur-lg z-0" style={{ animation: 'twinkle 1.8s ease-in-out infinite 0.3s' }}></div>
+                            <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-16 h-6 rounded-full bg-[#93C5FD]/50 blur-lg z-0" style={{ animation: 'twinkle 1.8s ease-in-out infinite 0.3s' }}></div>
                             {/* Sparkles around ship */}
-                            <div className="absolute top-0 left-0 w-2 h-2 bg-[#93C5FD]/70 rounded-full" style={{ animation: 'twinkle 2.5s ease-in-out infinite 0.3s' }}></div>
-                            <div className="absolute bottom-4 right-0 w-1.5 h-1.5 bg-white/50 rounded-full" style={{ animation: 'twinkle 3s ease-in-out infinite 1s' }}></div>
-                            <div className="absolute top-6 right-1 w-1 h-1 bg-[#93C5FD]/50 rounded-full" style={{ animation: 'twinkle 2s ease-in-out infinite 0.7s' }}></div>
+                            <div className="absolute top-0 left-0 w-2.5 h-2.5 bg-[#93C5FD]/70 rounded-full" style={{ animation: 'twinkle 2.5s ease-in-out infinite 0.3s' }}></div>
+                            <div className="absolute bottom-6 right-0 w-2 h-2 bg-white/50 rounded-full" style={{ animation: 'twinkle 3s ease-in-out infinite 1s' }}></div>
+                            <div className="absolute top-8 right-1 w-1.5 h-1.5 bg-[#93C5FD]/50 rounded-full" style={{ animation: 'twinkle 2s ease-in-out infinite 0.7s' }}></div>
                         </button>
                         {/* Info below */}
-                        <div className="text-center mt-1">
-                            <h3 className="text-xs font-black text-[#93C5FD] leading-tight">Estación de</h3>
-                            <h3 className="text-xs font-black text-[#93C5FD] leading-tight">Programación</h3>
-                            <span className="text-[9px] font-bold text-purple-200/50 mt-0.5 block">Tutoriales y retos</span>
+                        <div className="text-center mt-2 px-1">
+                            <div className="inline-flex items-center gap-1 bg-[#93C5FD]/10 border border-[#93C5FD]/25 rounded-full px-3 py-1 mb-1">
+                                <div className="w-1.5 h-1.5 rounded-full bg-[#93C5FD] animate-pulse"></div>
+                                <h3 className="text-[11px] font-black text-[#93C5FD] leading-tight">Estación de Programación</h3>
+                            </div>
+                            <span className="text-[9px] font-bold text-purple-200/50 block">Tutoriales y retos</span>
                         </div>
                     </div>
                 </div>

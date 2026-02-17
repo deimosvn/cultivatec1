@@ -245,6 +245,16 @@ export const ROBOT_SKINS = [
     rarityColor: '#06B6D4',
     config: { skinImage: '/skin21.png' },
   },
+  {
+    id: 'skin_22',
+    name: 'Prototipo X',
+    description: 'Creación secreta del laboratorio, solo para los elegidos 🔬',
+    icon: '🧪',
+    rarity: 'legendary',
+    rarityLabel: 'Exclusivo',
+    rarityColor: '#9333EA',
+    config: { skinImage: '/skin22.png' },
+  },
 ];
 
 // ============================================
@@ -274,6 +284,7 @@ export const SKIN_UNLOCK_REQUIREMENTS = {
   'skin_19': { type: 'modules', count: 45, label: 'Completa 45 módulos' },
   'skin_20': { type: 'admin_only', label: 'Regalo exclusivo del admin' },
   'skin_21': { type: 'world_enter', worldIndex: 0, label: 'Entra al Mundo 1' },
+  'skin_22': { type: 'admin_only', label: 'Regalo exclusivo del admin' },
 };
 
 /**
