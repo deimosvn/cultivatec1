@@ -10,9 +10,14 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/React-19.1.1-61DAFB?logo=react" alt="React" />
-  <img src="https://img.shields.io/badge/Vite-7.x-646CFF?logo=vite" alt="Vite" />
-  <img src="https://img.shields.io/badge/Tailwind_CSS-3.x-06B6D4?logo=tailwindcss" alt="Tailwind" />
+  <img src="https://img.shields.io/badge/Vite-7.1.7-646CFF?logo=vite" alt="Vite" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-4.1.15-06B6D4?logo=tailwindcss" alt="Tailwind" />
+  <img src="https://img.shields.io/badge/Firebase-12.3.0-FFCA28?logo=firebase" alt="Firebase" />
+  <img src="https://img.shields.io/badge/Matter.js-0.20.0-4B5562?logo=javascript" alt="Matter.js" />
+  <img src="https://img.shields.io/badge/jsPDF-4.1.0-EC4D37?logo=adobeacrobatreader" alt="jsPDF" />
+  <img src="https://img.shields.io/badge/Gemini_AI-API-4285F4?logo=google" alt="Gemini" />
   <img src="https://img.shields.io/badge/PWA-Ready-5A0FC8?logo=pwa" alt="PWA" />
+  <img src="https://img.shields.io/badge/Vercel-Deploy-000000?logo=vercel" alt="Vercel" />
   <img src="https://img.shields.io/badge/License-MIT-green" alt="License" />
 </p>
 
@@ -175,18 +180,107 @@ CultivaTec es una **Progressive Web App (PWA)**, lo que significa que puedes ins
 
 ---
 
-## 🛠️ Tecnologías
+## 🛠️ Tecnologías y Lenguajes
+
+### ⚛️ Frontend — Framework y UI
+
+| Tecnología | Versión | Uso |
+|-----------|---------|-----|
+| **React** | 19.1.1 | Framework principal de interfaz de usuario (SPA) |
+| **Vite** | 7.1.7 | Bundler ultrarrápido y servidor de desarrollo con HMR |
+| **Tailwind CSS** | 4.1.15 | Sistema de estilos utilitario (utility-first CSS) |
+| **PostCSS** | 8.5.6 | Procesador de CSS (pipeline de transformación) |
+| **Autoprefixer** | 10.4.21 | Prefijos de compatibilidad CSS automáticos |
+| **Lucide React** | 0.545.0 | Biblioteca de iconos SVG para React |
+
+### 🔥 Backend y Base de Datos
+
+| Tecnología | Versión | Uso |
+|-----------|---------|-----|
+| **Firebase** | 12.3.0 | Plataforma backend completa de Google |
+| **Firebase Authentication** | — | Registro e inicio de sesión de usuarios (Email/Password) |
+| **Cloud Firestore** | — | Base de datos NoSQL en tiempo real (usuarios, puntajes, amigos, rankings) |
+| **Firestore Security Rules** | — | Reglas de seguridad con sistema de roles (admin/usuario) |
+
+### 🤖 Inteligencia Artificial
 
 | Tecnología | Uso |
 |-----------|-----|
-| **React 19.1.1** | Framework de interfaz de usuario |
-| **Vite 7.x** | Bundler y servidor de desarrollo |
-| **Tailwind CSS** | Sistema de estilos utilitario |
-| **Lucide React** | Iconografía |
-| **Firebase** | Preparado para autenticación y base de datos |
-| **Gemini API** | Generación de código con IA |
-| **Service Worker** | Funcionalidad offline (PWA) |
-| **SVG** | Gráficos del constructor de circuitos y avatares |
+| **Google Gemini API** | Generación de código Python con IA (modelo `gemini-2.5-flash-preview`) |
+| **Prompt Engineering** | Prompts estructurados para generar código educativo seguro |
+
+### 🎮 Motor de Física y Juegos
+
+| Tecnología | Versión | Uso |
+|-----------|---------|-----|
+| **Matter.js** | 0.20.0 | Motor de física 2D para juegos de robots (AxonMerge, colisiones, gravedad) |
+| **Canvas 2D API** | — | Renderizado de gráficos del juego SumoBotPush y simulaciones |
+| **requestAnimationFrame** | — | Game loop a 60 FPS para animación fluida |
+
+### 📄 Generación de Documentos
+
+| Tecnología | Versión | Uso |
+|-----------|---------|-----|
+| **jsPDF** | 4.1.0 | Generación de PDFs con guías de robots DIY y certificados/licencias |
+| **Canvas API** | — | Conversión de imágenes a Base64 para insertar en PDFs |
+
+### 🌐 APIs Web Nativas
+
+| API | Uso |
+|-----|-----|
+| **Web Speech API** (`speechSynthesis`) | Texto a voz (TTS) en español para lecciones, glosario y simulador |
+| **Web Audio API** (`AudioContext`) | Efectos de sonido procedurales en minijuegos (osciladores, gain) |
+| **Drag and Drop API** | Arrastrar y soltar componentes en constructor de circuitos y simulador |
+| **localStorage** | Persistencia local de progreso, perfil, robot y estadísticas |
+| **Service Worker API** | Funcionalidad offline y caché para PWA |
+| **Fetch API** | Comunicación con Gemini API y servicios externos |
+| **Touch Events** | Soporte táctil para interacciones en dispositivos móviles |
+
+### 📱 Progressive Web App (PWA)
+
+| Componente | Uso |
+|-----------|-----|
+| **Web App Manifest** | Configuración de instalación, iconos, splash screen y orientación |
+| **Service Worker** (`sw.js`) | Caché de recursos, funcionamiento offline |
+| **9 tamaños de iconos** | Compatibilidad con todos los dispositivos (72x72 a 512x512) |
+
+### 🎨 Diseño y Animaciones
+
+| Tecnología | Uso |
+|-----------|-----|
+| **SVG** | Gráficos vectoriales del constructor de circuitos y avatares de robot |
+| **CSS Animations** | 30+ animaciones personalizadas (float, bounce, galaxy, confetti, pixel-blink, orbit, etc.) |
+| **CSS Gradients** | Fondos galácticos, nebulosas y efectos de brillo |
+| **Pixel Art** | Barra de navegación con estilo retro pixel art |
+| **Google Fonts — Nunito** | Tipografía principal amigable y legible |
+
+### ☁️ Hosting y Deploy
+
+| Tecnología | Uso |
+|-----------|-----|
+| **Vercel** | Hosting y despliegue continuo (CI/CD) |
+| **GitHub** | Control de versiones y repositorio del código fuente |
+
+### 🧹 Calidad de Código
+
+| Herramienta | Versión | Uso |
+|-----------|---------|-----|
+| **ESLint** | 9.36.0 | Linter de código JavaScript/JSX |
+| **eslint-plugin-react-hooks** | 5.2.0 | Reglas para hooks de React |
+| **eslint-plugin-react-refresh** | 0.4.22 | Reglas para Fast Refresh de Vite |
+
+### 💻 Lenguajes de Programación
+
+| Lenguaje | Uso |
+|---------|-----|
+| **JavaScript (ES2022+)** | Lenguaje principal de toda la aplicación |
+| **JSX** | Sintaxis de componentes React |
+| **CSS3** | Estilos, animaciones y diseño responsive |
+| **HTML5** | Estructura base de la aplicación web |
+| **Python** | Lenguaje enseñado en la app (simulado vía transpilador JS) |
+| **Arduino / C++** | Lenguaje enseñado en contenido educativo de microcontroladores |
+| **Firestore Rules** | Lenguaje de reglas de seguridad de Firebase |
+| **JSON** | Configuración (manifest, package.json, vercel.json, Firestore rules) |
 
 ---
 
