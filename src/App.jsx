@@ -25,7 +25,7 @@ import {
   getUserProfile, onUserProfileChange, updateUserProfile, syncUserStats,
   saveModuleScore, onUserScoresChange, createUserProfile, calculateLevel,
   getPendingFriendRequests, onPendingRequestsChange, checkAndUpdateStreak,
-  syncFriendsCount
+  syncFriendsCount, isAdminEmail, adminDeleteUser, adminGiftBadge, adminGiftSkin
 } from './firebase/firestore';
 
 // Helper: guardar scores en localStorage (fallback local)
@@ -164,6 +164,8 @@ const WORLDS_CONFIG = [
 // Helper: check if a world is unlocked
 const isWorldUnlocked = (userScores, worldIndex, firebaseProfile) => {
     if (worldIndex === 0) return true;
+    // Admins have all worlds unlocked
+    if (isAdminEmail(firebaseProfile?.email)) return true;
     const world = WORLDS_CONFIG[worldIndex];
     // Special unlock: friend-based
     if (world && world.unlockType === 'friends') {
@@ -2795,7 +2797,15 @@ const WorldMapScreen = ({ userScores, onSelectWorld, userProfile, firebaseProfil
                             </button>
                         )}
                         <div className="flex flex-col">
-                            <span className="text-[11px] font-black text-[#1E3A8A] leading-tight">{firebaseProfile?.username || 'Explorador'}</span>
+                            <div className="flex items-center gap-1">
+                                <span className="text-[11px] font-black text-[#1E3A8A] leading-tight">{firebaseProfile?.username || 'Explorador'}</span>
+                                {isAdminEmail(firebaseProfile?.email) && (
+                                    <span className="px-1.5 py-0.5 bg-gradient-to-r from-[#FF4B4B] to-[#FF9600] text-white text-[7px] font-black rounded-md uppercase tracking-wider shadow-sm">ADMIN</span>
+                                )}
+                                {firebaseProfile?.adminBadges?.map(b => (
+                                    <span key={b.id} title={b.name} className="text-sm">{b.emoji}</span>
+                                ))}
+                            </div>
                             <span className="text-[9px] font-bold text-[#3B82F6]/70 leading-tight">
                                 {(() => { const lv = calculateLevel(firebaseProfile?.totalPoints ?? userStats?.totalPoints ?? 0); return `${lv.emoji} Nv.${lv.level} · ${lv.title}`; })()}
                             </span>
@@ -4744,6 +4754,7 @@ export default function App() {
                             onBack={() => goToMenu('Biblioteca')}
                             currentUserId={userId}
                             currentUserProfile={firebaseProfile}
+                            isAdmin={isAdminEmail(firebaseProfile?.email)}
                         />;
     } else if (viewMode === 'friends') {
         ScreenContent = <FriendsScreen

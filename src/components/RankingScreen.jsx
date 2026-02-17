@@ -1,18 +1,40 @@
 // ================================================================
 // RANKING SCREEN — CultivaTec App
-// Ranking global + ranking de amigos
+// Ranking global + ranking de amigos + Admin tools
 // ================================================================
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { ArrowLeft, Trophy, Medal, Crown, Users, Globe, RefreshCw, Star, Zap, ChevronUp, ChevronDown, TrendingUp, Flame, Target } from 'lucide-react';
-import { getGlobalRanking, onRankingChange, getFriendsList } from '../firebase/firestore';
+import { ArrowLeft, Trophy, Medal, Crown, Users, Globe, RefreshCw, Star, Zap, Trash2, Gift, X, Award, Palette, Shield, AlertTriangle } from 'lucide-react';
+import { getGlobalRanking, onRankingChange, getFriendsList, adminDeleteUser, adminGiftBadge, adminGiftSkin, isAdminEmail } from '../firebase/firestore';
 import { calculateLevel, LEVEL_THRESHOLDS } from '../firebase/firestore';
 import { RobotMini, RobotAvatar } from '../Onboarding';
+import { ROBOT_SKINS } from './RobotSkinEditor';
 
-// Robot avatar for ranking — uses the real personalized robot
+// ============================================
+// INSIGNIAS DISPONIBLES PARA REGALAR (ADMIN)
+// ============================================
+const AVAILABLE_BADGES = [
+  { id: 'badge_star', name: 'Estrella', emoji: '⭐', color: '#FFC800' },
+  { id: 'badge_fire', name: 'En Llamas', emoji: '🔥', color: '#FF4B4B' },
+  { id: 'badge_diamond', name: 'Diamante', emoji: '💎', color: '#60A5FA' },
+  { id: 'badge_crown', name: 'Corona', emoji: '👑', color: '#FFC800' },
+  { id: 'badge_rocket', name: 'Cohete', emoji: '🚀', color: '#3B82F6' },
+  { id: 'badge_lightning', name: 'Rayo', emoji: '⚡', color: '#F59E0B' },
+  { id: 'badge_heart', name: 'Corazón', emoji: '❤️', color: '#FF4B6E' },
+  { id: 'badge_trophy', name: 'Trofeo', emoji: '🏆', color: '#FFC800' },
+  { id: 'badge_genius', name: 'Genio', emoji: '🧠', color: '#8B5CF6' },
+  { id: 'badge_shield', name: 'Escudo', emoji: '🛡️', color: '#10B981' },
+  { id: 'badge_music', name: 'Música', emoji: '🎵', color: '#EC4899' },
+  { id: 'badge_robot', name: 'Robot Pro', emoji: '🤖', color: '#6366F1' },
+  { id: 'badge_earth', name: 'Planeta', emoji: '🌍', color: '#22C55E' },
+  { id: 'badge_butterfly', name: 'Mariposa', emoji: '🦋', color: '#A78BFA' },
+  { id: 'badge_unicorn', name: 'Unicornio', emoji: '🦄', color: '#F472B6' },
+  { id: 'badge_alien', name: 'Alien', emoji: '👽', color: '#34D399' },
+];
+
+// Robot avatar for ranking
 const RankingAvatar = ({ config, size = 36 }) => {
   if (!config) {
-    // Fallback for users without robot config
     const fallbackSize = size;
     return (
       <div className="rounded-xl flex items-center justify-center" style={{
@@ -42,7 +64,225 @@ const RankBadge = ({ rank }) => {
   return <div className="w-8 h-8 rounded-full bg-[#E5E5E5] flex items-center justify-center"><span className="text-xs font-black text-[#777]">{rank}</span></div>;
 };
 
-const RankingEntry = ({ player, rank, isCurrentUser, index }) => {
+// ============================================
+// ADMIN ACTION MODAL
+// ============================================
+const AdminActionModal = ({ player, onClose, onDelete, onGiftBadge, onGiftSkin }) => {
+  const [activeTab, setActiveTab] = useState('actions');
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [giftingBadge, setGiftingBadge] = useState(null);
+  const [giftingSkin, setGiftingSkin] = useState(null);
+  const [actionDone, setActionDone] = useState(null);
+
+  const handleDelete = async () => {
+    try {
+      await onDelete(player.uid);
+      setActionDone('deleted');
+      setTimeout(() => onClose(), 1500);
+    } catch (e) {
+      alert('Error al eliminar: ' + e.message);
+    }
+  };
+
+  const handleGiftBadge = async (badge) => {
+    setGiftingBadge(badge.id);
+    try {
+      await onGiftBadge(player.uid, badge);
+      setActionDone(`badge_${badge.id}`);
+      setGiftingBadge(null);
+    } catch (e) {
+      alert('Error: ' + e.message);
+      setGiftingBadge(null);
+    }
+  };
+
+  const handleGiftSkin = async (skin) => {
+    setGiftingSkin(skin.id);
+    try {
+      await onGiftSkin(player.uid, skin);
+      setActionDone(`skin_${skin.id}`);
+      setGiftingSkin(null);
+    } catch (e) {
+      alert('Error: ' + e.message);
+      setGiftingSkin(null);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/60 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 animate-fade-in" onClick={onClose}>
+      <div className="bg-white w-full sm:max-w-md sm:rounded-3xl rounded-t-3xl max-h-[85vh] flex flex-col overflow-hidden animate-slide-up" onClick={e => e.stopPropagation()}>
+        {/* Header */}
+        <div className="bg-gradient-to-r from-[#1E40AF] to-[#3B82F6] px-5 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <RankingAvatar config={player.robotConfig} size={40} />
+            <div>
+              <div className="flex items-center gap-1.5">
+                <p className="text-sm font-black text-white">{player.username || 'Anónimo'}</p>
+                {isAdminEmail(player.email) && (
+                  <span className="px-1.5 py-0.5 bg-white/20 text-white text-[7px] font-black rounded-md uppercase">ADMIN</span>
+                )}
+              </div>
+              <p className="text-[10px] font-bold text-white/60">{(player.totalPoints || 0).toLocaleString()} XP</p>
+              {player.adminBadges?.length > 0 && (
+                <div className="flex gap-0.5 mt-0.5">
+                  {player.adminBadges.map(b => (
+                    <span key={b.id} className="text-sm" title={b.name}>{b.emoji}</span>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+          <button onClick={onClose} className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center active:scale-90 transition">
+            <X size={16} className="text-white" />
+          </button>
+        </div>
+
+        {/* Tabs */}
+        <div className="flex border-b border-[#E5E5E5]">
+          {[
+            { id: 'actions', icon: <Shield size={14} />, label: 'Acciones' },
+            { id: 'badges', icon: <Award size={14} />, label: 'Insignias' },
+            { id: 'skins', icon: <Palette size={14} />, label: 'Skins' },
+          ].map(t => (
+            <button key={t.id} onClick={() => setActiveTab(t.id)}
+              className={`flex-1 flex items-center justify-center gap-1.5 py-3 text-xs font-black transition-all border-b-2 ${
+                activeTab === t.id ? 'text-[#2563EB] border-[#2563EB]' : 'text-[#AFAFAF] border-transparent'
+              }`}>
+              {t.icon} {t.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Content */}
+        <div className="flex-grow overflow-y-auto p-4">
+          {actionDone === 'deleted' ? (
+            <div className="text-center py-10">
+              <span className="text-5xl block mb-3">🗑️</span>
+              <p className="text-lg font-black text-[#FF4B4B]">Cuenta Eliminada</p>
+              <p className="text-xs text-[#AFAFAF] font-bold mt-1">La cuenta ha sido eliminada exitosamente</p>
+            </div>
+          ) : activeTab === 'actions' ? (
+            <div className="space-y-3">
+              {/* Delete User */}
+              {!isAdminEmail(player.email) && (
+                <div className="p-4 bg-[#FEE2E2] rounded-2xl border-2 border-[#FECACA]">
+                  <div className="flex items-center gap-2 mb-2">
+                    <AlertTriangle size={18} className="text-[#DC2626]" />
+                    <p className="text-sm font-black text-[#DC2626]">Eliminar Cuenta</p>
+                  </div>
+                  <p className="text-xs text-[#777] font-semibold mb-3">
+                    Esta acción eliminará el perfil, progreso, amigos y rankings del usuario. No se puede deshacer.
+                  </p>
+                  {!confirmDelete ? (
+                    <button onClick={() => setConfirmDelete(true)}
+                      className="w-full py-2.5 bg-[#DC2626] text-white rounded-xl font-black text-sm active:scale-95 transition flex items-center justify-center gap-2">
+                      <Trash2 size={14} /> Eliminar Usuario
+                    </button>
+                  ) : (
+                    <div className="space-y-2">
+                      <p className="text-xs font-black text-[#DC2626] text-center">¿Estás seguro? Esta acción es permanente.</p>
+                      <div className="flex gap-2">
+                        <button onClick={() => setConfirmDelete(false)}
+                          className="flex-1 py-2.5 bg-[#E5E5E5] text-[#777] rounded-xl font-black text-sm active:scale-95 transition">
+                          Cancelar
+                        </button>
+                        <button onClick={handleDelete}
+                          className="flex-1 py-2.5 bg-[#DC2626] text-white rounded-xl font-black text-sm active:scale-95 transition flex items-center justify-center gap-1">
+                          <Trash2 size={12} /> Confirmar
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* User Info */}
+              <div className="p-4 bg-[#F0F9FF] rounded-2xl border-2 border-[#BAE6FD]">
+                <p className="text-sm font-black text-[#1E40AF] mb-2">📋 Información del Usuario</p>
+                <div className="space-y-1.5 text-xs font-semibold text-[#555]">
+                  <p>👤 Username: <span className="font-black text-[#3C3C3C]">{player.username}</span></p>
+                  <p>📧 Email: <span className="font-black text-[#3C3C3C]">{player.email || 'N/A'}</span></p>
+                  <p>⭐ XP: <span className="font-black text-[#3C3C3C]">{(player.totalPoints || 0).toLocaleString()}</span></p>
+                  <p>📚 Módulos: <span className="font-black text-[#3C3C3C]">{player.modulesCompleted || 0}</span></p>
+                  <p>👥 Amigos: <span className="font-black text-[#3C3C3C]">{player.friendsCount || 0}</span></p>
+                  <p>🔥 Racha: <span className="font-black text-[#3C3C3C]">{player.currentStreak || 0} días</span></p>
+                  {player.adminBadges?.length > 0 && (
+                    <p>🏅 Insignias: <span className="font-black text-[#3C3C3C]">{player.adminBadges.map(b => b.emoji).join(' ')}</span></p>
+                  )}
+                </div>
+              </div>
+            </div>
+          ) : activeTab === 'badges' ? (
+            <div>
+              <p className="text-xs font-bold text-[#AFAFAF] mb-3">Selecciona una insignia para regalar a <span className="font-black text-[#3C3C3C]">{player.username}</span>:</p>
+              <div className="grid grid-cols-2 gap-2">
+                {AVAILABLE_BADGES.map(badge => {
+                  const alreadyHas = player.adminBadges?.some(b => b.id === badge.id);
+                  const isGifting = giftingBadge === badge.id;
+                  const justGifted = actionDone === `badge_${badge.id}`;
+                  return (
+                    <button key={badge.id} onClick={() => !alreadyHas && !isGifting && handleGiftBadge(badge)}
+                      disabled={alreadyHas || isGifting}
+                      className={`p-3 rounded-2xl border-2 text-left transition-all active:scale-95 ${
+                        justGifted ? 'bg-[#DCFCE7] border-[#22C55E]/50' :
+                        alreadyHas ? 'bg-[#F0F0F0] border-[#E5E5E5] opacity-50' :
+                        'bg-white border-[#E5E5E5] hover:border-[#3B82F6]/50 hover:bg-[#EFF6FF]'
+                      }`}>
+                      <div className="flex items-center gap-2">
+                        <span className="text-2xl">{badge.emoji}</span>
+                        <div>
+                          <p className="text-xs font-black text-[#3C3C3C]">{badge.name}</p>
+                          <p className="text-[9px] font-bold" style={{ color: badge.color }}>
+                            {justGifted ? '✅ Regalada' : alreadyHas ? 'Ya la tiene' : isGifting ? '⏳ Enviando...' : 'Tap para regalar'}
+                          </p>
+                        </div>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ) : activeTab === 'skins' ? (
+            <div>
+              <p className="text-xs font-bold text-[#AFAFAF] mb-3">Regala una skin a <span className="font-black text-[#3C3C3C]">{player.username}</span> (se aplicará automáticamente):</p>
+              <div className="grid grid-cols-2 gap-2">
+                {ROBOT_SKINS.map(skin => {
+                  const isGifting = giftingSkin === skin.id;
+                  const justGifted = actionDone === `skin_${skin.id}`;
+                  const rarityBgs = { common: '#DCFCE7', rare: '#DBEAFE', epic: '#FEE2E2', legendary: '#FEF3C7' };
+                  return (
+                    <button key={skin.id} onClick={() => !isGifting && handleGiftSkin(skin)}
+                      disabled={isGifting}
+                      className={`p-3 rounded-2xl border-2 transition-all active:scale-95 ${
+                        justGifted ? 'bg-[#DCFCE7] border-[#22C55E]/50' : 'bg-white border-[#E5E5E5] hover:border-[#3B82F6]/50'
+                      }`}>
+                      <div className="flex flex-col items-center gap-1.5">
+                        <div className="w-12 h-12 rounded-xl flex items-center justify-center overflow-hidden" style={{ background: `${rarityBgs[skin.rarity] || '#F0F0F0'}` }}>
+                          <RobotAvatar config={skin.config} size={40} />
+                        </div>
+                        <div className="text-center">
+                          <p className="text-[10px] font-black text-[#3C3C3C]">{skin.name}</p>
+                          <p className="text-[8px] font-black uppercase" style={{ color: skin.rarityColor }}>{skin.rarityLabel}</p>
+                          {justGifted && <p className="text-[8px] font-black text-[#22C55E]">✅ Regalada</p>}
+                          {isGifting && <p className="text-[8px] font-black text-[#3B82F6]">⏳ Enviando...</p>}
+                        </div>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ) : null}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ============================================
+// RANKING ENTRY
+// ============================================
+const RankingEntry = ({ player, rank, isCurrentUser, index, isAdmin, onAdminAction }) => {
   const lv = calculateLevel(player.totalPoints || 0);
   const bgClass = isCurrentUser
     ? 'bg-gradient-to-r from-[#2563EB]/10 to-[#3B82F6]/5 border-[#2563EB]/30'
@@ -56,13 +296,20 @@ const RankingEntry = ({ player, rank, isCurrentUser, index }) => {
         <RankBadge rank={rank} />
         <RankingAvatar config={player.robotConfig} size={40} />
         <div className="flex-grow min-w-0">
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1.5 flex-wrap">
             <span className={`text-sm font-black truncate ${isCurrentUser ? 'text-[#2563EB]' : 'text-[#3C3C3C]'}`}>
               {player.username || 'Anónimo'}
             </span>
             {isCurrentUser && (
               <span className="px-1.5 py-0.5 bg-[#2563EB] text-white text-[8px] font-black rounded-md uppercase">Tú</span>
             )}
+            {isAdminEmail(player.email) && (
+              <span className="px-1.5 py-0.5 bg-gradient-to-r from-[#FF4B4B] to-[#FF9600] text-white text-[7px] font-black rounded-md uppercase tracking-wider">ADMIN</span>
+            )}
+            {/* Admin badges */}
+            {player.adminBadges?.map(b => (
+              <span key={b.id} title={b.name} className="text-sm">{b.emoji}</span>
+            ))}
           </div>
           <div className="flex items-center gap-2 mt-0.5">
             <span className="text-[10px] font-bold text-[#AFAFAF]">{lv.emoji} Nv.{lv.level}</span>
@@ -87,24 +334,37 @@ const RankingEntry = ({ player, rank, isCurrentUser, index }) => {
             </span>
           </div>
         </div>
-        <div className="text-right flex-shrink-0">
-          <div className="flex items-center gap-1">
-            <Star size={12} className="text-[#FFC800]" />
-            <span className="text-sm font-black text-[#3C3C3C]">{(player.totalPoints || 0).toLocaleString()}</span>
+        <div className="flex items-center gap-2">
+          <div className="text-right flex-shrink-0">
+            <div className="flex items-center gap-1">
+              <Star size={12} className="text-[#FFC800]" />
+              <span className="text-sm font-black text-[#3C3C3C]">{(player.totalPoints || 0).toLocaleString()}</span>
+            </div>
+            <span className="text-[9px] font-bold text-[#AFAFAF]">XP</span>
           </div>
-          <span className="text-[9px] font-bold text-[#AFAFAF]">XP</span>
+          {/* Admin action button */}
+          {isAdmin && !isCurrentUser && (
+            <button onClick={() => onAdminAction(player)}
+              className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#6366F1] to-[#4F46E5] flex items-center justify-center shadow-md active:scale-90 transition border border-[#4338CA]/50">
+              <Shield size={14} className="text-white" />
+            </button>
+          )}
         </div>
       </div>
     </div>
   );
 };
 
-const RankingScreen = ({ onBack, currentUserId, currentUserProfile }) => {
-  const [tab, setTab] = useState('global'); // 'global' | 'friends'
+// ============================================
+// RANKING SCREEN
+// ============================================
+const RankingScreen = ({ onBack, currentUserId, currentUserProfile, isAdmin = false }) => {
+  const [tab, setTab] = useState('global');
   const [globalRanking, setGlobalRanking] = useState([]);
   const [friendsRanking, setFriendsRanking] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [adminTarget, setAdminTarget] = useState(null);
 
   // Cargar ranking global en tiempo real
   useEffect(() => {
@@ -121,7 +381,6 @@ const RankingScreen = ({ onBack, currentUserId, currentUserProfile }) => {
     if (!currentUserId) return;
     try {
       const friends = await getFriendsList(currentUserId);
-      // Agregar al usuario actual y ordenar
       const allPlayers = [...friends];
       if (currentUserProfile) {
         allPlayers.push({
@@ -154,6 +413,40 @@ const RankingScreen = ({ onBack, currentUserId, currentUserProfile }) => {
     setTimeout(() => setRefreshing(false), 500);
   };
 
+  const handleAdminDelete = async (uid) => {
+    await adminDeleteUser(uid);
+    setGlobalRanking(prev => prev.filter(p => p.uid !== uid).map((p, i) => ({ ...p, rank: i + 1 })));
+    setAdminTarget(null);
+  };
+
+  const handleAdminGiftBadge = async (uid, badge) => {
+    await adminGiftBadge(uid, badge);
+    setGlobalRanking(prev => prev.map(p => {
+      if (p.uid === uid) {
+        const existing = p.adminBadges || [];
+        if (!existing.some(b => b.id === badge.id)) {
+          return { ...p, adminBadges: [...existing, { ...badge, giftedAt: new Date().toISOString() }] };
+        }
+      }
+      return p;
+    }));
+    setAdminTarget(prev => {
+      if (prev && prev.uid === uid) {
+        const existing = prev.adminBadges || [];
+        if (!existing.some(b => b.id === badge.id)) {
+          return { ...prev, adminBadges: [...existing, { ...badge, giftedAt: new Date().toISOString() }] };
+        }
+      }
+      return prev;
+    });
+  };
+
+  const handleAdminGiftSkin = async (uid, skin) => {
+    await adminGiftSkin(uid, skin);
+    setGlobalRanking(prev => prev.map(p => p.uid === uid ? { ...p, robotConfig: skin.config } : p));
+    setAdminTarget(prev => prev && prev.uid === uid ? { ...prev, robotConfig: skin.config } : prev);
+  };
+
   const currentRanking = tab === 'global' ? globalRanking : friendsRanking;
   const currentUserRank = currentRanking.find(p => p.uid === currentUserId);
 
@@ -174,7 +467,9 @@ const RankingScreen = ({ onBack, currentUserId, currentUserProfile }) => {
           <div className="relative z-10 text-center">
             <div className="text-5xl mb-2">🏆</div>
             <h1 className="text-2xl font-black text-white tracking-tight">Ranking</h1>
-            <p className="text-white/60 text-xs font-bold mt-1">Compite con la comunidad</p>
+            <p className="text-white/60 text-xs font-bold mt-1">
+              {isAdmin ? '🛡️ Modo Administrador Activo' : 'Compite con la comunidad'}
+            </p>
           </div>
         </div>
 
@@ -187,7 +482,15 @@ const RankingScreen = ({ onBack, currentUserId, currentUserProfile }) => {
               <div className="flex items-center gap-3">
                 <RankBadge rank={currentUserRank.rank} />
                 <div className="flex-grow min-w-0">
-                  <p className="text-sm font-black text-[#3C3C3C]">{currentUserProfile?.username || 'Tú'}</p>
+                  <div className="flex items-center gap-1.5">
+                    <p className="text-sm font-black text-[#3C3C3C]">{currentUserProfile?.username || 'Tú'}</p>
+                    {isAdmin && (
+                      <span className="px-1.5 py-0.5 bg-gradient-to-r from-[#FF4B4B] to-[#FF9600] text-white text-[7px] font-black rounded-md uppercase tracking-wider">ADMIN</span>
+                    )}
+                    {currentUserProfile?.adminBadges?.map(b => (
+                      <span key={b.id} title={b.name} className="text-sm">{b.emoji}</span>
+                    ))}
+                  </div>
                   <p className="text-[10px] font-bold text-[#AFAFAF]">Posición #{currentUserRank.rank} de {currentRanking.length}</p>
                   <div className="flex items-center gap-1.5 mt-1">
                     <span className="text-[10px] font-bold text-[#2563EB]">{myLv.emoji} Nv.{myLv.level}</span>
@@ -295,6 +598,9 @@ const RankingScreen = ({ onBack, currentUserId, currentUserProfile }) => {
                     </div>
                     <p className="text-[10px] font-black text-[#777] mt-1 truncate max-w-[70px]">{currentRanking[1]?.username}</p>
                     <p className="text-[9px] font-bold text-[#AFAFAF]">{currentRanking[1]?.totalPoints} XP</p>
+                    {currentRanking[1]?.adminBadges?.length > 0 && (
+                      <div className="flex justify-center gap-0.5">{currentRanking[1].adminBadges.map(b => <span key={b.id} className="text-xs">{b.emoji}</span>)}</div>
+                    )}
                   </div>
                   {/* 1st place */}
                   <div className="text-center -mb-2">
@@ -305,6 +611,9 @@ const RankingScreen = ({ onBack, currentUserId, currentUserProfile }) => {
                     </div>
                     <p className="text-xs font-black text-[#3C3C3C] mt-1 truncate max-w-[80px]">{currentRanking[0]?.username}</p>
                     <p className="text-[10px] font-bold text-[#FFC800]">{currentRanking[0]?.totalPoints} XP</p>
+                    {currentRanking[0]?.adminBadges?.length > 0 && (
+                      <div className="flex justify-center gap-0.5">{currentRanking[0].adminBadges.map(b => <span key={b.id} className="text-xs">{b.emoji}</span>)}</div>
+                    )}
                   </div>
                   {/* 3rd place */}
                   <div className="text-center">
@@ -314,6 +623,9 @@ const RankingScreen = ({ onBack, currentUserId, currentUserProfile }) => {
                     </div>
                     <p className="text-[10px] font-black text-[#777] mt-1 truncate max-w-[70px]">{currentRanking[2]?.username}</p>
                     <p className="text-[9px] font-bold text-[#AFAFAF]">{currentRanking[2]?.totalPoints} XP</p>
+                    {currentRanking[2]?.adminBadges?.length > 0 && (
+                      <div className="flex justify-center gap-0.5">{currentRanking[2].adminBadges.map(b => <span key={b.id} className="text-xs">{b.emoji}</span>)}</div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -327,11 +639,24 @@ const RankingScreen = ({ onBack, currentUserId, currentUserProfile }) => {
                 rank={player.rank || idx + 1}
                 isCurrentUser={player.uid === currentUserId}
                 index={idx}
+                isAdmin={isAdmin}
+                onAdminAction={(p) => setAdminTarget(p)}
               />
             ))}
           </>
         )}
       </div>
+
+      {/* Admin Action Modal */}
+      {adminTarget && (
+        <AdminActionModal
+          player={adminTarget}
+          onClose={() => setAdminTarget(null)}
+          onDelete={handleAdminDelete}
+          onGiftBadge={handleAdminGiftBadge}
+          onGiftSkin={handleAdminGiftSkin}
+        />
+      )}
     </div>
   );
 };

@@ -604,3 +604,133 @@ export const syncFriendsCount = async (uid) => {
     console.warn('Error sincronizando friendsCount:', e.message);
   }
 };
+
+// ================================================================
+// SISTEMA DE ADMINISTRACIÓN
+// ================================================================
+
+/**
+ * Emails con permisos de administrador.
+ */
+export const ADMIN_EMAILS = [
+  'diego.martinez111213@gmail.com',
+  'ing.abrahamdonate@gmail.com',
+];
+
+/**
+ * Verificar si un email es admin.
+ */
+export const isAdminEmail = (email) => {
+  return ADMIN_EMAILS.includes(email?.toLowerCase());
+};
+
+/**
+ * Eliminar cuenta de usuario (admin only).
+ * Borra: perfil, scores, username, amigos, solicitudes.
+ * No elimina la cuenta de Firebase Auth (requiere Cloud Functions).
+ */
+export const adminDeleteUser = async (targetUid) => {
+  try {
+    // Obtener perfil del usuario a eliminar
+    const userRef = doc(db, 'users', targetUid);
+    const userSnap = await getDoc(userRef);
+    if (!userSnap.exists()) throw new Error('Usuario no encontrado');
+
+    const userData = userSnap.data();
+    const batch = writeBatch(db);
+
+    // Eliminar perfil
+    batch.delete(userRef);
+
+    // Eliminar scores
+    const scoresRef = doc(db, 'userScores', targetUid);
+    batch.delete(scoresRef);
+
+    // Eliminar username reservado
+    if (userData.usernameLower) {
+      const usernameRef = doc(db, 'usernames', userData.usernameLower);
+      batch.delete(usernameRef);
+    }
+
+    await batch.commit();
+
+    // Eliminar amigos (subcollección - requiere lectura individual)
+    try {
+      const friendsSnap = await getDocs(collection(db, 'friends', targetUid, 'list'));
+      for (const friendDoc of friendsSnap.docs) {
+        const friendUid = friendDoc.id;
+        // Eliminar al usuario de la lista del amigo
+        await deleteDoc(doc(db, 'friends', friendUid, 'list', targetUid));
+        // Decrementar counter del amigo
+        try {
+          await updateDoc(doc(db, 'users', friendUid), { friendsCount: increment(-1) });
+        } catch {}
+        // Eliminar al amigo de la lista del usuario
+        await deleteDoc(doc(db, 'friends', targetUid, 'list', friendUid));
+      }
+    } catch (e) {
+      console.warn('Error limpiando amigos:', e.message);
+    }
+
+    // Eliminar solicitudes de amistad
+    try {
+      const sentReqs = await getDocs(query(collection(db, 'friendRequests'), where('from', '==', targetUid)));
+      for (const d of sentReqs.docs) await deleteDoc(d.ref);
+      const recvReqs = await getDocs(query(collection(db, 'friendRequests'), where('to', '==', targetUid)));
+      for (const d of recvReqs.docs) await deleteDoc(d.ref);
+    } catch (e) {
+      console.warn('Error limpiando solicitudes:', e.message);
+    }
+
+    return true;
+  } catch (e) {
+    console.error('Error eliminando usuario:', e);
+    throw e;
+  }
+};
+
+/**
+ * Regalar insignia a un usuario (admin only).
+ * Las insignias se guardan en el array 'adminBadges' del perfil.
+ */
+export const adminGiftBadge = async (targetUid, badge) => {
+  const userRef = doc(db, 'users', targetUid);
+  await updateDoc(userRef, {
+    adminBadges: arrayUnion({
+      id: badge.id,
+      name: badge.name,
+      emoji: badge.emoji,
+      color: badge.color,
+      giftedAt: new Date().toISOString(),
+    }),
+  });
+};
+
+/**
+ * Quitar insignia a un usuario (admin only).
+ */
+export const adminRemoveBadge = async (targetUid, badge) => {
+  const userRef = doc(db, 'users', targetUid);
+  const snap = await getDoc(userRef);
+  if (!snap.exists()) return;
+  const currentBadges = snap.data().adminBadges || [];
+  const filtered = currentBadges.filter(b => b.id !== badge.id);
+  await updateDoc(userRef, { adminBadges: filtered });
+};
+
+/**
+ * Regalar skin al usuario (admin only).
+ * Las skins regaladas se guardan en 'giftedSkins' array.
+ */
+export const adminGiftSkin = async (targetUid, skin) => {
+  const userRef = doc(db, 'users', targetUid);
+  await updateDoc(userRef, {
+    giftedSkins: arrayUnion({
+      id: skin.id,
+      name: skin.name,
+      giftedAt: new Date().toISOString(),
+    }),
+    // Aplicar la skin directamente al robot
+    robotConfig: skin.config,
+  });
+};
