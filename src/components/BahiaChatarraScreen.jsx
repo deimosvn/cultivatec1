@@ -866,7 +866,7 @@ const BahiaChatarraScreen = ({ onBack }) => {
               <div className="absolute inset-[-20px] rounded-full pointer-events-none opacity-70"
                 style={{ background: 'radial-gradient(circle, rgba(245,158,11,0.4) 0%, transparent 65%)', filter: 'blur(10px)' }}></div>
               <img src="/bahia.png" alt="Bahía de la Chatarra Estelar"
-                className="w-28 h-28 sm:w-36 sm:h-36 object-contain relative z-10"
+                className="w-40 h-40 sm:w-48 sm:h-48 object-contain relative z-10"
                 style={{ filter: 'drop-shadow(0 0 20px rgba(245,158,11,0.5)) drop-shadow(0 0 40px rgba(245,158,11,0.2))' }} />
               {/* Orbiting sparkles */}
               <div className="absolute inset-[-12px] rounded-full border border-amber-400/10 pointer-events-none" style={{ animation: 'orbit-ring 15s linear infinite' }}>

@@ -497,7 +497,7 @@ const CircuitLabScreen = ({ onBack, onOpenFreeCircuitBuilder, userId, userStats,
                             <div className="absolute inset-[-20px] rounded-full pointer-events-none opacity-70"
                                 style={{ background: 'radial-gradient(circle, rgba(34,211,238,0.4) 0%, transparent 65%)', filter: 'blur(10px)' }}></div>
                             <img src="/electronica.png" alt="Laboratorio de Circuitos"
-                                className="w-28 h-28 sm:w-36 sm:h-36 object-contain relative z-10"
+                                className="w-40 h-40 sm:w-48 sm:h-48 object-contain relative z-10"
                                 style={{ filter: 'drop-shadow(0 0 20px rgba(34,211,238,0.5)) drop-shadow(0 0 40px rgba(34,211,238,0.2))' }} />
                             {/* Orbiting sparkle */}
                             <div className="absolute inset-[-12px] rounded-full border border-cyan-400/10 pointer-events-none" style={{ animation: 'orbit-ring 15s linear infinite' }}>
@@ -944,7 +944,7 @@ const ProgrammingStationScreen = ({ onBack, startChallenge, userScores, userId, 
                             <div className="absolute inset-[-20px] rounded-full pointer-events-none opacity-70"
                                 style={{ background: 'radial-gradient(circle, rgba(147,197,253,0.4) 0%, transparent 65%)', filter: 'blur(10px)' }}></div>
                             <img src="/programacion.png" alt="Estación de Programación"
-                                className="w-28 h-28 sm:w-36 sm:h-36 object-contain relative z-10"
+                                className="w-40 h-40 sm:w-48 sm:h-48 object-contain relative z-10"
                                 style={{ filter: 'drop-shadow(0 0 20px rgba(147,197,253,0.5)) drop-shadow(0 0 40px rgba(147,197,253,0.2))' }} />
                             {/* Orbiting sparkle */}
                             <div className="absolute inset-[-12px] rounded-full border border-blue-400/10 pointer-events-none" style={{ animation: 'orbit-ring 15s linear infinite' }}>
