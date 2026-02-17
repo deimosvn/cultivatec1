@@ -4354,44 +4354,44 @@ const WorldMapScreen = ({ userScores, onSelectWorld, userProfile, firebaseProfil
             </div>
 
             {/* Top Stats Bar */}
-            <div className="sticky top-0 z-20 bg-[#DBEAFE]/90 backdrop-blur-2xl border-b border-[#93C5FD]/40 px-4 py-2.5">
-                <div className="flex items-center justify-between max-w-xl mx-auto">
-                    <div className="flex items-center gap-2.5">
+            <div className="sticky top-0 z-20 bg-[#DBEAFE]/90 backdrop-blur-2xl border-b border-[#93C5FD]/40 px-2 py-2">
+                <div className="flex items-center justify-between max-w-xl mx-auto gap-1">
+                    <div className="flex items-center gap-1.5 min-w-0 flex-1">
                         {userProfile && (
-                            <button onClick={onEditRobot} className="active:scale-90 transition-transform hover:ring-2 hover:ring-[#3B82F6]/30 rounded-2xl p-0.5 bg-[#2563EB]/10 border border-[#93C5FD]/40">
-                                <RobotMini config={userProfile.robotConfig} size={36} />
+                            <button onClick={onEditRobot} className="active:scale-90 transition-transform rounded-xl p-0.5 bg-[#2563EB]/10 border border-[#93C5FD]/40 flex-shrink-0">
+                                <RobotMini config={userProfile.robotConfig} size={30} />
                             </button>
                         )}
-                        <div className="flex flex-col">
+                        <div className="flex flex-col min-w-0">
                             <div className="flex items-center gap-1">
-                                <span className="text-[11px] font-black text-[#1E3A8A] leading-tight">{firebaseProfile?.username || 'Explorador'}</span>
+                                <span className="text-[7px] font-black text-[#1E3A8A] leading-tight truncate max-w-[80px]">{firebaseProfile?.username || 'Explorador'}</span>
                                 {isAdminEmail(firebaseProfile?.email) && (
-                                    <span className="px-1.5 py-0.5 bg-gradient-to-r from-[#FF4B4B] to-[#FF9600] text-white text-[7px] font-black rounded-md uppercase tracking-wider shadow-sm">ADMIN</span>
+                                    <span className="px-1 py-0.5 bg-gradient-to-r from-[#FF4B4B] to-[#FF9600] text-white text-[5px] font-black rounded-md uppercase tracking-wider shadow-sm flex-shrink-0">ADMIN</span>
                                 )}
                                 {firebaseProfile?.adminBadges?.map(b => (
-                                    <span key={b.id} title={b.name} className="text-sm">{b.emoji}</span>
+                                    <span key={b.id} title={b.name} className="text-xs flex-shrink-0">{b.emoji}</span>
                                 ))}
                             </div>
-                            <span className="text-[9px] font-bold text-[#3B82F6]/70 leading-tight">
+                            <span className="text-[6px] font-bold text-[#3B82F6]/70 leading-tight truncate">
                                 {(() => { const lv = calculateLevel(firebaseProfile?.totalPoints ?? userStats?.totalPoints ?? 0); return `${lv.emoji} Nv.${lv.level} · ${lv.title}`; })()}
                             </span>
                         </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                        <div className="flex items-center gap-1 bg-[#2563EB]/10 px-2.5 py-1.5 rounded-xl border border-[#93C5FD]/40">
-                            <Zap size={14} className="text-[#2563EB]" />
-                            <span className="text-xs font-black text-[#1D4ED8]">{firebaseProfile?.currentStreak || 0}</span>
+                    <div className="flex items-center gap-1 flex-shrink-0">
+                        <div className="flex items-center gap-0.5 bg-[#2563EB]/10 px-1.5 py-1 rounded-lg border border-[#93C5FD]/40">
+                            <Zap size={12} className="text-[#2563EB]" />
+                            <span className="text-[7px] font-black text-[#1D4ED8]">{firebaseProfile?.currentStreak || 0}</span>
                         </div>
-                        <div className="flex items-center gap-1 bg-[#FFC800]/10 px-2.5 py-1.5 rounded-xl border border-[#FFC800]/25">
-                            <Star size={14} className="text-[#D4A500]" />
-                            <span className="text-xs font-black text-[#B45309]">{(firebaseProfile?.totalPoints ?? userStats?.totalPoints ?? 0).toLocaleString()}</span>
+                        <div className="flex items-center gap-0.5 bg-[#FFC800]/10 px-1.5 py-1 rounded-lg border border-[#FFC800]/25">
+                            <Star size={12} className="text-[#D4A500]" />
+                            <span className="text-[7px] font-black text-[#B45309]">{(firebaseProfile?.totalPoints ?? userStats?.totalPoints ?? 0).toLocaleString()}</span>
                         </div>
-                        <button onClick={onShowLicenses} className="flex items-center bg-[#2563EB]/10 p-2 rounded-xl hover:bg-[#2563EB]/20 transition active:scale-95 border border-[#93C5FD]/40">
-                            <GraduationCap size={16} className="text-[#2563EB]" />
+                        <button onClick={onShowLicenses} className="flex items-center bg-[#2563EB]/10 p-1.5 rounded-lg hover:bg-[#2563EB]/20 transition active:scale-95 border border-[#93C5FD]/40">
+                            <GraduationCap size={14} className="text-[#2563EB]" />
                         </button>
                         {onShowSettings && (
-                            <button onClick={onShowSettings} className="flex items-center bg-[#2563EB]/10 p-2 rounded-xl hover:bg-[#2563EB]/20 transition active:scale-95 border border-[#93C5FD]/40" title="Ajustes">
-                                <Settings size={14} className="text-[#2563EB]" />
+                            <button onClick={onShowSettings} className="flex items-center bg-[#2563EB]/10 p-1.5 rounded-lg hover:bg-[#2563EB]/20 transition active:scale-95 border border-[#93C5FD]/40" title="Ajustes">
+                                <Settings size={12} className="text-[#2563EB]" />
                             </button>
                         )}
                     </div>
@@ -4888,33 +4888,33 @@ const LibraryScreen = ({ startLesson, userId, userScores, onShowAchievements, on
     return (
     <div className={`pb-24 min-h-full w-full relative ${world.bgClass || 'bg-[#F7F7F7]'}`}>
         {/* Modern Top Bar */}
-        <div className="sticky top-0 z-20 bg-[#DBEAFE]/90 backdrop-blur-2xl border-b border-[#93C5FD]/40 px-4 py-2.5">
-            <div className="flex items-center justify-between max-w-xl mx-auto">
-                <div className="flex items-center gap-2.5">
-                    <button onClick={onBackToWorlds} className="flex items-center bg-[#2563EB]/10 p-2 rounded-xl hover:bg-[#2563EB]/20 transition active:scale-95 border border-[#93C5FD]/40" title="Volver al mapa">
-                        <ArrowLeft size={16} className="text-[#1D4ED8]" />
+        <div className="sticky top-0 z-20 bg-[#DBEAFE]/90 backdrop-blur-2xl border-b border-[#93C5FD]/40 px-2 py-2">
+            <div className="flex items-center justify-between max-w-xl mx-auto gap-1">
+                <div className="flex items-center gap-1.5 min-w-0 flex-1">
+                    <button onClick={onBackToWorlds} className="flex items-center bg-[#2563EB]/10 p-1.5 rounded-lg hover:bg-[#2563EB]/20 transition active:scale-95 border border-[#93C5FD]/40 flex-shrink-0" title="Volver al mapa">
+                        <ArrowLeft size={14} className="text-[#1D4ED8]" />
                     </button>
                     {userProfile && (
-                      <button onClick={onEditRobot} className="active:scale-90 transition-transform hover:ring-2 hover:ring-[#2563EB]/30 rounded-2xl p-0.5 bg-[#2563EB]/5 border border-[#2563EB]/10" title="Personalizar robot">
-                        <RobotMini config={userProfile.robotConfig} size={34} />
+                      <button onClick={onEditRobot} className="active:scale-90 transition-transform rounded-xl p-0.5 bg-[#2563EB]/5 border border-[#2563EB]/10 flex-shrink-0" title="Personalizar robot">
+                        <RobotMini config={userProfile.robotConfig} size={28} />
                       </button>
                     )}
-                    <div className="flex items-center gap-1 bg-[#3B82F6]/8 px-2.5 py-1.5 rounded-xl border border-[#3B82F6]/10" title="Racha diaria">
-                        <Zap size={14} className="text-[#3B82F6]" />
-                        <span className="text-xs font-black text-[#3B82F6]">{firebaseProfile?.currentStreak || 0}</span>
+                    <div className="flex items-center gap-0.5 bg-[#3B82F6]/8 px-1.5 py-1 rounded-lg border border-[#3B82F6]/10 flex-shrink-0" title="Racha diaria">
+                        <Zap size={12} className="text-[#3B82F6]" />
+                        <span className="text-[7px] font-black text-[#3B82F6]">{firebaseProfile?.currentStreak || 0}</span>
                     </div>
-                    <div className="flex items-center gap-1 bg-[#FFC800]/8 px-2.5 py-1.5 rounded-xl border border-[#FFC800]/15">
-                        <Star size={14} className="text-[#FFC800]" />
-                        <span className="text-xs font-black text-[#D4A500]">{(firebaseProfile?.totalPoints ?? userStats?.totalPoints ?? 0).toLocaleString()}</span>
+                    <div className="flex items-center gap-0.5 bg-[#FFC800]/8 px-1.5 py-1 rounded-lg border border-[#FFC800]/15 flex-shrink-0">
+                        <Star size={12} className="text-[#FFC800]" />
+                        <span className="text-[7px] font-black text-[#D4A500]">{(firebaseProfile?.totalPoints ?? userStats?.totalPoints ?? 0).toLocaleString()}</span>
                     </div>
                 </div>
-                <div className="flex items-center gap-2">
-                    <button onClick={onShowLicenses} className="flex items-center bg-[#2563EB]/8 p-2 rounded-xl hover:bg-[#2563EB]/15 transition active:scale-95 border border-[#2563EB]/10" title="Mis Licencias">
-                        <GraduationCap size={16} className="text-[#2563EB]" />
+                <div className="flex items-center gap-1 flex-shrink-0">
+                    <button onClick={onShowLicenses} className="flex items-center bg-[#2563EB]/8 p-1.5 rounded-lg hover:bg-[#2563EB]/15 transition active:scale-95 border border-[#2563EB]/10" title="Mis Licencias">
+                        <GraduationCap size={14} className="text-[#2563EB]" />
                     </button>
                     {onShowSettings && (
-                        <button onClick={onShowSettings} className="flex items-center bg-[#2563EB]/8 p-2 rounded-xl hover:bg-[#2563EB]/15 transition active:scale-95 border border-[#2563EB]/10" title="Ajustes">
-                            <Settings size={14} className="text-[#2563EB]" />
+                        <button onClick={onShowSettings} className="flex items-center bg-[#2563EB]/8 p-1.5 rounded-lg hover:bg-[#2563EB]/15 transition active:scale-95 border border-[#2563EB]/10" title="Ajustes">
+                            <Settings size={12} className="text-[#2563EB]" />
                         </button>
                     )}
                 </div>
