@@ -401,15 +401,39 @@ const ROBOTS_CASEROS = [
 ];
 
 // ============================================
-// GENERADOR DE PDF CON LOGO
+// GENERADOR DE PDF PROFESIONAL CON LOGO
 // ============================================
 const generateRobotPDF = async (robot) => {
   const pdf = new jsPDF('p', 'mm', 'letter');
   const pageWidth = 216;
   const pageHeight = 279;
-  const margin = 18;
+  const margin = 16;
   const contentWidth = pageWidth - margin * 2;
   let y = margin;
+
+  // Color palette
+  const colors = {
+    primary: [30, 64, 175],      // Blue
+    primaryLight: [59, 130, 246],
+    primaryBg: [235, 242, 255],
+    accent: [124, 58, 237],      // Purple
+    dark: [15, 23, 42],
+    text: [30, 41, 59],
+    textLight: [100, 116, 139],
+    textMuted: [148, 163, 184],
+    success: [22, 163, 74],
+    successBg: [220, 252, 231],
+    warning: [180, 130, 20],
+    warningBg: [254, 252, 232],
+    warningBorder: [253, 230, 138],
+    danger: [220, 38, 38],
+    dangerBg: [254, 226, 226],
+    white: [255, 255, 255],
+    grayBg: [248, 250, 252],
+    grayBorder: [226, 232, 240],
+    stepEven: [248, 250, 255],
+    stepOdd: [245, 243, 255],
+  };
 
   // Load logo
   let logoImg = null;
@@ -431,36 +455,57 @@ const generateRobotPDF = async (robot) => {
     logoImg = null;
   }
 
-  const addHeader = (pageNum) => {
-    // Logo top-left
+  let pageNum = 1;
+
+  // --- Header for continuation pages ---
+  const addHeader = (pNum) => {
+    // Accent bar at very top
+    pdf.setFillColor(...colors.primary);
+    pdf.rect(0, 0, pageWidth, 3, 'F');
+    // Logo
     if (logoImg) {
-      try { pdf.addImage(logoImg, 'PNG', margin, 8, 22, 22); } catch {}
+      try { pdf.addImage(logoImg, 'PNG', margin, 6, 16, 16); } catch {}
     }
-    // CultivaTec brand text
-    pdf.setFontSize(10);
-    pdf.setTextColor(37, 99, 235);
-    pdf.text('CultivaTec - Bahía de la Chatarra Estelar', logoImg ? margin + 25 : margin, 18);
+    // Brand
+    pdf.setFontSize(9);
+    pdf.setTextColor(...colors.primary);
+    pdf.text('CultivaTec', logoImg ? margin + 19 : margin, 13);
     pdf.setFontSize(7);
-    pdf.setTextColor(160, 160, 160);
-    pdf.text(`Página ${pageNum}`, pageWidth - margin, 18, { align: 'right' });
-    // Divider line
-    pdf.setDrawColor(59, 130, 246);
-    pdf.setLineWidth(0.5);
-    pdf.line(margin, 28, pageWidth - margin, 28);
-    return 33;
+    pdf.setTextColor(...colors.textMuted);
+    pdf.text('Bahia de la Chatarra Estelar', logoImg ? margin + 19 : margin, 18);
+    // Robot name right
+    pdf.setFontSize(8);
+    pdf.setTextColor(...colors.accent);
+    pdf.text(robot.nombre, pageWidth - margin, 13, { align: 'right' });
+    // Page number
+    pdf.setFontSize(7);
+    pdf.setTextColor(...colors.textMuted);
+    pdf.text(`Pagina ${pNum}`, pageWidth - margin, 18, { align: 'right' });
+    // Separator
+    pdf.setDrawColor(...colors.grayBorder);
+    pdf.setLineWidth(0.4);
+    pdf.line(margin, 23, pageWidth - margin, 23);
+    return 28;
   };
 
+  // --- Footer ---
   const addFooter = () => {
-    pdf.setFontSize(7);
-    pdf.setTextColor(180, 180, 180);
-    pdf.text('CultivaTec © — Aprendiendo robótica paso a paso', pageWidth / 2, pageHeight - 10, { align: 'center' });
-    pdf.setDrawColor(220, 220, 220);
+    const footerY = pageHeight - 12;
+    pdf.setDrawColor(...colors.grayBorder);
     pdf.setLineWidth(0.3);
-    pdf.line(margin, pageHeight - 15, pageWidth - margin, pageHeight - 15);
+    pdf.line(margin, footerY - 3, pageWidth - margin, footerY - 3);
+    pdf.setFontSize(6.5);
+    pdf.setTextColor(...colors.textMuted);
+    pdf.text('CultivaTec - Democratizando el conocimiento STEM', margin, footerY);
+    pdf.text('cultivatec.vercel.app', pageWidth - margin, footerY, { align: 'right' });
+    // Accent bar at bottom
+    pdf.setFillColor(...colors.primary);
+    pdf.rect(0, pageHeight - 3, pageWidth, 3, 'F');
   };
 
+  // --- Page break check ---
   const checkNewPage = (neededSpace) => {
-    if (y + neededSpace > pageHeight - 20) {
+    if (y + neededSpace > pageHeight - 18) {
       addFooter();
       pdf.addPage();
       pageNum++;
@@ -470,132 +515,323 @@ const generateRobotPDF = async (robot) => {
     return false;
   };
 
-  let pageNum = 1;
-
-  // ---- PAGE 1: Cover ----
-  y = addHeader(pageNum);
-
-  // Title
-  pdf.setFontSize(26);
-  pdf.setTextColor(30, 64, 175);
-  pdf.text(robot.nombre, pageWidth / 2, y + 10, { align: 'center' });
-  y += 18;
-
-  // Robot emoji big
-  pdf.setFontSize(50);
-  pdf.text(robot.emoji, pageWidth / 2, y + 18, { align: 'center' });
-  y += 28;
-
-  // Difficulty / time / age badges
-  pdf.setFontSize(11);
-  pdf.setTextColor(100, 100, 100);
-  const infoLine = `Dificultad: ${robot.dificultad}   |   Tiempo: ${robot.tiempo}   |   Edad: ${robot.edad}`;
-  pdf.text(infoLine, pageWidth / 2, y + 5, { align: 'center' });
-  y += 12;
-
-  // Description
-  pdf.setFontSize(11);
-  pdf.setTextColor(60, 60, 60);
-  const descLines = pdf.splitTextToSize(robot.descripcion, contentWidth - 20);
-  descLines.forEach(line => {
-    pdf.text(line, pageWidth / 2, y + 5, { align: 'center' });
-    y += 5;
-  });
-  y += 8;
-
-  // Materials section
-  pdf.setDrawColor(220, 220, 240);
-  pdf.setFillColor(240, 245, 255);
-  const matBoxHeight = 10 + robot.materiales.length * 12;
-  checkNewPage(matBoxHeight + 10);
-  pdf.roundedRect(margin, y, contentWidth, matBoxHeight, 3, 3, 'FD');
-
-  pdf.setFontSize(14);
-  pdf.setTextColor(30, 64, 175);
-  pdf.text('Materiales Necesarios', margin + 5, y + 8);
-  y += 14;
-
-  pdf.setFontSize(10);
-  robot.materiales.forEach(mat => {
+  // --- Draw a section title with icon ---
+  const drawSectionTitle = (title, icon) => {
     checkNewPage(14);
-    pdf.setTextColor(50, 50, 50);
-    pdf.text(`${mat.emoji}  ${mat.nombre}`, margin + 6, y);
-    y += 4.5;
-    pdf.setFontSize(8);
-    pdf.setTextColor(130, 130, 130);
-    const notaLines = pdf.splitTextToSize(mat.nota, contentWidth - 16);
-    notaLines.forEach(nl => {
-      pdf.text(`     ${nl}`, margin + 6, y);
-      y += 3.5;
-    });
-    pdf.setFontSize(10);
-    y += 2;
+    // Left accent bar
+    pdf.setFillColor(...colors.primary);
+    pdf.roundedRect(margin, y, 3, 9, 1, 1, 'F');
+    // Icon + Title
+    pdf.setFontSize(13);
+    pdf.setTextColor(...colors.primary);
+    pdf.text(`${icon}  ${title}`, margin + 7, y + 7);
+    // Underline
+    pdf.setDrawColor(...colors.primaryLight);
+    pdf.setLineWidth(0.3);
+    pdf.line(margin, y + 11, pageWidth - margin, y + 11);
+    y += 15;
+  };
+
+  // ========================================
+  // PAGE 1: COVER PAGE
+  // ========================================
+
+  // Top accent bar
+  pdf.setFillColor(...colors.primary);
+  pdf.rect(0, 0, pageWidth, 4, 'F');
+
+  // Header band with gradient effect
+  pdf.setFillColor(30, 41, 59);
+  pdf.rect(0, 4, pageWidth, 70, 'F');
+  // Overlay lighter strip
+  pdf.setFillColor(30, 64, 175);
+  pdf.rect(0, 4, pageWidth, 70, 'F');
+  // Make it slightly transparent with a dark overlay
+  pdf.setFillColor(15, 23, 42, 0.3);
+
+  // Logo on cover
+  if (logoImg) {
+    try { pdf.addImage(logoImg, 'PNG', margin, 10, 20, 20); } catch {}
+  }
+  // Brand text
+  pdf.setFontSize(11);
+  pdf.setTextColor(255, 255, 255);
+  pdf.text('CultivaTec', logoImg ? margin + 23 : margin, 20);
+  pdf.setFontSize(8);
+  pdf.setTextColor(190, 210, 255);
+  pdf.text('Bahia de la Chatarra Estelar', logoImg ? margin + 23 : margin, 26);
+
+  // Robot name - large
+  pdf.setFontSize(28);
+  pdf.setTextColor(255, 255, 255);
+  const titleLines = pdf.splitTextToSize(robot.nombre, contentWidth - 20);
+  let titleY = 48;
+  titleLines.forEach(line => {
+    pdf.text(line, pageWidth / 2, titleY, { align: 'center' });
+    titleY += 12;
   });
 
-  y += 6;
+  // Emoji big
+  pdf.setFontSize(14);
+  pdf.setTextColor(255, 255, 255);
+  pdf.text(`${robot.emoji}  Guia de Construccion Paso a Paso`, pageWidth / 2, 65, { align: 'center' });
 
-  // ---- STEPS PAGES ----
-  robot.pasos.forEach((paso, idx) => {
-    const stepHeight = 45;
-    checkNewPage(stepHeight);
+  y = 82;
 
-    // Step box
-    pdf.setDrawColor(200, 210, 240);
-    pdf.setFillColor(idx % 2 === 0 ? 248 : 243, idx % 2 === 0 ? 250 : 247, 255);
-    pdf.roundedRect(margin, y, contentWidth, 0.1, 2, 2, 'F'); // placeholder, we'll draw content
+  // Info cards row
+  const cardW = (contentWidth - 8) / 3;
+  const cards = [
+    { label: 'Dificultad', value: robot.dificultad, color: robot.dificultadColor },
+    { label: 'Tiempo', value: robot.tiempo, color: '#3B82F6' },
+    { label: 'Edad', value: robot.edad, color: '#8B5CF6' },
+  ];
+  cards.forEach((card, i) => {
+    const cx = margin + i * (cardW + 4);
+    // Card background
+    pdf.setFillColor(248, 250, 252);
+    pdf.setDrawColor(226, 232, 240);
+    pdf.roundedRect(cx, y, cardW, 18, 2, 2, 'FD');
+    // Label
+    pdf.setFontSize(7);
+    pdf.setTextColor(...colors.textMuted);
+    pdf.text(card.label, cx + cardW / 2, y + 6, { align: 'center' });
+    // Value
+    pdf.setFontSize(11);
+    const hex = card.color;
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    pdf.setTextColor(r, g, b);
+    pdf.text(card.value, cx + cardW / 2, y + 14, { align: 'center' });
+  });
+  y += 24;
 
-    // Step number circle
-    pdf.setFillColor(37, 99, 235);
-    pdf.circle(margin + 8, y + 5, 5, 'F');
-    pdf.setFontSize(12);
+  // Description box
+  pdf.setFillColor(...colors.grayBg);
+  pdf.setDrawColor(...colors.grayBorder);
+  const descTextLines = pdf.splitTextToSize(robot.descripcion, contentWidth - 16);
+  const descBoxH = descTextLines.length * 5 + 8;
+  pdf.roundedRect(margin, y, contentWidth, descBoxH, 2, 2, 'FD');
+  pdf.setFontSize(10);
+  pdf.setTextColor(...colors.text);
+  descTextLines.forEach((line, i) => {
+    pdf.text(line, margin + 8, y + 6 + i * 5);
+  });
+  y += descBoxH + 6;
+
+  // Safety warning
+  checkNewPage(22);
+  pdf.setFillColor(...colors.dangerBg);
+  pdf.setDrawColor(252, 165, 165);
+  pdf.roundedRect(margin, y, contentWidth, 18, 2, 2, 'FD');
+  pdf.setFontSize(9);
+  pdf.setTextColor(...colors.danger);
+  pdf.text('!! Seguridad: Supervision de un adulto requerida', margin + 6, y + 7);
+  pdf.setFontSize(8);
+  pdf.setTextColor(150, 60, 60);
+  const safetyText = 'Algunos pasos usan herramientas cortantes, pegamento caliente u objetos pequenos. Un adulto debe supervisar y ayudar.';
+  const safetyLines = pdf.splitTextToSize(safetyText, contentWidth - 14);
+  safetyLines.forEach((sl, i) => {
+    pdf.text(sl, margin + 6, y + 12 + i * 3.5);
+  });
+  y += 22;
+
+  // ========================================
+  // MATERIALS SECTION
+  // ========================================
+  drawSectionTitle('Materiales Necesarios', '');
+
+  // Materials count badge
+  pdf.setFillColor(...colors.primaryBg);
+  pdf.setDrawColor(...colors.primaryLight);
+  pdf.roundedRect(pageWidth - margin - 30, y - 13, 28, 7, 2, 2, 'FD');
+  pdf.setFontSize(7);
+  pdf.setTextColor(...colors.primary);
+  pdf.text(`${robot.materiales.length} materiales`, pageWidth - margin - 16, y - 8, { align: 'center' });
+
+  // Materials as a clean list with alternating backgrounds
+  robot.materiales.forEach((mat, idx) => {
+    checkNewPage(16);
+    // Row background
+    const rowH = 12;
+    if (idx % 2 === 0) {
+      pdf.setFillColor(248, 250, 252);
+    } else {
+      pdf.setFillColor(255, 255, 255);
+    }
+    pdf.roundedRect(margin, y - 1, contentWidth, rowH, 1, 1, 'F');
+
+    // Number circle
+    pdf.setFillColor(...colors.primaryLight);
+    pdf.circle(margin + 5, y + 4, 3.5, 'F');
+    pdf.setFontSize(7);
     pdf.setTextColor(255, 255, 255);
-    pdf.text(`${idx + 1}`, margin + 8, y + 7, { align: 'center' });
+    pdf.text(`${idx + 1}`, margin + 5, y + 5.5, { align: 'center' });
+
+    // Material emoji + name
+    pdf.setFontSize(9);
+    pdf.setTextColor(...colors.text);
+    pdf.text(`${mat.emoji}  ${mat.nombre}`, margin + 12, y + 4);
+
+    // Note below
+    pdf.setFontSize(7.5);
+    pdf.setTextColor(...colors.textMuted);
+    const notaLines = pdf.splitTextToSize(mat.nota, contentWidth - 18);
+    pdf.text(notaLines[0] || '', margin + 12, y + 9);
+
+    y += rowH + 1;
+  });
+
+  // Checklist note
+  y += 4;
+  checkNewPage(10);
+  pdf.setFillColor(...colors.successBg);
+  pdf.setDrawColor(134, 239, 172);
+  pdf.roundedRect(margin, y, contentWidth, 10, 2, 2, 'FD');
+  pdf.setFontSize(8);
+  pdf.setTextColor(...colors.success);
+  pdf.text('Tip: Reune todos los materiales antes de comenzar. Marca cada uno con una palomita!', margin + 5, y + 6);
+  y += 16;
+
+  // ========================================
+  // STEPS SECTION
+  // ========================================
+  drawSectionTitle(`Instrucciones Paso a Paso (${robot.pasos.length} pasos)`, '');
+
+  robot.pasos.forEach((paso, idx) => {
+    // Calculate needed space for this step
+    const instrLines = pdf.splitTextToSize(paso.instruccion, contentWidth - 20);
+    const tipLines = paso.consejo ? pdf.splitTextToSize(`${paso.consejo}`, contentWidth - 28) : [];
+    const stepH = 18 + instrLines.length * 5 + (tipLines.length > 0 ? tipLines.length * 4 + 12 : 0);
+
+    checkNewPage(Math.min(stepH, 60)); // at least try to fit the header
+
+    // Step card background
+    const bgColor = idx % 2 === 0 ? colors.stepEven : colors.stepOdd;
+    pdf.setFillColor(...bgColor);
+    pdf.setDrawColor(...colors.grayBorder);
+    // We draw the background after calculating full height
+    const stepStartY = y;
+
+    // Step number badge
+    pdf.setFillColor(...(idx === robot.pasos.length - 1 ? colors.success : colors.primary));
+    pdf.roundedRect(margin + 2, y + 1, 12, 8, 2, 2, 'F');
+    pdf.setFontSize(9);
+    pdf.setTextColor(255, 255, 255);
+    pdf.text(`${idx + 1}`, margin + 8, y + 6.5, { align: 'center' });
 
     // Step title
-    pdf.setFontSize(13);
-    pdf.setTextColor(30, 58, 138);
-    pdf.text(`${paso.emoji} ${paso.titulo}`, margin + 16, y + 7);
-    y += 13;
+    pdf.setFontSize(12);
+    pdf.setTextColor(...colors.primary);
+    pdf.text(`${paso.emoji}  ${paso.titulo}`, margin + 17, y + 7);
 
-    // Instruction
-    pdf.setFontSize(10);
-    pdf.setTextColor(50, 50, 50);
-    const instrLines = pdf.splitTextToSize(paso.instruccion, contentWidth - 10);
+    // Title underline
+    y += 11;
+    pdf.setDrawColor(200, 210, 235);
+    pdf.setLineWidth(0.2);
+    pdf.line(margin + 4, y, pageWidth - margin - 4, y);
+    y += 5;
+
+    // Instruction text
+    pdf.setFontSize(9.5);
+    pdf.setTextColor(...colors.text);
     instrLines.forEach(line => {
       checkNewPage(6);
-      pdf.text(line, margin + 5, y);
+      pdf.text(line, margin + 6, y);
       y += 5;
     });
     y += 3;
 
-    // Tip
+    // Tip box
     if (paso.consejo) {
-      checkNewPage(14);
-      pdf.setFillColor(255, 251, 235);
-      const tipLines = pdf.splitTextToSize(`Consejo: ${paso.consejo}`, contentWidth - 16);
-      pdf.roundedRect(margin + 3, y - 3, contentWidth - 6, tipLines.length * 4.5 + 6, 2, 2, 'F');
-      pdf.setFontSize(9);
-      pdf.setTextColor(180, 130, 20);
-      tipLines.forEach(tl => {
-        pdf.text(tl, margin + 8, y + 2);
-        y += 4.5;
+      checkNewPage(tipLines.length * 4 + 10);
+      // Tip background
+      pdf.setFillColor(...colors.warningBg);
+      pdf.setDrawColor(...colors.warningBorder);
+      const tipBoxH = tipLines.length * 4 + 7;
+      pdf.roundedRect(margin + 4, y - 1, contentWidth - 8, tipBoxH, 2, 2, 'FD');
+      // Tip label
+      pdf.setFontSize(7.5);
+      pdf.setTextColor(...colors.warning);
+      pdf.text('CONSEJO', margin + 8, y + 3);
+      // Tip text
+      pdf.setFontSize(8.5);
+      pdf.setTextColor(120, 100, 30);
+      tipLines.forEach((tl, ti) => {
+        pdf.text(tl, margin + 8, y + 7 + ti * 4);
       });
-      y += 5;
+      y += tipBoxH + 3;
     }
 
-    y += 6;
+    // Now draw the step card border
+    const stepEndY = y;
+    const totalStepH = stepEndY - stepStartY;
+    pdf.setFillColor(...bgColor);
+    pdf.setDrawColor(...colors.grayBorder);
+    // Draw behind (we already rendered text, so just draw the border line on left)
+    pdf.setDrawColor(...(idx === robot.pasos.length - 1 ? colors.success : colors.primaryLight));
+    pdf.setLineWidth(0.8);
+    pdf.line(margin, stepStartY, margin, stepEndY);
+
+    y += 5;
   });
 
-  // Final note
-  checkNewPage(30);
-  pdf.setFillColor(220, 252, 231);
-  pdf.roundedRect(margin, y, contentWidth, 20, 3, 3, 'F');
-  pdf.setFontSize(12);
-  pdf.setTextColor(22, 163, 74);
-  pdf.text('¡Felicidades! Tu robot está terminado.', pageWidth / 2, y + 9, { align: 'center' });
+  // ========================================
+  // FINAL COMPLETION SECTION
+  // ========================================
+  checkNewPage(40);
+
+  // Completion card
+  pdf.setFillColor(...colors.successBg);
+  pdf.setDrawColor(134, 239, 172);
+  pdf.roundedRect(margin, y, contentWidth, 30, 3, 3, 'FD');
+
+  pdf.setFontSize(16);
+  pdf.setTextColor(...colors.success);
+  pdf.text('Felicidades! Tu robot esta terminado!', pageWidth / 2, y + 10, { align: 'center' });
+
   pdf.setFontSize(9);
-  pdf.setTextColor(80, 120, 80);
-  pdf.text('Recuerda: experimenta, ajusta y mejora. ¡Eso hacen los ingenieros!', pageWidth / 2, y + 15, { align: 'center' });
+  pdf.setTextColor(60, 120, 60);
+  const finalMsg = `Has construido tu ${robot.nombre}. Recuerda: experimenta, ajusta y mejora. Eso es lo que hacen los verdaderos ingenieros!`;
+  const finalLines = pdf.splitTextToSize(finalMsg, contentWidth - 20);
+  finalLines.forEach((fl, i) => {
+    pdf.text(fl, pageWidth / 2, y + 17 + i * 4, { align: 'center' });
+  });
+  y += 36;
+
+  // Educational tips box
+  checkNewPage(35);
+  pdf.setFillColor(...colors.primaryBg);
+  pdf.setDrawColor(...colors.primaryLight);
+  pdf.roundedRect(margin, y, contentWidth, 30, 3, 3, 'FD');
+
+  pdf.setFontSize(10);
+  pdf.setTextColor(...colors.primary);
+  pdf.text('Que aprendiste con este proyecto?', margin + 6, y + 7);
+
+  pdf.setFontSize(8);
+  pdf.setTextColor(...colors.text);
+  const learnings = [
+    'Circuitos basicos: como conectar componentes electricos',
+    'Mecanica: como el movimiento se transfiere entre partes',
+    'Resolucion de problemas: ajustar y mejorar tu diseno',
+    'Creatividad: disenar y personalizar tu propio robot',
+  ];
+  learnings.forEach((l, i) => {
+    pdf.text(`  ${i + 1}. ${l}`, margin + 6, y + 13 + i * 4.5);
+  });
+  y += 36;
+
+  // CultivaTec branding footer
+  checkNewPage(18);
+  pdf.setDrawColor(...colors.grayBorder);
+  pdf.setLineWidth(0.3);
+  pdf.line(margin, y, pageWidth - margin, y);
+  y += 5;
+  pdf.setFontSize(8);
+  pdf.setTextColor(...colors.textMuted);
+  pdf.text('Generado por CultivaTec - Plataforma educativa de robotica', pageWidth / 2, y + 3, { align: 'center' });
+  pdf.text('cultivatec.vercel.app | Democratizando el conocimiento STEM', pageWidth / 2, y + 8, { align: 'center' });
 
   addFooter();
 
