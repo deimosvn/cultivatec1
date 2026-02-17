@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Zap, Home, BookOpen, Settings, Sun, Moon, ArrowLeft, Lightbulb, Play, Target, Code, Terminal, BatteryCharging, Power, RadioTower, Component, Link, Minus, Plus, Bot, Send, Trophy, ChevronDown, Map, Calendar, Puzzle, Cpu, Dumbbell, Monitor, GraduationCap, Wrench, Rocket, Star, CheckCircle, RotateCcw } from 'lucide-react';
+import { Zap, Home, BookOpen, Settings, Sun, Moon, ArrowLeft, Lightbulb, Play, Target, Code, Terminal, BatteryCharging, Power, RadioTower, Component, Link, Minus, Plus, Bot, Send, Trophy, ChevronDown, Map, Calendar, Puzzle, Cpu, Dumbbell, Monitor, GraduationCap, Wrench, Rocket, Star, CheckCircle, CheckCircle2, RotateCcw, AlertTriangle, X } from 'lucide-react';
 import QuizScreen from './components/QuizScreen';
 import GlossaryScreen, { GLOSSARY_TERMS as GLOSSARY_TERMS_DATA } from './components/GlossaryScreen';
 import ClassroomScreen from './components/ClassroomScreen';
@@ -377,13 +377,109 @@ const getDailyIndex = (pool) => {
 };
 
 const DAILY_CIRCUIT_STORIES = [
-    { id: 'dc_1', title: '🚀 ¡Las Luces de Emergencia!', story: '¡Oh no! La nave CultivaTec-7 está cruzando un campo de asteroides y las luces de emergencia se apagaron. El capitán necesita TU ayuda para conectar 3 LEDs rojos. Hay que ponerlos en paralelo con una resistencia cada uno, usando una batería de 9V.', question: '¿Qué pasaría si pones los 3 LEDs en fila (serie) en vez de en paralelo?', options: ['Brillan igual de fuerte', 'Brillan menos porque el voltaje se reparte entre los 3', 'Brillan más fuerte', 'No cambia nada'], correct: 1, explanation: '¡Correcto! 🎉 En serie el voltaje se reparte: cada LED recibe menos energía y brilla poquito. En paralelo cada uno recibe TODA la energía. ¡Por eso paralelo es mejor!' },
-    { id: 'dc_2', title: '🛸 ¡Detector de Basura Espacial!', story: '¡Un satélite necesita detectar basura espacial! Su sensor ultrasónico manda un "sonido" y escucha cuánto tarda en regresar. Si algo está a menos de 30cm, un buzzer (bocina) debe sonar. Necesitamos: sensor, Arduino y buzzer.', question: '¿Por qué ponemos una resistencia entre el Arduino y el buzzer?', options: ['Para que suene más fuerte', 'Para proteger al Arduino, ¡que no pase demasiada electricidad!', 'No se necesita', 'Para que no suene'], correct: 1, explanation: '¡Bien pensado! 🛡️ El Arduino es delicado y solo aguanta poquita electricidad (20mA). La resistencia es como un guardaespaldas que no deja pasar más de lo necesario.' },
-    { id: 'dc_3', title: '🌟 ¡Los Paneles Solares!', story: '¡La estación espacial necesita energía del Sol! ☀️ Tienes 4 paneles solares que producen 3V cada uno. Pero el sistema necesita 12V para funcionar. ¿Cómo los conectas?', question: '¿Cómo conectas 4 paneles de 3V para obtener 12V?', options: ['Todos en paralelo (lado a lado)', 'Todos en serie (en fila)', '2 en serie y 2 en paralelo', 'No se puede con solo 4'], correct: 1, explanation: '¡En serie! 🚂 Como un tren: 3V + 3V + 3V + 3V = 12V. En paralelo se quedan en 3V pero dan más corriente. ¡Serie suma voltaje!' },
-    { id: 'dc_4', title: '🔧 ¡El Brazo Robótico!', story: '¡El brazo robot de la nave necesita reparación! Su motor funciona con 6V, pero la batería de la nave es de 12V. ¡Si le mandamos 12V se quema! 😱 Necesitamos bajar el voltaje.', question: '¿Cuál es la mejor forma de bajar de 12V a 6V para el motor?', options: ['Poner una resistencia grandota', 'Usar un regulador de voltaje (un chip especial)', 'Desconectar cables', 'Poner un LED para gastar voltaje'], correct: 1, explanation: '¡El regulador de voltaje! 🎯 Es un chip mágico que convierte 12V a exactamente 6V de forma segura. Una resistencia desperdiciaría mucha energía en forma de calor. 🌡️' },
-    { id: 'dc_5', title: '💡 ¡Luces por Zonas!', story: 'La nave tiene 3 zonas: la cabina del piloto (LED blanco ⬜), los motores (LED rojo 🔴) y la bodega (LED azul 🔵). El capitán quiere que CADA zona tenga su propio botón para encender y apagar.', question: '¿Cómo conectas los LEDs para que cada botón controle solo SU zona?', options: ['Todos en serie con un solo botón', 'Cada LED en paralelo con su propio botón', 'Todos en paralelo con un solo botón', 'En serie con 3 botones en paralelo'], correct: 1, explanation: '¡En paralelo con su propio botón! 🎮 Así el botón de la cabina solo prende la cabina, sin afectar los motores ni la bodega. ¡Cada zona es independiente!' },
-    { id: 'dc_6', title: '⚡ ¡Cargando Baterías!', story: '¡La nave necesita cargar 2 baterías de respaldo! Cada batería necesita 2A para cargar. Pero el generador de la nave solo produce 3A en total. ¿Podemos cargar las dos al mismo tiempo?', question: '¿Por qué NO podemos cargar las dos baterías al mismo tiempo?', options: ['Porque explotarían 💥', 'Porque necesitan 4A total y el generador solo da 3A', 'Porque en paralelo no cargan', 'Sí se puede sin problema'], correct: 1, explanation: '¡Es matemáticas! 🧮 Batería 1 necesita 2A + Batería 2 necesita 2A = 4A total. ¡Pero el generador solo da 3A! Se sobrecargaría. Hay que cargarlas una a la vez. ⏰' },
-    { id: 'dc_7', title: '🛰️ ¡La Radio de la Nave!', story: '¡El transmisor de radio necesita exactamente 5V para funcionar! Pero la fuente de energía de la nave da 9V. Necesitamos un componente especial que baje el voltaje a exactamente 5V.', question: '¿Qué componente usarías para convertir 9V a 5V de forma estable?', options: ['Un fusible', 'Un regulador de voltaje 7805', 'Un condensador', 'Un diodo simple'], correct: 1, explanation: '¡El 7805! 🌟 Es un regulador que siempre da exactamente 5V sin importar cuánto le metas (entre 7V y 35V). ¡Es súper útil para Arduino y muchos circuitos!' },
+    {
+        id: 'dr_1',
+        title: 'RX-7 no puede ver',
+        robotName: 'RX-7',
+        story: 'El robot humanoide RX-7 esta perdido en la estacion espacial porque sus sensores de distancia dejaron de funcionar. No puede detectar paredes ni obstaculos y choca con todo. Necesita que un ingeniero reemplace el componente danado para que pueda "ver" de nuevo.',
+        symptom: 'No detecta obstaculos ni distancia',
+        correctComponents: ['sensor ultrasonico'],
+        explanation: 'El sensor ultrasonico emite ondas de sonido y mide cuanto tardan en rebotar. Asi el robot sabe a que distancia estan los objetos. Sin este sensor, RX-7 esta completamente ciego y no puede navegar.',
+    },
+    {
+        id: 'dr_2',
+        title: 'TITAN-3 no se mueve',
+        robotName: 'TITAN-3',
+        story: 'TITAN-3 es el robot de carga mas fuerte de la nave, pero hoy se quedo completamente inmovil. Sus piernas no responden y no puede llevar los suministros al almacen. El mecanico dice que el componente que hace girar las articulaciones esta quemado.',
+        symptom: 'Las piernas no responden, no puede caminar',
+        correctComponents: ['motor DC'],
+        explanation: 'El motor DC convierte electricidad en movimiento giratorio. Es el "musculo" del robot que hace que las articulaciones y ruedas se muevan. Sin motores funcionales, TITAN-3 no puede dar un solo paso.',
+    },
+    {
+        id: 'dr_3',
+        title: 'SPARK se apago de repente',
+        robotName: 'SPARK',
+        story: 'SPARK estaba ayudando en el laboratorio cuando de repente se apago por completo. No responde a nada. El diagnostico muestra que su fuente de energia principal esta agotada y necesita ser reemplazada urgentemente.',
+        symptom: 'Se apago completamente, sin energia',
+        correctComponents: ['bateria lipo'],
+        explanation: 'La bateria LiPo (Litio Polimero) es la fuente de energia del robot. Es ligera pero poderosa, y almacena la electricidad que alimenta todos los sistemas. Sin bateria, SPARK no tiene energia para encender ningun componente.',
+    },
+    {
+        id: 'dr_4',
+        title: 'NOVA tiene luces apagadas',
+        robotName: 'NOVA',
+        story: 'NOVA es el robot guia de la estacion y usa luces de colores para comunicarse con la tripulacion. Pero hoy todas sus luces indicadoras se apagaron y nadie entiende sus senales. El tecnico detecto que los componentes de iluminacion estan fundidos.',
+        symptom: 'Luces indicadoras apagadas, no puede comunicarse visualmente',
+        correctComponents: ['led', 'resistor'],
+        explanation: 'Los LEDs son los "ojos luminosos" del robot que emiten luz de colores. El resistor es su companero obligatorio: limita la corriente para que el LED no se queme. Siempre van juntos, como un equipo inseparable.',
+    },
+    {
+        id: 'dr_5',
+        title: 'ATLAS no piensa',
+        robotName: 'ATLAS',
+        story: 'ATLAS es el robot mas inteligente de la flota, pero hoy no puede procesar ninguna orden. Su pantalla muestra solo estatica y no responde comandos. El problema es que su cerebro electronico, la placa controladora principal, se recalento y dejo de funcionar.',
+        symptom: 'No procesa ordenes, pantalla con estatica',
+        correctComponents: ['ESP32'],
+        explanation: 'El ESP32 es el "cerebro" del robot: un microcontrolador que procesa todas las instrucciones, lee sensores y controla motores. Ademas tiene WiFi y Bluetooth integrados. Sin el, ATLAS no puede pensar ni tomar decisiones.',
+    },
+    {
+        id: 'dr_6',
+        title: 'VOLT tiene circuitos inestables',
+        robotName: 'VOLT',
+        story: 'VOLT se reinicia aleatoriamente cada pocos segundos. Sus circuitos reciben picos de voltaje que confunden a su procesador. El diagnostico revela que le falta el componente que absorbe las fluctuaciones electricas y mantiene estable el voltaje.',
+        symptom: 'Se reinicia cada pocos segundos, voltaje inestable',
+        correctComponents: ['capacitor'],
+        explanation: 'El capacitor es como una "esponja de electricidad": absorbe los picos de voltaje y libera energia cuando el voltaje baja. Asi mantiene la corriente estable y constante. Sin el, los circuitos de VOLT reciben electricidad irregular que lo reinicia.',
+    },
+    {
+        id: 'dr_7',
+        title: 'MECH se desarmo',
+        robotName: 'MECH',
+        story: 'MECH tuvo un accidente en la bahia de carga y su estructura se rompio. Las piezas estan por todos lados, los motores cuelgan y los cables estan sueltos. Necesita una nueva estructura base donde montar todos sus componentes y volver a funcionar.',
+        symptom: 'Estructura rota, piezas sueltas y cables colgando',
+        correctComponents: ['chasis'],
+        explanation: 'El chasis es el "esqueleto" del robot: la estructura rigida donde se montan todos los demas componentes como motores, sensores, baterias y la placa controladora. Sin un chasis fuerte, el robot se desarma y nada funciona correctamente.',
+    },
+    {
+        id: 'dr_8',
+        title: 'FLUX no controla potencia',
+        robotName: 'FLUX',
+        story: 'FLUX tiene un motor potente que necesita mucha corriente, pero su cerebro ESP32 es delicado y solo puede enviar senales pequenas. El motor gira a toda velocidad o no gira nada, no hay control intermedio. Necesita un componente que amplifique la senal.',
+        symptom: 'Motor sin control: 100% o 0%, no hay velocidad intermedia',
+        correctComponents: ['transistor'],
+        explanation: 'El transistor es como un "interruptor inteligente": recibe una senal pequena del cerebro del robot y la usa para controlar una corriente grande hacia el motor. Asi el ESP32 puede controlar el motor sin quemarse, como un amplificador de potencia.',
+    },
+    {
+        id: 'dr_9',
+        title: 'ORION esta ciego y sin energia',
+        robotName: 'ORION',
+        story: 'ORION sufrio una sobrecarga electrica que dano multiples sistemas. No tiene energia porque su bateria se quemo, y ademas su sensor de distancia se fundio. Es una reparacion doble: necesita recuperar tanto su fuente de poder como su capacidad de detectar objetos.',
+        symptom: 'Sin energia y sin deteccion de distancia',
+        correctComponents: ['bateria lipo', 'sensor ultrasonico'],
+        explanation: 'La bateria LiPo proporciona toda la energia que necesita ORION para funcionar, y el sensor ultrasonico le permite detectar objetos midiendo el eco de ondas sonoras. Ambos son esenciales: sin bateria no enciende, y sin sensor no puede navegar de forma segura.',
+    },
+    {
+        id: 'dr_10',
+        title: 'ZERO necesita reconstruccion total',
+        robotName: 'ZERO',
+        story: 'Encontraron a ZERO flotando en el espacio con danos graves. No tiene estructura, su cerebro esta frito, y sus motores estan destruidos. Es la mision de reparacion mas dificil: hay que reconstruir los tres sistemas fundamentales desde cero.',
+        symptom: 'Estructura destruida, sin cerebro, motores quemados',
+        correctComponents: ['chasis', 'ESP32', 'motor DC'],
+        explanation: 'El chasis es la estructura donde se monta todo, el ESP32 es el cerebro que procesa ordenes y toma decisiones, y el motor DC es el musculo que genera movimiento. Estos tres forman el trio fundamental de cualquier robot: cuerpo, cerebro y musculo.',
+    },
+];
+
+// All available components for repair missions (with images from /icons/components/)
+const REPAIR_COMPONENTS = [
+    { id: 'sensor ultrasonico', nombre: 'Sensor Ultrasonico', img: '/icons/components/sensor ultrasonico.png', desc: 'Detecta distancia con ondas de sonido' },
+    { id: 'motor DC', nombre: 'Motor DC', img: '/icons/components/motor DC.png', desc: 'Convierte electricidad en movimiento' },
+    { id: 'bateria lipo', nombre: 'Bateria LiPo', img: '/icons/components/bateria lipo.png', desc: 'Almacena energia para el robot' },
+    { id: 'led', nombre: 'LED', img: '/icons/components/led.png', desc: 'Emite luz de colores' },
+    { id: 'resistor', nombre: 'Resistor', img: '/icons/components/resistor.png', desc: 'Limita el flujo de corriente' },
+    { id: 'ESP32', nombre: 'ESP32', img: '/icons/components/ESP32.png', desc: 'Cerebro del robot con WiFi' },
+    { id: 'capacitor', nombre: 'Capacitor', img: '/icons/components/capacitor.png', desc: 'Estabiliza el voltaje' },
+    { id: 'chasis', nombre: 'Chasis', img: '/icons/components/chasis.png', desc: 'Estructura base del robot' },
+    { id: 'transistor', nombre: 'Transistor', img: '/icons/components/transistor.png', desc: 'Amplifica y controla senales' },
 ];
 
 const DAILY_PROGRAMMING_STORIES = [
@@ -573,11 +669,22 @@ const CircuitLabScreen = ({ onBack, onOpenFreeCircuitBuilder, userId, userStats,
     const [dailySolved, setDailySolved] = useState(() => {
         try { const saved = localStorage.getItem('cultivatec_daily_circuit'); return saved === getTodayKey(); } catch { return false; }
     });
-    const [dailyAnswer, setDailyAnswer] = useState(null);
-    const [showDailyExplanation, setShowDailyExplanation] = useState(false);
+    const [selectedComponents, setSelectedComponents] = useState([]);
+    const [repairAttempted, setRepairAttempted] = useState(false);
+    const [repairCorrect, setRepairCorrect] = useState(false);
+    const [robotAnimFrame, setRobotAnimFrame] = useState(0);
     const [solvedProblems, setSolvedProblems] = useState(new Set());
 
     const dailyProblem = DAILY_CIRCUIT_STORIES[getDailyIndex(DAILY_CIRCUIT_STORIES)];
+
+    // Robot failing animation: cycle through robote1, robote2, robote3
+    React.useEffect(() => {
+        if (tab !== 'daily' || dailySolved || repairCorrect) return;
+        const interval = setInterval(() => {
+            setRobotAnimFrame(prev => (prev + 1) % 3);
+        }, 600);
+        return () => clearInterval(interval);
+    }, [tab, dailySolved, repairCorrect]);
 
     const circuitStars = React.useMemo(() =>
         Array.from({ length: 40 }, (_, i) => ({
@@ -598,16 +705,30 @@ const CircuitLabScreen = ({ onBack, onOpenFreeCircuitBuilder, userId, userStats,
         }
     };
 
-    const solveDailyProblem = (answerIdx) => {
-        setDailyAnswer(answerIdx);
-        setShowDailyExplanation(true);
-        if (answerIdx === dailyProblem.correct) {
+    const toggleComponent = (compId) => {
+        if (repairAttempted) return;
+        setSelectedComponents(prev => prev.includes(compId) ? prev.filter(c => c !== compId) : [...prev, compId]);
+    };
+
+    const attemptRepair = () => {
+        if (selectedComponents.length === 0) return;
+        setRepairAttempted(true);
+        const correct = dailyProblem.correctComponents;
+        const isCorrect = correct.length === selectedComponents.length && correct.every(c => selectedComponents.includes(c));
+        setRepairCorrect(isCorrect);
+        if (isCorrect) {
             const wasAlreadySolved = dailySolved;
             try { localStorage.setItem('cultivatec_daily_circuit', getTodayKey()); setDailySolved(true); } catch {}
             if (!wasAlreadySolved && onAwardXp) {
                 onAwardXp(DAILY_CIRCUIT_XP, 'dailyCircuit');
             }
         }
+    };
+
+    const resetDailyRepair = () => {
+        setSelectedComponents([]);
+        setRepairAttempted(false);
+        setRepairCorrect(false);
     };
 
     return (
@@ -676,55 +797,163 @@ const CircuitLabScreen = ({ onBack, onOpenFreeCircuitBuilder, userId, userStats,
                 {/* DAILY MISSION TAB */}
                 {tab === 'daily' && (
                     <div className="space-y-4">
-                        {dailySolved ? (
-                            <div className="bg-[#22C55E]/10 border-2 border-[#22C55E]/30 rounded-2xl p-6 text-center space-y-3">
-                                <div className="text-5xl">🎉</div>
-                                <h2 className="text-xl font-black text-[#22C55E]">¡Misión Completada!</h2>
-                                <p className="text-sm text-[#94A3B8] font-bold">¡Eres increíble! Resolviste el problema de circuitos de hoy. 🌟</p>
+                        {dailySolved && !repairAttempted ? (
+                            <div className="bg-[#22C55E]/10 border-2 border-[#22C55E]/30 rounded-2xl p-6 text-center space-y-4">
+                                {/* Repaired robot */}
+                                <div className="relative inline-block">
+                                    <div className="absolute inset-[-30px] rounded-full pointer-events-none opacity-60"
+                                        style={{ background: 'radial-gradient(circle, rgba(34,197,94,0.4) 0%, transparent 65%)', filter: 'blur(12px)' }}></div>
+                                    <img src="/robote4.png" alt="Robot reparado" className="w-48 h-48 sm:w-56 sm:h-56 object-contain mx-auto relative z-10"
+                                        style={{ filter: 'drop-shadow(0 0 20px rgba(34,197,94,0.5))' }} />
+                                </div>
+                                <h2 className="text-xl font-black text-[#22C55E]">¡{dailyProblem.robotName} está reparado!</h2>
+                                <p className="text-sm text-[#94A3B8] font-bold">¡Excelente trabajo, ingeniero! Reparaste a {dailyProblem.robotName} exitosamente. 🌟</p>
                                 <div className="flex items-center justify-center gap-2 mt-1">
                                     <span className="px-3 py-1 bg-[#FFC800]/20 text-[#FFC800] text-xs font-black rounded-full border border-[#FFC800]/30">+{DAILY_CIRCUIT_XP} XP ganados 🏆</span>
                                 </div>
                                 <div className="bg-[#1E293B] rounded-xl p-4 border border-[#334155]">
-                                    <p className="text-xs text-[#64748B] font-bold">🕐 ¡Vuelve mañana para una nueva aventura eléctrica!</p>
-                                    <p className="text-[10px] text-[#475569] font-semibold mt-1">Cada día la nave CultivaTec-7 tiene un nuevo problema de circuitos que resolver 🚀</p>
+                                    <p className="text-xs text-[#64748B] font-bold">🕐 ¡Vuelve mañana para reparar otro robot!</p>
+                                    <p className="text-[10px] text-[#475569] font-semibold mt-1">Cada día un robot humanoide diferente necesita tu ayuda 🤖</p>
                                 </div>
-                                <button onClick={() => { setDailyAnswer(null); setShowDailyExplanation(false); setDailySolved(false); }}
-                                    className="text-[10px] font-bold text-[#22D3EE] underline mt-2">Volver a ver el problema</button>
+                                <button onClick={() => { resetDailyRepair(); setDailySolved(false); }}
+                                    className="text-[10px] font-bold text-[#22D3EE] underline mt-2">Volver a ver la misión</button>
                             </div>
                         ) : (
                             <>
                                 <div className="text-center mb-2">
-                                    <span className="text-[10px] font-black text-[#22D3EE] bg-[#22D3EE]/10 px-3 py-1 rounded-full border border-[#22D3EE]/20 flex items-center gap-1 mx-auto w-fit"><Calendar size={11} /> ⚡ MISIÓN DIARIA DE CIRCUITOS</span>
+                                    <span className="text-[10px] font-black text-[#22D3EE] bg-[#22D3EE]/10 px-3 py-1 rounded-full border border-[#22D3EE]/20 flex items-center gap-1 mx-auto w-fit"><Calendar size={11} /> 🔧 MISIÓN DIARIA DE REPARACIÓN</span>
                                 </div>
+
                                 <div className="bg-gradient-to-br from-[#1E293B] to-[#0F172A] rounded-2xl border-2 border-[#22D3EE]/20 p-5 space-y-4">
-                                    <h2 className="text-lg font-black text-white">{dailyProblem.title}</h2>
+                                    {/* Robot image - large, animated */}
+                                    <div className="text-center">
+                                        <div className="relative inline-block">
+                                            {repairCorrect ? (
+                                                <>
+                                                    <div className="absolute inset-[-30px] rounded-full pointer-events-none opacity-60"
+                                                        style={{ background: 'radial-gradient(circle, rgba(34,197,94,0.4) 0%, transparent 65%)', filter: 'blur(12px)' }}></div>
+                                                    <img src="/robote4.png" alt="Robot reparado"
+                                                        className="w-52 h-52 sm:w-64 sm:h-64 object-contain mx-auto relative z-10 animate-bounce-in"
+                                                        style={{ filter: 'drop-shadow(0 0 25px rgba(34,197,94,0.5))' }} />
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <div className="absolute inset-[-30px] rounded-full pointer-events-none opacity-60"
+                                                        style={{ background: 'radial-gradient(circle, rgba(239,68,68,0.3) 0%, transparent 65%)', filter: 'blur(12px)' }}></div>
+                                                    <img src={`/robote${robotAnimFrame + 1}.png`} alt="Robot averiado"
+                                                        className="w-52 h-52 sm:w-64 sm:h-64 object-contain mx-auto relative z-10"
+                                                        style={{ filter: 'drop-shadow(0 0 20px rgba(239,68,68,0.4))' }} />
+                                                </>
+                                            )}
+                                        </div>
+                                        {!repairCorrect && (
+                                            <p className="text-[10px] text-red-400/60 font-bold mt-2 animate-pulse-soft">⚠️ Robot averiado — necesita reparación</p>
+                                        )}
+                                    </div>
+
+                                    {/* Mission title & story */}
+                                    <div>
+                                        <h2 className="text-lg font-black text-white">🔧 {dailyProblem.title}</h2>
+                                        <p className="text-[10px] text-[#22D3EE]/60 font-bold mt-0.5">Robot: {dailyProblem.robotName}</p>
+                                    </div>
+
                                     <div className="bg-[#0F172A]/60 rounded-xl p-4 border border-[#334155]">
-                                        <p className="text-sm text-[#E2E8F0] font-semibold leading-relaxed">📖 {dailyProblem.story}</p>
+                                        <p className="text-sm text-[#E2E8F0] font-semibold leading-relaxed">{dailyProblem.story}</p>
                                     </div>
-                                    <div className="bg-[#22D3EE]/10 rounded-xl p-4 border border-[#22D3EE]/20">
-                                        <p className="text-sm font-bold text-[#22D3EE]">❓ {dailyProblem.question}</p>
+
+                                    {/* Symptom badge */}
+                                    <div className="bg-red-500/10 rounded-xl p-3 border border-red-500/20 flex items-start gap-2">
+                                        <AlertTriangle size={16} className="text-red-400 flex-shrink-0 mt-0.5" />
+                                        <div>
+                                            <p className="text-[10px] font-black text-red-300 uppercase tracking-wide">Síntoma detectado</p>
+                                            <p className="text-xs text-red-200/80 font-bold mt-0.5">{dailyProblem.symptom}</p>
+                                        </div>
                                     </div>
-                                    <div className="space-y-2">
-                                        {dailyProblem.options.map((opt, oi) => (
-                                            <button key={oi} onClick={() => !showDailyExplanation && solveDailyProblem(oi)}
-                                                disabled={showDailyExplanation}
-                                                className={`w-full text-left p-3.5 rounded-xl border-2 transition-all text-sm font-bold ${
-                                                    showDailyExplanation
-                                                        ? oi === dailyProblem.correct ? 'bg-[#22C55E]/20 border-[#22C55E] text-[#22C55E]'
-                                                        : oi === dailyAnswer ? 'bg-[#EF4444]/20 border-[#EF4444] text-[#EF4444]'
-                                                        : 'bg-[#1E293B] border-[#334155] text-[#64748B]'
-                                                        : 'bg-[#1E293B] border-[#334155] text-[#E2E8F0] hover:border-[#22D3EE] active:scale-[0.98]'
-                                                }`}>
-                                                <span className="mr-2">{String.fromCharCode(65 + oi)})</span>{opt}
-                                                {showDailyExplanation && oi === dailyProblem.correct && ' ✅'}
-                                                {showDailyExplanation && oi === dailyAnswer && oi !== dailyProblem.correct && ' ❌'}
-                                            </button>
-                                        ))}
-                                    </div>
-                                    {showDailyExplanation && (
-                                        <div className={`rounded-xl p-4 border-2 ${dailyAnswer === dailyProblem.correct ? 'bg-[#22C55E]/10 border-[#22C55E]/30' : 'bg-[#F59E0B]/10 border-[#F59E0B]/30'}`}>
-                                            <p className="text-sm font-bold text-white mb-1">{dailyAnswer === dailyProblem.correct ? '🎉 ¡Correcto!' : '💡 No exactamente...'}</p>
-                                            <p className="text-xs text-[#94A3B8] font-semibold leading-relaxed">{dailyProblem.explanation}</p>
+
+                                    {/* Component selection */}
+                                    {!repairCorrect && (
+                                        <div>
+                                            <p className="text-xs font-black text-[#22D3EE] mb-3 flex items-center gap-1.5">
+                                                <Wrench size={13} /> Selecciona el componente (o componentes) para reparar a {dailyProblem.robotName}:
+                                            </p>
+                                            <div className="grid grid-cols-3 gap-2.5">
+                                                {REPAIR_COMPONENTS.map(comp => {
+                                                    const isSelected = selectedComponents.includes(comp.id);
+                                                    const isCorrectComp = repairAttempted && dailyProblem.correctComponents.includes(comp.id);
+                                                    const isWrongSelection = repairAttempted && isSelected && !dailyProblem.correctComponents.includes(comp.id);
+                                                    return (
+                                                        <button key={comp.id} onClick={() => toggleComponent(comp.id)}
+                                                            disabled={repairAttempted}
+                                                            className={`relative rounded-2xl p-2.5 border-2 transition-all active:scale-95 flex flex-col items-center gap-1.5 ${
+                                                                repairAttempted
+                                                                    ? isCorrectComp ? 'bg-[#22C55E]/15 border-[#22C55E] shadow-[0_0_12px_rgba(34,197,94,0.3)]'
+                                                                    : isWrongSelection ? 'bg-red-500/15 border-red-500'
+                                                                    : 'bg-[#1E293B]/50 border-[#334155]/50 opacity-50'
+                                                                    : isSelected ? 'bg-[#22D3EE]/15 border-[#22D3EE] shadow-[0_0_12px_rgba(34,211,238,0.2)]'
+                                                                    : 'bg-[#1E293B] border-[#334155] hover:border-[#22D3EE]/50'
+                                                            }`}>
+                                                            <img src={comp.img} alt={comp.nombre} className="w-12 h-12 sm:w-14 sm:h-14 object-contain" />
+                                                            <span className="text-[9px] font-black text-white/90 text-center leading-tight">{comp.nombre}</span>
+                                                            <span className="text-[7px] font-semibold text-[#94A3B8] text-center leading-tight">{comp.desc}</span>
+                                                            {isSelected && !repairAttempted && (
+                                                                <div className="absolute top-1 right-1 w-5 h-5 bg-[#22D3EE] rounded-full flex items-center justify-center">
+                                                                    <CheckCircle2 size={12} className="text-white" />
+                                                                </div>
+                                                            )}
+                                                            {repairAttempted && isCorrectComp && (
+                                                                <div className="absolute top-1 right-1 w-5 h-5 bg-[#22C55E] rounded-full flex items-center justify-center">
+                                                                    <CheckCircle2 size={12} className="text-white" />
+                                                                </div>
+                                                            )}
+                                                            {isWrongSelection && (
+                                                                <div className="absolute top-1 right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center">
+                                                                    <X size={12} className="text-white" />
+                                                                </div>
+                                                            )}
+                                                        </button>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* Repair button */}
+                                    {!repairAttempted && (
+                                        <button onClick={attemptRepair}
+                                            disabled={selectedComponents.length === 0}
+                                            className={`w-full py-3.5 rounded-xl font-black text-sm transition-all active:scale-95 flex items-center justify-center gap-2 ${
+                                                selectedComponents.length > 0
+                                                    ? 'bg-gradient-to-r from-[#22D3EE] to-[#3B82F6] text-white shadow-lg shadow-cyan-500/30'
+                                                    : 'bg-[#1E293B] text-[#64748B] border border-[#334155] cursor-not-allowed'
+                                            }`}>
+                                            <Wrench size={16} /> Reparar a {dailyProblem.robotName}
+                                        </button>
+                                    )}
+
+                                    {/* Result */}
+                                    {repairAttempted && (
+                                        <div className={`rounded-xl p-4 border-2 space-y-3 ${repairCorrect ? 'bg-[#22C55E]/10 border-[#22C55E]/30' : 'bg-red-500/10 border-red-500/30'}`}>
+                                            {repairCorrect ? (
+                                                <>
+                                                    <p className="text-sm font-black text-[#22C55E]">🎉 ¡Reparación exitosa!</p>
+                                                    <p className="text-xs text-[#94A3B8] font-semibold leading-relaxed">{dailyProblem.explanation}</p>
+                                                    <div className="flex items-center justify-center gap-2 mt-1">
+                                                        <span className="px-3 py-1 bg-[#FFC800]/20 text-[#FFC800] text-xs font-black rounded-full border border-[#FFC800]/30">+{DAILY_CIRCUIT_XP} XP 🏆</span>
+                                                    </div>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <p className="text-sm font-black text-red-400">❌ Componente(s) incorrecto(s)</p>
+                                                    <p className="text-xs text-[#94A3B8] font-semibold leading-relaxed">
+                                                        El componente correcto era: <span className="text-[#22D3EE] font-black">{dailyProblem.correctComponents.map(c => REPAIR_COMPONENTS.find(rc => rc.id === c)?.nombre).join(' + ')}</span>
+                                                    </p>
+                                                    <p className="text-xs text-[#94A3B8] font-semibold leading-relaxed">{dailyProblem.explanation}</p>
+                                                    <button onClick={resetDailyRepair}
+                                                        className="w-full py-2.5 bg-[#22D3EE]/20 text-[#22D3EE] rounded-xl font-black text-xs active:scale-95 transition border border-[#22D3EE]/30">
+                                                        🔄 Intentar de nuevo
+                                                    </button>
+                                                </>
+                                            )}
                                         </div>
                                     )}
                                 </div>
