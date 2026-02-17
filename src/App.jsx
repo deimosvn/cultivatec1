@@ -3254,19 +3254,15 @@ const LibraryScreen = ({ startLesson, userId, userScores, onShowAchievements, on
 
     return (
     <div className={`pb-24 min-h-full w-full relative ${world.bgClass || 'bg-[#F7F7F7]'}`}>
-        {/* Pixel-art themed emoji decorations */}
-        <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-            {(world.bgPattern || '').split('').filter(c => c.trim()).slice(0, 6).map((emoji, i) => (
-                <div key={i} className="absolute" style={{
-                    left: `${5 + (i * 18) % 90}%`,
-                    top: `${15 + (i * 23) % 70}%`,
-                    opacity: 0.05,
-                    fontSize: `${28 + (i % 3) * 12}px`,
-                    transform: `rotate(${i * 30 - 45}deg)`,
-                    imageRendering: 'pixelated'
-                }}>{emoji}</div>
-            ))}
-        </div>
+        {/* World path background image - stretches vertically to cover the full path */}
+        <img 
+            src={`/fondo${currentWorld + 1}.png`} 
+            alt="" 
+            className="absolute inset-0 w-full h-full pointer-events-none z-0"
+            style={{ objectFit: 'fill' }}
+        />
+        {/* Slight overlay for text readability */}
+        <div className="absolute inset-0 bg-black/10 pointer-events-none z-0"></div>
         {/* Modern Top Bar */}
         <div className="sticky top-0 z-20 bg-white/85 backdrop-blur-2xl border-b border-gray-200/60 px-4 py-2.5">
             <div className="flex items-center justify-between max-w-xl mx-auto">
@@ -3302,7 +3298,7 @@ const LibraryScreen = ({ startLesson, userId, userScores, onShowAchievements, on
         </div>
 
         {/* World-themed Hero Section */}
-        <div className={`bg-gradient-to-br ${world.bgGradient} px-5 pt-5 pb-6 border-b-2 border-gray-100 relative overflow-hidden`}>
+        <div className={`bg-gradient-to-br ${world.bgGradient} px-5 pt-5 pb-6 border-b-2 border-gray-100 relative overflow-hidden z-[1]`}>
             {/* Background decoration */}
             <div className="absolute right-0 top-0 text-8xl opacity-10 text-white transform translate-x-8 -translate-y-4">{world.emoji}</div>
             <div className="absolute left-0 bottom-0 text-6xl opacity-10 text-white transform -translate-x-4 translate-y-4">{world.emoji}</div>
@@ -3366,7 +3362,7 @@ const LibraryScreen = ({ startLesson, userId, userScores, onShowAchievements, on
         </div>
         
         {/* Path-based Module Layout */}
-        <div className="px-4 w-full max-w-xl mx-auto py-5 space-y-4">
+        <div className="px-4 w-full max-w-xl mx-auto py-5 space-y-4 relative z-[1]">
             {worldSections.map((section, sIdx) => {
                 const nextSection = worldSections[sIdx + 1];
                 const endIdx = nextSection ? nextSection.startIdx : worldModules.length;
