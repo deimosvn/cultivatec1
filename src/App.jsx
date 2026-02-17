@@ -12,6 +12,7 @@ import { WORLD_2_MODULES, WORLD_2_SECTIONS } from './data/world2Data';
 import { WORLD_3_MODULES, WORLD_3_SECTIONS } from './data/world3Data';
 import { WORLD_4_MODULES, WORLD_4_SECTIONS } from './data/world4Data';
 import { WORLD_5_MODULES, WORLD_5_SECTIONS } from './data/world5Data';
+import { WORLD_6_MODULES, WORLD_6_SECTIONS } from './data/world6Data';
 import { OnboardingScreen, RobotAvatar, RobotMini } from './Onboarding';
 import AuthScreen from './components/AuthScreen';
 import RankingScreen from './components/RankingScreen';
@@ -159,6 +160,26 @@ const WORLDS_CONFIG = [
         challengeIds: ['py_clase_rover', 'py_a_star', 'py_clasificador', 'py_fsm_rover', 'py_sensor_fusion', 'py_energy_manager'],
         circuitIds: [9, 10],
         glossaryTermIds: ['g53','g54','g55','g56','g57','g58','g59','g60','g61','g62','g63','g64','g65'],
+    },
+    {
+        id: 'world_6',
+        name: 'La Bahía de la Aero-Biosfera',
+        emoji: '🌿',
+        description: 'Drones agrícolas, invernaderos robóticos, biosensores y robótica ecológica.',
+        bgGradient: 'from-[#065F46] via-[#047857] to-[#059669]',
+        bgCard: 'from-[#D1FAE5] to-[#ECFDF5]',
+        bgClass: 'bg-world-aerobiosfera',
+        worldImage: '/mundo6.png',
+        accentColor: '#059669',
+        accentDark: '#065F46',
+        modules: WORLD_6_MODULES,
+        sections: WORLD_6_SECTIONS,
+        bgPattern: '🌱🚁🌡️💧📡🗺️🌾🐝🏠🏙️🍅📱☀️🌍🏁🏆',
+        unlockType: 'friends',
+        unlockRequirement: 25,
+        challengeIds: ['py_hola_mundo', 'py_variable_basica', 'py_if_else', 'py_for_contar', 'py_funcion_saludar', 'py_clase_rover'],
+        circuitIds: [1, 5],
+        glossaryTermIds: ['g1','g2','g15','g22','g27','g35','g43','g53'],
     },
 ];
 
@@ -4512,7 +4533,7 @@ const WorldMapScreen = ({ userScores, onSelectWorld, userProfile, firebaseProfil
                     const totalCount = world.modules.length;
                     const progress = Math.round((completedCount / totalCount) * 100);
                     const isComplete = completedCount === totalCount;
-                    const glowColors = ['rgba(59,130,246,0.5)', 'rgba(245,158,11,0.5)', 'rgba(16,185,129,0.5)', 'rgba(99,102,241,0.5)', 'rgba(217,119,6,0.5)'];
+                    const glowColors = ['rgba(59,130,246,0.5)', 'rgba(245,158,11,0.5)', 'rgba(16,185,129,0.5)', 'rgba(99,102,241,0.5)', 'rgba(217,119,6,0.5)', 'rgba(5,150,105,0.5)'];
                     const glowColor = glowColors[idx] || glowColors[0];
 
                     return (
