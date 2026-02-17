@@ -423,14 +423,14 @@ const UserProfileCard = ({ player, onClose, currentUserId, currentUserProfile, f
           </button>
 
           {/* Large robot skin */}
-          <div className="relative mx-auto mb-3" style={{ width: 150, height: 150 }}>
-            <div className="absolute inset-[-16px] rounded-full animate-pulse" style={{ background: `radial-gradient(circle, ${skinData.rarityColor}35, transparent 70%)` }} />
-            <div className="w-full h-full rounded-[28px] border-2 flex items-center justify-center overflow-hidden" style={{
+          <div className="relative mx-auto mb-3" style={{ width: 180, height: 180 }}>
+            <div className="absolute inset-[-20px] rounded-full animate-pulse" style={{ background: `radial-gradient(circle, ${skinData.rarityColor}35, transparent 70%)` }} />
+            <div className="w-full h-full rounded-[32px] border-2 flex items-center justify-center overflow-hidden" style={{
               background: 'linear-gradient(135deg, #1E293B, #0F172A)',
               borderColor: `${skinData.rarityColor}50`,
               boxShadow: `0 0 40px ${skinData.rarityColor}30, 0 0 80px ${skinData.rarityColor}15`,
             }}>
-              <RobotAvatar config={player.robotConfig} size={130} />
+              <RobotAvatar config={player.robotConfig} size={160} />
             </div>
             {/* Rarity badge */}
             <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full text-[8px] font-black text-white whitespace-nowrap shadow-lg" style={{ backgroundColor: skinData.rarityColor }}>
@@ -443,8 +443,8 @@ const UserProfileCard = ({ player, onClose, currentUserId, currentUserProfile, f
         <div className="px-5 -mt-4">
           {/* Username & level & badges */}
           <div className="text-center mb-4">
-            <div className="flex items-center justify-center gap-2 flex-wrap">
-              <h3 className="text-xl font-black text-white">{player.username || 'Anónimo'}</h3>
+            <div className="flex items-center justify-center gap-2 flex-wrap px-2">
+              <h3 className="text-xl font-black text-white break-all leading-tight">{player.username || 'Anónimo'}</h3>
               {isAdminEmail(player.email) && (
                 <span className="px-1.5 py-0.5 bg-gradient-to-r from-[#FF4B4B] to-[#FF9600] text-white text-[7px] font-black rounded-md uppercase">ADMIN</span>
               )}

@@ -263,7 +263,7 @@ export const ROBOT_SKINS = [
 
 export const SKIN_UNLOCK_REQUIREMENTS = {
   'skin_default': { type: 'free' },
-  'skin_1':  { type: 'free' },
+  'skin_1':  { type: 'modules', count: 1, label: 'Completa 1 módulo' },
   'skin_2':  { type: 'world_unlock', worldIndex: 2, label: 'Desbloquea el Mundo 3' },
   'skin_3':  { type: 'modules', count: 3,  label: 'Completa 3 módulos' },
   'skin_4':  { type: 'world_unlock', worldIndex: 2, label: 'Desbloquea el Mundo 3' },
