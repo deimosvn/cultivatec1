@@ -4454,9 +4454,11 @@ export default function App() {
         
         // Mark module as completed in userScores
         const moduleData = ALL_MODULES.find(m => m.id === moduleId) || MODULOS_DE_ROBOTICA.find(m => m.id === moduleId);
-        const totalSteps = Array.isArray(moduleData?.contenidoTeorico) 
+        let totalSteps = Array.isArray(moduleData?.contenidoTeorico) 
             ? moduleData.contenidoTeorico.length 
             : (moduleData?.contenidoTeorico === '__MODULO_1_REF__' ? 6 : 2);
+        // Special views (e.g. InteractiveLEDGuide) may have empty contenidoTeorico — ensure at least 1
+        if (totalSteps === 0) totalSteps = 1;
         const newScoreData = { score: totalSteps, total: totalSteps };
 
         setUserScores(prev => {
