@@ -6499,7 +6499,7 @@ export default function App() {
 
 
     return (
-        <div className="font-sans min-h-screen bg-[#F8FAFC] w-full">
+        <div className="font-sans min-h-screen bg-[#0F172A] w-full">
             <div className="w-full min-h-screen">
                 <div className="min-h-screen overflow-y-auto pb-24 animate-fade-in"> 
                     {ScreenContent}

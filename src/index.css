@@ -138,11 +138,15 @@ body {
 /* ===== GLOBAL STYLES ===== */
 * { -webkit-tap-highlight-color: transparent; }
 
+html, body {
+  background: #0F172A;
+}
+
 body {
   font-family: 'Nunito', sans-serif;
-  background: #FFFFFF;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
 }
 
 ::-webkit-scrollbar { width: 4px; }
