@@ -6195,11 +6195,18 @@ export default function App() {
         const completedWorldIndices = WORLDS_CONFIG
             .map((w, i) => w.modules.every(m => isModuleCompleted(userScores, m.id)) ? i : -1)
             .filter(i => i >= 0);
+        // Determine which worlds are unlocked (accessible)
+        const unlockedWorldIndices = WORLDS_CONFIG
+            .map((_, i) => isWorldUnlocked(userScores, i, firebaseProfile) ? i : -1)
+            .filter(i => i >= 0);
+        // Get entered worlds from localStorage
+        let enteredWorldIndices = [];
+        try { enteredWorldIndices = JSON.parse(localStorage.getItem('cultivatec_enteredWorlds') || '[]'); } catch {}
         // Get gifted skin IDs from firebase profile
         const giftedSkinIds = (firebaseProfile?.giftedSkins || []).map(g => g.id);
         // Admin check
         const admin = isAdminEmail(firebaseProfile?.email);
-        return getUnlockedSkinIds(completedModulesCount, completedWorldIndices, giftedSkinIds, admin);
+        return getUnlockedSkinIds(completedModulesCount, completedWorldIndices, giftedSkinIds, admin, unlockedWorldIndices, enteredWorldIndices);
     }, [completedModules, userScores, firebaseProfile]);
 
     // Show loading screen while Firebase Auth initializes
@@ -6433,7 +6440,17 @@ export default function App() {
                     // Show World Map
                     ScreenContent = <WorldMapScreen 
                         userScores={userScores}
-                        onSelectWorld={(idx) => setCurrentWorldIndex(idx)}
+                        onSelectWorld={(idx) => {
+                            setCurrentWorldIndex(idx);
+                            // Track entered worlds for skin unlock system
+                            try {
+                                const entered = JSON.parse(localStorage.getItem('cultivatec_enteredWorlds') || '[]');
+                                if (!entered.includes(idx)) {
+                                    entered.push(idx);
+                                    localStorage.setItem('cultivatec_enteredWorlds', JSON.stringify(entered));
+                                }
+                            } catch {}
+                        }}
                         userProfile={userProfile}
                         firebaseProfile={firebaseProfile}
                         onShowAchievements={() => setViewMode('achievements')}
@@ -6517,7 +6534,17 @@ export default function App() {
             default:
                 ScreenContent = <WorldMapScreen 
                     userScores={userScores}
-                    onSelectWorld={(idx) => setCurrentWorldIndex(idx)}
+                    onSelectWorld={(idx) => {
+                        setCurrentWorldIndex(idx);
+                        // Track entered worlds for skin unlock system
+                        try {
+                            const entered = JSON.parse(localStorage.getItem('cultivatec_enteredWorlds') || '[]');
+                            if (!entered.includes(idx)) {
+                                entered.push(idx);
+                                localStorage.setItem('cultivatec_enteredWorlds', JSON.stringify(entered));
+                            }
+                        } catch {}
+                    }}
                     userProfile={userProfile}
                     firebaseProfile={firebaseProfile}
                     onShowAchievements={() => setViewMode('achievements')}

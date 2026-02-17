@@ -1,15 +1,14 @@
 // ================================================================
 // ROBOT SKIN EDITOR — CultivaTec App
-// Modal para editar el skin del robot desde la pantalla principal
-// Incluye skins predefinidas únicas y editor de partes personalizadas
+// Garage-style fullscreen modal for robot skin customization
 // ================================================================
 
-import React, { useState, useEffect } from 'react';
-import { X, Sparkles, RotateCcw, ChevronLeft, ChevronRight, Check, Palette, Star, BookOpen, Lock } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { X, Sparkles, RotateCcw, ChevronLeft, ChevronRight, Check, Star, BookOpen, Lock, Wrench, ChevronDown } from 'lucide-react';
 import { RobotAvatar } from '../Onboarding';
 
 // ============================================
-// ROBOT STORY DIALOGUE (same as onboarding)
+// ROBOT STORY DIALOGUE
 // ============================================
 
 const ROBOT_STORY_LINES = [
@@ -216,25 +215,53 @@ export const ROBOT_SKINS = [
     rarityColor: '#FFC800',
     config: { skinImage: '/skin18.png' },
   },
+  {
+    id: 'skin_19',
+    name: 'Sombra',
+    description: 'Robot misterioso que se mueve entre las sombras 🌑',
+    icon: '🌑',
+    rarity: 'epic',
+    rarityLabel: 'Épico',
+    rarityColor: '#FF4B4B',
+    config: { skinImage: '/skin19.png' },
+  },
+  {
+    id: 'skin_20',
+    name: 'Cazador de Bugs',
+    description: 'Solo los elegidos por el admin obtienen esta skin 🐛',
+    icon: '🐛',
+    rarity: 'legendary',
+    rarityLabel: 'Exclusivo',
+    rarityColor: '#9333EA',
+    config: { skinImage: '/skin20.png' },
+  },
+  {
+    id: 'skin_21',
+    name: 'Novato',
+    description: 'Tu primer paso en el mundo de la robótica 🌟',
+    icon: '🌟',
+    rarity: 'rare',
+    rarityLabel: 'Especial',
+    rarityColor: '#06B6D4',
+    config: { skinImage: '/skin21.png' },
+  },
 ];
 
 // ============================================
 // SKIN UNLOCK REQUIREMENTS
 // ============================================
-// First 3 skins are free. The rest unlock by completing modules or worlds.
-// Admin-gifted skins (giftedSkins) are always unlocked regardless.
 
 export const SKIN_UNLOCK_REQUIREMENTS = {
   'skin_default': { type: 'free' },
   'skin_1':  { type: 'free' },
-  'skin_2':  { type: 'free' },
+  'skin_2':  { type: 'world_unlock', worldIndex: 2, label: 'Desbloquea el Mundo 3' },
   'skin_3':  { type: 'modules', count: 3,  label: 'Completa 3 módulos' },
-  'skin_4':  { type: 'modules', count: 6,  label: 'Completa 6 módulos' },
+  'skin_4':  { type: 'world_unlock', worldIndex: 2, label: 'Desbloquea el Mundo 3' },
   'skin_5':  { type: 'modules', count: 10, label: 'Completa 10 módulos' },
   'skin_6':  { type: 'world',   worldIndex: 0, label: 'Completa el Mundo 1' },
-  'skin_7':  { type: 'modules', count: 20, label: 'Completa 20 módulos' },
+  'skin_7':  { type: 'world_unlock', worldIndex: 3, label: 'Desbloquea el Mundo 4' },
   'skin_8':  { type: 'modules', count: 25, label: 'Completa 25 módulos' },
-  'skin_9':  { type: 'world',   worldIndex: 1, label: 'Completa el Mundo 2' },
+  'skin_9':  { type: 'world_unlock', worldIndex: 3, label: 'Desbloquea el Mundo 4' },
   'skin_10': { type: 'modules', count: 35, label: 'Completa 35 módulos' },
   'skin_11': { type: 'modules', count: 40, label: 'Completa 40 módulos' },
   'skin_12': { type: 'world',   worldIndex: 2, label: 'Completa el Mundo 3' },
@@ -244,37 +271,39 @@ export const SKIN_UNLOCK_REQUIREMENTS = {
   'skin_16': { type: 'modules', count: 65, label: 'Completa 65 módulos' },
   'skin_17': { type: 'modules', count: 70, label: 'Completa 70 módulos' },
   'skin_18': { type: 'world',   worldIndex: 4, label: 'Completa el Mundo 5' },
+  'skin_19': { type: 'modules', count: 45, label: 'Completa 45 módulos' },
+  'skin_20': { type: 'admin_only', label: 'Regalo exclusivo del admin' },
+  'skin_21': { type: 'world_enter', worldIndex: 0, label: 'Entra al Mundo 1' },
 };
 
 /**
  * Compute the set of unlocked skin IDs based on progress and gifts.
- * @param {number} completedModulesCount - Total number of completed modules across all worlds
- * @param {number[]} completedWorldIndices - Array of world indices (0-4) that are fully completed
- * @param {string[]} giftedSkinIds - Array of skin IDs gifted by admin
- * @param {boolean} isAdmin - Whether the user is an admin (admins unlock all)
- * @returns {Set<string>} Set of unlocked skin IDs
+ * @param {number} completedModulesCount
+ * @param {number[]} completedWorldIndices - fully completed worlds
+ * @param {string[]} giftedSkinIds
+ * @param {boolean} isAdmin
+ * @param {number[]} unlockedWorldIndices - worlds that are accessible/unlocked
+ * @param {number[]} enteredWorldIndices - worlds the user has entered at least once
  */
-export const getUnlockedSkinIds = (completedModulesCount = 0, completedWorldIndices = [], giftedSkinIds = [], isAdmin = false) => {
+export const getUnlockedSkinIds = (completedModulesCount = 0, completedWorldIndices = [], giftedSkinIds = [], isAdmin = false, unlockedWorldIndices = [], enteredWorldIndices = []) => {
   const unlocked = new Set();
   for (const skin of ROBOT_SKINS) {
     const req = SKIN_UNLOCK_REQUIREMENTS[skin.id];
     if (!req) continue;
-    // Admin override
     if (isAdmin) { unlocked.add(skin.id); continue; }
-    // Gifted by admin
     if (giftedSkinIds.includes(skin.id)) { unlocked.add(skin.id); continue; }
-    // Free skins
     if (req.type === 'free') { unlocked.add(skin.id); continue; }
-    // Module count milestone
     if (req.type === 'modules' && completedModulesCount >= req.count) { unlocked.add(skin.id); continue; }
-    // World completion milestone
     if (req.type === 'world' && completedWorldIndices.includes(req.worldIndex)) { unlocked.add(skin.id); continue; }
+    if (req.type === 'world_unlock' && unlockedWorldIndices.includes(req.worldIndex)) { unlocked.add(skin.id); continue; }
+    if (req.type === 'world_enter' && enteredWorldIndices.includes(req.worldIndex)) { unlocked.add(skin.id); continue; }
+    // admin_only: only via gifted or isAdmin (already handled above)
   }
   return unlocked;
 };
 
 // ============================================
-// ROBOT STORY TAB COMPONENT
+// ROBOT STORY TAB (garage-themed)
 // ============================================
 
 const RobotStoryTab = ({ robotConfig, robotName, userName, storyIndex, setStoryIndex, storyTyping, setStoryTyping, storyText, setStoryText }) => {
@@ -282,7 +311,6 @@ const RobotStoryTab = ({ robotConfig, robotName, userName, storyIndex, setStoryI
   const fullText = currentLine.getText(robotName, userName);
   const isLast = storyIndex === ROBOT_STORY_LINES.length - 1;
 
-  // Typewriter effect
   useEffect(() => {
     if (!storyTyping) return;
     setStoryText('');
@@ -290,114 +318,93 @@ const RobotStoryTab = ({ robotConfig, robotName, userName, storyIndex, setStoryI
     const interval = setInterval(() => {
       i++;
       setStoryText(fullText.slice(0, i));
-      if (i >= fullText.length) {
-        clearInterval(interval);
-        setStoryTyping(false);
-      }
+      if (i >= fullText.length) { clearInterval(interval); setStoryTyping(false); }
     }, 25);
     return () => clearInterval(interval);
   }, [storyIndex, storyTyping]);
 
   const handleTap = () => {
-    if (storyTyping) {
-      setStoryText(fullText);
-      setStoryTyping(false);
-      return;
-    }
-    if (!isLast) {
-      setStoryIndex(prev => prev + 1);
-      setStoryTyping(true);
-    }
+    if (storyTyping) { setStoryText(fullText); setStoryTyping(false); return; }
+    if (!isLast) { setStoryIndex(prev => prev + 1); setStoryTyping(true); }
   };
 
   return (
-    <div className="p-4 flex flex-col items-center">
-      {/* Robot */}
-      <div className="relative mb-3">
-        <div className="w-28 h-28 bg-gradient-to-br from-[#DBEAFE] to-[#EFF6FF] rounded-3xl border-2 border-[#93C5FD] flex items-center justify-center p-2 shadow-inner">
+    <div className="p-5 flex flex-col items-center">
+      <div className="relative mb-4">
+        <div className="w-28 h-28 bg-gradient-to-br from-[#1E293B] to-[#0F172A] rounded-2xl border-2 border-cyan-500/30 flex items-center justify-center p-2 shadow-lg shadow-cyan-500/10">
           <RobotAvatar config={robotConfig} size={95} animate />
         </div>
         <div className="absolute -top-1 -right-2 text-lg animate-bounce">✨</div>
-        <div className="absolute -bottom-1 -left-2 text-sm animate-pulse">💫</div>
       </div>
-
-      {/* Name badge */}
-      <div className="inline-flex items-center gap-1.5 bg-[#2563EB]/10 border border-[#2563EB]/20 rounded-full px-3 py-1 mb-3">
+      <div className="inline-flex items-center gap-1.5 bg-cyan-500/10 border border-cyan-500/20 rounded-full px-3 py-1 mb-3">
         <span className="text-base">{currentLine.emoji}</span>
-        <span className="text-xs font-black text-[#2563EB]">{robotName} dice...</span>
+        <span className="text-xs font-black text-cyan-400">{robotName} dice...</span>
       </div>
-
-      {/* Speech bubble */}
-      <div className="relative bg-[#F0F7FF] rounded-2xl p-4 border-2 border-[#DBEAFE] mb-3 text-left min-h-[100px] w-full cursor-pointer active:bg-[#E8F1FD] transition-colors"
-        onClick={handleTap}>
-        {/* Triangle */}
-        <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-3 h-3 bg-[#F0F7FF] border-l-2 border-t-2 border-[#DBEAFE] transform rotate-45"></div>
-        
-        <p className="text-[#3C3C3C] leading-relaxed text-sm font-semibold">
+      <div className="relative bg-[#1E293B] rounded-2xl p-4 border border-cyan-500/20 mb-3 text-left min-h-[100px] w-full cursor-pointer active:bg-[#263548] transition-colors" onClick={handleTap}>
+        <p className="text-gray-200 leading-relaxed text-sm font-semibold">
           {storyText}
-          {storyTyping && <span className="inline-block w-0.5 h-4 bg-[#2563EB] ml-0.5 animate-pulse align-middle"></span>}
+          {storyTyping && <span className="inline-block w-0.5 h-4 bg-cyan-400 ml-0.5 animate-pulse align-middle"></span>}
         </p>
       </div>
-
-      {/* Progress dots */}
       <div className="flex justify-center gap-1.5 mb-3">
         {ROBOT_STORY_LINES.map((_, i) => (
-          <div key={i} className={`h-1.5 rounded-full transition-all duration-300 ${
-            i === storyIndex ? 'w-6 bg-[#2563EB]' : i < storyIndex ? 'w-3 bg-[#93C5FD]' : 'w-3 bg-[#E5E5E5]'
-          }`}/>
+          <div key={i} className={`h-1.5 rounded-full transition-all duration-300 ${i === storyIndex ? 'w-6 bg-cyan-400' : i < storyIndex ? 'w-3 bg-cyan-700' : 'w-3 bg-gray-600'}`}/>
         ))}
       </div>
-
-      {/* Navigation */}
       <div className="flex gap-2 w-full">
         {storyIndex > 0 && (
           <button onClick={() => { setStoryIndex(prev => prev - 1); setStoryTyping(true); }}
-            className="flex-1 py-2.5 rounded-xl bg-[#F7F7F7] border-2 border-[#E5E5E5] font-bold text-sm text-[#777] active:scale-95 transition-all flex items-center justify-center gap-1">
+            className="flex-1 py-2.5 rounded-xl bg-[#1E293B] border border-gray-600 font-bold text-sm text-gray-400 active:scale-95 transition-all flex items-center justify-center gap-1">
             <ChevronLeft size={16}/> Anterior
           </button>
         )}
         <button onClick={handleTap}
-          className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-[#2563EB] to-[#3B82F6] text-white font-bold text-sm shadow-md active:scale-95 transition-all flex items-center justify-center gap-1">
+          className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold text-sm shadow-lg active:scale-95 transition-all flex items-center justify-center gap-1">
           {storyTyping ? 'Saltar ▸▸' : isLast ? '🎉 ¡Fin!' : <>Siguiente <ChevronRight size={16}/></>}
         </button>
       </div>
-
-      <p className="text-[10px] text-[#AFAFAF] font-semibold mt-3 text-center">Toca la burbuja para avanzar</p>
+      <p className="text-[10px] text-gray-600 font-semibold mt-3 text-center">Toca la burbuja para avanzar</p>
     </div>
   );
 };
 
 // ============================================
-// ROBOT SKIN EDITOR MODAL COMPONENT
+// GARAGE-STYLE ROBOT SKIN EDITOR
 // ============================================
 
 const RobotSkinEditor = ({ isOpen, onClose, currentConfig, currentName, onSave, userName, unlockedSkinIds }) => {
-  const [mode, setMode] = useState('skins'); // 'skins' | 'story'
+  const [mode, setMode] = useState('skins');
   const [storyIndex, setStoryIndex] = useState(0);
   const [storyTyping, setStoryTyping] = useState(false);
   const [storyText, setStoryText] = useState('');
-  const [robotConfig, setRobotConfig] = useState(currentConfig || {
-    skinImage: '/skin.png'
-  });
+  const [robotConfig, setRobotConfig] = useState(currentConfig || { skinImage: '/skin.png' });
   const [robotName, setRobotName] = useState(currentName || '');
   const [selectedSkin, setSelectedSkin] = useState(null);
   const [showSavedMessage, setShowSavedMessage] = useState(false);
+  const [skinsPanelExpanded, setSkinsPanelExpanded] = useState(true);
+  const skinsRef = useRef(null);
+
+  const currentSkinData = ROBOT_SKINS.find(s => s.id === selectedSkin)
+    || ROBOT_SKINS.find(s => JSON.stringify(s.config) === JSON.stringify(robotConfig))
+    || ROBOT_SKINS[0];
+
+  const totalSkins = ROBOT_SKINS.length;
+  const unlockedCount = unlockedSkinIds ? unlockedSkinIds.size : totalSkins;
 
   useEffect(() => {
     if (isOpen) {
-      setRobotConfig(currentConfig || {
-        skinImage: '/skin.png'
-      });
+      setRobotConfig(currentConfig || { skinImage: '/skin.png' });
       setRobotName(currentName || '');
       setSelectedSkin(null);
       setShowSavedMessage(false);
+      setMode('skins');
+      setSkinsPanelExpanded(true);
     }
   }, [isOpen, currentConfig, currentName]);
 
   if (!isOpen) return null;
 
   const handleSelectSkin = (skin) => {
-    // Prevent selecting locked skins
     if (unlockedSkinIds && !unlockedSkinIds.has(skin.id)) return;
     setSelectedSkin(skin.id);
     setRobotConfig({ ...skin.config });
@@ -406,181 +413,233 @@ const RobotSkinEditor = ({ isOpen, onClose, currentConfig, currentName, onSave, 
   const handleSave = () => {
     onSave(robotConfig, robotName);
     setShowSavedMessage(true);
-    setTimeout(() => {
-      setShowSavedMessage(false);
-      onClose();
-    }, 1200);
+    setTimeout(() => { setShowSavedMessage(false); onClose(); }, 1200);
   };
 
   const randomize = () => {
-    const available = unlockedSkinIds
-      ? ROBOT_SKINS.filter(s => unlockedSkinIds.has(s.id))
-      : ROBOT_SKINS;
+    const available = unlockedSkinIds ? ROBOT_SKINS.filter(s => unlockedSkinIds.has(s.id)) : ROBOT_SKINS;
+    if (available.length === 0) return;
     const randomSkin = available[Math.floor(Math.random() * available.length)];
     setSelectedSkin(randomSkin.id);
     setRobotConfig({ ...randomSkin.config });
   };
 
-  const getRarityBorder = (rarity) => {
-    switch(rarity) {
-      case 'legendary': return 'border-[#FFC800] bg-gradient-to-br from-[#FFC800]/10 to-[#FF9600]/10';
-      case 'epic': return 'border-[#FF4B4B] bg-gradient-to-br from-[#FF4B4B]/10 to-[#FF6B6B]/5';
-      case 'rare': return 'border-[#3B82F6] bg-gradient-to-br from-[#3B82F6]/10 to-[#60A5FA]/5';
-      default: return 'border-[#58CC02] bg-gradient-to-br from-[#58CC02]/10 to-[#7CDB30]/5';
+  const getRarityGlow = (rarity) => {
+    switch (rarity) {
+      case 'legendary': return 'shadow-[0_0_25px_rgba(255,200,0,0.4)]';
+      case 'epic': return 'shadow-[0_0_20px_rgba(255,75,75,0.3)]';
+      case 'rare': return 'shadow-[0_0_15px_rgba(59,130,246,0.3)]';
+      default: return 'shadow-[0_0_12px_rgba(88,204,2,0.15)]';
+    }
+  };
+
+  const getRarityBorder = (rarity, isSelected) => {
+    if (isSelected) return 'border-cyan-400 ring-2 ring-cyan-400/40';
+    switch (rarity) {
+      case 'legendary': return 'border-[#FFC800]/40 hover:border-[#FFC800]';
+      case 'epic': return 'border-[#FF4B4B]/30 hover:border-[#FF4B4B]';
+      case 'rare': return 'border-[#3B82F6]/30 hover:border-[#3B82F6]';
+      default: return 'border-gray-600/40 hover:border-gray-500';
     }
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-3 animate-fade-in" onClick={onClose}>
-      <div className="bg-white rounded-3xl w-full max-w-lg max-h-[92vh] overflow-hidden animate-scale-in shadow-2xl flex flex-col" onClick={e => e.stopPropagation()}>
-        
-        {/* Header */}
-        <div className="bg-gradient-to-r from-[#2563EB] to-[#3B82F6] px-5 py-4 flex justify-between items-center border-b-4 border-[#1D4ED8] flex-shrink-0">
-          <h2 className="text-lg font-black text-white flex items-center gap-2">
-            <Palette size={20} />
-            Personalizar Robot
-          </h2>
-          <button onClick={onClose} className="text-white/70 hover:text-white transition p-1.5 rounded-lg hover:bg-white/20">
-            <X size={20} />
+    <div className="fixed inset-0 z-50 animate-fade-in" onClick={onClose}>
+      {/* Full-screen garage background */}
+      <div className="absolute inset-0 bg-[#0B1120]">
+        {/* Industrial grid */}
+        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+        {/* Ambient glow spots */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[350px] bg-cyan-500/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-[250px] h-[250px] bg-blue-600/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-0 w-[250px] h-[250px] bg-purple-600/5 rounded-full blur-3xl" />
+      </div>
+
+      {/* Main layout */}
+      <div className="relative z-10 h-full flex flex-col" onClick={e => e.stopPropagation()}>
+
+        {/* ── TOP BAR ── */}
+        <div className="flex-shrink-0 flex items-center justify-between px-4 py-3 border-b border-gray-700/50 bg-[#0F172A]/80 backdrop-blur-md">
+          <button onClick={onClose} className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors active:scale-95">
+            <ChevronLeft size={20} />
+            <span className="text-sm font-bold">Volver</span>
           </button>
+          <div className="flex items-center gap-2">
+            <Wrench size={16} className="text-cyan-400" />
+            <h1 className="text-base font-black text-white tracking-wide">GARAGE</h1>
+          </div>
+          <div className="flex items-center gap-1.5 bg-gray-800/60 rounded-lg px-2.5 py-1 border border-gray-700/50">
+            <Star size={12} className="text-yellow-400" />
+            <span className="text-xs font-black text-gray-300">{unlockedCount}/{totalSkins}</span>
+          </div>
         </div>
 
-        {/* Saved Message Overlay */}
+        {/* ── SAVED OVERLAY ── */}
         {showSavedMessage && (
-          <div className="absolute inset-0 z-50 bg-white/95 flex flex-col items-center justify-center rounded-3xl animate-scale-in">
-            <div className="w-24 h-24 bg-[#58CC02]/10 rounded-full flex items-center justify-center mb-4">
-              <Check size={48} className="text-[#58CC02]" />
+          <div className="absolute inset-0 z-50 bg-[#0B1120]/95 flex flex-col items-center justify-center animate-scale-in">
+            <div className="w-24 h-24 bg-green-500/20 rounded-full flex items-center justify-center mb-4 border-2 border-green-500/30">
+              <Check size={48} className="text-green-400" />
             </div>
-            <h3 className="text-xl font-black text-[#3C3C3C]">¡Guardado!</h3>
-            <p className="text-sm text-[#777] font-bold">Tu robot se ha actualizado</p>
+            <h3 className="text-xl font-black text-white">¡Guardado!</h3>
+            <p className="text-sm text-gray-400 font-bold">Tu robot se ha actualizado</p>
           </div>
         )}
 
-        {/* Robot Preview */}
-        <div className="flex flex-col items-center py-4 bg-gradient-to-b from-[#F0F7FF] to-white flex-shrink-0">
-          <div className="relative">
-            <div className="absolute inset-0 rounded-3xl blur-xl opacity-20"
-              style={{ background: `radial-gradient(circle, #3B82F688, transparent 70%)` }}/>
-            <div className="relative w-32 h-32 bg-white rounded-3xl border-2 border-[#E5E5E5] flex items-center justify-center p-2 shadow-lg">
-              <RobotAvatar config={robotConfig} size={110} animate />
-            </div>
-            <button onClick={randomize}
-              className="absolute -top-1 -right-1 w-8 h-8 bg-gradient-to-br from-yellow-400 to-orange-400 rounded-full flex items-center justify-center shadow-lg hover:from-yellow-300 hover:to-orange-300 transition-all active:scale-90"
-              title="Aleatorio">
-              <RotateCcw size={14} className="text-yellow-900"/>
-            </button>
-          </div>
-          {/* Robot Name */}
-          <div className="flex items-center gap-2 mt-3 px-6 w-full max-w-xs">
-            <input type="text" value={robotName} onChange={e => setRobotName(e.target.value)}
-              placeholder="Nombre de tu robot..."
-              className="flex-1 py-2 px-3 rounded-xl bg-[#F7F7F7] border-2 border-[#E5E5E5] text-[#3C3C3C] text-center font-bold placeholder-[#CDCDCD] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20 transition text-sm"
-              maxLength={16}/>
-          </div>
-        </div>
-
-        {/* Mode Tabs */}
-        <div className="flex border-b-2 border-[#E5E5E5] flex-shrink-0">
+        {/* ── MODE TABS ── */}
+        <div className="flex-shrink-0 flex border-b border-gray-700/50 bg-[#0F172A]/60">
           <button onClick={() => setMode('skins')}
             className={`flex-1 py-2.5 text-sm font-black transition-all flex items-center justify-center gap-1.5 ${
-              mode === 'skins' ? 'text-[#2563EB] border-b-3 border-[#2563EB] bg-[#2563EB]/5' : 'text-[#AFAFAF]'
+              mode === 'skins' ? 'text-cyan-400 border-b-2 border-cyan-400 bg-cyan-400/5' : 'text-gray-500 hover:text-gray-400'
             }`}>
             <Star size={14} /> Skins
           </button>
           <button onClick={() => { setMode('story'); setStoryIndex(0); setStoryTyping(true); setStoryText(''); }}
             className={`flex-1 py-2.5 text-sm font-black transition-all flex items-center justify-center gap-1.5 ${
-              mode === 'story' ? 'text-[#2563EB] border-b-3 border-[#2563EB] bg-[#2563EB]/5' : 'text-[#AFAFAF]'
+              mode === 'story' ? 'text-cyan-400 border-b-2 border-cyan-400 bg-cyan-400/5' : 'text-gray-500 hover:text-gray-400'
             }`}>
             <BookOpen size={14} /> Historia
           </button>
         </div>
 
-        {/* Content - Scrollable */}
-        <div className="flex-1 overflow-y-auto min-h-0">
-          {mode === 'story' ? (
-            /* ROBOT STORY */
+        {mode === 'story' ? (
+          /* ── STORY MODE ── */
+          <div className="flex-1 overflow-y-auto">
             <RobotStoryTab
               robotConfig={robotConfig}
               robotName={robotName || currentName || 'Sparky'}
               userName={userName || 'Explorador'}
-              storyIndex={storyIndex}
-              setStoryIndex={setStoryIndex}
-              storyTyping={storyTyping}
-              setStoryTyping={setStoryTyping}
-              storyText={storyText}
-              setStoryText={setStoryText}
+              storyIndex={storyIndex} setStoryIndex={setStoryIndex}
+              storyTyping={storyTyping} setStoryTyping={setStoryTyping}
+              storyText={storyText} setStoryText={setStoryText}
             />
-          ) : (
-            /* SKINS GRID */
-            <div className="p-4 grid grid-cols-2 gap-2.5">
-              {ROBOT_SKINS.map(skin => {
-                const isSelected = selectedSkin === skin.id;
-                const isLocked = unlockedSkinIds && !unlockedSkinIds.has(skin.id);
-                const requirement = SKIN_UNLOCK_REQUIREMENTS[skin.id];
-                return (
-                  <button key={skin.id}
-                    onClick={() => handleSelectSkin(skin)}
-                    className={`relative rounded-2xl border-2 p-3 transition-all text-left ${
-                      isLocked
-                        ? 'border-[#E5E5E5] bg-[#F7F7F7] opacity-70 cursor-not-allowed'
-                        : isSelected 
-                          ? 'border-[#2563EB] ring-2 ring-[#2563EB]/30 bg-[#2563EB]/5 scale-[1.02] active:scale-95' 
-                          : `${getRarityBorder(skin.rarity)} active:scale-95`
-                    }`}>
-                    {/* Rarity badge */}
-                    <div className="absolute top-1.5 right-1.5 text-[8px] font-black px-1.5 py-0.5 rounded-full text-white"
-                      style={{ backgroundColor: isLocked ? '#AFAFAF' : skin.rarityColor }}>
-                      {skin.rarityLabel}
-                    </div>
-                    {/* Robot Preview */}
-                    <div className="flex justify-center mb-2 relative">
-                      <div className={`w-16 h-16 bg-white rounded-xl flex items-center justify-center border border-[#E5E5E5]/50 ${isLocked ? 'grayscale' : ''}`}>
-                        <RobotAvatar config={skin.config} size={55} />
-                      </div>
-                      {/* Lock overlay */}
-                      {isLocked && (
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="w-8 h-8 bg-[#3C3C3C]/80 rounded-full flex items-center justify-center shadow-lg">
-                            <Lock size={16} className="text-white" />
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                    {/* Info */}
-                    <div className="text-center">
-                      <div className="flex items-center justify-center gap-1">
-                        <span className="text-sm">{skin.icon}</span>
-                        <span className={`text-xs font-black ${isLocked ? 'text-[#AFAFAF]' : 'text-[#3C3C3C]'}`}>{skin.name}</span>
-                      </div>
-                      {isLocked && requirement ? (
-                        <p className="text-[9px] text-[#FF9600] font-bold mt-0.5 leading-tight flex items-center justify-center gap-0.5">
-                          🔒 {requirement.label}
-                        </p>
-                      ) : (
-                        <p className="text-[9px] text-[#AFAFAF] font-semibold mt-0.5 leading-tight">{skin.description}</p>
-                      )}
-                    </div>
-                    {/* Selected check */}
-                    {isSelected && !isLocked && (
-                      <div className="absolute -top-1 -left-1 w-5 h-5 bg-[#2563EB] rounded-full flex items-center justify-center">
-                        <Check size={12} className="text-white" />
-                      </div>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-          )}
-        </div>
+          </div>
+        ) : (
+          /* ── SKINS / GARAGE MODE ── */
+          <>
+            {/* Robot display area */}
+            <div className="flex-shrink-0 flex flex-col items-center justify-center py-5 px-4 relative"
+              style={{ minHeight: skinsPanelExpanded ? '36vh' : '62vh', transition: 'min-height 0.3s ease' }}>
+              {/* Platform glow */}
+              <div className="absolute bottom-3 left-1/2 -translate-x-1/2 w-48 h-5 bg-cyan-500/15 rounded-full blur-xl" />
+              <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-28 h-1.5 bg-cyan-400/25 rounded-full blur-sm" />
 
-        {/* Footer - Save Button */}
-        <div className="p-4 border-t-2 border-[#E5E5E5] bg-white flex-shrink-0">
-          <button onClick={handleSave}
-            className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-[#2563EB] to-[#3B82F6] text-white font-black text-sm shadow-lg shadow-[#2563EB]/30 active:scale-95 transition-all flex items-center justify-center gap-2 border-b-4 border-[#1D4ED8]">
-            <Sparkles size={18} />
-            Guardar Cambios
-          </button>
-        </div>
+              {/* Robot — LARGE */}
+              <div className="relative mb-3">
+                <div className={`absolute inset-0 rounded-[28px] ${getRarityGlow(currentSkinData.rarity)}`} style={{ transform: 'scale(1.06)' }} />
+                <div className="relative bg-gradient-to-br from-[#1E293B] to-[#0F172A] rounded-[28px] border-2 border-gray-700/60 flex items-center justify-center shadow-2xl overflow-hidden"
+                  style={{ width: 'min(62vw, 250px)', height: 'min(62vw, 250px)' }}>
+                  {/* Corner brackets */}
+                  <div className="absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 border-cyan-500/30 rounded-tl-lg" />
+                  <div className="absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 border-cyan-500/30 rounded-tr-lg" />
+                  <div className="absolute bottom-2 left-2 w-4 h-4 border-b-2 border-l-2 border-cyan-500/30 rounded-bl-lg" />
+                  <div className="absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 border-cyan-500/30 rounded-br-lg" />
+                  {/* Scan line effect */}
+                  <div className="absolute inset-0 pointer-events-none opacity-5" style={{ background: 'repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,255,255,0.15) 3px, rgba(0,255,255,0.15) 4px)' }} />
+                  <RobotAvatar config={robotConfig} size={Math.min(window.innerWidth * 0.52, 210)} animate />
+                </div>
+                {/* Randomize */}
+                <button onClick={randomize}
+                  className="absolute -top-2 -right-2 w-10 h-10 bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl flex items-center justify-center shadow-lg shadow-amber-500/30 hover:shadow-amber-500/50 transition-all active:scale-90 border border-amber-400/30"
+                  title="Aleatorio">
+                  <RotateCcw size={18} className="text-white" />
+                </button>
+              </div>
+
+              {/* Skin info */}
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-lg">{currentSkinData.icon}</span>
+                <span className="text-base font-black text-white">{currentSkinData.name}</span>
+                <span className="text-[9px] font-black px-2 py-0.5 rounded-full text-white" style={{ backgroundColor: currentSkinData.rarityColor }}>
+                  {currentSkinData.rarityLabel}
+                </span>
+              </div>
+
+              {/* Robot name */}
+              <div className="w-full max-w-[250px]">
+                <input type="text" value={robotName} onChange={e => setRobotName(e.target.value)}
+                  placeholder="Nombre de tu robot..."
+                  className="w-full py-2 px-4 rounded-xl bg-[#1E293B] border border-gray-600/50 text-white text-center font-bold placeholder-gray-500 outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/30 transition text-sm"
+                  maxLength={16} />
+              </div>
+
+              {/* Expand/collapse toggle */}
+              <button onClick={() => setSkinsPanelExpanded(!skinsPanelExpanded)}
+                className="mt-2.5 flex items-center gap-1 text-gray-500 hover:text-cyan-400 transition-colors text-xs font-bold active:scale-95">
+                <ChevronDown size={14} className={`transition-transform duration-300 ${skinsPanelExpanded ? '' : 'rotate-180'}`} />
+                {skinsPanelExpanded ? 'Ocultar skins' : 'Mostrar skins'}
+              </button>
+            </div>
+
+            {/* Skins panel */}
+            {skinsPanelExpanded && (
+              <div className="flex-1 min-h-0 flex flex-col border-t border-gray-700/50 bg-[#0F172A]/80">
+                <div className="flex-shrink-0 px-4 py-2 flex items-center justify-between">
+                  <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Colección</span>
+                  <span className="text-[10px] font-bold text-gray-500">{unlockedCount} desbloqueadas</span>
+                </div>
+                <div ref={skinsRef} className="flex-1 overflow-y-auto px-3 pb-3 min-h-0">
+                  <div className="grid grid-cols-3 gap-2">
+                    {ROBOT_SKINS.map(skin => {
+                      const isSelected = selectedSkin === skin.id || (!selectedSkin && JSON.stringify(skin.config) === JSON.stringify(robotConfig));
+                      const isLocked = unlockedSkinIds && !unlockedSkinIds.has(skin.id);
+                      const requirement = SKIN_UNLOCK_REQUIREMENTS[skin.id];
+                      return (
+                        <button key={skin.id}
+                          onClick={() => handleSelectSkin(skin)}
+                          className={`relative rounded-xl border p-1.5 transition-all text-center ${
+                            isLocked
+                              ? 'border-gray-700/40 bg-gray-800/30 opacity-50 cursor-not-allowed'
+                              : `${getRarityBorder(skin.rarity, isSelected)} bg-[#1E293B]/80 active:scale-95`
+                          }`}>
+                          {/* Rarity dot */}
+                          <div className="absolute top-1 right-1 w-2 h-2 rounded-full" style={{ backgroundColor: isLocked ? '#4B5563' : skin.rarityColor }} />
+                          {/* Preview */}
+                          <div className="flex justify-center mb-1 relative">
+                            <div className={`w-14 h-14 rounded-lg flex items-center justify-center ${isLocked ? 'grayscale opacity-40' : ''}`}>
+                              <RobotAvatar config={skin.config} size={48} />
+                            </div>
+                            {isLocked && (
+                              <div className="absolute inset-0 flex items-center justify-center">
+                                <div className="w-7 h-7 bg-gray-900/90 rounded-full flex items-center justify-center border border-gray-600/50">
+                                  <Lock size={13} className="text-gray-400" />
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                          {/* Name */}
+                          <div className={`text-[9px] font-black leading-tight truncate ${isLocked ? 'text-gray-600' : isSelected ? 'text-cyan-400' : 'text-gray-300'}`}>
+                            {skin.name}
+                          </div>
+                          {/* Requirement or rarity */}
+                          {isLocked && requirement ? (
+                            <p className="text-[7px] text-amber-500/80 font-bold mt-0.5 leading-tight truncate">🔒 {requirement.label}</p>
+                          ) : (
+                            <p className="text-[7px] text-gray-500 font-semibold mt-0.5 leading-tight truncate">{skin.icon} {skin.rarityLabel}</p>
+                          )}
+                          {/* Selected */}
+                          {isSelected && !isLocked && (
+                            <div className="absolute -top-1 -left-1 w-4 h-4 bg-cyan-400 rounded-full flex items-center justify-center shadow-lg shadow-cyan-400/50">
+                              <Check size={10} className="text-[#0B1120]" />
+                            </div>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Save button */}
+            <div className="flex-shrink-0 p-3 border-t border-gray-700/50 bg-[#0F172A]/90 backdrop-blur-sm">
+              <button onClick={handleSave}
+                className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-black text-sm shadow-lg shadow-cyan-500/30 active:scale-[0.97] transition-all flex items-center justify-center gap-2 border-b-4 border-blue-700">
+                <Sparkles size={18} />
+                Guardar Cambios
+              </button>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

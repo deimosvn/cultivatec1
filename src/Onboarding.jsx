@@ -5,7 +5,6 @@ import { ChevronRight, ChevronLeft, Sparkles, Star, Zap, RotateCcw, Check } from
 const ROBOT_SKINS_ONBOARDING = [
   { id: 'skin_default', name: 'Original', icon: '🤖', rarity: 'common', rarityColor: '#58CC02', config: { skinImage: '/skin.png' } },
   { id: 'skin_1', name: 'Explorador', icon: '🧭', rarity: 'common', rarityColor: '#58CC02', config: { skinImage: '/skin1.png' } },
-  { id: 'skin_2', name: 'Guerrero', icon: '⚔️', rarity: 'rare', rarityColor: '#3B82F6', config: { skinImage: '/skin2.png' } },
 ];
 
 // ============================================
