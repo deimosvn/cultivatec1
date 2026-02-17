@@ -409,7 +409,7 @@ const UserProfileCard = ({ player, onClose, currentUserId, currentUserProfile, f
 
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-fade-in" onClick={onClose}>
-      <div className="w-full max-w-sm rounded-3xl overflow-hidden animate-scale-in" style={{ background: 'linear-gradient(180deg, #1E293B, #0F172A)' }} onClick={e => e.stopPropagation()}>
+      <div className="w-full max-w-sm max-h-[90vh] rounded-3xl overflow-y-auto animate-scale-in" style={{ background: 'linear-gradient(180deg, #1E293B, #0F172A)' }} onClick={e => e.stopPropagation()}>
         {/* Gradient header with robot */}
         <div className="relative px-5 pt-5 pb-10 text-center overflow-hidden" style={{ background: 'linear-gradient(135deg, #0E7490, #164E63, #0B1120)' }}>
           {/* Floating particles */}

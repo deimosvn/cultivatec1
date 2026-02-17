@@ -6235,17 +6235,26 @@ export default function App() {
     }, [completedModules, userScores, firebaseProfile]);
 
     // === SKIN UNLOCK ANIMATION ===
-    const prevUnlockedSkinIdsRef = useRef(null);
+    const skinUnlockInitRef = useRef(false);
     const [skinUnlockPopup, setSkinUnlockPopup] = useState(null);
     const [skinUnlockQueue, setSkinUnlockQueue] = useState([]);
 
     useEffect(() => {
-        if (!computedUnlockedSkinIds) return;
+        if (!computedUnlockedSkinIds || computedUnlockedSkinIds.size === 0) return;
         const currentIds = [...computedUnlockedSkinIds];
-        const prevIds = prevUnlockedSkinIdsRef.current;
-        prevUnlockedSkinIdsRef.current = currentIds;
-        if (prevIds === null) return; // first render, skip
-        const newIds = currentIds.filter(id => !prevIds.includes(id));
+        // Read previously known skins from localStorage
+        let knownIds = [];
+        try { knownIds = JSON.parse(localStorage.getItem('cultivatec_knownUnlockedSkins') || '[]'); } catch {}
+        // Always persist the current set
+        localStorage.setItem('cultivatec_knownUnlockedSkins', JSON.stringify(currentIds));
+        // Skip animation on first mount / initial load
+        if (!skinUnlockInitRef.current) {
+            skinUnlockInitRef.current = true;
+            // If localStorage was empty (first ever session), don't animate
+            if (knownIds.length === 0) return;
+        }
+        // Find truly new skins (not previously known)
+        const newIds = currentIds.filter(id => !knownIds.includes(id));
         if (newIds.length > 0) {
             const newSkins = newIds.map(id => ROBOT_SKINS.find(s => s.id === id)).filter(Boolean);
             if (newSkins.length > 0) {
