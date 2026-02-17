@@ -382,6 +382,7 @@ const RobotSkinEditor = ({ isOpen, onClose, currentConfig, currentName, onSave, 
   const [selectedSkin, setSelectedSkin] = useState(null);
   const [showSavedMessage, setShowSavedMessage] = useState(false);
   const [skinsPanelExpanded, setSkinsPanelExpanded] = useState(true);
+  const [lockedPreview, setLockedPreview] = useState(null); // skin object for locked preview modal
   const skinsRef = useRef(null);
 
   const currentSkinData = ROBOT_SKINS.find(s => s.id === selectedSkin)
@@ -405,7 +406,10 @@ const RobotSkinEditor = ({ isOpen, onClose, currentConfig, currentName, onSave, 
   if (!isOpen) return null;
 
   const handleSelectSkin = (skin) => {
-    if (unlockedSkinIds && !unlockedSkinIds.has(skin.id)) return;
+    if (unlockedSkinIds && !unlockedSkinIds.has(skin.id)) {
+      setLockedPreview(skin);
+      return;
+    }
     setSelectedSkin(skin.id);
     setRobotConfig({ ...skin.config });
   };
@@ -588,7 +592,7 @@ const RobotSkinEditor = ({ isOpen, onClose, currentConfig, currentName, onSave, 
                           onClick={() => handleSelectSkin(skin)}
                           className={`relative rounded-xl border p-1.5 transition-all text-center ${
                             isLocked
-                              ? 'border-gray-700/40 bg-gray-800/30 opacity-50 cursor-not-allowed'
+                              ? 'border-gray-700/40 bg-gray-800/30 opacity-60 active:scale-95 cursor-pointer'
                               : `${getRarityBorder(skin.rarity, isSelected)} bg-[#1E293B]/80 active:scale-95`
                           }`}>
                           {/* Rarity dot */}
@@ -641,6 +645,88 @@ const RobotSkinEditor = ({ isOpen, onClose, currentConfig, currentName, onSave, 
           </>
         )}
       </div>
+
+      {/* Locked Skin Preview Modal */}
+      {lockedPreview && (() => {
+        const req = SKIN_UNLOCK_REQUIREMENTS[lockedPreview.id];
+        return (
+          <div className="fixed inset-0 z-[60] bg-black/80 backdrop-blur-sm flex items-center justify-center p-6 animate-fade-in" onClick={() => setLockedPreview(null)}>
+            <div className="w-full max-w-xs rounded-3xl overflow-hidden animate-scale-in" style={{ background: 'linear-gradient(180deg, #1E293B, #0F172A)' }} onClick={e => e.stopPropagation()}>
+              {/* Header */}
+              <div className="relative px-5 pt-5 pb-3 text-center" style={{ background: 'linear-gradient(135deg, #1E293B, #0F172ACC)' }}>
+                <button onClick={() => setLockedPreview(null)} className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/10 flex items-center justify-center active:scale-90 transition">
+                  <X size={16} className="text-white/60" />
+                </button>
+                <div className="inline-flex items-center gap-1.5 bg-red-500/15 border border-red-500/25 rounded-full px-3 py-1 mb-3">
+                  <Lock size={12} className="text-red-400" />
+                  <span className="text-[10px] font-black text-red-400 uppercase tracking-wider">Skin Bloqueada</span>
+                </div>
+              </div>
+
+              {/* Grayscale robot preview */}
+              <div className="flex flex-col items-center px-5 pb-5">
+                <div className="relative mb-4">
+                  <div className="relative bg-gradient-to-br from-[#1E293B] to-[#0F172A] rounded-[24px] border-2 border-gray-700/60 flex items-center justify-center shadow-2xl overflow-hidden" style={{ width: 180, height: 180 }}>
+                    {/* Corner brackets */}
+                    <div className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-gray-600/40 rounded-tl-lg" />
+                    <div className="absolute top-2 right-2 w-3 h-3 border-t-2 border-r-2 border-gray-600/40 rounded-tr-lg" />
+                    <div className="absolute bottom-2 left-2 w-3 h-3 border-b-2 border-l-2 border-gray-600/40 rounded-bl-lg" />
+                    <div className="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 border-gray-600/40 rounded-br-lg" />
+                    {/* Grayscale skin */}
+                    <div style={{ filter: 'grayscale(100%) brightness(0.7) contrast(1.1)', opacity: 0.85 }}>
+                      <RobotAvatar config={lockedPreview.config} size={150} />
+                    </div>
+                    {/* Lock overlay */}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-14 h-14 bg-gray-900/80 rounded-full flex items-center justify-center border-2 border-gray-600/50 shadow-lg">
+                        <Lock size={26} className="text-gray-400" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Skin info */}
+                <div className="text-center mb-4">
+                  <div className="flex items-center justify-center gap-2 mb-1">
+                    <span className="text-lg">{lockedPreview.icon}</span>
+                    <span className="text-lg font-black text-white">{lockedPreview.name}</span>
+                  </div>
+                  <span className="text-[10px] font-black px-2.5 py-0.5 rounded-full text-white" style={{ backgroundColor: lockedPreview.rarityColor }}>
+                    {lockedPreview.rarityLabel}
+                  </span>
+                  <p className="text-xs text-gray-400 font-semibold mt-2">{lockedPreview.description}</p>
+                </div>
+
+                {/* Unlock requirement */}
+                <div className="w-full p-3.5 rounded-2xl border border-amber-500/25 mb-4" style={{ background: 'linear-gradient(135deg, #78350F20, #92400E15)' }}>
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <span className="text-base">🔓</span>
+                    <span className="text-xs font-black text-amber-400">¿Cómo desbloquear?</span>
+                  </div>
+                  <p className="text-sm font-bold text-amber-200/90 leading-relaxed">
+                    {req?.label || 'Requisito desconocido'}
+                  </p>
+                  {req?.type === 'admin_only' && (
+                    <p className="text-[10px] text-amber-500/60 font-semibold mt-1">Solo el administrador puede otorgar esta skin</p>
+                  )}
+                  {req?.type === 'modules' && (
+                    <p className="text-[10px] text-amber-500/60 font-semibold mt-1">Sigue avanzando en la Biblioteca para desbloquearla</p>
+                  )}
+                  {(req?.type === 'world' || req?.type === 'world_unlock' || req?.type === 'world_enter') && (
+                    <p className="text-[10px] text-amber-500/60 font-semibold mt-1">Explora los mundos para obtener esta skin</p>
+                  )}
+                </div>
+
+                {/* Close button */}
+                <button onClick={() => setLockedPreview(null)}
+                  className="w-full py-3 rounded-xl bg-gray-800 border border-gray-700 text-gray-300 font-black text-sm active:scale-95 transition-all">
+                  Entendido
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
     </div>
   );
 };

@@ -4,7 +4,7 @@
 // ================================================================
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { ArrowLeft, Trophy, Medal, Crown, Users, Globe, RefreshCw, Star, Zap, Trash2, Gift, X, Award, Palette, Shield, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, Trophy, Medal, Crown, Users, Globe, RefreshCw, Star, Zap, Trash2, Gift, X, Award, Palette, Shield, AlertTriangle, Flame, BookOpen, ScrollText } from 'lucide-react';
 import { getGlobalRanking, onRankingChange, getFriendsList, adminDeleteUser, adminGiftBadge, adminGiftSkin, isAdminEmail } from '../firebase/firestore';
 import { calculateLevel, LEVEL_THRESHOLDS } from '../firebase/firestore';
 import { RobotMini, RobotAvatar } from '../Onboarding';
@@ -284,9 +284,141 @@ const AdminActionModal = ({ player, onClose, onDelete, onGiftBadge, onGiftSkin }
 };
 
 // ============================================
+// USER PROFILE CARD (for non-admin users)
+// ============================================
+const UserProfileCard = ({ player, onClose }) => {
+  const lv = calculateLevel(player.totalPoints || 0);
+  const skinData = ROBOT_SKINS.find(s => JSON.stringify(s.config) === JSON.stringify(player.robotConfig)) || ROBOT_SKINS[0];
+
+  // Estimate current module name based on modulesCompleted
+  const MODULE_NAMES = [
+    'Introducción a la Robótica', 'Partes de un Robot', 'Primer Proyecto',
+    'Electricidad Básica', 'Electrónica', 'Programación General',
+    'Mecánica', 'Arduino', 'C++', 'Python',
+    'Robótica Avanzada', 'Componentes', 'Control',
+    'Programación Avanzada', 'Diseño', 'Primer LED',
+  ];
+  const WORLD_NAMES = ['Mundo 1: Fundamentos', 'Mundo 2: Electrónica', 'Mundo 3: Programación', 'Mundo 4: Avanzado', 'Mundo 5: Maestría'];
+  const completedMods = player.modulesCompleted || 0;
+  const currentModName = completedMods >= MODULE_NAMES.length ? 'Todos completados ✅' : MODULE_NAMES[completedMods] || 'Sin iniciar';
+  const currentWorldIdx = Math.min(Math.floor(completedMods / 3), WORLD_NAMES.length - 1);
+  const currentWorldName = completedMods >= MODULE_NAMES.length ? 'Graduado 🎓' : WORLD_NAMES[currentWorldIdx];
+
+  return (
+    <div className="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in" onClick={onClose}>
+      <div className="w-full max-w-sm rounded-3xl overflow-hidden animate-scale-in" style={{ background: 'linear-gradient(180deg, #1E293B, #0F172A)' }} onClick={e => e.stopPropagation()}>
+        {/* Gradient header */}
+        <div className="relative px-5 pt-5 pb-8 text-center" style={{ background: 'linear-gradient(135deg, #0E7490, #164E63, #0B1120)' }}>
+          <button onClick={onClose} className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/15 flex items-center justify-center active:scale-90 transition">
+            <X size={16} className="text-white" />
+          </button>
+          {/* Large robot skin */}
+          <div className="relative mx-auto mb-3" style={{ width: 140, height: 140 }}>
+            <div className="absolute inset-0 rounded-[24px]" style={{ background: `radial-gradient(circle, ${skinData.rarityColor}30, transparent 70%)` }} />
+            <div className="w-full h-full rounded-[24px] border-2 flex items-center justify-center overflow-hidden" style={{
+              background: 'linear-gradient(135deg, #1E293B, #0F172A)',
+              borderColor: `${skinData.rarityColor}50`,
+              boxShadow: `0 0 30px ${skinData.rarityColor}25, 0 0 60px ${skinData.rarityColor}10`,
+            }}>
+              <RobotAvatar config={player.robotConfig} size={120} />
+            </div>
+            {/* Rarity badge */}
+            <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full text-[8px] font-black text-white" style={{ backgroundColor: skinData.rarityColor }}>
+              {skinData.name} · {skinData.rarityLabel}
+            </div>
+          </div>
+        </div>
+
+        {/* Profile info */}
+        <div className="px-5 -mt-3">
+          {/* Username & level */}
+          <div className="text-center mb-4">
+            <div className="flex items-center justify-center gap-2">
+              <h3 className="text-xl font-black text-white">{player.username || 'Anónimo'}</h3>
+              {player.adminBadges?.map(b => (
+                <span key={b.id} title={b.name} className="text-lg">{b.emoji}</span>
+              ))}
+            </div>
+            <p className="text-xs font-bold text-cyan-400 mt-0.5">{lv.emoji} Nivel {lv.level} · {lv.title}</p>
+          </div>
+
+          {/* Stats grid */}
+          <div className="grid grid-cols-2 gap-2 mb-4">
+            {/* Streak */}
+            <div className="p-3 rounded-2xl border border-orange-500/20" style={{ background: 'linear-gradient(135deg, #7C2D1210, #9A341208)' }}>
+              <div className="flex items-center gap-2 mb-1">
+                <div className="w-7 h-7 rounded-lg bg-orange-500/15 flex items-center justify-center">
+                  <Flame size={14} className="text-orange-400" />
+                </div>
+                <span className="text-[10px] font-bold text-gray-400">Racha</span>
+              </div>
+              <p className="text-lg font-black text-orange-300">{player.currentStreak || 0} <span className="text-[10px] font-bold text-gray-500">días</span></p>
+            </div>
+
+            {/* XP */}
+            <div className="p-3 rounded-2xl border border-cyan-500/20" style={{ background: 'linear-gradient(135deg, #0E749010, #164E6308)' }}>
+              <div className="flex items-center gap-2 mb-1">
+                <div className="w-7 h-7 rounded-lg bg-cyan-500/15 flex items-center justify-center">
+                  <Star size={14} className="text-cyan-400" />
+                </div>
+                <span className="text-[10px] font-bold text-gray-400">XP Total</span>
+              </div>
+              <p className="text-lg font-black text-cyan-300">{(player.totalPoints || 0).toLocaleString()}</p>
+            </div>
+
+            {/* Licenses (= modules completed) */}
+            <div className="p-3 rounded-2xl border border-green-500/20" style={{ background: 'linear-gradient(135deg, #14532D10, #16653408)' }}>
+              <div className="flex items-center gap-2 mb-1">
+                <div className="w-7 h-7 rounded-lg bg-green-500/15 flex items-center justify-center">
+                  <ScrollText size={14} className="text-green-400" />
+                </div>
+                <span className="text-[10px] font-bold text-gray-400">Licencias</span>
+              </div>
+              <p className="text-lg font-black text-green-300">{completedMods} <span className="text-[10px] font-bold text-gray-500">/ 16</span></p>
+            </div>
+
+            {/* Modules */}
+            <div className="p-3 rounded-2xl border border-purple-500/20" style={{ background: 'linear-gradient(135deg, #581C8710, #6B21A808)' }}>
+              <div className="flex items-center gap-2 mb-1">
+                <div className="w-7 h-7 rounded-lg bg-purple-500/15 flex items-center justify-center">
+                  <BookOpen size={14} className="text-purple-400" />
+                </div>
+                <span className="text-[10px] font-bold text-gray-400">Módulos</span>
+              </div>
+              <p className="text-lg font-black text-purple-300">{completedMods}</p>
+            </div>
+          </div>
+
+          {/* Current progress */}
+          <div className="p-3.5 rounded-2xl border border-[#334155] mb-4" style={{ background: '#0F172ACC' }}>
+            <p className="text-[10px] font-black text-gray-400 uppercase tracking-wider mb-2">📍 Progreso Actual</p>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-gray-400">Mundo:</span>
+                <span className="text-xs font-black text-cyan-300">{currentWorldName}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-gray-400">Siguiente módulo:</span>
+                <span className="text-xs font-black text-white truncate ml-2 max-w-[180px]">{currentModName}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Close button */}
+          <button onClick={onClose}
+            className="w-full py-3 mb-5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-black text-sm active:scale-95 transition-all shadow-lg shadow-cyan-500/20">
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ============================================
 // RANKING ENTRY
 // ============================================
-const RankingEntry = ({ player, rank, isCurrentUser, index, isAdmin, onAdminAction }) => {
+const RankingEntry = ({ player, rank, isCurrentUser, index, isAdmin, onAdminAction, onViewProfile }) => {
   const lv = calculateLevel(player.totalPoints || 0);
 
   return (
@@ -329,7 +461,9 @@ const RankingEntry = ({ player, rank, isCurrentUser, index, isAdmin, onAdminActi
         }}
       >
         <RankBadge rank={rank} />
-        <RankingAvatar config={player.robotConfig} size={isCurrentUser ? 60 : 42} highlight={isCurrentUser} />
+        <div className="cursor-pointer" onClick={() => onViewProfile && onViewProfile(player)}>
+          <RankingAvatar config={player.robotConfig} size={isCurrentUser ? 68 : 52} highlight={isCurrentUser} />
+        </div>
         <div className="flex-grow min-w-0">
           <div className="flex items-center gap-1.5 flex-wrap">
             <span className={`font-black truncate ${isCurrentUser ? 'text-[15px] text-[#22D3EE]' : 'text-sm text-[#E2E8F0]'}`}>
@@ -395,6 +529,13 @@ const RankingEntry = ({ player, rank, isCurrentUser, index, isAdmin, onAdminActi
   );
 };
 
+// Helper: wrap podium avatar with click
+const PodiumAvatar = ({ player, size, onViewProfile }) => (
+  <div className="cursor-pointer" onClick={() => onViewProfile && onViewProfile(player)}>
+    <RankingAvatar config={player?.robotConfig} size={size} />
+  </div>
+);
+
 // ============================================
 // RANKING SCREEN
 // ============================================
@@ -405,6 +546,7 @@ const RankingScreen = ({ onBack, currentUserId, currentUserProfile, isAdmin = fa
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [adminTarget, setAdminTarget] = useState(null);
+  const [profileTarget, setProfileTarget] = useState(null); // user profile card for non-admin view
 
   // Cargar ranking global en tiempo real
   useEffect(() => {
@@ -651,7 +793,7 @@ const RankingScreen = ({ onBack, currentUserId, currentUserProfile, isAdmin = fa
                 <div className="flex items-end justify-center gap-4">
                   {/* 2nd place */}
                   <div className="text-center">
-                    <RankingAvatar config={currentRanking[1]?.robotConfig} size={48} />
+                    <PodiumAvatar player={currentRanking[1]} size={60} onViewProfile={(p) => setProfileTarget(p)} />
                     <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#C0C0C0] to-[#A0A0A0] flex items-center justify-center mx-auto mt-1 shadow-md shadow-gray-500/20">
                       <span className="text-xs font-black text-white">2</span>
                     </div>
@@ -664,7 +806,7 @@ const RankingScreen = ({ onBack, currentUserId, currentUserProfile, isAdmin = fa
                   {/* 1st place */}
                   <div className="text-center -mb-2">
                     <div className="text-2xl mb-1" style={{ animation: 'float 2s ease-in-out infinite' }}>👑</div>
-                    <RankingAvatar config={currentRanking[0]?.robotConfig} size={62} />
+                    <PodiumAvatar player={currentRanking[0]} size={80} onViewProfile={(p) => setProfileTarget(p)} />
                     <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#FFC800] to-[#FF9600] flex items-center justify-center mx-auto mt-1 shadow-lg shadow-amber-500/30">
                       <span className="text-sm font-black text-white">1</span>
                     </div>
@@ -676,7 +818,7 @@ const RankingScreen = ({ onBack, currentUserId, currentUserProfile, isAdmin = fa
                   </div>
                   {/* 3rd place */}
                   <div className="text-center">
-                    <RankingAvatar config={currentRanking[2]?.robotConfig} size={48} />
+                    <PodiumAvatar player={currentRanking[2]} size={60} onViewProfile={(p) => setProfileTarget(p)} />
                     <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#CD7F32] to-[#A0522D] flex items-center justify-center mx-auto mt-1 shadow-md shadow-orange-700/20">
                       <span className="text-xs font-black text-white">3</span>
                     </div>
@@ -700,6 +842,7 @@ const RankingScreen = ({ onBack, currentUserId, currentUserProfile, isAdmin = fa
                 index={idx}
                 isAdmin={isAdmin}
                 onAdminAction={(p) => setAdminTarget(p)}
+                onViewProfile={(p) => setProfileTarget(p)}
               />
             ))}
           </>
@@ -714,6 +857,14 @@ const RankingScreen = ({ onBack, currentUserId, currentUserProfile, isAdmin = fa
           onDelete={handleAdminDelete}
           onGiftBadge={handleAdminGiftBadge}
           onGiftSkin={handleAdminGiftSkin}
+        />
+      )}
+
+      {/* User Profile Card Modal */}
+      {profileTarget && (
+        <UserProfileCard
+          player={profileTarget}
+          onClose={() => setProfileTarget(null)}
         />
       )}
     </div>
