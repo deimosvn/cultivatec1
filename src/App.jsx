@@ -798,85 +798,201 @@ const CircuitLabScreen = ({ onBack, onOpenFreeCircuitBuilder, userId, userStats,
                 {tab === 'daily' && (
                     <div className="space-y-4">
                         {dailySolved && !repairAttempted ? (
-                            <div className="bg-[#22C55E]/10 border-2 border-[#22C55E]/30 rounded-2xl p-6 text-center space-y-4">
-                                {/* Repaired robot */}
-                                <div className="relative inline-block">
-                                    <div className="absolute inset-[-30px] rounded-full pointer-events-none opacity-60"
-                                        style={{ background: 'radial-gradient(circle, rgba(34,197,94,0.4) 0%, transparent 65%)', filter: 'blur(12px)' }}></div>
-                                    <img src="/robote4.png" alt="Robot reparado" className="w-48 h-48 sm:w-56 sm:h-56 object-contain mx-auto relative z-10"
-                                        style={{ filter: 'drop-shadow(0 0 20px rgba(34,197,94,0.5))' }} />
+                            /* ===== COMPLETED STATE — Robot repaired, come back tomorrow ===== */
+                            <div className="relative overflow-hidden rounded-3xl border-2 border-[#22C55E]/40"
+                                style={{ background: 'linear-gradient(135deg, #064E3B 0%, #0B1120 40%, #052E16 100%)' }}>
+                                {/* Confetti particles */}
+                                {[...Array(12)].map((_, i) => (
+                                    <div key={i} className="absolute rounded-full pointer-events-none animate-float-particle"
+                                        style={{
+                                            width: `${4 + Math.random() * 6}px`, height: `${4 + Math.random() * 6}px`,
+                                            background: ['#22C55E', '#FFC800', '#22D3EE', '#A78BFA', '#FB923C'][i % 5],
+                                            left: `${5 + Math.random() * 90}%`, top: `${5 + Math.random() * 90}%`,
+                                            opacity: 0.5 + Math.random() * 0.5,
+                                            animationDelay: `${Math.random() * 3}s`, animationDuration: `${3 + Math.random() * 4}s`
+                                        }} />
+                                ))}
+                                <div className="relative z-10 p-6 text-center space-y-4">
+                                    {/* Trophy banner */}
+                                    <div className="inline-flex items-center gap-2 bg-[#FFC800]/20 px-5 py-2 rounded-full border border-[#FFC800]/40">
+                                        <span className="text-2xl">🏆</span>
+                                        <span className="text-sm font-black text-[#FFC800] tracking-wide">MISIÓN COMPLETADA</span>
+                                        <span className="text-2xl">🏆</span>
+                                    </div>
+                                    {/* Repaired robot with glow */}
+                                    <div className="relative inline-block">
+                                        <div className="absolute inset-[-40px] rounded-full pointer-events-none"
+                                            style={{ background: 'radial-gradient(circle, rgba(34,197,94,0.5) 0%, rgba(34,197,94,0.15) 40%, transparent 65%)', filter: 'blur(15px)' }}></div>
+                                        <div className="absolute inset-[-50px] rounded-full pointer-events-none animate-ping-slow"
+                                            style={{ background: 'radial-gradient(circle, rgba(34,197,94,0.2) 0%, transparent 50%)' }}></div>
+                                        <img src="/robote4.png" alt="Robot reparado" className="w-52 h-52 sm:w-60 sm:h-60 object-contain mx-auto relative z-10"
+                                            style={{ filter: 'drop-shadow(0 0 30px rgba(34,197,94,0.6))' }} />
+                                    </div>
+                                    <div>
+                                        <h2 className="text-2xl font-black text-[#22C55E]">¡{dailyProblem.robotName} reparado!</h2>
+                                        <p className="text-sm text-[#86EFAC] font-bold mt-1">¡Excelente trabajo, ingeniero! 🌟</p>
+                                    </div>
+                                    {/* XP reward card */}
+                                    <div className="inline-flex items-center gap-3 bg-[#FFC800]/10 px-6 py-3 rounded-2xl border-2 border-[#FFC800]/30"
+                                        style={{ boxShadow: '0 0 30px rgba(255,200,0,0.15)' }}>
+                                        <div className="text-3xl">⚡</div>
+                                        <div>
+                                            <p className="text-xl font-black text-[#FFC800]">+{DAILY_CIRCUIT_XP} XP</p>
+                                            <p className="text-[10px] font-bold text-[#FFC800]/60">Recompensa de reparación</p>
+                                        </div>
+                                    </div>
+                                    {/* Tomorrow card */}
+                                    <div className="bg-[#1E293B]/80 rounded-2xl p-4 border border-[#334155] backdrop-blur-sm mt-2">
+                                        <div className="flex items-center justify-center gap-2 mb-1">
+                                            <Calendar size={14} className="text-[#22D3EE]" />
+                                            <p className="text-xs text-[#22D3EE] font-black">¡Vuelve mañana!</p>
+                                        </div>
+                                        <p className="text-[10px] text-[#64748B] font-semibold">Un nuevo robot necesitará tu ayuda cada día 🤖</p>
+                                    </div>
+                                    <button onClick={() => { resetDailyRepair(); setDailySolved(false); }}
+                                        className="text-[10px] font-bold text-[#22D3EE]/70 underline mt-1 hover:text-[#22D3EE]">Ver la misión de nuevo</button>
                                 </div>
-                                <h2 className="text-xl font-black text-[#22C55E]">¡{dailyProblem.robotName} está reparado!</h2>
-                                <p className="text-sm text-[#94A3B8] font-bold">¡Excelente trabajo, ingeniero! Reparaste a {dailyProblem.robotName} exitosamente. 🌟</p>
-                                <div className="flex items-center justify-center gap-2 mt-1">
-                                    <span className="px-3 py-1 bg-[#FFC800]/20 text-[#FFC800] text-xs font-black rounded-full border border-[#FFC800]/30">+{DAILY_CIRCUIT_XP} XP ganados 🏆</span>
-                                </div>
-                                <div className="bg-[#1E293B] rounded-xl p-4 border border-[#334155]">
-                                    <p className="text-xs text-[#64748B] font-bold">🕐 ¡Vuelve mañana para reparar otro robot!</p>
-                                    <p className="text-[10px] text-[#475569] font-semibold mt-1">Cada día un robot humanoide diferente necesita tu ayuda 🤖</p>
-                                </div>
-                                <button onClick={() => { resetDailyRepair(); setDailySolved(false); }}
-                                    className="text-[10px] font-bold text-[#22D3EE] underline mt-2">Volver a ver la misión</button>
                             </div>
                         ) : (
                             <>
-                                <div className="text-center mb-2">
-                                    <span className="text-[10px] font-black text-[#22D3EE] bg-[#22D3EE]/10 px-3 py-1 rounded-full border border-[#22D3EE]/20 flex items-center gap-1 mx-auto w-fit"><Calendar size={11} /> 🔧 MISIÓN DIARIA DE REPARACIÓN</span>
+                                {/* ===== ACTIVE MISSION ===== */}
+                                {/* Mission header banner */}
+                                <div className="relative overflow-hidden rounded-2xl border-2 border-[#22D3EE]/30 p-3"
+                                    style={{ background: 'linear-gradient(135deg, rgba(34,211,238,0.15) 0%, rgba(14,26,48,0.9) 50%, rgba(99,102,241,0.1) 100%)' }}>
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-9 h-9 rounded-xl bg-[#22D3EE]/20 flex items-center justify-center border border-[#22D3EE]/30">
+                                                <Wrench size={18} className="text-[#22D3EE]" />
+                                            </div>
+                                            <div>
+                                                <p className="text-[10px] font-black text-[#22D3EE] uppercase tracking-widest">Misión Diaria</p>
+                                                <p className="text-[8px] font-bold text-[#64748B]">Taller de Reparación Robótica</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center gap-1.5 bg-[#FFC800]/15 px-3 py-1.5 rounded-full border border-[#FFC800]/30">
+                                            <Zap size={12} className="text-[#FFC800]" />
+                                            <span className="text-[10px] font-black text-[#FFC800]">+{DAILY_CIRCUIT_XP} XP</span>
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <div className="bg-gradient-to-br from-[#1E293B] to-[#0F172A] rounded-2xl border-2 border-[#22D3EE]/20 p-5 space-y-4">
-                                    {/* Robot image - large, animated */}
-                                    <div className="text-center">
-                                        <div className="relative inline-block">
-                                            {repairCorrect ? (
-                                                <>
-                                                    <div className="absolute inset-[-30px] rounded-full pointer-events-none opacity-60"
-                                                        style={{ background: 'radial-gradient(circle, rgba(34,197,94,0.4) 0%, transparent 65%)', filter: 'blur(12px)' }}></div>
-                                                    <img src="/robote4.png" alt="Robot reparado"
-                                                        className="w-52 h-52 sm:w-64 sm:h-64 object-contain mx-auto relative z-10 animate-bounce-in"
-                                                        style={{ filter: 'drop-shadow(0 0 25px rgba(34,197,94,0.5))' }} />
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <div className="absolute inset-[-30px] rounded-full pointer-events-none opacity-60"
-                                                        style={{ background: 'radial-gradient(circle, rgba(239,68,68,0.3) 0%, transparent 65%)', filter: 'blur(12px)' }}></div>
-                                                    <img src={`/robote${robotAnimFrame + 1}.png`} alt="Robot averiado"
-                                                        className="w-52 h-52 sm:w-64 sm:h-64 object-contain mx-auto relative z-10"
-                                                        style={{ filter: 'drop-shadow(0 0 20px rgba(239,68,68,0.4))' }} />
-                                                </>
-                                            )}
-                                        </div>
+                                {/* Main mission card */}
+                                <div className="relative overflow-hidden rounded-3xl border-2"
+                                    style={{
+                                        borderColor: repairCorrect ? 'rgba(34,197,94,0.4)' : 'rgba(239,68,68,0.25)',
+                                        background: repairCorrect
+                                            ? 'linear-gradient(180deg, #064E3B 0%, #0B1120 30%, #0F172A 100%)'
+                                            : 'linear-gradient(180deg, #1C1017 0%, #0B1120 30%, #0F172A 100%)'
+                                    }}>
+
+                                    {/* ---- ROBOT DISPLAY AREA ---- */}
+                                    <div className="relative pt-6 pb-4 px-4">
+                                        {/* Diagnostic scan lines background effect */}
                                         {!repairCorrect && (
-                                            <p className="text-[10px] text-red-400/60 font-bold mt-2 animate-pulse-soft">⚠️ Robot averiado — necesita reparación</p>
+                                            <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-20">
+                                                <div className="absolute w-full h-[2px] bg-gradient-to-r from-transparent via-red-400 to-transparent animate-scan-line"
+                                                    style={{ animationDuration: '3s' }}></div>
+                                            </div>
                                         )}
-                                    </div>
-
-                                    {/* Mission title & story */}
-                                    <div>
-                                        <h2 className="text-lg font-black text-white">🔧 {dailyProblem.title}</h2>
-                                        <p className="text-[10px] text-[#22D3EE]/60 font-bold mt-0.5">Robot: {dailyProblem.robotName}</p>
-                                    </div>
-
-                                    <div className="bg-[#0F172A]/60 rounded-xl p-4 border border-[#334155]">
-                                        <p className="text-sm text-[#E2E8F0] font-semibold leading-relaxed">{dailyProblem.story}</p>
-                                    </div>
-
-                                    {/* Symptom badge */}
-                                    <div className="bg-red-500/10 rounded-xl p-3 border border-red-500/20 flex items-start gap-2">
-                                        <AlertTriangle size={16} className="text-red-400 flex-shrink-0 mt-0.5" />
-                                        <div>
-                                            <p className="text-[10px] font-black text-red-300 uppercase tracking-wide">Síntoma detectado</p>
-                                            <p className="text-xs text-red-200/80 font-bold mt-0.5">{dailyProblem.symptom}</p>
+                                        <div className="text-center">
+                                            <div className="relative inline-block">
+                                                {/* Background glow */}
+                                                <div className="absolute inset-[-45px] rounded-full pointer-events-none"
+                                                    style={{
+                                                        background: repairCorrect
+                                                            ? 'radial-gradient(circle, rgba(34,197,94,0.45) 0%, rgba(34,197,94,0.1) 40%, transparent 65%)'
+                                                            : 'radial-gradient(circle, rgba(239,68,68,0.3) 0%, rgba(239,68,68,0.08) 40%, transparent 65%)',
+                                                        filter: 'blur(14px)'
+                                                    }}></div>
+                                                {/* Rotating ring */}
+                                                <div className="absolute inset-[-15px] rounded-full border-2 border-dashed pointer-events-none animate-spin-slow"
+                                                    style={{
+                                                        borderColor: repairCorrect ? 'rgba(34,197,94,0.25)' : 'rgba(239,68,68,0.2)',
+                                                        animationDuration: '12s'
+                                                    }}></div>
+                                                {repairCorrect ? (
+                                                    <img src="/robote4.png" alt="Robot reparado"
+                                                        className="w-56 h-56 sm:w-64 sm:h-64 object-contain mx-auto relative z-10"
+                                                        style={{ filter: 'drop-shadow(0 0 30px rgba(34,197,94,0.5))' }} />
+                                                ) : (
+                                                    <img src={`/robote${robotAnimFrame + 1}.png`} alt="Robot averiado"
+                                                        className="w-56 h-56 sm:w-64 sm:h-64 object-contain mx-auto relative z-10"
+                                                        style={{ filter: 'drop-shadow(0 0 25px rgba(239,68,68,0.4))' }} />
+                                                )}
+                                            </div>
+                                            {/* Status badge under robot */}
+                                            <div className="mt-3">
+                                                {repairCorrect ? (
+                                                    <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-[10px] font-black tracking-wider bg-[#22C55E]/20 text-[#22C55E] border border-[#22C55E]/30">
+                                                        <CheckCircle2 size={12} /> REPARADO CON ÉXITO
+                                                    </span>
+                                                ) : (
+                                                    <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-[10px] font-black tracking-wider bg-red-500/15 text-red-400 border border-red-500/25 animate-pulse-soft">
+                                                        <AlertTriangle size={12} /> AVERIADO — NECESITA REPARACIÓN
+                                                    </span>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
 
-                                    {/* Component selection */}
+                                    {/* ---- MISSION INFO ---- */}
+                                    <div className="px-5 pb-2 space-y-3">
+                                        {/* Robot name & title */}
+                                        <div className="flex items-start gap-3">
+                                            <div className="w-10 h-10 rounded-xl bg-[#22D3EE]/10 flex items-center justify-center border border-[#22D3EE]/20 flex-shrink-0 mt-0.5">
+                                                <Bot size={20} className="text-[#22D3EE]" />
+                                            </div>
+                                            <div>
+                                                <h2 className="text-lg font-black text-white leading-tight">{dailyProblem.title}</h2>
+                                                <p className="text-[10px] font-black text-[#22D3EE]/50 uppercase tracking-wider mt-0.5">Paciente: {dailyProblem.robotName}</p>
+                                            </div>
+                                        </div>
+
+                                        {/* Story card with speech bubble style */}
+                                        <div className="relative bg-[#1E293B]/80 rounded-2xl p-4 border border-[#334155]/60 backdrop-blur-sm">
+                                            <div className="absolute top-0 left-5 -translate-y-1/2 px-2 py-0.5 bg-[#334155] rounded-md">
+                                                <span className="text-[8px] font-black text-[#94A3B8] uppercase tracking-wider">Reporte de daños</span>
+                                            </div>
+                                            <p className="text-[13px] text-[#CBD5E1] font-semibold leading-relaxed mt-1">{dailyProblem.story}</p>
+                                        </div>
+
+                                        {/* Symptom - diagnostic card */}
+                                        <div className="relative bg-red-950/30 rounded-2xl p-3.5 border border-red-500/20 overflow-hidden">
+                                            <div className="absolute top-0 right-0 w-20 h-20 pointer-events-none opacity-10"
+                                                style={{ background: 'radial-gradient(circle, rgba(239,68,68,0.8) 0%, transparent 70%)' }}></div>
+                                            <div className="flex items-start gap-3 relative z-10">
+                                                <div className="w-8 h-8 rounded-lg bg-red-500/20 flex items-center justify-center flex-shrink-0 border border-red-500/30">
+                                                    <AlertTriangle size={15} className="text-red-400" />
+                                                </div>
+                                                <div>
+                                                    <p className="text-[9px] font-black text-red-400/80 uppercase tracking-widest">Diagnóstico</p>
+                                                    <p className="text-xs text-red-200/90 font-bold mt-0.5 leading-relaxed">{dailyProblem.symptom}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* ---- COMPONENT SELECTION ---- */}
                                     {!repairCorrect && (
-                                        <div>
-                                            <p className="text-xs font-black text-[#22D3EE] mb-3 flex items-center gap-1.5">
-                                                <Wrench size={13} /> Selecciona el componente (o componentes) para reparar a {dailyProblem.robotName}:
-                                            </p>
-                                            <div className="grid grid-cols-3 gap-2.5">
+                                        <div className="px-5 pt-2 pb-4">
+                                            {/* Section header */}
+                                            <div className="flex items-center gap-2 mb-3">
+                                                <div className="w-7 h-7 rounded-lg bg-[#A78BFA]/15 flex items-center justify-center border border-[#A78BFA]/25">
+                                                    <Component size={14} className="text-[#A78BFA]" />
+                                                </div>
+                                                <div>
+                                                    <p className="text-[10px] font-black text-[#A78BFA] uppercase tracking-wider">Caja de herramientas</p>
+                                                    <p className="text-[8px] font-bold text-[#64748B]">Selecciona {dailyProblem.correctComponents.length === 1 ? 'el componente correcto' : 'los componentes correctos'}</p>
+                                                </div>
+                                                {selectedComponents.length > 0 && (
+                                                    <span className="ml-auto px-2.5 py-1 bg-[#22D3EE]/15 text-[#22D3EE] text-[9px] font-black rounded-full border border-[#22D3EE]/25">
+                                                        {selectedComponents.length} seleccionado{selectedComponents.length > 1 ? 's' : ''}
+                                                    </span>
+                                                )}
+                                            </div>
+
+                                            {/* Component grid — card game style */}
+                                            <div className="grid grid-cols-3 gap-2">
                                                 {REPAIR_COMPONENTS.map(comp => {
                                                     const isSelected = selectedComponents.includes(comp.id);
                                                     const isCorrectComp = repairAttempted && dailyProblem.correctComponents.includes(comp.id);
@@ -884,30 +1000,37 @@ const CircuitLabScreen = ({ onBack, onOpenFreeCircuitBuilder, userId, userStats,
                                                     return (
                                                         <button key={comp.id} onClick={() => toggleComponent(comp.id)}
                                                             disabled={repairAttempted}
-                                                            className={`relative rounded-2xl p-2.5 border-2 transition-all active:scale-95 flex flex-col items-center gap-1.5 ${
+                                                            className={`relative rounded-2xl p-2 border-2 transition-all duration-200 active:scale-90 flex flex-col items-center gap-1 ${
                                                                 repairAttempted
-                                                                    ? isCorrectComp ? 'bg-[#22C55E]/15 border-[#22C55E] shadow-[0_0_12px_rgba(34,197,94,0.3)]'
-                                                                    : isWrongSelection ? 'bg-red-500/15 border-red-500'
-                                                                    : 'bg-[#1E293B]/50 border-[#334155]/50 opacity-50'
-                                                                    : isSelected ? 'bg-[#22D3EE]/15 border-[#22D3EE] shadow-[0_0_12px_rgba(34,211,238,0.2)]'
-                                                                    : 'bg-[#1E293B] border-[#334155] hover:border-[#22D3EE]/50'
+                                                                    ? isCorrectComp ? 'bg-[#22C55E]/15 border-[#22C55E] ring-2 ring-[#22C55E]/30'
+                                                                    : isWrongSelection ? 'bg-red-500/15 border-red-500 ring-2 ring-red-500/30'
+                                                                    : 'bg-[#0F172A]/60 border-[#1E293B] opacity-40'
+                                                                    : isSelected ? 'bg-[#22D3EE]/10 border-[#22D3EE] ring-2 ring-[#22D3EE]/20 scale-[1.03]'
+                                                                    : 'bg-[#1E293B]/60 border-[#334155]/60 hover:border-[#475569]'
+                                                            }`}
+                                                            style={isSelected && !repairAttempted ? { boxShadow: '0 0 20px rgba(34,211,238,0.15)' } : {}}>
+                                                            {/* Component image with circular bg */}
+                                                            <div className={`relative w-14 h-14 sm:w-16 sm:h-16 rounded-xl flex items-center justify-center ${
+                                                                isSelected && !repairAttempted ? 'bg-[#22D3EE]/10' : 'bg-[#0F172A]/50'
                                                             }`}>
-                                                            <img src={comp.img} alt={comp.nombre} className="w-12 h-12 sm:w-14 sm:h-14 object-contain" />
+                                                                <img src={comp.img} alt={comp.nombre} className="w-11 h-11 sm:w-13 sm:h-13 object-contain" />
+                                                            </div>
                                                             <span className="text-[9px] font-black text-white/90 text-center leading-tight">{comp.nombre}</span>
-                                                            <span className="text-[7px] font-semibold text-[#94A3B8] text-center leading-tight">{comp.desc}</span>
+                                                            <span className="text-[7px] font-semibold text-[#64748B] text-center leading-tight line-clamp-2">{comp.desc}</span>
+                                                            {/* Selection indicators */}
                                                             {isSelected && !repairAttempted && (
-                                                                <div className="absolute top-1 right-1 w-5 h-5 bg-[#22D3EE] rounded-full flex items-center justify-center">
-                                                                    <CheckCircle2 size={12} className="text-white" />
+                                                                <div className="absolute -top-1 -right-1 w-6 h-6 bg-[#22D3EE] rounded-full flex items-center justify-center shadow-lg shadow-cyan-500/30 border-2 border-[#0B1120]">
+                                                                    <CheckCircle2 size={13} className="text-white" />
                                                                 </div>
                                                             )}
                                                             {repairAttempted && isCorrectComp && (
-                                                                <div className="absolute top-1 right-1 w-5 h-5 bg-[#22C55E] rounded-full flex items-center justify-center">
-                                                                    <CheckCircle2 size={12} className="text-white" />
+                                                                <div className="absolute -top-1 -right-1 w-6 h-6 bg-[#22C55E] rounded-full flex items-center justify-center shadow-lg shadow-green-500/30 border-2 border-[#0B1120]">
+                                                                    <CheckCircle2 size={13} className="text-white" />
                                                                 </div>
                                                             )}
                                                             {isWrongSelection && (
-                                                                <div className="absolute top-1 right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center">
-                                                                    <X size={12} className="text-white" />
+                                                                <div className="absolute -top-1 -right-1 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center shadow-lg shadow-red-500/30 border-2 border-[#0B1120]">
+                                                                    <X size={13} className="text-white" />
                                                                 </div>
                                                             )}
                                                         </button>
@@ -917,42 +1040,99 @@ const CircuitLabScreen = ({ onBack, onOpenFreeCircuitBuilder, userId, userStats,
                                         </div>
                                     )}
 
-                                    {/* Repair button */}
+                                    {/* ---- REPAIR BUTTON ---- */}
                                     {!repairAttempted && (
-                                        <button onClick={attemptRepair}
-                                            disabled={selectedComponents.length === 0}
-                                            className={`w-full py-3.5 rounded-xl font-black text-sm transition-all active:scale-95 flex items-center justify-center gap-2 ${
-                                                selectedComponents.length > 0
-                                                    ? 'bg-gradient-to-r from-[#22D3EE] to-[#3B82F6] text-white shadow-lg shadow-cyan-500/30'
-                                                    : 'bg-[#1E293B] text-[#64748B] border border-[#334155] cursor-not-allowed'
-                                            }`}>
-                                            <Wrench size={16} /> Reparar a {dailyProblem.robotName}
-                                        </button>
+                                        <div className="px-5 pb-5">
+                                            <button onClick={attemptRepair}
+                                                disabled={selectedComponents.length === 0}
+                                                className={`w-full py-4 rounded-2xl font-black text-sm transition-all duration-200 active:scale-95 flex items-center justify-center gap-2.5 relative overflow-hidden ${
+                                                    selectedComponents.length > 0
+                                                        ? 'text-white shadow-xl'
+                                                        : 'bg-[#1E293B] text-[#475569] border-2 border-[#334155] cursor-not-allowed'
+                                                }`}
+                                                style={selectedComponents.length > 0 ? {
+                                                    background: 'linear-gradient(135deg, #22D3EE 0%, #3B82F6 50%, #8B5CF6 100%)',
+                                                    boxShadow: '0 8px 30px rgba(34,211,238,0.3), 0 0 0 1px rgba(34,211,238,0.2)'
+                                                } : {}}>
+                                                {selectedComponents.length > 0 && (
+                                                    <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 animate-shimmer"
+                                                        style={{ animationDuration: '2s' }}></div>
+                                                )}
+                                                <Wrench size={18} className="relative z-10" />
+                                                <span className="relative z-10">
+                                                    {selectedComponents.length > 0 ? `¡Reparar a ${dailyProblem.robotName}!` : 'Selecciona componentes'}
+                                                </span>
+                                            </button>
+                                        </div>
                                     )}
 
-                                    {/* Result */}
+                                    {/* ---- RESULT PANEL ---- */}
                                     {repairAttempted && (
-                                        <div className={`rounded-xl p-4 border-2 space-y-3 ${repairCorrect ? 'bg-[#22C55E]/10 border-[#22C55E]/30' : 'bg-red-500/10 border-red-500/30'}`}>
+                                        <div className="px-5 pb-5">
                                             {repairCorrect ? (
-                                                <>
-                                                    <p className="text-sm font-black text-[#22C55E]">🎉 ¡Reparación exitosa!</p>
-                                                    <p className="text-xs text-[#94A3B8] font-semibold leading-relaxed">{dailyProblem.explanation}</p>
-                                                    <div className="flex items-center justify-center gap-2 mt-1">
-                                                        <span className="px-3 py-1 bg-[#FFC800]/20 text-[#FFC800] text-xs font-black rounded-full border border-[#FFC800]/30">+{DAILY_CIRCUIT_XP} XP 🏆</span>
+                                                <div className="rounded-2xl p-5 text-center space-y-3 border-2 border-[#22C55E]/30"
+                                                    style={{ background: 'linear-gradient(135deg, rgba(34,197,94,0.15) 0%, rgba(11,17,32,0.9) 100%)' }}>
+                                                    {/* Success particles */}
+                                                    {[...Array(6)].map((_, i) => (
+                                                        <div key={i} className="absolute rounded-full pointer-events-none animate-float-particle"
+                                                            style={{
+                                                                width: `${3 + Math.random() * 5}px`, height: `${3 + Math.random() * 5}px`,
+                                                                background: ['#22C55E', '#FFC800', '#22D3EE'][i % 3],
+                                                                left: `${10 + Math.random() * 80}%`, top: `${10 + Math.random() * 80}%`,
+                                                                opacity: 0.4, animationDelay: `${Math.random() * 2}s`, animationDuration: `${3 + Math.random() * 3}s`
+                                                            }} />
+                                                    ))}
+                                                    <div className="text-4xl">🎉</div>
+                                                    <h3 className="text-xl font-black text-[#22C55E]">¡Reparación Exitosa!</h3>
+                                                    <p className="text-xs text-[#86EFAC] font-bold">{dailyProblem.robotName} está funcionando perfectamente</p>
+                                                    {/* Explanation card */}
+                                                    <div className="bg-[#1E293B]/60 rounded-xl p-3.5 border border-[#334155] text-left mt-2">
+                                                        <p className="text-[9px] font-black text-[#22D3EE]/60 uppercase tracking-wider mb-1">💡 ¿Sabías que?</p>
+                                                        <p className="text-xs text-[#94A3B8] font-semibold leading-relaxed">{dailyProblem.explanation}</p>
                                                     </div>
-                                                </>
+                                                    {/* XP reward */}
+                                                    <div className="inline-flex items-center gap-2.5 bg-[#FFC800]/15 px-5 py-2.5 rounded-2xl border-2 border-[#FFC800]/30 mt-1"
+                                                        style={{ boxShadow: '0 0 25px rgba(255,200,0,0.12)' }}>
+                                                        <span className="text-2xl">⚡</span>
+                                                        <span className="text-lg font-black text-[#FFC800]">+{DAILY_CIRCUIT_XP} XP</span>
+                                                    </div>
+                                                </div>
                                             ) : (
-                                                <>
-                                                    <p className="text-sm font-black text-red-400">❌ Componente(s) incorrecto(s)</p>
-                                                    <p className="text-xs text-[#94A3B8] font-semibold leading-relaxed">
-                                                        El componente correcto era: <span className="text-[#22D3EE] font-black">{dailyProblem.correctComponents.map(c => REPAIR_COMPONENTS.find(rc => rc.id === c)?.nombre).join(' + ')}</span>
-                                                    </p>
-                                                    <p className="text-xs text-[#94A3B8] font-semibold leading-relaxed">{dailyProblem.explanation}</p>
+                                                <div className="rounded-2xl p-5 space-y-3 border-2 border-red-500/25"
+                                                    style={{ background: 'linear-gradient(135deg, rgba(127,29,29,0.2) 0%, rgba(11,17,32,0.95) 100%)' }}>
+                                                    <div className="text-center">
+                                                        <div className="text-3xl mb-1">🔍</div>
+                                                        <h3 className="text-base font-black text-red-400">Componente(s) incorrecto(s)</h3>
+                                                        <p className="text-[10px] text-red-300/60 font-bold mt-0.5">¡Casi! Revisa el diagnóstico</p>
+                                                    </div>
+                                                    {/* Correct answer reveal */}
+                                                    <div className="bg-[#1E293B]/60 rounded-xl p-3.5 border border-[#334155]">
+                                                        <p className="text-[9px] font-black text-[#22D3EE]/60 uppercase tracking-wider mb-1.5">Componente correcto</p>
+                                                        <div className="flex items-center justify-center gap-2 flex-wrap">
+                                                            {dailyProblem.correctComponents.map(c => {
+                                                                const comp = REPAIR_COMPONENTS.find(rc => rc.id === c);
+                                                                return comp ? (
+                                                                    <div key={c} className="flex items-center gap-1.5 bg-[#22C55E]/10 px-3 py-1.5 rounded-xl border border-[#22C55E]/30">
+                                                                        <img src={comp.img} alt={comp.nombre} className="w-6 h-6 object-contain" />
+                                                                        <span className="text-[10px] font-black text-[#22C55E]">{comp.nombre}</span>
+                                                                    </div>
+                                                                ) : null;
+                                                            })}
+                                                        </div>
+                                                    </div>
+                                                    {/* Explanation */}
+                                                    <div className="bg-[#1E293B]/60 rounded-xl p-3.5 border border-[#334155]">
+                                                        <p className="text-[9px] font-black text-[#F59E0B]/60 uppercase tracking-wider mb-1">💡 Explicación</p>
+                                                        <p className="text-xs text-[#94A3B8] font-semibold leading-relaxed">{dailyProblem.explanation}</p>
+                                                    </div>
+                                                    {/* Retry button */}
                                                     <button onClick={resetDailyRepair}
-                                                        className="w-full py-2.5 bg-[#22D3EE]/20 text-[#22D3EE] rounded-xl font-black text-xs active:scale-95 transition border border-[#22D3EE]/30">
-                                                        🔄 Intentar de nuevo
+                                                        className="w-full py-3.5 rounded-2xl font-black text-sm active:scale-95 transition-all flex items-center justify-center gap-2 border-2 border-[#22D3EE]/30 text-[#22D3EE] relative overflow-hidden"
+                                                        style={{ background: 'linear-gradient(135deg, rgba(34,211,238,0.1) 0%, rgba(14,26,48,0.8) 100%)' }}>
+                                                        <RotateCcw size={16} />
+                                                        <span>Intentar de nuevo</span>
                                                     </button>
-                                                </>
+                                                </div>
                                             )}
                                         </div>
                                     )}
