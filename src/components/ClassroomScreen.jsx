@@ -1,7 +1,7 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { ArrowLeft, Calendar, Users, Bell, Clock, MapPin, BookOpen, ChevronRight, Plus, CheckCircle, Star } from 'lucide-react';
 
-// --- DATOS DE CLASES DE ROBÃ“TICA ---
+// --- DATOS DE CLASES DE ROBÓTICA ---
 const CLASS_SCHEDULE = [
   {
     id: 'c1',
@@ -9,23 +9,23 @@ const CLASS_SCHEDULE = [
     dayShort: 'Lun',
     time: '3:00 PM - 4:30 PM',
     title: 'Electricidad y Circuitos',
-    description: 'Fundamentos elÃ©ctricos, Ley de Ohm, circuitos en serie y paralelo',
-    level: 'BÃ¡sico',
-    icon: 'âš¡',
+    description: 'Fundamentos eléctricos, Ley de Ohm, circuitos en serie y paralelo',
+    level: 'Básico',
+    icon: '⚡',
     color: 'bg-yellow-500',
     borderColor: 'border-yellow-600',
-    topics: ['Voltaje y Corriente', 'Resistencias', 'Circuitos BÃ¡sicos', 'Seguridad ElÃ©ctrica'],
-    materials: ['Protoboard', 'LEDs', 'Resistencias', 'Pila 9V', 'Cables de conexiÃ³n']
+    topics: ['Voltaje y Corriente', 'Resistencias', 'Circuitos Básicos', 'Seguridad Eléctrica'],
+    materials: ['Protoboard', 'LEDs', 'Resistencias', 'Pila 9V', 'Cables de conexión']
   },
   {
     id: 'c2',
     day: 'Martes',
     dayShort: 'Mar',
     time: '3:00 PM - 4:30 PM',
-    title: 'ProgramaciÃ³n con Python',
-    description: 'Variables, funciones, bucles y lÃ³gica de programaciÃ³n',
-    level: 'BÃ¡sico',
-    icon: 'ðŸ',
+    title: 'Programación con Python',
+    description: 'Variables, funciones, bucles y lógica de programación',
+    level: 'Básico',
+    icon: '🐍',
     color: 'bg-green-500',
     borderColor: 'border-green-600',
     topics: ['Variables y Tipos', 'Condicionales', 'Bucles For/While', 'Funciones'],
@@ -33,59 +33,59 @@ const CLASS_SCHEDULE = [
   },
   {
     id: 'c3',
-    day: 'MiÃ©rcoles',
-    dayShort: 'MiÃ©',
+    day: 'Miércoles',
+    dayShort: 'Mié',
     time: '3:00 PM - 4:30 PM',
     title: 'Arduino: Control y Sensores',
-    description: 'ProgramaciÃ³n de Arduino, lectura de sensores y control de actuadores',
+    description: 'Programación de Arduino, lectura de sensores y control de actuadores',
     level: 'Intermedio',
-    icon: 'ðŸ•¹ï¸',
+    icon: '🕹️',
     color: 'bg-blue-500',
     borderColor: 'border-blue-600',
-    topics: ['Setup y Loop', 'Pines Digitales', 'Pines AnalÃ³gicos', 'Sensores BÃ¡sicos'],
-    materials: ['Arduino UNO', 'Cable USB', 'Sensor UltrasÃ³nico', 'Servo Motor', 'Computadora']
+    topics: ['Setup y Loop', 'Pines Digitales', 'Pines Analógicos', 'Sensores Básicos'],
+    materials: ['Arduino UNO', 'Cable USB', 'Sensor Ultrasónico', 'Servo Motor', 'Computadora']
   },
   {
     id: 'c4',
     day: 'Jueves',
     dayShort: 'Jue',
     time: '3:00 PM - 4:30 PM',
-    title: 'MecÃ¡nica y ConstrucciÃ³n',
-    description: 'Engranajes, poleas, diseÃ±o de estructuras y ensamblaje de robots',
+    title: 'Mecánica y Construcción',
+    description: 'Engranajes, poleas, diseño de estructuras y ensamblaje de robots',
     level: 'Intermedio',
-    icon: 'âš™ï¸',
-    color: 'bg-blue-500',
-    borderColor: 'border-blue-600',
-    topics: ['Engranajes y TransmisiÃ³n', 'Estructuras Resistentes', 'DiseÃ±o de Chasis', 'Ensamblaje'],
-    materials: ['Kit de engranajes', 'CartÃ³n/MDF', 'Pegamento', 'Herramientas bÃ¡sicas']
+    icon: '⚙️',
+    color: 'bg-purple-500',
+    borderColor: 'border-purple-600',
+    topics: ['Engranajes y Transmisión', 'Estructuras Resistentes', 'Diseño de Chasis', 'Ensamblaje'],
+    materials: ['Kit de engranajes', 'Cartón/MDF', 'Pegamento', 'Herramientas básicas']
   },
   {
     id: 'c5',
     day: 'Viernes',
     dayShort: 'Vie',
     time: '3:00 PM - 5:00 PM',
-    title: 'ðŸ† Proyecto Integrador',
-    description: 'Taller prÃ¡ctico: construye y programa tu robot de la semana',
+    title: '🏆 Proyecto Integrador',
+    description: 'Taller práctico: construye y programa tu robot de la semana',
     level: 'Todos',
-    icon: 'ðŸ¤–',
+    icon: '🤖',
     color: 'bg-red-500',
     borderColor: 'border-red-600',
-    topics: ['Trabajo en Equipo', 'ResoluciÃ³n de Problemas', 'Pruebas y Ajustes', 'PresentaciÃ³n'],
+    topics: ['Trabajo en Equipo', 'Resolución de Problemas', 'Pruebas y Ajustes', 'Presentación'],
     materials: ['Todos los componentes de la semana', 'Creatividad', 'Trabajo en equipo']
   },
   {
     id: 'c6',
-    day: 'SÃ¡bado',
-    dayShort: 'SÃ¡b',
+    day: 'Sábado',
+    dayShort: 'Sáb',
     time: '10:00 AM - 12:00 PM',
-    title: 'Club de RobÃ³tica Avanzada',
-    description: 'Proyectos especiales, competencias y robÃ³tica avanzada',
+    title: 'Club de Robótica Avanzada',
+    description: 'Proyectos especiales, competencias y robótica avanzada',
     level: 'Avanzado',
-    icon: 'ðŸš€',
+    icon: '🚀',
     color: 'bg-indigo-500',
     borderColor: 'border-indigo-600',
-    topics: ['Robots AutÃ³nomos', 'VisiÃ³n por Computadora', 'ComunicaciÃ³n IoT', 'Competencias'],
-    materials: ['Kit Avanzado', 'Raspberry Pi', 'CÃ¡mara', 'Sensores Avanzados']
+    topics: ['Robots Autónomos', 'Visión por Computadora', 'Comunicación IoT', 'Competencias'],
+    materials: ['Kit Avanzado', 'Raspberry Pi', 'Cámara', 'Sensores Avanzados']
   }
 ];
 
@@ -93,32 +93,32 @@ const ANNOUNCEMENTS = [
   {
     id: 'a1',
     date: '10 Feb 2026',
-    title: 'ðŸ† Torneo de Robots - Marzo 2026',
-    message: 'Â¡Inscripciones abiertas para el Torneo Inter-escolar de RobÃ³tica! Fecha: 15 de Marzo. Armen sus equipos de 3 personas.',
+    title: '🏆 Torneo de Robots - Marzo 2026',
+    message: '¡Inscripciones abiertas para el Torneo Inter-escolar de Robótica! Fecha: 15 de Marzo. Armen sus equipos de 3 personas.',
     type: 'evento',
     priority: 'alta'
   },
   {
     id: 'a2',
     date: '8 Feb 2026',
-    title: 'ðŸ“¦ Nuevos Kits de Arduino',
-    message: 'Llegaron los nuevos kits con sensores de temperatura, humedad y mÃ³dulos Bluetooth. Â¡Los usaremos desde la prÃ³xima semana!',
+    title: '📦 Nuevos Kits de Arduino',
+    message: 'Llegaron los nuevos kits con sensores de temperatura, humedad y módulos Bluetooth. ¡Los usaremos desde la próxima semana!',
     type: 'novedad',
     priority: 'media'
   },
   {
     id: 'a3',
     date: '5 Feb 2026',
-    title: 'â­ Estudiante Destacado de Enero',
-    message: 'Â¡Felicitaciones a todos los estudiantes que completaron su primer robot seguidor de lÃ­nea! Excelente trabajo en equipo.',
+    title: '⭐ Estudiante Destacado de Enero',
+    message: '¡Felicitaciones a todos los estudiantes que completaron su primer robot seguidor de línea! Excelente trabajo en equipo.',
     type: 'reconocimiento',
     priority: 'baja'
   },
   {
     id: 'a4',
     date: '3 Feb 2026',
-    title: 'ðŸ“ Tareas de la Semana',
-    message: 'Recuerden practicar los ejercicios de programaciÃ³n en la app CultivaTec. MÃ³dulos 1-3 deben estar completados para el viernes.',
+    title: '📝 Tareas de la Semana',
+    message: 'Recuerden practicar los ejercicios de programación en la app CultivaTec. Módulos 1-3 deben estar completados para el viernes.',
     type: 'tarea',
     priority: 'media'
   }
@@ -127,17 +127,17 @@ const ANNOUNCEMENTS = [
 const PROJECTS = [
   {
     id: 'p1',
-    title: 'Robot Seguidor de LÃ­nea',
-    difficulty: 'â­â­',
+    title: 'Robot Seguidor de Línea',
+    difficulty: '⭐⭐',
     duration: '2 semanas',
-    description: 'Construye un robot que siga una lÃ­nea negra en el piso usando sensores infrarrojos.',
-    skills: ['Arduino', 'Sensores IR', 'Motores DC', 'ProgramaciÃ³n'],
+    description: 'Construye un robot que siga una línea negra en el piso usando sensores infrarrojos.',
+    skills: ['Arduino', 'Sensores IR', 'Motores DC', 'Programación'],
     status: 'disponible'
   },
   {
     id: 'p2',
-    title: 'EstaciÃ³n MeteorolÃ³gica',
-    difficulty: 'â­â­',
+    title: 'Estación Meteorológica',
+    difficulty: '⭐⭐',
     duration: '1 semana',
     description: 'Mide temperatura y humedad con sensores y muestra los datos en una pantalla LCD.',
     skills: ['Arduino', 'Sensor DHT11', 'Pantalla LCD', 'Variables'],
@@ -145,19 +145,19 @@ const PROJECTS = [
   },
   {
     id: 'p3',
-    title: 'Brazo RobÃ³tico',
-    difficulty: 'â­â­â­',
+    title: 'Brazo Robótico',
+    difficulty: '⭐⭐⭐',
     duration: '3 semanas',
     description: 'Construye un brazo con 3 servomotores controlado con joystick o desde la computadora.',
-    skills: ['Servomotores', 'Joystick', 'MecÃ¡nica', 'ProgramaciÃ³n Avanzada'],
-    status: 'prÃ³ximamente'
+    skills: ['Servomotores', 'Joystick', 'Mecánica', 'Programación Avanzada'],
+    status: 'próximamente'
   },
   {
     id: 'p4',
-    title: 'SemÃ¡foro Inteligente',
-    difficulty: 'â­',
+    title: 'Semáforo Inteligente',
+    difficulty: '⭐',
     duration: '1 clase',
-    description: 'Programa un semÃ¡foro con LEDs que cambie de color automÃ¡ticamente con tiempos reales.',
+    description: 'Programa un semáforo con LEDs que cambie de color automáticamente con tiempos reales.',
     skills: ['LEDs', 'digitalWrite', 'delay()', 'Circuitos'],
     status: 'disponible'
   }
@@ -170,10 +170,10 @@ const ClassroomScreen = ({ onBack }) => {
   const [attendanceDate] = useState(new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }));
 
   const tabs = [
-    { id: 'horario', label: 'Horario', icon: 'ðŸ“…' },
-    { id: 'anuncios', label: 'Anuncios', icon: 'ðŸ“¢' },
-    { id: 'proyectos', label: 'Proyectos', icon: 'ðŸ”¨' },
-    { id: 'asistencia', label: 'Mi Asistencia', icon: 'âœ…' },
+    { id: 'horario', label: 'Horario', icon: '📅' },
+    { id: 'anuncios', label: 'Anuncios', icon: '📢' },
+    { id: 'proyectos', label: 'Proyectos', icon: '🔨' },
+    { id: 'asistencia', label: 'Mi Asistencia', icon: '✅' },
   ];
 
   const renderSchedule = () => {
@@ -193,12 +193,12 @@ const ClassroomScreen = ({ onBack }) => {
           </div>
 
           <div className="bg-white p-4 rounded-2xl border-2 border-[#E5E5E5]">
-            <h3 className="font-black text-sm text-[#1CB0F6] mb-1">ðŸ“ DescripciÃ³n</h3>
+            <h3 className="font-black text-sm text-[#1CB0F6] mb-1">📝 Descripción</h3>
             <p className="text-[#777] text-sm">{cls.description}</p>
           </div>
 
           <div className="bg-white p-4 rounded-2xl border-2 border-[#E5E5E5]">
-            <h3 className="font-black text-sm text-[#58CC02] mb-2">ðŸ“š Temas</h3>
+            <h3 className="font-black text-sm text-[#58CC02] mb-2">📚 Temas</h3>
             <div className="space-y-1.5">
               {cls.topics.map((topic, i) => (
                 <div key={i} className="flex items-center gap-2 bg-[#D7FFB8] p-2.5 rounded-xl">
@@ -210,7 +210,7 @@ const ClassroomScreen = ({ onBack }) => {
           </div>
 
           <div className="bg-white p-4 rounded-2xl border-2 border-[#E5E5E5]">
-            <h3 className="font-black text-sm text-[#FFC800] mb-2">ðŸŽ’ Materiales</h3>
+            <h3 className="font-black text-sm text-[#FFC800] mb-2">🎒 Materiales</h3>
             <div className="flex flex-wrap gap-1.5">
               {cls.materials.map((mat, i) => (
                 <span key={i} className="bg-[#FFF4D4] text-[#E5B800] px-2.5 py-1 rounded-full text-xs font-black">{mat}</span>
@@ -276,7 +276,7 @@ const ClassroomScreen = ({ onBack }) => {
             <span className={`px-2 py-0.5 rounded-full text-[10px] font-black ${
               proj.status === 'disponible' ? 'bg-[#D7FFB8] text-[#58CC02]' : 'bg-[#F7F7F7] text-[#AFAFAF]'
             }`}>
-              {proj.status === 'disponible' ? 'âœ… Disponible' : 'ðŸ”’ PrÃ³ximamente'}
+              {proj.status === 'disponible' ? '✅ Disponible' : '🔒 Próximamente'}
             </span>
           </div>
           <p className="text-[#777] mt-1.5 text-xs">{proj.description}</p>
@@ -291,7 +291,7 @@ const ClassroomScreen = ({ onBack }) => {
           </div>
           {proj.status === 'disponible' && (
             <button className="w-full mt-3 py-2.5 btn-3d btn-3d-green rounded-xl text-xs">
-              ðŸ“‹ Ver Instrucciones
+              📋 Ver Instrucciones
             </button>
           )}
         </div>
@@ -300,12 +300,12 @@ const ClassroomScreen = ({ onBack }) => {
   );
 
   const renderAttendance = () => {
-    const weekDays = ['Lun', 'Mar', 'MiÃ©', 'Jue', 'Vie', 'SÃ¡b'];
+    const weekDays = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
     const [attendance, setAttendance] = useState({
-      'Sem1': { 'Lun': true, 'Mar': true, 'MiÃ©': true, 'Jue': false, 'Vie': true, 'SÃ¡b': false },
-      'Sem2': { 'Lun': true, 'Mar': true, 'MiÃ©': false, 'Jue': true, 'Vie': true, 'SÃ¡b': true },
-      'Sem3': { 'Lun': true, 'Mar': true, 'MiÃ©': true, 'Jue': true, 'Vie': true, 'SÃ¡b': false },
-      'Sem4': { 'Lun': false, 'Mar': false, 'MiÃ©': false, 'Jue': false, 'Vie': false, 'SÃ¡b': false },
+      'Sem1': { 'Lun': true, 'Mar': true, 'Mié': true, 'Jue': false, 'Vie': true, 'Sáb': false },
+      'Sem2': { 'Lun': true, 'Mar': true, 'Mié': false, 'Jue': true, 'Vie': true, 'Sáb': true },
+      'Sem3': { 'Lun': true, 'Mar': true, 'Mié': true, 'Jue': true, 'Vie': true, 'Sáb': false },
+      'Sem4': { 'Lun': false, 'Mar': false, 'Mié': false, 'Jue': false, 'Vie': false, 'Sáb': false },
     });
 
     const totalClasses = Object.values(attendance).reduce((total, week) => 
@@ -337,7 +337,7 @@ const ClassroomScreen = ({ onBack }) => {
                   <p className="text-[10px] font-black text-[#AFAFAF] mb-1">{day}</p>
                   <div className={`w-8 h-8 mx-auto rounded-lg flex items-center justify-center text-sm font-black ${
                     days[day] ? 'bg-[#58CC02] text-white' : 'bg-[#F7F7F7] text-[#E5E5E5]'
-                  }`}>{days[day] ? 'âœ“' : 'âœ—'}</div>
+                  }`}>{days[day] ? '✓' : '✗'}</div>
                 </div>
               ))}
             </div>
@@ -351,8 +351,8 @@ const ClassroomScreen = ({ onBack }) => {
     <div className="pb-24 min-h-full bg-white flex flex-col animate-fade-in">
       {/* Header */}
       <div className="bg-[#1CB0F6] px-6 pt-6 pb-8 text-center border-b-4 border-[#1899D6]">
-        <span className="text-4xl mb-1 block">ðŸ«</span>
-        <h1 className="text-2xl font-black text-white">Clases de RobÃ³tica</h1>
+        <span className="text-4xl mb-1 block">🏫</span>
+        <h1 className="text-2xl font-black text-white">Clases de Robótica</h1>
         <p className="text-white/80 text-sm font-bold mt-1">Tu espacio de aprendizaje presencial</p>
       </div>
 

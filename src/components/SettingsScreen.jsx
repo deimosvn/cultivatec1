@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowLeft, User, FileText, LogOut, Info, ChevronRight, Save, X, Shield, Smartphone } from 'lucide-react';
 
 const APP_VERSION = '2.5.0';
@@ -66,14 +66,14 @@ const SettingsScreen = ({ onBack, firebaseProfile, userId, onUpdateProfile, onLo
   return (
     <div className="pb-24 min-h-full bg-[#F7F7F7] w-full animate-fade-in">
       {/* Header */}
-      <div className="bg-gradient-to-br from-[#0C1632] to-[#1E3A8A] px-6 pt-8 pb-10 text-center relative overflow-hidden">
-        <div className="absolute top-4 right-6 text-7xl opacity-5 rotate-12">âš™ï¸</div>
+      <div className="bg-gradient-to-br from-[#1E1B4B] to-[#312E81] px-6 pt-8 pb-10 text-center relative overflow-hidden">
+        <div className="absolute top-4 right-6 text-7xl opacity-5 rotate-12">⚙️</div>
         <button onClick={onBack}
           className="absolute top-4 left-4 text-white/80 hover:text-white transition flex items-center bg-white/10 p-2 rounded-xl active:scale-95">
           <ArrowLeft size={18} />
         </button>
         <div className="w-16 h-16 mx-auto bg-white/10 rounded-2xl flex items-center justify-center mb-3 border border-white/10">
-          <User size={32} className="text-blue-200" />
+          <User size={32} className="text-purple-200" />
         </div>
         <h1 className="text-2xl font-black text-white">Ajustes</h1>
         <p className="text-white/60 text-sm font-bold mt-1">Personaliza tu experiencia</p>
@@ -123,11 +123,11 @@ const SettingsScreen = ({ onBack, firebaseProfile, userId, onUpdateProfile, onLo
                   </div>
                 )}
                 {saveSuccess === 'fullName' && (
-                  <p className="text-[10px] text-[#58CC02] font-black mt-1 animate-fade-in">âœ… Nombre actualizado correctamente</p>
+                  <p className="text-[10px] text-[#58CC02] font-black mt-1 animate-fade-in">✅ Nombre actualizado correctamente</p>
                 )}
               </div>
             </div>
-            <p className="text-[10px] text-[#CDCDCD] font-semibold mt-1">Este nombre aparecerÃ¡ en tus certificados y licencias</p>
+            <p className="text-[10px] text-[#CDCDCD] font-semibold mt-1">Este nombre aparecerá en tus certificados y licencias</p>
           </div>
 
           {/* Username (read-only) */}
@@ -139,7 +139,7 @@ const SettingsScreen = ({ onBack, firebaseProfile, userId, onUpdateProfile, onLo
 
           {/* Email (read-only) */}
           <div className="px-4 py-3">
-            <p className="text-xs font-bold text-[#AFAFAF] mb-0.5">Correo electrÃ³nico</p>
+            <p className="text-xs font-bold text-[#AFAFAF] mb-0.5">Correo electrónico</p>
             <p className="text-sm font-black text-[#3C3C3C]">{email}</p>
           </div>
         </div>
@@ -159,8 +159,8 @@ const SettingsScreen = ({ onBack, firebaseProfile, userId, onUpdateProfile, onLo
               {[
                 { value: 0.7, label: 'Lenta' },
                 { value: 1, label: 'Normal' },
-                { value: 1.3, label: 'RÃ¡pida' },
-                { value: 1.6, label: 'Muy rÃ¡pida' },
+                { value: 1.3, label: 'Rápida' },
+                { value: 1.6, label: 'Muy rápida' },
               ].map(opt => (
                 <button key={opt.value} onClick={() => handleTtsSpeed(opt.value)}
                   className={`flex-1 py-2 rounded-xl text-[11px] font-black transition active:scale-95 border-2 ${
@@ -203,10 +203,10 @@ const SettingsScreen = ({ onBack, firebaseProfile, userId, onUpdateProfile, onLo
           <div className="px-4 py-3">
             <p className="text-xs text-[#777] font-semibold leading-relaxed">
               Los certificados se generan con el nombre configurado arriba. Si necesitas cambiar el nombre, 
-              edÃ­talo antes de descargar tus certificados desde la secciÃ³n de <b className="text-[#2563EB]">Licencias</b>.
+              edítalo antes de descargar tus certificados desde la sección de <b className="text-[#2563EB]">Licencias</b>.
             </p>
             <div className="mt-2 bg-[#FFF8E1] rounded-xl p-2.5 border border-[#FFE082]">
-              <p className="text-[11px] text-[#F59E0B] font-black">ðŸ’¡ Consejo</p>
+              <p className="text-[11px] text-[#F59E0B] font-black">💡 Consejo</p>
               <p className="text-[10px] text-[#777] font-semibold mt-0.5">
                 Usa tu nombre completo real para que tus certificados tengan validez oficial.
               </p>
@@ -228,7 +228,7 @@ const SettingsScreen = ({ onBack, firebaseProfile, userId, onUpdateProfile, onLo
                 <LogOut size={16} className="text-red-500" />
               </div>
               <div className="text-left">
-                <p className="text-sm font-black text-red-500">Cerrar sesiÃ³n</p>
+                <p className="text-sm font-black text-red-500">Cerrar sesión</p>
                 <p className="text-[10px] text-[#CDCDCD] font-semibold">Tu progreso se guarda en la nube</p>
               </div>
             </div>
@@ -242,8 +242,8 @@ const SettingsScreen = ({ onBack, firebaseProfile, userId, onUpdateProfile, onLo
             <Info size={12} className="text-[#CDCDCD]" />
             <p className="text-[11px] text-[#CDCDCD] font-bold">CultivaTec v{APP_VERSION}</p>
           </div>
-          <p className="text-[10px] text-[#E5E5E5] font-semibold">Programa Educativo de RobÃ³tica</p>
-          <p className="text-[10px] text-[#E5E5E5] font-semibold mt-0.5">Â© 2025 CultivaTec. Todos los derechos reservados.</p>
+          <p className="text-[10px] text-[#E5E5E5] font-semibold">Programa Educativo de Robótica</p>
+          <p className="text-[10px] text-[#E5E5E5] font-semibold mt-0.5">© 2025 CultivaTec. Todos los derechos reservados.</p>
         </div>
       </div>
 
@@ -255,8 +255,8 @@ const SettingsScreen = ({ onBack, firebaseProfile, userId, onUpdateProfile, onLo
               <div className="w-16 h-16 mx-auto bg-red-50 rounded-2xl flex items-center justify-center mb-3">
                 <LogOut size={28} className="text-red-500" />
               </div>
-              <h2 className="text-xl font-black text-[#3C3C3C] mb-1">Â¿Cerrar sesiÃ³n?</h2>
-              <p className="text-sm text-[#777] font-semibold">No te preocupes, tu progreso estÃ¡ guardado en la nube y podrÃ¡s continuar donde lo dejaste.</p>
+              <h2 className="text-xl font-black text-[#3C3C3C] mb-1">¿Cerrar sesión?</h2>
+              <p className="text-sm text-[#777] font-semibold">No te preocupes, tu progreso está guardado en la nube y podrás continuar donde lo dejaste.</p>
             </div>
             <div className="flex gap-2">
               <button onClick={() => setShowLogoutConfirm(false)}
@@ -265,7 +265,7 @@ const SettingsScreen = ({ onBack, firebaseProfile, userId, onUpdateProfile, onLo
               </button>
               <button onClick={handleLogout}
                 className="flex-1 py-3 bg-red-500 text-white font-black rounded-xl border-b-4 border-red-700 active:scale-95 transition text-sm">
-                Cerrar sesiÃ³n
+                Cerrar sesión
               </button>
             </div>
           </div>

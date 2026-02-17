@@ -1,24 +1,24 @@
-﻿import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import Matter from 'matter-js';
 import { ArrowLeft, RotateCcw, Trophy, Volume2, VolumeX, Zap, Sparkles } from 'lucide-react';
 
 // ================================================================
-// AXON MERGE â€” "El DesafÃ­o del Robot"  v2.0
-// Suika-style merge game Â· Matter.js physics Â· Neon Cyber aesthetic
+// AXON MERGE — "El Desafío del Robot"  v2.0
+// Suika-style merge game · Matter.js physics · Neon Cyber aesthetic
 // ================================================================
 
-// ---- Merge Tree (10 levels) â€” LARGER radii for increased difficulty ----
+// ---- Merge Tree (10 levels) — LARGER radii for increased difficulty ----
 const COMPONENTS = [
-  { level: 0, name: 'Resistor',           emoji: 'ðŸŸ«', radius: 28, color: '#D97706', glow: '#FDE68A', accent: '#92400E', desc: 'Â¡Limito el paso de corriente!', img: '/icons/components/resistor.png' },
-  { level: 1, name: 'LED',                emoji: 'ðŸ’¡', radius: 33, color: '#EF4444', glow: '#FCA5A5', accent: '#991B1B', desc: 'Â¡Convierto energÃ­a en luz!', img: '/icons/components/led.png' },
-  { level: 2, name: 'Capacitor',          emoji: 'ðŸ”µ', radius: 38, color: '#3B82F6', glow: '#93C5FD', accent: '#1E40AF', desc: 'Â¡Almaceno energÃ­a como una mini baterÃ­a!', img: '/icons/components/capacitor.png' },
-  { level: 3, name: 'Transistor',         emoji: 'ðŸ”º', radius: 44, color: '#8B5CF6', glow: '#C4B5FD', accent: '#5B21B6', desc: 'Â¡Soy el interruptor electrÃ³nico!', img: '/icons/components/transistor.png' },
-  { level: 4, name: 'ESP32-S3',           emoji: 'ðŸ§ ', radius: 50, color: '#10B981', glow: '#6EE7B7', accent: '#065F46', desc: 'Â¡Soy el cerebro con WiFi y Bluetooth!', img: '/icons/components/ESP32.png' },
-  { level: 5, name: 'Sensor UltrasÃ³nico', emoji: 'ðŸ‘ï¸', radius: 56, color: '#06B6D4', glow: '#67E8F9', accent: '#155E75', desc: 'Â¡Mido distancia como un murciÃ©lago!', img: '/icons/components/sensor ultrasonico.png' },
-  { level: 6, name: 'Motor DC',           emoji: 'âš™ï¸', radius: 62, color: '#6366F1', glow: '#A5B4FC', accent: '#3730A3', desc: 'Â¡Convierto electricidad en movimiento!', img: '/icons/components/motor DC.png' },
-  { level: 7, name: 'BaterÃ­a LiPo',       emoji: 'ðŸ”‹', radius: 68, color: '#F59E0B', glow: '#FDE68A', accent: '#92400E', desc: 'Â¡Soy la fuente de energÃ­a recargable!', img: '/icons/components/bateria lipo.png' },
-  { level: 8, name: 'Chasis',             emoji: 'ðŸ“¦', radius: 74, color: '#64748B', glow: '#CBD5E1', accent: '#1E293B', desc: 'Â¡Soy el esqueleto del robot!', img: '/icons/components/chasis.png' },
-  { level: 9, name: 'CultivaTec Rover',   emoji: 'ðŸ¤–', radius: 80, color: '#2563EB', glow: '#60A5FA', accent: '#1E3A8A', desc: 'Â¡Robot completo! Â¡Eres un genio!', img: '/icons/components/rover.png' },
+  { level: 0, name: 'Resistor',           emoji: '🟫', radius: 28, color: '#D97706', glow: '#FDE68A', accent: '#92400E', desc: '¡Limito el paso de corriente!', img: '/icons/components/resistor.png' },
+  { level: 1, name: 'LED',                emoji: '💡', radius: 33, color: '#EF4444', glow: '#FCA5A5', accent: '#991B1B', desc: '¡Convierto energía en luz!', img: '/icons/components/led.png' },
+  { level: 2, name: 'Capacitor',          emoji: '🔵', radius: 38, color: '#3B82F6', glow: '#93C5FD', accent: '#1E40AF', desc: '¡Almaceno energía como una mini batería!', img: '/icons/components/capacitor.png' },
+  { level: 3, name: 'Transistor',         emoji: '🔺', radius: 44, color: '#8B5CF6', glow: '#BFDBFE', accent: '#1E3A5F', desc: '¡Soy el interruptor electrónico!', img: '/icons/components/transistor.png' },
+  { level: 4, name: 'ESP32-S3',           emoji: '🧠', radius: 50, color: '#10B981', glow: '#6EE7B7', accent: '#065F46', desc: '¡Soy el cerebro con WiFi y Bluetooth!', img: '/icons/components/ESP32.png' },
+  { level: 5, name: 'Sensor Ultrasónico', emoji: '👁️', radius: 56, color: '#06B6D4', glow: '#67E8F9', accent: '#155E75', desc: '¡Mido distancia como un murciélago!', img: '/icons/components/sensor ultrasonico.png' },
+  { level: 6, name: 'Motor DC',           emoji: '⚙️', radius: 62, color: '#6366F1', glow: '#A5B4FC', accent: '#3730A3', desc: '¡Convierto electricidad en movimiento!', img: '/icons/components/motor DC.png' },
+  { level: 7, name: 'Batería LiPo',       emoji: '🔋', radius: 68, color: '#F59E0B', glow: '#FDE68A', accent: '#92400E', desc: '¡Soy la fuente de energía recargable!', img: '/icons/components/bateria lipo.png' },
+  { level: 8, name: 'Chasis',             emoji: '📦', radius: 74, color: '#64748B', glow: '#CBD5E1', accent: '#1E293B', desc: '¡Soy el esqueleto del robot!', img: '/icons/components/chasis.png' },
+  { level: 9, name: 'CultivaTec Rover',   emoji: '🤖', radius: 80, color: '#2563EB', glow: '#60A5FA', accent: '#1E3A8A', desc: '¡Robot completo! ¡Eres un genio!', img: '/icons/components/rover.png' },
 ];
 
 // ---- Preload component images ----
@@ -73,7 +73,7 @@ const drawComponent = (ctx, x, y, r, comp, time) => {
   ctx.arc(x, y, r, 0, Math.PI * 2);
   ctx.fill();
 
-  // Component image â€” PNG fills the entire sphere, stretched wider
+  // Component image — PNG fills the entire sphere, stretched wider
   const img = componentImages[comp.level];
   if (img && img.complete && img.naturalWidth > 0) {
     const imgW = r * 4.2;    // wider horizontal stretch
@@ -93,7 +93,7 @@ const drawComponent = (ctx, x, y, r, comp, time) => {
     ctx.fillText(comp.emoji, x, y + 1);
   }
 
-  // Very thin color tint â€” just enough to unify, image is the star
+  // Very thin color tint — just enough to unify, image is the star
   const colorRgb = hexToRgb(color);
   const overlayGrad = ctx.createRadialGradient(x, y, r * 0.5, x, y, r);
   overlayGrad.addColorStop(0, `rgba(${colorRgb.r},${colorRgb.g},${colorRgb.b},0.03)`);
@@ -234,7 +234,7 @@ const drawWallStrips = (ctx, w, h, time) => {
     ctx.fill();
   }
 
-  // Floor â€” circuit board strip
+  // Floor — circuit board strip
   const floorGrad = ctx.createLinearGradient(0, h - 6, 0, h);
   floorGrad.addColorStop(0, 'rgba(99,102,241,0)');
   floorGrad.addColorStop(1, 'rgba(99,102,241,0.35)');
@@ -276,7 +276,7 @@ function Toast({ text, emoji, color, level, onDone }) {
       }}>{emoji}</div>
       <div style={{ minWidth: 0 }}>
         <div style={{ fontSize: 12, fontWeight: 900, color: color, letterSpacing: 0.5 }}>
-          NIVEL {level + 1} â€” {text.split(':')[0]}
+          NIVEL {level + 1} — {text.split(':')[0]}
         </div>
         <div style={{ fontSize: 11, fontWeight: 600, color: '#64748B', marginTop: 2 }}>
           {text.split(':')[1]?.trim()}
@@ -303,7 +303,7 @@ function ComboIndicator({ combo }) {
         border: '2px solid rgba(255,255,255,0.3)',
       }}>
         <span style={{ fontSize: 13, fontWeight: 900, color: '#fff', letterSpacing: 1 }}>
-          {combo}x COMBO{combo >= 5 ? ' ðŸ”¥' : combo >= 3 ? ' âš¡' : ' âœ¨'}
+          {combo}x COMBO{combo >= 5 ? ' 🔥' : combo >= 3 ? ' ⚡' : ' ✨'}
         </span>
       </div>
     </div>
@@ -357,7 +357,7 @@ export default function AxonMerge({ onBack }) {
     } catch {}
   }, []);
 
-  // ---- Audio (stable â€” no state in deps, uses refs) ----
+  // ---- Audio (stable — no state in deps, uses refs) ----
   const audioCtxRef = useRef(null);
   const getAudioCtx = useCallback(() => {
     if (!audioCtxRef.current) audioCtxRef.current = new (window.AudioContext || window.webkitAudioContext)();
@@ -661,10 +661,10 @@ export default function AxonMerge({ onBack }) {
       ctx.translate(shake.x, shake.y);
       ctx.clearRect(-5, -5, w + 10, h + 10);
 
-      // Background â€” deep space-tech gradient
+      // Background — deep space-tech gradient
       const bgGrad = ctx.createLinearGradient(0, 0, 0, h);
       bgGrad.addColorStop(0, '#0F172A');
-      bgGrad.addColorStop(0.3, '#0C1632');
+      bgGrad.addColorStop(0.3, '#1E1B4B');
       bgGrad.addColorStop(0.6, '#0F172A');
       bgGrad.addColorStop(1, '#020617');
       ctx.fillStyle = bgGrad;
@@ -725,7 +725,7 @@ export default function AxonMerge({ onBack }) {
         ctx.fillStyle = '#EF4444';
         ctx.font = 'bold 11px sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText('âš  PELIGRO âš ', w / 2, DANGER_Y - 8);
+        ctx.fillText('⚠ PELIGRO ⚠', w / 2, DANGER_Y - 8);
         ctx.globalAlpha = 1;
       }
       ctx.restore();
@@ -787,7 +787,7 @@ export default function AxonMerge({ onBack }) {
         drawComponent(ctx, px, py, pr, previewComp, time);
         ctx.globalAlpha = 1;
 
-        // Drop guide line â€” glowing
+        // Drop guide line — glowing
         const lineGrad = ctx.createLinearGradient(px, py + pr, px, h);
         lineGrad.addColorStop(0, previewComp.glow + '44');
         lineGrad.addColorStop(0.5, previewComp.glow + '15');
@@ -929,7 +929,7 @@ export default function AxonMerge({ onBack }) {
   // ============ GUIDE SCREEN ============
   if (showGuide) {
     return (
-      <div className="min-h-full animate-fade-in flex flex-col" style={{ background: 'linear-gradient(180deg, #0F172A 0%, #0C1632 40%, #0F172A 100%)' }}>
+      <div className="min-h-full animate-fade-in flex flex-col" style={{ background: 'linear-gradient(180deg, #0F172A 0%, #1E1B4B 40%, #0F172A 100%)' }}>
         {/* Animated header */}
         <div className="relative overflow-hidden" style={{
           background: 'linear-gradient(135deg, #6366F1 0%, #8B5CF6 30%, #EC4899 60%, #F59E0B 100%)',
@@ -954,14 +954,14 @@ export default function AxonMerge({ onBack }) {
             </button>
             <div className="text-center">
               <div className="inline-block relative">
-                <div className="text-7xl mb-2" style={{ filter: 'drop-shadow(0 0 20px rgba(99,102,241,0.5))' }}>ðŸ§©</div>
-                <div className="absolute -right-3 -top-2 text-2xl animate-spin" style={{ animationDuration: '3s' }}>âš¡</div>
-                <div className="absolute -left-3 top-0 text-xl animate-bounce" style={{ animationDelay: '0.5s' }}>âœ¨</div>
+                <div className="text-7xl mb-2" style={{ filter: 'drop-shadow(0 0 20px rgba(99,102,241,0.5))' }}>🧩</div>
+                <div className="absolute -right-3 -top-2 text-2xl animate-spin" style={{ animationDuration: '3s' }}>⚡</div>
+                <div className="absolute -left-3 top-0 text-xl animate-bounce" style={{ animationDelay: '0.5s' }}>✨</div>
               </div>
               <h1 className="text-3xl font-black text-white drop-shadow-lg tracking-tight mt-2">AXON MERGE</h1>
               <div className="flex items-center justify-center gap-2 mt-2">
                 <div className="h-px w-10 bg-white/30" />
-                <p className="text-white/80 text-sm font-bold tracking-widest uppercase">El DesafÃ­o del Robot</p>
+                <p className="text-white/80 text-sm font-bold tracking-widest uppercase">El Desafío del Robot</p>
                 <div className="h-px w-10 bg-white/30" />
               </div>
             </div>
@@ -969,43 +969,43 @@ export default function AxonMerge({ onBack }) {
         </div>
 
         <div className="flex-grow px-5 py-5 space-y-4 pb-28 overflow-y-auto">
-          {/* How to play â€” neon card */}
+          {/* How to play — neon card */}
           <div className="rounded-2xl p-5 border border-indigo-500/30" style={{
             background: 'linear-gradient(135deg, rgba(99,102,241,0.1), rgba(139,92,246,0.08))',
             backdropFilter: 'blur(12px)',
             boxShadow: '0 0 20px rgba(99,102,241,0.1)',
           }}>
             <h3 className="text-base font-black text-indigo-300 mb-4 flex items-center gap-2">
-              <Zap size={16} className="text-yellow-400" /> Â¿CÃ³mo se juega?
+              <Zap size={16} className="text-yellow-400" /> ¿Cómo se juega?
             </h3>
             <div className="space-y-3 text-sm font-semibold text-slate-300">
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center text-lg flex-shrink-0">ðŸ‘†</div>
-                <p><b className="text-white">Toca</b> la pantalla para soltar un componente electrÃ³nico.</p>
+                <div className="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center text-lg flex-shrink-0">👆</div>
+                <p><b className="text-white">Toca</b> la pantalla para soltar un componente electrónico.</p>
               </div>
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center text-lg flex-shrink-0">ðŸ”„</div>
-                <p>Cuando <b className="text-white">dos iguales</b> se tocan, Â¡se fusionan en uno mejor!</p>
+                <div className="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center text-lg flex-shrink-0">🔄</div>
+                <p>Cuando <b className="text-white">dos iguales</b> se tocan, ¡se fusionan en uno mejor!</p>
               </div>
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-lg bg-pink-500/20 flex items-center justify-center text-lg flex-shrink-0">âš¡</div>
-                <p>Â¡Fusiones seguidas activan <b className="text-yellow-300">COMBOS</b> para mÃ¡s puntos!</p>
+                <div className="w-8 h-8 rounded-lg bg-pink-500/20 flex items-center justify-center text-lg flex-shrink-0">⚡</div>
+                <p>¡Fusiones seguidas activan <b className="text-yellow-300">COMBOS</b> para más puntos!</p>
               </div>
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center text-lg flex-shrink-0">ðŸ†</div>
-                <p>Meta: Â¡Crea el <b className="text-blue-300">CultivaTec Rover</b> ðŸ¤–!</p>
+                <div className="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center text-lg flex-shrink-0">🏆</div>
+                <p>Meta: ¡Crea el <b className="text-blue-300">CultivaTec Rover</b> 🤖!</p>
               </div>
             </div>
           </div>
 
-          {/* Merge tree â€” visual chain */}
-          <div className="rounded-2xl p-5 border border-blue-500/30" style={{
+          {/* Merge tree — visual chain */}
+          <div className="rounded-2xl p-5 border border-purple-500/30" style={{
             background: 'linear-gradient(135deg, rgba(139,92,246,0.08), rgba(236,72,153,0.06))',
             backdropFilter: 'blur(12px)',
             boxShadow: '0 0 20px rgba(139,92,246,0.08)',
           }}>
-            <h3 className="text-base font-black text-blue-300 mb-4 flex items-center gap-2">
-              <Sparkles size={16} className="text-pink-400" /> Cadena de FusiÃ³n
+            <h3 className="text-base font-black text-purple-300 mb-4 flex items-center gap-2">
+              <Sparkles size={16} className="text-pink-400" /> Cadena de Fusión
             </h3>
             <div className="grid grid-cols-5 gap-3">
               {COMPONENTS.map((c, i) => (
@@ -1033,7 +1033,7 @@ export default function AxonMerge({ onBack }) {
               boxShadow: '0 6px 0 #4338CA, 0 0 30px rgba(99,102,241,0.3)',
             }}>
             <div className="absolute inset-0 bg-white/10 opacity-0 group-active:opacity-100 transition-opacity" />
-            ðŸš€ Â¡JUGAR!
+            🚀 ¡JUGAR!
           </button>
         </div>
       </div>
@@ -1044,8 +1044,8 @@ export default function AxonMerge({ onBack }) {
 
   // ============ GAME SCREEN ============
   return (
-    <div className="min-h-full animate-fade-in flex flex-col" style={{ background: 'linear-gradient(180deg, #0F172A, #0C1632, #0F172A)' }}>
-      {/* Top bar â€” sleek dark glass */}
+    <div className="min-h-full animate-fade-in flex flex-col" style={{ background: 'linear-gradient(180deg, #0F172A, #1E1B4B, #0F172A)' }}>
+      {/* Top bar — sleek dark glass */}
       <div className="flex items-center justify-between px-4 py-2.5" style={{
         background: 'linear-gradient(135deg, rgba(30,27,75,0.95), rgba(15,23,42,0.95))',
         borderBottom: '1px solid rgba(99,102,241,0.2)',
@@ -1063,7 +1063,7 @@ export default function AxonMerge({ onBack }) {
           <div className="w-px h-8 bg-indigo-500/20" />
           {/* High score */}
           <div className="text-center">
-            <p className="text-[9px] font-black text-amber-400/70 uppercase tracking-wider flex items-center gap-0.5"><Trophy size={9} /> RÃ©cord</p>
+            <p className="text-[9px] font-black text-amber-400/70 uppercase tracking-wider flex items-center gap-0.5"><Trophy size={9} /> Récord</p>
             <p className="text-sm font-black text-amber-300 tabular-nums">{highScore.toLocaleString()}</p>
           </div>
           <div className="w-px h-8 bg-indigo-500/20" />
@@ -1103,7 +1103,7 @@ export default function AxonMerge({ onBack }) {
         </div>
         {maxLevelReached > 0 && (
           <div className="flex items-center gap-1 text-[10px] font-bold text-slate-500">
-            <span>MÃ¡x:</span>
+            <span>Máx:</span>
             <img src={COMPONENTS[maxLevelReached].img} alt={COMPONENTS[maxLevelReached].name} className="w-5 h-5 object-contain" />
             <span style={{ color: COMPONENTS[maxLevelReached].glow }}>{COMPONENTS[maxLevelReached].name}</span>
           </div>
@@ -1144,13 +1144,13 @@ export default function AxonMerge({ onBack }) {
               boxShadow: '0 0 60px rgba(99,102,241,0.15), 0 20px 60px rgba(0,0,0,0.3)',
             }}>
               <div className="text-6xl mb-3" style={{ filter: roverAchieved ? 'drop-shadow(0 0 20px rgba(37,99,235,0.5))' : 'none' }}>
-                {roverAchieved ? 'ðŸ¤–' : 'ðŸ’¥'}
+                {roverAchieved ? '🤖' : '💥'}
               </div>
               <h2 className="text-2xl font-black text-white mb-1 tracking-tight">
-                {roverAchieved ? 'Â¡INCREÃBLE!' : 'Â¡FIN DEL JUEGO!'}
+                {roverAchieved ? '¡INCREÍBLE!' : '¡FIN DEL JUEGO!'}
               </h2>
               <p className="text-sm text-slate-400 font-semibold mb-5">
-                {roverAchieved ? 'Â¡Creaste el CultivaTec Rover!' : 'Los componentes llegaron al tope'}
+                {roverAchieved ? '¡Creaste el CultivaTec Rover!' : 'Los componentes llegaron al tope'}
               </p>
 
               {/* Stats grid */}
@@ -1161,7 +1161,7 @@ export default function AxonMerge({ onBack }) {
                 </div>
                 <div className="rounded-xl p-3" style={{ background: 'rgba(245,158,11,0.1)', border: '1px solid rgba(245,158,11,0.2)' }}>
                   <p className="text-xl font-black text-amber-300">{highScore.toLocaleString()}</p>
-                  <p className="text-[9px] font-bold text-slate-500 uppercase mt-0.5 flex items-center gap-0.5 justify-center"><Trophy size={8} /> RÃ©cord</p>
+                  <p className="text-[9px] font-bold text-slate-500 uppercase mt-0.5 flex items-center gap-0.5 justify-center"><Trophy size={8} /> Récord</p>
                 </div>
                 <div className="rounded-xl p-3" style={{ background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.2)' }}>
                   <p className="text-xl font-black text-emerald-300">{mergeCount}</p>
@@ -1189,12 +1189,12 @@ export default function AxonMerge({ onBack }) {
                   background: 'linear-gradient(135deg, #6366F1, #8B5CF6)',
                   boxShadow: '0 4px 0 #4338CA, 0 0 20px rgba(99,102,241,0.2)',
                 }}>
-                ðŸ”„ Jugar de Nuevo
+                🔄 Jugar de Nuevo
               </button>
               <button onClick={onBack}
                 className="w-full py-3 rounded-xl text-sm font-black text-slate-400 active:scale-[0.97] transition-transform"
                 style={{ background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.15)' }}>
-                â† Volver al Taller
+                ← Volver al Taller
               </button>
             </div>
           </div>

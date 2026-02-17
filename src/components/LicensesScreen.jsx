@@ -5,7 +5,7 @@ import { jsPDF } from 'jspdf';
 // Module licenses data — maps module IDs to license info
 const MODULE_LICENSES = [
   { moduleId: 'mod_intro_robot', title: 'Introducción a la Robótica', icon: '🤖', licenseTitle: 'Explorador Robótico', color: '#2563EB', description: 'Conoces qué es un robot y sus componentes básicos' },
-  { moduleId: 'mod_partes_robot', title: 'Partes de un Robot', icon: '🧩', licenseTitle: 'Anatomista Mecánico', color: '#7C3AED', description: 'Identificas las partes esenciales de un robot' },
+  { moduleId: 'mod_partes_robot', title: 'Partes de un Robot', icon: '🧩', licenseTitle: 'Anatomista Mecánico', color: '#3B82F6', description: 'Identificas las partes esenciales de un robot' },
   { moduleId: 'mod_primer_proyecto', title: 'Primer Proyecto', icon: '🛠️', licenseTitle: 'Constructor Principiante', color: '#059669', description: 'Has completado tu primer proyecto de robótica' },
   { moduleId: 'mod_electr', title: 'Electricidad Básica', icon: '⚡', licenseTitle: 'Electricista Junior', color: '#F59E0B', description: 'Entiendes los fundamentos de la electricidad' },
   { moduleId: 'mod_electon', title: 'Electrónica', icon: '🔌', licenseTitle: 'Técnico Electrónico', color: '#EF4444', description: 'Dominas los componentes electrónicos básicos' },
@@ -17,7 +17,7 @@ const MODULE_LICENSES = [
   { moduleId: 'mod_robotica', title: 'Robótica Avanzada', icon: '🤖', licenseTitle: 'Robótico Avanzado', color: '#DC2626', description: 'Dominas conceptos avanzados de robótica' },
   { moduleId: 'mod_componentes', title: 'Componentes', icon: '🧬', licenseTitle: 'Experto en Componentes', color: '#0891B2', description: 'Conoces todos los componentes electrónicos' },
   { moduleId: 'mod_control', title: 'Control', icon: '🎮', licenseTitle: 'Controlador de Sistemas', color: '#4F46E5', description: 'Entiendes los sistemas de control robótico' },
-  { moduleId: 'mod_prog_avanzada', title: 'Programación Avanzada', icon: '🚀', licenseTitle: 'Programador Experto', color: '#9333EA', description: 'Dominas la programación avanzada para robots' },
+  { moduleId: 'mod_prog_avanzada', title: 'Programación Avanzada', icon: '🚀', licenseTitle: 'Programador Experto', color: '#2563EB', description: 'Dominas la programación avanzada para robots' },
   { moduleId: 'mod_diseno', title: 'Diseño', icon: '✏️', licenseTitle: 'Diseñador Robótico', color: '#EC4899', description: 'Sabes diseñar robots desde cero' },
   { moduleId: 'mod_primer_led', title: 'Primer LED', icon: '💡', licenseTitle: 'Iluminador Digital', color: '#F97316', description: 'Has dado vida a tu primer circuito LED' },
 ];

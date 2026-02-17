@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { ArrowLeft, RotateCcw, Trophy, Star, Zap, Check, X } from 'lucide-react';
 
 /* ================================================================
@@ -23,7 +23,7 @@ const GameHeader = ({ title, subtitle, icon, color, onBack, stars, maxStars = 3 
       {stars !== undefined && (
         <div className="flex gap-0.5">
           {Array.from({ length: maxStars }).map((_, i) => (
-            <span key={i} className={`text-lg ${i < stars ? 'opacity-100' : 'opacity-30'}`}>â­</span>
+            <span key={i} className={`text-lg ${i < stars ? 'opacity-100' : 'opacity-30'}`}>⭐</span>
           ))}
         </div>
       )}
@@ -34,17 +34,17 @@ const GameHeader = ({ title, subtitle, icon, color, onBack, stars, maxStars = 3 
 const GameComplete = ({ title, score, maxScore, stars, xp, onReplay, onBack, color }) => (
   <div className="min-h-full flex flex-col items-center justify-center p-6 animate-fade-in bg-gradient-to-b from-[#F7F7F7] to-white">
     <div className="text-center max-w-sm">
-      <div className="text-6xl mb-4 animate-bounce-in">ðŸ†</div>
+      <div className="text-6xl mb-4 animate-bounce-in">🏆</div>
       <h1 className="text-2xl font-black text-[#3C3C3C] mb-1">{title}</h1>
-      <p className="text-sm text-[#777] font-bold mb-5">Â¡Mini-juego completado!</p>
+      <p className="text-sm text-[#777] font-bold mb-5">¡Mini-juego completado!</p>
       <div className="flex justify-center gap-1 mb-4">
         {Array.from({ length: 3 }).map((_, i) => (
-          <span key={i} className={`text-3xl ${i < stars ? 'animate-bounce' : 'opacity-20'}`} style={{ animationDelay: `${i * 150}ms` }}>â­</span>
+          <span key={i} className={`text-3xl ${i < stars ? 'animate-bounce' : 'opacity-20'}`} style={{ animationDelay: `${i * 150}ms` }}>⭐</span>
         ))}
       </div>
       <div className="bg-white rounded-2xl border-2 border-[#E5E5E5] p-5 mb-5 space-y-3">
         <div className="flex justify-between items-center">
-          <span className="text-sm font-bold text-[#777]">PuntuaciÃ³n</span>
+          <span className="text-sm font-bold text-[#777]">Puntuación</span>
           <span className="text-lg font-black text-[#3C3C3C]">{score}/{maxScore}</span>
         </div>
         <div className="w-full h-3 bg-[#E5E5E5] rounded-full overflow-hidden">
@@ -61,7 +61,7 @@ const GameComplete = ({ title, score, maxScore, stars, xp, onReplay, onBack, col
           <RotateCcw size={16} /> Repetir
         </button>
         <button onClick={onBack} className={`flex-1 py-3.5 bg-gradient-to-r ${color} text-white rounded-xl font-black text-sm border-b-4 border-black/20 active:scale-95 transition`}>
-          Â¡Continuar! ðŸš€
+          ¡Continuar! 🚀
         </button>
       </div>
     </div>
@@ -78,20 +78,20 @@ const ProgressBar = ({ current, total, color = '#58CC02' }) => (
 );
 
 /* ================================================================
-   ðŸ¤¼ SUMO ROBOT GAMES
+   🤼 SUMO ROBOT GAMES
    ================================================================ */
 
 // Game 1: Circuit Wiring Challenge
 const SumoWiringGame = ({ onComplete, onBack }) => {
   const CONNECTIONS = [
     { id: 'motor_a_pos', from: 'Motor A (+)', to: 'OUT1', fromColor: '#EF4444', toColor: '#3B82F6', hint: 'El terminal positivo del motor izquierdo va a la salida 1 del driver' },
-    { id: 'motor_a_neg', from: 'Motor A (âˆ’)', to: 'OUT2', fromColor: '#1F2937', toColor: '#3B82F6', hint: 'El terminal negativo del motor izquierdo va a la salida 2' },
+    { id: 'motor_a_neg', from: 'Motor A (−)', to: 'OUT2', fromColor: '#1F2937', toColor: '#3B82F6', hint: 'El terminal negativo del motor izquierdo va a la salida 2' },
     { id: 'motor_b_pos', from: 'Motor B (+)', to: 'OUT3', fromColor: '#EF4444', toColor: '#8B5CF6', hint: 'El motor derecho va a las salidas 3 y 4 del driver' },
-    { id: 'motor_b_neg', from: 'Motor B (âˆ’)', to: 'OUT4', fromColor: '#1F2937', toColor: '#8B5CF6', hint: 'Terminal negativo del motor derecho a OUT4' },
-    { id: 'ultra_trig', from: 'Trig (Ultra)', to: 'Pin 7', fromColor: '#06B6D4', toColor: '#F59E0B', hint: 'El pin TRIG del ultrasonido envÃ­a el pulso' },
+    { id: 'motor_b_neg', from: 'Motor B (−)', to: 'OUT4', fromColor: '#1F2937', toColor: '#8B5CF6', hint: 'Terminal negativo del motor derecho a OUT4' },
+    { id: 'ultra_trig', from: 'Trig (Ultra)', to: 'Pin 7', fromColor: '#06B6D4', toColor: '#F59E0B', hint: 'El pin TRIG del ultrasonido envía el pulso' },
     { id: 'ultra_echo', from: 'Echo (Ultra)', to: 'Pin 8', fromColor: '#06B6D4', toColor: '#F59E0B', hint: 'El pin ECHO recibe el eco de vuelta' },
-    { id: 'driver_in1', from: 'IN1 (Driver)', to: 'Pin 5', fromColor: '#10B981', toColor: '#F59E0B', hint: 'Las seÃ±ales de control del driver van a pines PWM del Arduino' },
-    { id: 'driver_in2', from: 'IN2 (Driver)', to: 'Pin 6', fromColor: '#10B981', toColor: '#F59E0B', hint: 'IN2 del driver tambiÃ©n necesita un pin PWM' },
+    { id: 'driver_in1', from: 'IN1 (Driver)', to: 'Pin 5', fromColor: '#10B981', toColor: '#F59E0B', hint: 'Las señales de control del driver van a pines PWM del Arduino' },
+    { id: 'driver_in2', from: 'IN2 (Driver)', to: 'Pin 6', fromColor: '#10B981', toColor: '#F59E0B', hint: 'IN2 del driver también necesita un pin PWM' },
   ];
 
   const [currentIdx, setCurrentIdx] = useState(0);
@@ -137,7 +137,7 @@ const SumoWiringGame = ({ onComplete, onBack }) => {
 
   return (
     <div className="min-h-full bg-[#F7F7F7] flex flex-col animate-fade-in">
-      <GameHeader title="ConexiÃ³n de Circuitos" subtitle="Conecta cada cable al pin correcto" icon="ðŸ”Œ" color="from-red-500 to-orange-600" onBack={onBack} />
+      <GameHeader title="Conexión de Circuitos" subtitle="Conecta cada cable al pin correcto" icon="🔌" color="from-red-500 to-orange-600" onBack={onBack} />
       <ProgressBar current={completed.length} total={CONNECTIONS.length} color="#EF4444" />
 
       <div className="flex-grow overflow-y-auto px-4 py-4 space-y-4">
@@ -151,7 +151,7 @@ const SumoWiringGame = ({ onComplete, onBack }) => {
               <p className="text-xs font-black text-[#AFAFAF] uppercase tracking-wider">Conecta</p>
               <p className="text-base font-black text-[#3C3C3C]">{current.from}</p>
             </div>
-            <div className="flex-grow flex justify-center"><span className="text-xl">â†’</span></div>
+            <div className="flex-grow flex justify-center"><span className="text-xl">→</span></div>
             <div className="text-right">
               <p className="text-xs font-black text-[#AFAFAF] uppercase tracking-wider">A</p>
               <p className="text-base font-black text-[#60A5FA]">???</p>
@@ -160,7 +160,7 @@ const SumoWiringGame = ({ onComplete, onBack }) => {
 
           {showHint && (
             <div className="bg-[#FFC800]/10 border border-[#FFC800]/30 rounded-xl p-3 mt-2 animate-slide-up">
-              <p className="text-xs font-semibold text-[#92400E]">ðŸ’¡ <b>Pista:</b> {current.hint}</p>
+              <p className="text-xs font-semibold text-[#92400E]">💡 <b>Pista:</b> {current.hint}</p>
             </div>
           )}
         </div>
@@ -186,7 +186,7 @@ const SumoWiringGame = ({ onComplete, onBack }) => {
                       ? 'bg-red-500/20 border-red-500 text-red-400 animate-shake'
                       : 'bg-gray-800 border-gray-600 text-gray-300 hover:border-[#F59E0B] hover:text-[#F59E0B] hover:bg-gray-700'
                   }`}>
-                  <span className="text-lg block mb-0.5">ðŸ“Œ</span>
+                  <span className="text-lg block mb-0.5">📌</span>
                   {toLabel}
                 </button>
               );
@@ -197,12 +197,12 @@ const SumoWiringGame = ({ onComplete, onBack }) => {
         {/* Completed connections */}
         {completed.length > 0 && (
           <div className="bg-white rounded-2xl border-2 border-[#58CC02]/30 p-3 space-y-1.5">
-            <p className="text-xs font-black text-[#58CC02] mb-1">âœ… Conexiones completadas</p>
+            <p className="text-xs font-black text-[#58CC02] mb-1">✅ Conexiones completadas</p>
             {completed.map(id => {
               const c = CONNECTIONS.find(cn => cn.id === id);
               return (
                 <div key={id} className="flex items-center gap-2 text-xs font-semibold text-[#777] bg-[#D7FFB8]/30 px-3 py-1.5 rounded-lg">
-                  <span style={{ color: c.fromColor }}>â—</span> {c.from} <span className="text-[#AFAFAF]">â†’</span> {c.to} <Check size={12} className="text-[#58CC02] ml-auto" />
+                  <span style={{ color: c.fromColor }}>●</span> {c.from} <span className="text-[#AFAFAF]">→</span> {c.to} <Check size={12} className="text-[#58CC02] ml-auto" />
                 </div>
               );
             })}
@@ -212,14 +212,14 @@ const SumoWiringGame = ({ onComplete, onBack }) => {
         {/* Hint button */}
         {!showHint && (
           <button onClick={() => setShowHint(true)} className="w-full py-2.5 bg-[#FFC800]/10 border border-[#FFC800]/30 rounded-xl text-xs font-black text-[#92400E] active:scale-95 transition">
-            ðŸ’¡ Necesito una pista
+            💡 Necesito una pista
           </button>
         )}
 
         {/* Stats */}
         <div className="flex gap-3 justify-center">
-          <span className="bg-green-50 text-green-700 px-3 py-1.5 rounded-full text-xs font-black">âœ… {completed.length} correctas</span>
-          <span className="bg-red-50 text-red-600 px-3 py-1.5 rounded-full text-xs font-black">âŒ {mistakes} errores</span>
+          <span className="bg-green-50 text-green-700 px-3 py-1.5 rounded-full text-xs font-black">✅ {completed.length} correctas</span>
+          <span className="bg-red-50 text-red-600 px-3 py-1.5 rounded-full text-xs font-black">❌ {mistakes} errores</span>
         </div>
       </div>
     </div>
@@ -263,10 +263,10 @@ const SumoBalanceGame = ({ onComplete, onBack }) => {
 
   const getBalanceEmoji = () => {
     const score = calculateScore();
-    if (score >= 90) return 'ðŸ˜Ž';
-    if (score >= 70) return 'ðŸ™‚';
-    if (score >= 50) return 'ðŸ˜';
-    return 'ðŸ˜°';
+    if (score >= 90) return '😎';
+    if (score >= 70) return '🙂';
+    if (score >= 50) return '😐';
+    return '😰';
   };
 
   const getCGPosition = () => ({
@@ -278,7 +278,7 @@ const SumoBalanceGame = ({ onComplete, onBack }) => {
 
   return (
     <div className="min-h-full bg-[#F7F7F7] flex flex-col animate-fade-in">
-      <GameHeader title="Centro de Gravedad" subtitle="Balancea el peso para mÃ¡xima estabilidad" icon="âš–ï¸" color="from-red-500 to-orange-600" onBack={onBack} />
+      <GameHeader title="Centro de Gravedad" subtitle="Balancea el peso para máxima estabilidad" icon="⚖️" color="from-red-500 to-orange-600" onBack={onBack} />
 
       <div className="flex-grow overflow-y-auto px-4 py-4 space-y-4">
         {/* Balance visualization */}
@@ -309,7 +309,7 @@ const SumoBalanceGame = ({ onComplete, onBack }) => {
               <text x={cg.x} y={cg.y + 1} textAnchor="middle" fontSize="4" fill="white" fontWeight="bold">CG</text>
               {/* Labels */}
               <text x="50" y="8" textAnchor="middle" fontSize="4" fill="#9CA3AF" fontWeight="bold">FRENTE</text>
-              <text x="50" y="98" textAnchor="middle" fontSize="4" fill="#9CA3AF" fontWeight="bold">ATRÃS</text>
+              <text x="50" y="98" textAnchor="middle" fontSize="4" fill="#9CA3AF" fontWeight="bold">ATRÁS</text>
             </svg>
           </div>
         </div>
@@ -318,18 +318,18 @@ const SumoBalanceGame = ({ onComplete, onBack }) => {
         <div className="bg-white rounded-2xl border-2 border-[#E5E5E5] p-4 space-y-5">
           <div>
             <div className="flex justify-between mb-2">
-              <span className="text-xs font-black text-[#3C3C3C]">â¬†ï¸ Frente / AtrÃ¡s â¬‡ï¸</span>
+              <span className="text-xs font-black text-[#3C3C3C]">⬆️ Frente / Atrás ⬇️</span>
               <span className="text-xs font-black text-[#EF4444]">{frontBack}%</span>
             </div>
             <input type="range" min="20" max="80" value={frontBack} onChange={e => setFrontBack(+e.target.value)}
               className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-red-500" />
             <div className="flex justify-between text-[9px] text-[#AFAFAF] font-bold mt-1">
-              <span>MÃ¡s atrÃ¡s</span><span>Equilibrado</span><span>MÃ¡s al frente</span>
+              <span>Más atrás</span><span>Equilibrado</span><span>Más al frente</span>
             </div>
           </div>
           <div>
             <div className="flex justify-between mb-2">
-              <span className="text-xs font-black text-[#3C3C3C]">â¬…ï¸ Izquierda / Derecha âž¡ï¸</span>
+              <span className="text-xs font-black text-[#3C3C3C]">⬅️ Izquierda / Derecha ➡️</span>
               <span className="text-xs font-black text-[#3B82F6]">{leftRight}%</span>
             </div>
             <input type="range" min="20" max="80" value={leftRight} onChange={e => setLeftRight(+e.target.value)}
@@ -342,19 +342,19 @@ const SumoBalanceGame = ({ onComplete, onBack }) => {
 
         {/* Hint card */}
         <div className="bg-[#FFC800]/10 border border-[#FFC800]/30 rounded-2xl p-4">
-          <p className="text-xs font-bold text-[#92400E]">ðŸ’¡ <b>Consejo de experto:</b> Un robot sumo necesita el centro de gravedad ligeramente al frente para empujar con mÃ¡s fuerza, pero centrado de izquierda a derecha para no volcarse.</p>
+          <p className="text-xs font-bold text-[#92400E]">💡 <b>Consejo de experto:</b> Un robot sumo necesita el centro de gravedad ligeramente al frente para empujar con más fuerza, pero centrado de izquierda a derecha para no volcarse.</p>
         </div>
 
         {/* Test result */}
         {testResult !== null && (
           <div className={`rounded-2xl p-4 border-2 animate-scale-in ${testResult >= 85 ? 'bg-[#D7FFB8] border-[#58CC02]' : testResult >= 60 ? 'bg-[#FFC800]/10 border-[#FFC800]' : 'bg-red-50 border-red-300'}`}>
             <div className="flex items-center gap-3">
-              <span className="text-3xl">{testResult >= 85 ? 'ðŸ†' : testResult >= 60 ? 'ðŸ‘' : 'ðŸ”§'}</span>
+              <span className="text-3xl">{testResult >= 85 ? '🏆' : testResult >= 60 ? '👍' : '🔧'}</span>
               <div>
                 <p className="text-sm font-black" style={{ color: testResult >= 85 ? '#58CC02' : testResult >= 60 ? '#92400E' : '#EF4444' }}>
-                  {testResult >= 85 ? 'Â¡Excelente equilibrio!' : testResult >= 60 ? 'Casi perfecto...' : 'Necesita mÃ¡s ajuste'}
+                  {testResult >= 85 ? '¡Excelente equilibrio!' : testResult >= 60 ? 'Casi perfecto...' : 'Necesita más ajuste'}
                 </p>
-                <p className="text-xs font-bold text-[#777]">PuntuaciÃ³n: {testResult}/100</p>
+                <p className="text-xs font-bold text-[#777]">Puntuación: {testResult}/100</p>
               </div>
             </div>
           </div>
@@ -366,8 +366,8 @@ const SumoBalanceGame = ({ onComplete, onBack }) => {
             testing ? 'bg-gray-200 text-gray-400 border-gray-300 cursor-not-allowed' : 'bg-gradient-to-r from-red-500 to-orange-500 text-white border-red-700'
           }`}>
           {testing ? (
-            <span className="flex items-center justify-center gap-2"><span className="animate-spin">âš™ï¸</span> Probando equilibrio...</span>
-          ) : `ðŸ§ª Probar Equilibrio (Intento ${attempts + 1})`}
+            <span className="flex items-center justify-center gap-2"><span className="animate-spin">⚙️</span> Probando equilibrio...</span>
+          ) : `🧪 Probar Equilibrio (Intento ${attempts + 1})`}
         </button>
       </div>
     </div>
@@ -437,7 +437,7 @@ const SumoPushGame = ({ onComplete, onBack }) => {
 
   return (
     <div className="min-h-full bg-[#F7F7F7] flex flex-col animate-fade-in">
-      <GameHeader title="Prueba de Empuje" subtitle={`Ronda ${round + 1} de ${ROUNDS} â€” Alcanza la potencia objetivo`} icon="ðŸ’ª" color="from-red-500 to-orange-600" onBack={onBack} />
+      <GameHeader title="Prueba de Empuje" subtitle={`Ronda ${round + 1} de ${ROUNDS} — Alcanza la potencia objetivo`} icon="💪" color="from-red-500 to-orange-600" onBack={onBack} />
       <ProgressBar current={round + (phase === 'result' ? 1 : 0)} total={ROUNDS} color="#EF4444" />
 
       <div className="flex-grow overflow-y-auto px-4 py-4 space-y-4">
@@ -446,7 +446,7 @@ const SumoPushGame = ({ onComplete, onBack }) => {
           <div className="flex justify-between items-center mb-3">
             <h3 className="text-sm font-black text-[#3C3C3C]">Medidor de Potencia</h3>
             <div className="bg-[#60A5FA]/10 px-3 py-1 rounded-full">
-              <span className="text-xs font-black text-[#60A5FA]">ðŸŽ¯ Objetivo: {targetPower}%</span>
+              <span className="text-xs font-black text-[#60A5FA]">🎯 Objetivo: {targetPower}%</span>
             </div>
           </div>
 
@@ -457,7 +457,7 @@ const SumoPushGame = ({ onComplete, onBack }) => {
               style={{ bottom: `${targetPower - 5}%`, height: '10%', backgroundColor: 'rgba(206,130,255,0.1)' }} />
             <div className="absolute w-full text-center z-10"
               style={{ bottom: `${targetPower - 2}%` }}>
-              <span className="text-[9px] font-black text-[#60A5FA] bg-white px-1.5 py-0.5 rounded">ðŸŽ¯ {targetPower}%</span>
+              <span className="text-[9px] font-black text-[#60A5FA] bg-white px-1.5 py-0.5 rounded">🎯 {targetPower}%</span>
             </div>
             {/* Power fill */}
             <div className="absolute bottom-0 w-full transition-all rounded-b-lg"
@@ -482,29 +482,29 @@ const SumoPushGame = ({ onComplete, onBack }) => {
           {phase === 'ready' && (
             <button onClick={startCharge}
               className="w-full py-4 bg-gradient-to-r from-red-500 to-orange-500 text-white rounded-xl font-black text-base border-b-4 border-red-700 active:scale-95 transition animate-pulse-soft">
-              ðŸ‘Š Â¡MantÃ©n Presionado para Cargar!
+              👊 ¡Mantén Presionado para Cargar!
             </button>
           )}
           {phase === 'charging' && (
             <button onClick={release} onTouchEnd={release}
               className="w-full py-4 bg-gradient-to-r from-orange-500 to-yellow-500 text-white rounded-xl font-black text-base border-b-4 border-orange-700 active:scale-95 transition animate-pulse">
-              âœ‹ Â¡SOLTAR para disparar!
+              ✋ ¡SOLTAR para disparar!
             </button>
           )}
           {phase === 'result' && (
             <div className="space-y-3">
               <div className={`p-4 rounded-xl border-2 animate-scale-in ${latestScore >= 80 ? 'bg-[#D7FFB8] border-[#58CC02]' : latestScore >= 50 ? 'bg-[#FFC800]/10 border-[#FFC800]' : 'bg-red-50 border-red-300'}`}>
                 <div className="text-center">
-                  <span className="text-3xl">{latestScore >= 80 ? 'ðŸŽ¯' : latestScore >= 50 ? 'ðŸ‘' : 'ðŸ’¨'}</span>
+                  <span className="text-3xl">{latestScore >= 80 ? '🎯' : latestScore >= 50 ? '👍' : '💨'}</span>
                   <p className="text-sm font-black mt-1" style={{ color: latestScore >= 80 ? '#58CC02' : latestScore >= 50 ? '#92400E' : '#EF4444' }}>
-                    {latestScore >= 80 ? 'Â¡Golpe Perfecto!' : latestScore >= 50 ? 'Buen intento' : 'Fuera de rango'}
+                    {latestScore >= 80 ? '¡Golpe Perfecto!' : latestScore >= 50 ? 'Buen intento' : 'Fuera de rango'}
                   </p>
-                  <p className="text-xs font-bold text-[#777]">PrecisiÃ³n: {latestScore}% Â· Diferencia: {Math.abs(power - targetPower)}%</p>
+                  <p className="text-xs font-bold text-[#777]">Precisión: {latestScore}% · Diferencia: {Math.abs(power - targetPower)}%</p>
                 </div>
               </div>
               {round + 1 < ROUNDS && (
                 <button onClick={nextRound} className="w-full py-3.5 bg-gradient-to-r from-red-500 to-orange-500 text-white rounded-xl font-black text-sm border-b-4 border-red-700 active:scale-95 transition">
-                  Siguiente Ronda â†’
+                  Siguiente Ronda →
                 </button>
               )}
             </div>
@@ -527,7 +527,7 @@ const SumoPushGame = ({ onComplete, onBack }) => {
 };
 
 /* ================================================================
-   ã€°ï¸ LINE FOLLOWER GAMES
+   〰️ LINE FOLLOWER GAMES
    ================================================================ */
 
 // Game 1: IR Sensor Calibration
@@ -541,11 +541,11 @@ const LineCalibrationGame = ({ onComplete, onBack }) => {
   const scanRef = useRef(null);
 
   const TRACK_PATTERNS = [
-    { name: 'LÃ­nea Recta', line: 50, width: 4 },
+    { name: 'Línea Recta', line: 50, width: 4 },
     { name: 'Curva Suave', line: 35, width: 5 },
     { name: 'Curva Cerrada', line: 20, width: 3 },
-    { name: 'LÃ­nea Ancha', line: 60, width: 8 },
-    { name: 'LÃ­nea Fina', line: 50, width: 2 },
+    { name: 'Línea Ancha', line: 60, width: 8 },
+    { name: 'Línea Fina', line: 50, width: 2 },
   ];
 
   const currentPattern = TRACK_PATTERNS[round];
@@ -611,13 +611,13 @@ const LineCalibrationGame = ({ onComplete, onBack }) => {
 
   return (
     <div className="min-h-full bg-[#F7F7F7] flex flex-col animate-fade-in">
-      <GameHeader title="CalibraciÃ³n de Sensores IR" subtitle={`PatrÃ³n: ${currentPattern.name}`} icon="ðŸ“Š" color="from-blue-500 to-cyan-600" onBack={onBack} />
+      <GameHeader title="Calibración de Sensores IR" subtitle={`Patrón: ${currentPattern.name}`} icon="📊" color="from-blue-500 to-cyan-600" onBack={onBack} />
       <ProgressBar current={round} total={TRACK_PATTERNS.length} color="#3B82F6" />
 
       <div className="flex-grow overflow-y-auto px-4 py-4 space-y-4">
         {/* Track visualization */}
         <div className="bg-white rounded-2xl border-2 border-[#E5E5E5] p-4">
-          <h3 className="text-sm font-black text-[#3C3C3C] mb-2">ðŸ›¤ï¸ Vista de la Pista</h3>
+          <h3 className="text-sm font-black text-[#3C3C3C] mb-2">🛤️ Vista de la Pista</h3>
           <div className="relative h-20 bg-gray-100 rounded-xl border border-gray-300 overflow-hidden">
             {/* Track line */}
             <div className="absolute top-0 bottom-0 bg-[#1F2937] rounded"
@@ -643,14 +643,14 @@ const LineCalibrationGame = ({ onComplete, onBack }) => {
             <p className="text-[10px] font-black text-[#AFAFAF]">SENSOR IZQ</p>
             <p className={`text-2xl font-black ${sensorL > threshold ? 'text-[#3B82F6]' : 'text-[#AFAFAF]'}`}>{sensorL}</p>
             <p className="text-[9px] font-bold" style={{ color: sensorL > threshold ? '#3B82F6' : '#AFAFAF' }}>
-              {sensorL > threshold ? 'â–  LÃNEA' : 'â–¡ PISO'}
+              {sensorL > threshold ? '■ LÍNEA' : '□ PISO'}
             </p>
           </div>
           <div className="bg-white rounded-xl border-2 border-[#E5E5E5] p-3 text-center">
             <p className="text-[10px] font-black text-[#AFAFAF]">SENSOR DER</p>
             <p className={`text-2xl font-black ${sensorR > threshold ? 'text-[#3B82F6]' : 'text-[#AFAFAF]'}`}>{sensorR}</p>
             <p className="text-[9px] font-bold" style={{ color: sensorR > threshold ? '#3B82F6' : '#AFAFAF' }}>
-              {sensorR > threshold ? 'â–  LÃNEA' : 'â–¡ PISO'}
+              {sensorR > threshold ? '■ LÍNEA' : '□ PISO'}
             </p>
           </div>
         </div>
@@ -658,7 +658,7 @@ const LineCalibrationGame = ({ onComplete, onBack }) => {
         {/* Threshold control */}
         <div className="bg-white rounded-2xl border-2 border-[#E5E5E5] p-4">
           <div className="flex justify-between mb-2">
-            <span className="text-xs font-black text-[#3C3C3C]">ðŸŽšï¸ Umbral de DetecciÃ³n</span>
+            <span className="text-xs font-black text-[#3C3C3C]">🎚️ Umbral de Detección</span>
             <span className="text-sm font-black text-[#3B82F6]">{threshold}</span>
           </div>
           <input type="range" min="100" max="900" value={threshold} onChange={e => setThreshold(+e.target.value)}
@@ -667,14 +667,14 @@ const LineCalibrationGame = ({ onComplete, onBack }) => {
             <span>100 (Muy sensible)</span><span>512</span><span>900 (Poco sensible)</span>
           </div>
           <p className="text-[10px] text-[#777] font-semibold mt-2">
-            Si el valor leÃ­do &gt; {threshold} â†’ LÃ­nea detectada. Si no â†’ Piso.
+            Si el valor leído &gt; {threshold} → Línea detectada. Si no → Piso.
           </p>
         </div>
 
         {/* Signal visualization */}
         {samples.length > 0 && (
           <div className="bg-[#1a1a2e] rounded-2xl border-2 border-gray-700 p-3">
-            <p className="text-[10px] font-black text-gray-400 mb-2">ðŸ“ˆ Historial de Lecturas</p>
+            <p className="text-[10px] font-black text-gray-400 mb-2">📈 Historial de Lecturas</p>
             <div className="flex items-end gap-[2px] h-16">
               {samples.slice(-30).map((s, i) => (
                 <div key={i} className="flex-1 flex flex-col justify-end gap-[1px]">
@@ -683,7 +683,7 @@ const LineCalibrationGame = ({ onComplete, onBack }) => {
               ))}
             </div>
             <div className="flex justify-between mt-1">
-              <span className="text-[9px] font-bold text-gray-500">PrecisiÃ³n: {lastAccuracy}%</span>
+              <span className="text-[9px] font-bold text-gray-500">Precisión: {lastAccuracy}%</span>
               <span className="text-[9px] font-bold text-gray-500">{samples.length} muestras</span>
             </div>
           </div>
@@ -695,11 +695,11 @@ const LineCalibrationGame = ({ onComplete, onBack }) => {
             className={`w-full py-3.5 rounded-xl text-sm font-black active:scale-95 transition border-b-4 ${
               scanning ? 'bg-gray-200 text-gray-400 border-gray-300 cursor-not-allowed' : 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white border-blue-700'
             }`}>
-            {scanning ? 'ðŸ“¡ Escaneando...' : `ðŸ“¡ Iniciar Escaneo (PatrÃ³n ${round + 1}/${TRACK_PATTERNS.length})`}
+            {scanning ? '📡 Escaneando...' : `📡 Iniciar Escaneo (Patrón ${round + 1}/${TRACK_PATTERNS.length})`}
           </button>
           {!scanning && samples.length > 0 && round + 1 < TRACK_PATTERNS.length && lastAccuracy >= 70 && (
             <button onClick={nextRound} className="w-full py-3 bg-white border-2 border-blue-300 text-blue-600 rounded-xl text-sm font-black active:scale-95 transition">
-              Siguiente PatrÃ³n â†’
+              Siguiente Patrón →
             </button>
           )}
         </div>
@@ -771,12 +771,12 @@ const LinePIDGame = ({ onComplete, onBack }) => {
 
   return (
     <div className="min-h-full bg-[#F7F7F7] flex flex-col animate-fade-in">
-      <GameHeader title="Ajuste PID" subtitle="Encuentra los valores perfectos de control" icon="ðŸŽ›ï¸" color="from-blue-500 to-cyan-600" onBack={onBack} />
+      <GameHeader title="Ajuste PID" subtitle="Encuentra los valores perfectos de control" icon="🎛️" color="from-blue-500 to-cyan-600" onBack={onBack} />
 
       <div className="flex-grow overflow-y-auto px-4 py-4 space-y-4">
         {/* Track simulation */}
         <div className="bg-white rounded-2xl border-2 border-[#E5E5E5] p-4">
-          <h3 className="text-sm font-black text-[#3C3C3C] mb-2">ðŸ Recorrido de Prueba</h3>
+          <h3 className="text-sm font-black text-[#3C3C3C] mb-2">🏁 Recorrido de Prueba</h3>
           <div className="relative h-32 bg-gray-100 rounded-xl border border-gray-300 overflow-hidden">
             <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
               {/* Target line (track) */}
@@ -804,18 +804,18 @@ const LinePIDGame = ({ onComplete, onBack }) => {
               )}
             </svg>
             {/* Labels */}
-            <div className="absolute top-1 left-2 text-[8px] font-bold text-gray-400">Pista (lÃ­nea oscura) vs Robot (azul)</div>
+            <div className="absolute top-1 left-2 text-[8px] font-bold text-gray-400">Pista (línea oscura) vs Robot (azul)</div>
           </div>
         </div>
 
         {/* PID Controls */}
         <div className="bg-white rounded-2xl border-2 border-[#E5E5E5] p-4 space-y-4">
-          <h3 className="text-sm font-black text-[#3C3C3C]">âš™ï¸ ParÃ¡metros PID</h3>
+          <h3 className="text-sm font-black text-[#3C3C3C]">⚙️ Parámetros PID</h3>
           
           {[
-            { label: 'P (Proporcional)', value: kp, set: setKp, max: 5, step: 0.1, color: '#3B82F6', desc: 'ReacciÃ³n al error actual â€” mÃ¡s alto = gira mÃ¡s rÃ¡pido' },
-            { label: 'I (Integral)', value: ki, set: setKi, max: 2, step: 0.1, color: '#10B981', desc: 'Corrige errores acumulados â€” evita desviarse a largo plazo' },
-            { label: 'D (Derivativo)', value: kd, set: setKd, max: 3, step: 0.1, color: '#60A5FA', desc: 'Anticipa cambios â€” suaviza la respuesta' },
+            { label: 'P (Proporcional)', value: kp, set: setKp, max: 5, step: 0.1, color: '#3B82F6', desc: 'Reacción al error actual — más alto = gira más rápido' },
+            { label: 'I (Integral)', value: ki, set: setKi, max: 2, step: 0.1, color: '#10B981', desc: 'Corrige errores acumulados — evita desviarse a largo plazo' },
+            { label: 'D (Derivativo)', value: kd, set: setKd, max: 3, step: 0.1, color: '#60A5FA', desc: 'Anticipa cambios — suaviza la respuesta' },
           ].map(param => (
             <div key={param.label}>
               <div className="flex justify-between mb-1">
@@ -835,11 +835,11 @@ const LinePIDGame = ({ onComplete, onBack }) => {
         {simResult !== null && (
           <div className={`p-4 rounded-2xl border-2 animate-scale-in ${simResult >= 75 ? 'bg-[#D7FFB8] border-[#58CC02]' : simResult >= 50 ? 'bg-[#FFC800]/10 border-[#FFC800]' : 'bg-red-50 border-red-300'}`}>
             <div className="text-center">
-              <span className="text-3xl">{simResult >= 85 ? 'ðŸ†' : simResult >= 65 ? 'ðŸ‘' : 'ðŸ”§'}</span>
+              <span className="text-3xl">{simResult >= 85 ? '🏆' : simResult >= 65 ? '👍' : '🔧'}</span>
               <p className="text-sm font-black mt-1" style={{ color: simResult >= 75 ? '#58CC02' : simResult >= 50 ? '#92400E' : '#EF4444' }}>
-                {simResult >= 85 ? 'Â¡Control Perfecto!' : simResult >= 65 ? 'Â¡Buen seguimiento!' : 'El robot se desvÃ­a mucho'}
+                {simResult >= 85 ? '¡Control Perfecto!' : simResult >= 65 ? '¡Buen seguimiento!' : 'El robot se desvía mucho'}
               </p>
-              <p className="text-xs text-[#777] font-bold">PrecisiÃ³n: {simResult}%</p>
+              <p className="text-xs text-[#777] font-bold">Precisión: {simResult}%</p>
             </div>
           </div>
         )}
@@ -855,13 +855,13 @@ const LinePIDGame = ({ onComplete, onBack }) => {
             className={`flex-[2] py-3.5 rounded-xl text-sm font-black active:scale-95 transition border-b-4 ${
               simulating ? 'bg-gray-200 text-gray-400 border-gray-300 cursor-not-allowed' : 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white border-blue-700'
             }`}>
-            {simulating ? 'ðŸŽï¸ Simulando...' : `â–¶ï¸ Simular Recorrido (Intento ${attempts + 1})`}
+            {simulating ? '🏎️ Simulando...' : `▶️ Simular Recorrido (Intento ${attempts + 1})`}
           </button>
         </div>
 
         {/* Hint */}
         <div className="bg-[#1CB0F6]/10 border border-[#1CB0F6]/30 rounded-2xl p-4">
-          <p className="text-xs font-bold text-[#0C4A6E]">ðŸ’¡ <b>Tip:</b> Un buen punto de partida es P=2.0, I=0.3, D=1.0. Si el robot oscila mucho, baja P. Si se desvÃ­a lentamente, sube I. Si reacciona muy brusco, sube D.</p>
+          <p className="text-xs font-bold text-[#0C4A6E]">💡 <b>Tip:</b> Un buen punto de partida es P=2.0, I=0.3, D=1.0. Si el robot oscila mucho, baja P. Si se desvía lentamente, sube I. Si reacciona muy brusco, sube D.</p>
         </div>
       </div>
     </div>
@@ -912,13 +912,13 @@ const LineSpeedGame = ({ onComplete, onBack }) => {
 
   return (
     <div className="min-h-full bg-[#F7F7F7] flex flex-col animate-fade-in">
-      <GameHeader title="Velocidad vs PrecisiÃ³n" subtitle="Encuentra la velocidad Ã³ptima para la pista" icon="ðŸŽï¸" color="from-blue-500 to-cyan-600" onBack={onBack} />
+      <GameHeader title="Velocidad vs Precisión" subtitle="Encuentra la velocidad óptima para la pista" icon="🏎️" color="from-blue-500 to-cyan-600" onBack={onBack} />
       <ProgressBar current={results.length} total={3} color="#3B82F6" />
 
       <div className="flex-grow overflow-y-auto px-4 py-4 space-y-4">
         {/* Track animation */}
         <div className="bg-white rounded-2xl border-2 border-[#E5E5E5] p-4">
-          <h3 className="text-sm font-black text-[#3C3C3C] mb-2">ðŸ Pista de Prueba</h3>
+          <h3 className="text-sm font-black text-[#3C3C3C] mb-2">🏁 Pista de Prueba</h3>
           <div className="relative h-16 bg-gray-100 rounded-xl border border-gray-300 overflow-hidden">
             {/* Track */}
             <div className="absolute top-1/2 left-4 right-4 h-1 bg-[#1F2937] -translate-y-1/2 rounded" />
@@ -927,7 +927,7 @@ const LineSpeedGame = ({ onComplete, onBack }) => {
             {/* Robot */}
             <div className="absolute top-1/2 -translate-y-1/2 w-8 h-6 bg-blue-500 rounded transition-all"
               style={{ left: `${5 + animPos * 0.85}%` }}>
-              <span className="text-[10px] text-white font-black flex items-center justify-center h-full">ðŸ¤–</span>
+              <span className="text-[10px] text-white font-black flex items-center justify-center h-full">🤖</span>
             </div>
           </div>
         </div>
@@ -935,7 +935,7 @@ const LineSpeedGame = ({ onComplete, onBack }) => {
         {/* Speed control */}
         <div className="bg-white rounded-2xl border-2 border-[#E5E5E5] p-4">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="text-sm font-black text-[#3C3C3C]">âš¡ Velocidad del Motor</h3>
+            <h3 className="text-sm font-black text-[#3C3C3C]">⚡ Velocidad del Motor</h3>
             <div className="bg-[#3B82F6]/10 px-3 py-1 rounded-full">
               <span className="text-sm font-black text-[#3B82F6]">{speed} PWM</span>
             </div>
@@ -944,16 +944,16 @@ const LineSpeedGame = ({ onComplete, onBack }) => {
             className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-500" />
           <div className="flex justify-between mt-2">
             <div className="text-center">
-              <span className="text-lg">ðŸ¢</span>
+              <span className="text-lg">🐢</span>
               <p className="text-[9px] text-[#AFAFAF] font-bold">Lento y preciso</p>
             </div>
             <div className="text-center">
-              <span className="text-lg">âš¡</span>
+              <span className="text-lg">⚡</span>
               <p className="text-[9px] text-[#AFAFAF] font-bold">Equilibrado</p>
             </div>
             <div className="text-center">
-              <span className="text-lg">ðŸš€</span>
-              <p className="text-[9px] text-[#AFAFAF] font-bold">RÃ¡pido pero loco</p>
+              <span className="text-lg">🚀</span>
+              <p className="text-[9px] text-[#AFAFAF] font-bold">Rápido pero loco</p>
             </div>
           </div>
           {/* Speedometer */}
@@ -967,7 +967,7 @@ const LineSpeedGame = ({ onComplete, onBack }) => {
         {results.length > 0 && (
           <div className="bg-white rounded-2xl border-2 border-[#E5E5E5] overflow-hidden">
             <div className="bg-[#3B82F6] px-4 py-2.5">
-              <h3 className="text-xs font-black text-white">ðŸ“‹ Resultados</h3>
+              <h3 className="text-xs font-black text-white">📋 Resultados</h3>
             </div>
             <div className="p-3 space-y-2">
               {results.map((r, i) => (
@@ -979,7 +979,7 @@ const LineSpeedGame = ({ onComplete, onBack }) => {
                       <p className="text-xs font-black text-[#3C3C3C]">{r.speed}</p>
                     </div>
                     <div>
-                      <p className="text-[9px] text-[#AFAFAF] font-bold">PrecisiÃ³n</p>
+                      <p className="text-[9px] text-[#AFAFAF] font-bold">Precisión</p>
                       <p className="text-xs font-black" style={{ color: r.accuracy >= 75 ? '#58CC02' : '#FF9600' }}>{r.accuracy}%</p>
                     </div>
                     <div>
@@ -999,7 +999,7 @@ const LineSpeedGame = ({ onComplete, onBack }) => {
           className={`w-full py-3.5 rounded-xl text-sm font-black active:scale-95 transition border-b-4 ${
             testing || results.length >= 3 ? 'bg-gray-200 text-gray-400 border-gray-300 cursor-not-allowed' : 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white border-blue-700'
           }`}>
-          {testing ? 'ðŸŽï¸ En carrera...' : results.length >= 3 ? 'âœ… 3 pruebas completadas' : `â–¶ï¸ Probar Velocidad ${speed} PWM`}
+          {testing ? '🏎️ En carrera...' : results.length >= 3 ? '✅ 3 pruebas completadas' : `▶️ Probar Velocidad ${speed} PWM`}
         </button>
       </div>
     </div>
@@ -1007,16 +1007,16 @@ const LineSpeedGame = ({ onComplete, onBack }) => {
 };
 
 /* ================================================================
-   ðŸ• DOG ROBOT GAMES
+   🐕 DOG ROBOT GAMES
    ================================================================ */
 
 // Game 1: Servo Calibration
 const DogServoGame = ({ onComplete, onBack }) => {
   const LEGS = [
-    { id: 'fl', name: 'Pata Frontal Izq', ideal: 90, emoji: 'ðŸ¦¿' },
-    { id: 'fr', name: 'Pata Frontal Der', ideal: 90, emoji: 'ðŸ¦¿' },
-    { id: 'bl', name: 'Pata Trasera Izq', ideal: 75, emoji: 'ðŸ¦¿' },
-    { id: 'br', name: 'Pata Trasera Der', ideal: 75, emoji: 'ðŸ¦¿' },
+    { id: 'fl', name: 'Pata Frontal Izq', ideal: 90, emoji: '🦿' },
+    { id: 'fr', name: 'Pata Frontal Der', ideal: 90, emoji: '🦿' },
+    { id: 'bl', name: 'Pata Trasera Izq', ideal: 75, emoji: '🦿' },
+    { id: 'br', name: 'Pata Trasera Der', ideal: 75, emoji: '🦿' },
   ];
 
   const [angles, setAngles] = useState({ fl: 45, fr: 135, bl: 45, br: 135 });
@@ -1064,12 +1064,12 @@ const DogServoGame = ({ onComplete, onBack }) => {
 
   return (
     <div className="min-h-full bg-[#F7F7F7] flex flex-col animate-fade-in">
-      <GameHeader title="CalibraciÃ³n de Servos" subtitle="Ajusta cada pata para que se pare correctamente" icon="ðŸ¦¿" color="from-amber-500 to-yellow-600" onBack={onBack} />
+      <GameHeader title="Calibración de Servos" subtitle="Ajusta cada pata para que se pare correctamente" icon="🦿" color="from-amber-500 to-yellow-600" onBack={onBack} />
 
       <div className="flex-grow overflow-y-auto px-4 py-4 space-y-4">
         {/* Dog visualization */}
         <div className="bg-white rounded-2xl border-2 border-[#E5E5E5] p-4">
-          <h3 className="text-sm font-black text-[#3C3C3C] mb-3">ðŸ• Vista Lateral del Perro</h3>
+          <h3 className="text-sm font-black text-[#3C3C3C] mb-3">🐕 Vista Lateral del Perro</h3>
           <div className="relative h-40 bg-gradient-to-b from-amber-50 to-amber-100 rounded-xl border border-amber-200 overflow-hidden">
             <svg className="w-full h-full" viewBox="0 0 200 100">
               {/* Ground */}
@@ -1097,7 +1097,7 @@ const DogServoGame = ({ onComplete, onBack }) => {
                   <ellipse cx={leg.x} cy={55 + bodyTilt * 0.3 + leg.h + 2} rx="5" ry="3" fill={leg.selected ? '#B45309' : '#D97706'} />
                   {/* Angle indicator */}
                   <text x={leg.x} y={55 + bodyTilt * 0.3 + leg.h / 2} textAnchor="middle" fontSize="5"
-                    fill={leg.selected ? '#B45309' : '#92400E'} fontWeight="bold">{angles[leg.id]}Â°</text>
+                    fill={leg.selected ? '#B45309' : '#92400E'} fontWeight="bold">{angles[leg.id]}°</text>
                 </g>
               ))}
               {/* Stability indicator */}
@@ -1118,7 +1118,7 @@ const DogServoGame = ({ onComplete, onBack }) => {
               <span className="text-lg block">{leg.emoji}</span>
               <span className="text-[9px] font-black text-[#3C3C3C]">{leg.name.split(' ').slice(-2).join(' ')}</span>
               <span className="text-[10px] font-black block mt-0.5" style={{ color: Math.abs(angles[leg.id] - leg.ideal) < 5 ? '#58CC02' : '#FF9600' }}>
-                {angles[leg.id]}Â°
+                {angles[leg.id]}°
               </span>
             </button>
           ))}
@@ -1128,13 +1128,13 @@ const DogServoGame = ({ onComplete, onBack }) => {
         <div className="bg-white rounded-2xl border-2 border-amber-300 p-4">
           <div className="flex justify-between mb-2">
             <span className="text-sm font-black text-[#3C3C3C]">{LEGS[currentLeg].emoji} {LEGS[currentLeg].name}</span>
-            <span className="text-lg font-black text-amber-600">{angles[LEGS[currentLeg].id]}Â°</span>
+            <span className="text-lg font-black text-amber-600">{angles[LEGS[currentLeg].id]}°</span>
           </div>
           <input type="range" min="0" max="180" value={angles[LEGS[currentLeg].id]}
             onChange={e => setAngle(LEGS[currentLeg].id, +e.target.value)}
             className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-amber-500" />
           <div className="flex justify-between text-[9px] text-[#AFAFAF] font-bold mt-1">
-            <span>0Â° (Recogida)</span><span>90Â° (Recta)</span><span>180Â° (Extendida)</span>
+            <span>0° (Recogida)</span><span>90° (Recta)</span><span>180° (Extendida)</span>
           </div>
           {/* Quick presets */}
           <div className="flex gap-2 mt-3">
@@ -1143,7 +1143,7 @@ const DogServoGame = ({ onComplete, onBack }) => {
                 className={`flex-1 py-1.5 rounded-lg text-[10px] font-black transition active:scale-95 ${
                   angles[LEGS[currentLeg].id] === preset ? 'bg-amber-500 text-white' : 'bg-amber-50 text-amber-700 border border-amber-200'
                 }`}>
-                {preset}Â°
+                {preset}°
               </button>
             ))}
           </div>
@@ -1153,9 +1153,9 @@ const DogServoGame = ({ onComplete, onBack }) => {
         {testResult !== null && (
           <div className={`p-4 rounded-2xl border-2 animate-scale-in ${testResult >= 80 ? 'bg-[#D7FFB8] border-[#58CC02]' : 'bg-[#FFC800]/10 border-[#FFC800]'}`}>
             <div className="text-center">
-              <span className="text-3xl">{testResult >= 90 ? 'ðŸ•' : testResult >= 70 ? 'ðŸ¶' : 'ðŸ¾'}</span>
+              <span className="text-3xl">{testResult >= 90 ? '🐕' : testResult >= 70 ? '🐶' : '🐾'}</span>
               <p className="text-sm font-black mt-1" style={{ color: testResult >= 80 ? '#58CC02' : '#92400E' }}>
-                {testResult >= 90 ? 'Â¡El perro se para perfecto!' : testResult >= 70 ? 'Casi equilibrado...' : 'El perro se tambalea'}
+                {testResult >= 90 ? '¡El perro se para perfecto!' : testResult >= 70 ? 'Casi equilibrado...' : 'El perro se tambalea'}
               </p>
             </div>
           </div>
@@ -1166,11 +1166,11 @@ const DogServoGame = ({ onComplete, onBack }) => {
           className={`w-full py-3.5 rounded-xl text-sm font-black active:scale-95 transition border-b-4 ${
             testing ? 'bg-gray-200 text-gray-400 border-gray-300 cursor-not-allowed' : 'bg-gradient-to-r from-amber-500 to-yellow-500 text-white border-amber-700'
           }`}>
-          {testing ? 'ðŸ• Probando postura...' : `ðŸ§ª Probar Postura (Intento ${attempts + 1})`}
+          {testing ? '🐕 Probando postura...' : `🧪 Probar Postura (Intento ${attempts + 1})`}
         </button>
 
         <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4">
-          <p className="text-xs font-bold text-[#92400E]">ðŸ’¡ <b>Tip:</b> Las patas delanteras deben estar a ~90Â° para soportar la cabeza. Las traseras a ~75Â° le dan un Ã¡ngulo de impulso para caminar.</p>
+          <p className="text-xs font-bold text-[#92400E]">💡 <b>Tip:</b> Las patas delanteras deben estar a ~90° para soportar la cabeza. Las traseras a ~75° le dan un ángulo de impulso para caminar.</p>
         </div>
       </div>
     </div>
@@ -1265,12 +1265,12 @@ const DogWalkGame = ({ onComplete, onBack }) => {
 
   return (
     <div className="min-h-full bg-[#F7F7F7] flex flex-col animate-fade-in">
-      <GameHeader title="PatrÃ³n de Marcha" subtitle="DiseÃ±a el ciclo de caminata del perro" icon="ðŸ¾" color="from-amber-500 to-yellow-600" onBack={onBack} />
+      <GameHeader title="Patrón de Marcha" subtitle="Diseña el ciclo de caminata del perro" icon="🐾" color="from-amber-500 to-yellow-600" onBack={onBack} />
 
       <div className="flex-grow overflow-y-auto px-4 py-4 space-y-4">
         {/* Dog leg preview */}
         <div className="bg-white rounded-2xl border-2 border-[#E5E5E5] p-4">
-          <h3 className="text-sm font-black text-[#3C3C3C] mb-2">ðŸ• Vista Superior</h3>
+          <h3 className="text-sm font-black text-[#3C3C3C] mb-2">🐕 Vista Superior</h3>
           <div className="relative w-48 h-32 mx-auto bg-amber-50 rounded-xl border border-amber-200">
             <svg className="w-full h-full" viewBox="0 0 120 80">
               {/* Body */}
@@ -1318,7 +1318,7 @@ const DogWalkGame = ({ onComplete, onBack }) => {
         {/* Timeline editor */}
         <div className="bg-white rounded-2xl border-2 border-[#E5E5E5] p-4">
           <div className="flex justify-between items-center mb-3">
-            <h3 className="text-sm font-black text-[#3C3C3C]">ðŸŽµ Secuencia de Pasos</h3>
+            <h3 className="text-sm font-black text-[#3C3C3C]">🎵 Secuencia de Pasos</h3>
             {pattern.length < 8 && (
               <button onClick={addStep} className="text-xs font-black text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200 active:scale-95 transition">
                 + Paso
@@ -1352,11 +1352,11 @@ const DogWalkGame = ({ onComplete, onBack }) => {
                         : 'border-[#E5E5E5] bg-gray-50'
                     }`}
                     style={step.includes(legId) ? { backgroundColor: `${LEG_COLORS[legId]}20`, borderColor: LEG_COLORS[legId] } : {}}>
-                    {step.includes(legId) ? 'ðŸ¦¶' : ''}
+                    {step.includes(legId) ? '🦶' : ''}
                   </button>
                 ))}
                 {pattern.length > 2 && (
-                  <button onClick={() => removeStep(stepIdx)} className="w-6 h-6 text-[10px] text-red-400 hover:text-red-600 transition">âœ•</button>
+                  <button onClick={() => removeStep(stepIdx)} className="w-6 h-6 text-[10px] text-red-400 hover:text-red-600 transition">✕</button>
                 )}
               </div>
             ))}
@@ -1368,11 +1368,11 @@ const DogWalkGame = ({ onComplete, onBack }) => {
         {score !== null && (
           <div className={`p-4 rounded-2xl border-2 animate-scale-in ${score >= 65 ? 'bg-[#D7FFB8] border-[#58CC02]' : 'bg-[#FFC800]/10 border-[#FFC800]'}`}>
             <div className="text-center">
-              <span className="text-3xl">{score >= 85 ? 'ðŸ•' : score >= 65 ? 'ðŸ¶' : 'ðŸ¾'}</span>
+              <span className="text-3xl">{score >= 85 ? '🐕' : score >= 65 ? '🐶' : '🐾'}</span>
               <p className="text-sm font-black mt-1" style={{ color: score >= 65 ? '#58CC02' : '#92400E' }}>
-                {score >= 85 ? 'Â¡Marcha perfecta!' : score >= 65 ? 'Â¡Buena caminata!' : 'El perro se tropieza...'}
+                {score >= 85 ? '¡Marcha perfecta!' : score >= 65 ? '¡Buena caminata!' : 'El perro se tropieza...'}
               </p>
-              <p className="text-xs text-[#777] font-bold">PuntuaciÃ³n: {score}/100</p>
+              <p className="text-xs text-[#777] font-bold">Puntuación: {score}/100</p>
             </div>
           </div>
         )}
@@ -1384,11 +1384,11 @@ const DogWalkGame = ({ onComplete, onBack }) => {
             : pattern.every(s => s.length === 0) ? 'bg-gray-200 text-gray-400 border-gray-300 cursor-not-allowed'
             : 'bg-gradient-to-r from-amber-500 to-yellow-500 text-white border-amber-700'
           }`}>
-          {playing ? 'ðŸ¾ Caminando...' : 'â–¶ï¸ Probar Caminata'}
+          {playing ? '🐾 Caminando...' : '▶️ Probar Caminata'}
         </button>
 
         <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4">
-          <p className="text-xs font-bold text-[#92400E]">ðŸ’¡ <b>Tip:</b> Un patrÃ³n diagonal (FI+TD, luego FD+TI) es el mÃ¡s estable. Nunca levantes mÃ¡s de 2 patas a la vez o el perro se cae.</p>
+          <p className="text-xs font-bold text-[#92400E]">💡 <b>Tip:</b> Un patrón diagonal (FI+TD, luego FD+TI) es el más estable. Nunca levantes más de 2 patas a la vez o el perro se cae.</p>
         </div>
       </div>
     </div>
@@ -1398,12 +1398,12 @@ const DogWalkGame = ({ onComplete, onBack }) => {
 // Game 3: Sound Command Training
 const DogSoundGame = ({ onComplete, onBack }) => {
   const COMMANDS = [
-    { id: 'sit', action: 'Sentarse', icon: 'ðŸ•', sound: '2 beeps cortos', freq: '500Hz Ã— 2' },
-    { id: 'walk', action: 'Caminar', icon: 'ðŸš¶', sound: '1 beep largo', freq: '800Hz Ã— 1' },
-    { id: 'bark', action: 'Ladrar', icon: 'ðŸ”Š', sound: '3 beeps rÃ¡pidos', freq: '1000Hz Ã— 3' },
-    { id: 'spin', action: 'Girar', icon: 'ðŸ”„', sound: 'Tono ascendente', freq: '400â†’1200Hz' },
-    { id: 'stop', action: 'Detener', icon: 'âœ‹', sound: '1 beep grave', freq: '200Hz Ã— 1' },
-    { id: 'dance', action: 'Bailar', icon: 'ðŸ’ƒ', sound: 'MelodÃ­a (3 notas)', freq: '600-800-1000Hz' },
+    { id: 'sit', action: 'Sentarse', icon: '🐕', sound: '2 beeps cortos', freq: '500Hz × 2' },
+    { id: 'walk', action: 'Caminar', icon: '🚶', sound: '1 beep largo', freq: '800Hz × 1' },
+    { id: 'bark', action: 'Ladrar', icon: '🔊', sound: '3 beeps rápidos', freq: '1000Hz × 3' },
+    { id: 'spin', action: 'Girar', icon: '🔄', sound: 'Tono ascendente', freq: '400→1200Hz' },
+    { id: 'stop', action: 'Detener', icon: '✋', sound: '1 beep grave', freq: '200Hz × 1' },
+    { id: 'dance', action: 'Bailar', icon: '💃', sound: 'Melodía (3 notas)', freq: '600-800-1000Hz' },
   ];
 
   const [round, setRound] = useState(0);
@@ -1450,16 +1450,16 @@ const DogSoundGame = ({ onComplete, onBack }) => {
 
   return (
     <div className="min-h-full bg-[#F7F7F7] flex flex-col animate-fade-in">
-      <GameHeader title="Entrenamiento de Comandos" subtitle="Asocia cada sonido con la acciÃ³n correcta" icon="ðŸŽµ" color="from-amber-500 to-yellow-600" onBack={onBack} />
+      <GameHeader title="Entrenamiento de Comandos" subtitle="Asocia cada sonido con la acción correcta" icon="🎵" color="from-amber-500 to-yellow-600" onBack={onBack} />
       <ProgressBar current={round} total={COMMANDS.length} color="#F59E0B" />
 
       <div className="flex-grow overflow-y-auto px-4 py-4 space-y-4">
         {/* Sound card */}
         <div className="bg-white rounded-2xl border-2 border-[#E5E5E5] p-5 text-center animate-scale-in">
           <div className="w-16 h-16 mx-auto bg-gradient-to-br from-amber-400 to-orange-500 rounded-2xl flex items-center justify-center text-3xl mb-3 border-b-4 border-orange-600">
-            ðŸ”Š
+            🔊
           </div>
-          <p className="text-xs font-black text-[#AFAFAF] uppercase tracking-wider mb-1">SeÃ±al del Buzzer</p>
+          <p className="text-xs font-black text-[#AFAFAF] uppercase tracking-wider mb-1">Señal del Buzzer</p>
           <h2 className="text-xl font-black text-[#3C3C3C] mb-1">{currentCommand.sound}</h2>
           <p className="text-sm font-bold text-[#777]">{currentCommand.freq}</p>
           
@@ -1475,7 +1475,7 @@ const DogSoundGame = ({ onComplete, onBack }) => {
           </div>
         </div>
 
-        <p className="text-center text-sm font-black text-[#3C3C3C]">Â¿QuÃ© acciÃ³n corresponde a este sonido?</p>
+        <p className="text-center text-sm font-black text-[#3C3C3C]">¿Qué acción corresponde a este sonido?</p>
 
         {/* Options */}
         <div className="space-y-2">
@@ -1503,9 +1503,9 @@ const DogSoundGame = ({ onComplete, onBack }) => {
 
         {/* Score bar */}
         <div className="flex gap-3 justify-center">
-          <span className="bg-green-50 text-green-700 px-3 py-1.5 rounded-full text-xs font-black">âœ… {correct}</span>
-          <span className="bg-red-50 text-red-600 px-3 py-1.5 rounded-full text-xs font-black">âŒ {wrong}</span>
-          <span className="bg-gray-50 text-gray-600 px-3 py-1.5 rounded-full text-xs font-black">ðŸ“Š {round + 1}/{COMMANDS.length}</span>
+          <span className="bg-green-50 text-green-700 px-3 py-1.5 rounded-full text-xs font-black">✅ {correct}</span>
+          <span className="bg-red-50 text-red-600 px-3 py-1.5 rounded-full text-xs font-black">❌ {wrong}</span>
+          <span className="bg-gray-50 text-gray-600 px-3 py-1.5 rounded-full text-xs font-black">📊 {round + 1}/{COMMANDS.length}</span>
         </div>
       </div>
     </div>
@@ -1518,26 +1518,26 @@ const DogSoundGame = ({ onComplete, onBack }) => {
 
 const ROBOT_GAMES = {
   sumo: [
-    { id: 'sumo_wiring', name: 'ConexiÃ³n de Circuitos', desc: 'Conecta los cables del motor y sensores a los pines correctos del Arduino', icon: 'ðŸ”Œ', difficulty: 'Medio', xp: 50, Component: SumoWiringGame },
-    { id: 'sumo_balance', name: 'Centro de Gravedad', desc: 'Ajusta la distribuciÃ³n de peso para mÃ¡xima estabilidad en el combate', icon: 'âš–ï¸', difficulty: 'FÃ¡cil', xp: 30, Component: SumoBalanceGame },
-    { id: 'sumo_push', name: 'Prueba de Empuje', desc: 'Calibra la potencia de los motores para el golpe perfecto', icon: 'ðŸ’ª', difficulty: 'DifÃ­cil', xp: 60, Component: SumoPushGame },
+    { id: 'sumo_wiring', name: 'Conexión de Circuitos', desc: 'Conecta los cables del motor y sensores a los pines correctos del Arduino', icon: '🔌', difficulty: 'Medio', xp: 50, Component: SumoWiringGame },
+    { id: 'sumo_balance', name: 'Centro de Gravedad', desc: 'Ajusta la distribución de peso para máxima estabilidad en el combate', icon: '⚖️', difficulty: 'Fácil', xp: 30, Component: SumoBalanceGame },
+    { id: 'sumo_push', name: 'Prueba de Empuje', desc: 'Calibra la potencia de los motores para el golpe perfecto', icon: '💪', difficulty: 'Difícil', xp: 60, Component: SumoPushGame },
   ],
   line: [
-    { id: 'line_calibration', name: 'CalibraciÃ³n de Sensores IR', desc: 'Ajusta el umbral de detecciÃ³n para diferentes patrones de pista', icon: 'ðŸ“Š', difficulty: 'Medio', xp: 50, Component: LineCalibrationGame },
-    { id: 'line_pid', name: 'Ajuste PID', desc: 'Encuentra los valores perfectos para seguir la lÃ­nea suavemente', icon: 'ðŸŽ›ï¸', difficulty: 'DifÃ­cil', xp: 70, Component: LinePIDGame },
-    { id: 'line_speed', name: 'Velocidad vs PrecisiÃ³n', desc: 'Encuentra la velocidad Ã³ptima sin salirse de la pista', icon: 'ðŸŽï¸', difficulty: 'FÃ¡cil', xp: 40, Component: LineSpeedGame },
+    { id: 'line_calibration', name: 'Calibración de Sensores IR', desc: 'Ajusta el umbral de detección para diferentes patrones de pista', icon: '📊', difficulty: 'Medio', xp: 50, Component: LineCalibrationGame },
+    { id: 'line_pid', name: 'Ajuste PID', desc: 'Encuentra los valores perfectos para seguir la línea suavemente', icon: '🎛️', difficulty: 'Difícil', xp: 70, Component: LinePIDGame },
+    { id: 'line_speed', name: 'Velocidad vs Precisión', desc: 'Encuentra la velocidad óptima sin salirse de la pista', icon: '🏎️', difficulty: 'Fácil', xp: 40, Component: LineSpeedGame },
   ],
   dog: [
-    { id: 'dog_servo', name: 'CalibraciÃ³n de Servos', desc: 'Ajusta el Ã¡ngulo de cada pata para que se pare correctamente', icon: 'ðŸ¦¿', difficulty: 'Medio', xp: 50, Component: DogServoGame },
-    { id: 'dog_walk', name: 'PatrÃ³n de Marcha', desc: 'DiseÃ±a la secuencia de movimiento para que camine naturalmente', icon: 'ðŸ¾', difficulty: 'DifÃ­cil', xp: 60, Component: DogWalkGame },
-    { id: 'dog_sound', name: 'Entrenamiento de Comandos', desc: 'Asocia seÃ±ales del buzzer con acciones del robot', icon: 'ðŸŽµ', difficulty: 'FÃ¡cil', xp: 35, Component: DogSoundGame },
+    { id: 'dog_servo', name: 'Calibración de Servos', desc: 'Ajusta el ángulo de cada pata para que se pare correctamente', icon: '🦿', difficulty: 'Medio', xp: 50, Component: DogServoGame },
+    { id: 'dog_walk', name: 'Patrón de Marcha', desc: 'Diseña la secuencia de movimiento para que camine naturalmente', icon: '🐾', difficulty: 'Difícil', xp: 60, Component: DogWalkGame },
+    { id: 'dog_sound', name: 'Entrenamiento de Comandos', desc: 'Asocia señales del buzzer con acciones del robot', icon: '🎵', difficulty: 'Fácil', xp: 35, Component: DogSoundGame },
   ],
 };
 
 const DIFFICULTY_COLORS = {
-  'FÃ¡cil': { bg: 'bg-green-50', text: 'text-green-700', border: 'border-green-200' },
+  'Fácil': { bg: 'bg-green-50', text: 'text-green-700', border: 'border-green-200' },
   'Medio': { bg: 'bg-yellow-50', text: 'text-yellow-700', border: 'border-yellow-200' },
-  'DifÃ­cil': { bg: 'bg-red-50', text: 'text-red-600', border: 'border-red-200' },
+  'Difícil': { bg: 'bg-red-50', text: 'text-red-600', border: 'border-red-200' },
 };
 
 const ROBOT_COLORS = {
@@ -1552,7 +1552,7 @@ export default function RobotBuildGamesHub({ robotType, onBack }) {
   const [showComplete, setShowComplete] = useState(null);
 
   const games = ROBOT_GAMES[robotType] || [];
-  const robotColor = ROBOT_COLORS[robotType] || 'from-blue-500 to-blue-600';
+  const robotColor = ROBOT_COLORS[robotType] || 'from-violet-500 to-purple-600';
 
   const handleGameComplete = (gameId, score, maxScore, stars) => {
     const xp = games.find(g => g.id === gameId)?.xp || 30;
@@ -1604,16 +1604,16 @@ export default function RobotBuildGamesHub({ robotType, onBack }) {
       <div className={`bg-gradient-to-r ${robotColor} rounded-2xl p-4 border-b-4 border-black/10`}>
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-base font-black text-white">ðŸŽ® Mini-Juegos de Armado</h3>
-            <p className="text-xs text-white/70 font-bold mt-0.5">DesafÃ­os personalizados para tu robot</p>
+            <h3 className="text-base font-black text-white">🎮 Mini-Juegos de Armado</h3>
+            <p className="text-xs text-white/70 font-bold mt-0.5">Desafíos personalizados para tu robot</p>
           </div>
           <div className="flex gap-2">
             <div className="bg-white/20 backdrop-blur-sm px-2.5 py-1.5 rounded-xl text-center">
-              <p className="text-[10px] text-white/60 font-bold">â­ Estrellas</p>
+              <p className="text-[10px] text-white/60 font-bold">⭐ Estrellas</p>
               <p className="text-sm font-black text-white">{totalStars}/{games.length * 3}</p>
             </div>
             <div className="bg-white/20 backdrop-blur-sm px-2.5 py-1.5 rounded-xl text-center">
-              <p className="text-[10px] text-white/60 font-bold">âš¡ XP</p>
+              <p className="text-[10px] text-white/60 font-bold">⚡ XP</p>
               <p className="text-sm font-black text-white">{totalXP}</p>
             </div>
           </div>
@@ -1640,7 +1640,7 @@ export default function RobotBuildGamesHub({ robotType, onBack }) {
               <div className="flex-grow min-w-0">
                 <div className="flex items-center gap-2 mb-0.5">
                   <h4 className="text-sm font-black text-[#3C3C3C] truncate">{game.name}</h4>
-                  {result && <span className="text-xs">âœ…</span>}
+                  {result && <span className="text-xs">✅</span>}
                 </div>
                 <p className="text-[11px] text-[#777] font-semibold leading-snug mb-2">{game.desc}</p>
                 <div className="flex items-center gap-2 flex-wrap">
@@ -1648,16 +1648,16 @@ export default function RobotBuildGamesHub({ robotType, onBack }) {
                     {game.difficulty}
                   </span>
                   <span className="text-[9px] font-black text-[#60A5FA] bg-[#DBEAFE] px-2 py-0.5 rounded-full">
-                    âš¡ {game.xp} XP
+                    ⚡ {game.xp} XP
                   </span>
                   {result && (
                     <span className="text-[9px] font-black text-[#58CC02] bg-[#D7FFB8] px-2 py-0.5 rounded-full flex items-center gap-0.5">
-                      {Array.from({ length: result.stars }).map((_, i) => <span key={i}>â­</span>)} {result.score}/{result.maxScore}
+                      {Array.from({ length: result.stars }).map((_, i) => <span key={i}>⭐</span>)} {result.score}/{result.maxScore}
                     </span>
                   )}
                 </div>
               </div>
-              <div className="flex-shrink-0 text-[#E5E5E5]">â–¶</div>
+              <div className="flex-shrink-0 text-[#E5E5E5]">▶</div>
             </div>
           </button>
         );
@@ -1665,9 +1665,9 @@ export default function RobotBuildGamesHub({ robotType, onBack }) {
 
       {games.length === 0 && (
         <div className="bg-white rounded-2xl border-2 border-[#E5E5E5] p-6 text-center">
-          <span className="text-4xl block mb-2">ðŸ”§</span>
+          <span className="text-4xl block mb-2">🔧</span>
           <p className="text-sm font-black text-[#3C3C3C]">Modo Libre</p>
-          <p className="text-xs text-[#777] font-semibold mt-1">Los mini-juegos estÃ¡n disponibles para robots con plantilla predefinida</p>
+          <p className="text-xs text-[#777] font-semibold mt-1">Los mini-juegos están disponibles para robots con plantilla predefinida</p>
         </div>
       )}
     </div>

@@ -1,40 +1,40 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Trophy, Star, Lock, CheckCircle, Zap } from 'lucide-react';
 
 const ACHIEVEMENTS = [
-  { id: 'first_module', title: 'Primer Paso', description: 'Completa tu primer mÃ³dulo', icon: 'ðŸ‘£', category: 'Aprendizaje', points: 10, condition: (s) => s.modulesCompleted >= 1, rarity: 'comÃºn' },
-  { id: 'electrician', title: 'Electricista Junior', description: 'Aprueba el Quiz de Electricidad >70%', icon: 'âš¡', category: 'Aprendizaje', points: 25, condition: (s) => s.quizScores?.mod_electr >= 70, rarity: 'raro' },
-  { id: 'bookworm', title: 'RatÃ³n de Biblioteca', description: 'Visita 5 mÃ³dulos diferentes', icon: 'ðŸ“š', category: 'Aprendizaje', points: 15, condition: (s) => s.modulesVisited >= 5, rarity: 'comÃºn' },
-  { id: 'scholar', title: 'Erudito Digital', description: 'Completa mÃ³dulos bÃ¡sicos (1-6)', icon: 'ðŸŽ“', category: 'Aprendizaje', points: 50, condition: (s) => s.modulesCompleted >= 6, rarity: 'Ã©pico' },
-  { id: 'quiz_starter', title: 'Inquisitivo', description: 'Completa tu primer Quiz', icon: 'â“', category: 'Quiz', points: 10, condition: (s) => s.quizzesCompleted >= 1, rarity: 'comÃºn' },
-  { id: 'perfect_score', title: 'PuntuaciÃ³n Perfecta', description: 'ObtÃ©n 100% en cualquier Quiz', icon: 'ðŸ’¯', category: 'Quiz', points: 50, condition: (s) => s.perfectQuizzes >= 1, rarity: 'legendario' },
-  { id: 'quiz_streak', title: 'Racha Imparable', description: '5 preguntas correctas seguidas', icon: 'ðŸ”¥', category: 'Quiz', points: 30, condition: (s) => s.maxStreak >= 5, rarity: 'raro' },
-  { id: 'speed_demon', title: 'Rayo Veloz', description: 'Responde correcta en <5 segundos', icon: 'âš¡', category: 'Quiz', points: 20, condition: (s) => s.fastestCorrectAnswer <= 5, rarity: 'raro' },
-  { id: 'first_code', title: 'Programador Novato', description: 'Ejecuta tu primer cÃ³digo', icon: 'ðŸ’»', category: 'ProgramaciÃ³n', points: 10, condition: (s) => s.codesExecuted >= 1, rarity: 'comÃºn' },
-  { id: 'ai_coder', title: 'Asistido por IA', description: 'Genera cÃ³digo con el Asistente IA', icon: 'ðŸ¤–', category: 'ProgramaciÃ³n', points: 15, condition: (s) => s.aiCodesGenerated >= 1, rarity: 'comÃºn' },
-  { id: 'bug_free', title: 'Libre de Bugs', description: '3 programas sin errores seguidos', icon: 'ðŸ›', category: 'ProgramaciÃ³n', points: 25, condition: (s) => s.consecutiveNoErrors >= 3, rarity: 'raro' },
-  { id: 'code_master', title: 'Maestro del CÃ³digo', description: 'Ejecuta 10 programas', icon: 'ðŸ‘¨â€ðŸ’»', category: 'ProgramaciÃ³n', points: 30, condition: (s) => s.codesExecuted >= 10, rarity: 'Ã©pico' },
-  { id: 'first_challenge', title: 'Primer Reto', description: 'Completa tu primer reto de cÃ³digo', icon: 'ðŸ§©', category: 'Retos', points: 10, condition: (s) => s.challengesCompleted >= 1, rarity: 'comÃºn' },
-  { id: 'five_challenges', title: 'Racha de 5', description: 'Completa 5 retos de programaciÃ³n', icon: 'ðŸ”¥', category: 'Retos', points: 20, condition: (s) => s.challengesCompleted >= 5, rarity: 'raro' },
-  { id: 'twelve_challenges', title: 'Media Docena x2', description: 'Completa 12 retos (la mitad)', icon: 'âš¡', category: 'Retos', points: 35, condition: (s) => s.challengesCompleted >= 12, rarity: 'Ã©pico' },
-  { id: 'all_challenges', title: 'Maestro de Retos', description: 'Completa los 24 retos', icon: 'ðŸ†', category: 'Retos', points: 75, condition: (s) => s.challengesCompleted >= 24, rarity: 'legendario' },
-  { id: 'python_master', title: 'Pythonista', description: 'Completa todos los retos de Python', icon: 'ðŸ', category: 'Retos', points: 30, condition: (s) => s.challengesPython >= 14, rarity: 'Ã©pico' },
-  { id: 'arduino_hero', title: 'HÃ©roe Arduino', description: 'Completa todos los retos de Arduino', icon: 'ðŸ”·', category: 'Retos', points: 30, condition: (s) => s.challengesArduino >= 8, rarity: 'Ã©pico' },
-  { id: 'beginner_done', title: 'Base SÃ³lida', description: 'Completa todos los retos de Principiante', icon: 'ðŸŒ±', category: 'Retos', points: 15, condition: (s) => s.challengesLevel1 >= 6, rarity: 'raro' },
-  { id: 'advanced_done', title: 'Nivel Experto', description: 'Completa todos los retos Avanzados', icon: 'ðŸŽ–ï¸', category: 'Retos', points: 50, condition: (s) => s.challengesLevel4 >= 6, rarity: 'legendario' },
-  { id: 'led_builder', title: 'Constructor de LED', description: 'Completa la guÃ­a de LED', icon: 'ðŸ’¡', category: 'PrÃ¡ctica', points: 20, condition: (s) => s.ledGuideCompleted === true, rarity: 'raro' },
-  { id: 'class_regular', title: 'Alumno Dedicado', description: 'Asiste a 10 clases', icon: 'ðŸ«', category: 'PrÃ¡ctica', points: 30, condition: (s) => s.classesAttended >= 10, rarity: 'raro' },
-  { id: 'explorer', title: 'Explorador Total', description: 'Usa todas las secciones', icon: 'ðŸ—ºï¸', category: 'Especial', points: 25, condition: (s) => s.sectionsVisited >= 5, rarity: 'raro' },
-  { id: 'points_100', title: 'CenturiÃ³n', description: 'Acumula 100 puntos', icon: 'ðŸ’Ž', category: 'Especial', points: 0, condition: (s) => s.totalPoints >= 100, rarity: 'Ã©pico' },
+  { id: 'first_module', title: 'Primer Paso', description: 'Completa tu primer módulo', icon: '👣', category: 'Aprendizaje', points: 10, condition: (s) => s.modulesCompleted >= 1, rarity: 'común' },
+  { id: 'electrician', title: 'Electricista Junior', description: 'Aprueba el Quiz de Electricidad >70%', icon: '⚡', category: 'Aprendizaje', points: 25, condition: (s) => s.quizScores?.mod_electr >= 70, rarity: 'raro' },
+  { id: 'bookworm', title: 'Ratón de Biblioteca', description: 'Visita 5 módulos diferentes', icon: '📚', category: 'Aprendizaje', points: 15, condition: (s) => s.modulesVisited >= 5, rarity: 'común' },
+  { id: 'scholar', title: 'Erudito Digital', description: 'Completa módulos básicos (1-6)', icon: '🎓', category: 'Aprendizaje', points: 50, condition: (s) => s.modulesCompleted >= 6, rarity: 'épico' },
+  { id: 'quiz_starter', title: 'Inquisitivo', description: 'Completa tu primer Quiz', icon: '❓', category: 'Quiz', points: 10, condition: (s) => s.quizzesCompleted >= 1, rarity: 'común' },
+  { id: 'perfect_score', title: 'Puntuación Perfecta', description: 'Obtén 100% en cualquier Quiz', icon: '💯', category: 'Quiz', points: 50, condition: (s) => s.perfectQuizzes >= 1, rarity: 'legendario' },
+  { id: 'quiz_streak', title: 'Racha Imparable', description: '5 preguntas correctas seguidas', icon: '🔥', category: 'Quiz', points: 30, condition: (s) => s.maxStreak >= 5, rarity: 'raro' },
+  { id: 'speed_demon', title: 'Rayo Veloz', description: 'Responde correcta en <5 segundos', icon: '⚡', category: 'Quiz', points: 20, condition: (s) => s.fastestCorrectAnswer <= 5, rarity: 'raro' },
+  { id: 'first_code', title: 'Programador Novato', description: 'Ejecuta tu primer código', icon: '💻', category: 'Programación', points: 10, condition: (s) => s.codesExecuted >= 1, rarity: 'común' },
+  { id: 'ai_coder', title: 'Asistido por IA', description: 'Genera código con el Asistente IA', icon: '🤖', category: 'Programación', points: 15, condition: (s) => s.aiCodesGenerated >= 1, rarity: 'común' },
+  { id: 'bug_free', title: 'Libre de Bugs', description: '3 programas sin errores seguidos', icon: '🐛', category: 'Programación', points: 25, condition: (s) => s.consecutiveNoErrors >= 3, rarity: 'raro' },
+  { id: 'code_master', title: 'Maestro del Código', description: 'Ejecuta 10 programas', icon: '👨‍💻', category: 'Programación', points: 30, condition: (s) => s.codesExecuted >= 10, rarity: 'épico' },
+  { id: 'first_challenge', title: 'Primer Reto', description: 'Completa tu primer reto de código', icon: '🧩', category: 'Retos', points: 10, condition: (s) => s.challengesCompleted >= 1, rarity: 'común' },
+  { id: 'five_challenges', title: 'Racha de 5', description: 'Completa 5 retos de programación', icon: '🔥', category: 'Retos', points: 20, condition: (s) => s.challengesCompleted >= 5, rarity: 'raro' },
+  { id: 'twelve_challenges', title: 'Media Docena x2', description: 'Completa 12 retos (la mitad)', icon: '⚡', category: 'Retos', points: 35, condition: (s) => s.challengesCompleted >= 12, rarity: 'épico' },
+  { id: 'all_challenges', title: 'Maestro de Retos', description: 'Completa los 24 retos', icon: '🏆', category: 'Retos', points: 75, condition: (s) => s.challengesCompleted >= 24, rarity: 'legendario' },
+  { id: 'python_master', title: 'Pythonista', description: 'Completa todos los retos de Python', icon: '🐍', category: 'Retos', points: 30, condition: (s) => s.challengesPython >= 14, rarity: 'épico' },
+  { id: 'arduino_hero', title: 'Héroe Arduino', description: 'Completa todos los retos de Arduino', icon: '🔷', category: 'Retos', points: 30, condition: (s) => s.challengesArduino >= 8, rarity: 'épico' },
+  { id: 'beginner_done', title: 'Base Sólida', description: 'Completa todos los retos de Principiante', icon: '🌱', category: 'Retos', points: 15, condition: (s) => s.challengesLevel1 >= 6, rarity: 'raro' },
+  { id: 'advanced_done', title: 'Nivel Experto', description: 'Completa todos los retos Avanzados', icon: '🎖️', category: 'Retos', points: 50, condition: (s) => s.challengesLevel4 >= 6, rarity: 'legendario' },
+  { id: 'led_builder', title: 'Constructor de LED', description: 'Completa la guía de LED', icon: '💡', category: 'Práctica', points: 20, condition: (s) => s.ledGuideCompleted === true, rarity: 'raro' },
+  { id: 'class_regular', title: 'Alumno Dedicado', description: 'Asiste a 10 clases', icon: '🏫', category: 'Práctica', points: 30, condition: (s) => s.classesAttended >= 10, rarity: 'raro' },
+  { id: 'explorer', title: 'Explorador Total', description: 'Usa todas las secciones', icon: '🗺️', category: 'Especial', points: 25, condition: (s) => s.sectionsVisited >= 5, rarity: 'raro' },
+  { id: 'points_100', title: 'Centurión', description: 'Acumula 100 puntos', icon: '💎', category: 'Especial', points: 0, condition: (s) => s.totalPoints >= 100, rarity: 'épico' },
 ];
 
 const RARITY_CONFIG = {
-  'comÃºn': { gradient: 'from-gray-400 to-gray-500', bg: 'bg-gradient-to-br from-gray-50 to-gray-100', border: 'border-gray-200', badge: 'bg-gray-400', glow: '', stars: 1 },
+  'común': { gradient: 'from-gray-400 to-gray-500', bg: 'bg-gradient-to-br from-gray-50 to-gray-100', border: 'border-gray-200', badge: 'bg-gray-400', glow: '', stars: 1 },
   'raro': { gradient: 'from-[#1CB0F6] to-[#0D8ECF]', bg: 'bg-gradient-to-br from-blue-50 to-cyan-50', border: 'border-[#1CB0F6]/40', badge: 'bg-[#1CB0F6]', glow: 'shadow-[0_0_15px_rgba(28,176,246,0.2)]', stars: 2 },
-  'Ã©pico': { gradient: 'from-[#60A5FA] to-[#2563EB]', bg: 'bg-gradient-to-br from-blue-50 to-sky-50', border: 'border-[#60A5FA]/40', badge: 'bg-[#60A5FA]', glow: 'shadow-[0_0_20px_rgba(206,130,255,0.25)]', stars: 3 },
+  'épico': { gradient: 'from-[#60A5FA] to-[#2563EB]', bg: 'bg-gradient-to-br from-purple-50 to-fuchsia-50', border: 'border-[#60A5FA]/40', badge: 'bg-[#60A5FA]', glow: 'shadow-[0_0_20px_rgba(206,130,255,0.25)]', stars: 3 },
   'legendario': { gradient: 'from-[#FFC800] to-[#FF9600]', bg: 'bg-gradient-to-br from-yellow-50 to-orange-50', border: 'border-[#FFC800]/50', badge: 'bg-gradient-to-r from-[#FFC800] to-[#FF9600]', glow: 'shadow-[0_0_25px_rgba(255,200,0,0.3)]', stars: 4 },
 };
-const CATEGORY_ICONS = { 'Aprendizaje': 'ðŸ“š', 'Quiz': 'â“', 'ProgramaciÃ³n': 'ðŸ’»', 'Retos': 'ðŸ§©', 'PrÃ¡ctica': 'ðŸ”§', 'Especial': 'â­' };
+const CATEGORY_ICONS = { 'Aprendizaje': '📚', 'Quiz': '❓', 'Programación': '💻', 'Retos': '🧩', 'Práctica': '🔧', 'Especial': '⭐' };
 
 const ConfettiParticle = ({ index }) => {
   const colors = ['#58CC02', '#1CB0F6', '#FFC800', '#FF4B4B', '#60A5FA', '#FF9600'];
@@ -67,7 +67,7 @@ const AchievementCard = ({ achievement, isUnlocked, onCelebrate, animDelay }) =>
                 <div className="absolute inset-0 rounded-2xl overflow-hidden"><div className="absolute -inset-full bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-12 animate-shimmer-slide" /></div></>
               ) : <Lock size={20} className="text-white/70" />}
               <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 flex gap-0.5">
-                {Array.from({ length: rarity.stars }).map((_, i) => <span key={i} className={`text-[8px] ${isUnlocked ? 'opacity-100' : 'opacity-30'}`}>â­</span>)}
+                {Array.from({ length: rarity.stars }).map((_, i) => <span key={i} className={`text-[8px] ${isUnlocked ? 'opacity-100' : 'opacity-30'}`}>⭐</span>)}
               </div>
             </div>
             <div className="flex-grow min-w-0">
@@ -79,7 +79,7 @@ const AchievementCard = ({ achievement, isUnlocked, onCelebrate, animDelay }) =>
               <div className="flex items-center gap-2 mt-1.5">
                 {isUnlocked 
                   ? <span className="flex items-center gap-1 bg-[#D7FFB8] text-[#58CC02] px-2 py-0.5 rounded-lg text-[10px] font-black"><CheckCircle size={10} /> +{achievement.points} XP</span>
-                  : <span className="text-[#CDCDCD] text-[10px] font-black">ðŸ”’ {achievement.points} XP</span>}
+                  : <span className="text-[#CDCDCD] text-[10px] font-black">🔒 {achievement.points} XP</span>}
                 <span className="text-[10px] font-bold text-[#AFAFAF]">{CATEGORY_ICONS[achievement.category]} {achievement.category}</span>
               </div>
             </div>
@@ -105,18 +105,18 @@ const AchievementsScreen = ({ onBack, userStats, onShowRanking, onShowFriends, p
     const mf = !showUnlockedOnly || unlockedIds.includes(a.id);
     return mc && mf;
   });
-  const rarityOrder = { 'legendario': 0, 'Ã©pico': 1, 'raro': 2, 'comÃºn': 3 };
+  const rarityOrder = { 'legendario': 0, 'épico': 1, 'raro': 2, 'común': 3 };
   const sorted = [...filteredAchievements].sort((a, b) => {
     const d = (unlockedIds.includes(a.id) ? 0 : 1) - (unlockedIds.includes(b.id) ? 0 : 1);
     return d !== 0 ? d : (rarityOrder[a.rarity] || 99) - (rarityOrder[b.rarity] || 99);
   });
   const progressPercent = Math.round((unlockedIds.length / ACHIEVEMENTS.length) * 100);
   const getLevel = (pts) => {
-    if (pts >= 200) return { level: 5, title: 'Maestro RobÃ³tico', emoji: 'ðŸ†', color: '#FFC800', nextAt: null };
-    if (pts >= 100) return { level: 4, title: 'Ingeniero Junior', emoji: 'ðŸ”§', color: '#60A5FA', nextAt: 200 };
-    if (pts >= 50) return { level: 3, title: 'Aprendiz Avanzado', emoji: 'â­', color: '#1CB0F6', nextAt: 100 };
-    if (pts >= 20) return { level: 2, title: 'Explorador Curioso', emoji: 'ðŸŒ±', color: '#58CC02', nextAt: 50 };
-    return { level: 1, title: 'Principiante', emoji: 'ðŸ£', color: '#AFAFAF', nextAt: 20 };
+    if (pts >= 200) return { level: 5, title: 'Maestro Robótico', emoji: '🏆', color: '#FFC800', nextAt: null };
+    if (pts >= 100) return { level: 4, title: 'Ingeniero Junior', emoji: '🔧', color: '#60A5FA', nextAt: 200 };
+    if (pts >= 50) return { level: 3, title: 'Aprendiz Avanzado', emoji: '⭐', color: '#1CB0F6', nextAt: 100 };
+    if (pts >= 20) return { level: 2, title: 'Explorador Curioso', emoji: '🌱', color: '#58CC02', nextAt: 50 };
+    return { level: 1, title: 'Principiante', emoji: '🐣', color: '#AFAFAF', nextAt: 20 };
   };
   const lv = getLevel(totalPoints);
   const prevT = lv.level === 1 ? 0 : lv.level === 2 ? 20 : lv.level === 3 ? 50 : 100;
@@ -143,15 +143,15 @@ const AchievementsScreen = ({ onBack, userStats, onShowRanking, onShowFriends, p
             </div>
           </div>
           <div className="mt-4 relative z-10">
-            <div className="flex justify-between text-[10px] text-[#3C3C3C]/50 font-black mb-1"><span>Nv. {lv.level}</span><span>{lv.nextAt ? `${totalPoints}/${lv.nextAt} XP` : 'Â¡Nivel MÃ¡ximo!'}</span>{lv.nextAt && <span>Nv. {lv.level + 1}</span>}</div>
+            <div className="flex justify-between text-[10px] text-[#3C3C3C]/50 font-black mb-1"><span>Nv. {lv.level}</span><span>{lv.nextAt ? `${totalPoints}/${lv.nextAt} XP` : '¡Nivel Máximo!'}</span>{lv.nextAt && <span>Nv. {lv.level + 1}</span>}</div>
             <div className="w-full bg-[#3C3C3C]/10 rounded-full h-3 overflow-hidden"><div className="h-full rounded-full transition-all duration-1000 relative overflow-hidden" style={{ width: `${Math.max(lvProg, 5)}%`, backgroundColor: lv.color }}><div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/30 to-white/0 animate-shimmer-slide" /></div></div>
           </div>
         </div>
         <div className="px-4 -mt-6 relative z-10">
           <div className="grid grid-cols-3 gap-2">
-            <div className="bg-white rounded-2xl p-3 text-center border-2 border-[#E5E5E5] shadow-sm"><span className="text-2xl block mb-0.5">ðŸ…</span><span className="text-lg font-black text-[#3C3C3C]">{unlockedIds.length}</span><span className="text-[9px] font-bold text-[#AFAFAF] block">Logros</span></div>
-            <div className="bg-white rounded-2xl p-3 text-center border-2 border-[#E5E5E5] shadow-sm"><span className="text-2xl block mb-0.5">â­</span><span className="text-lg font-black text-[#3C3C3C]">{totalPoints}</span><span className="text-[9px] font-bold text-[#AFAFAF] block">Puntos XP</span></div>
-            <div className="bg-white rounded-2xl p-3 text-center border-2 border-[#E5E5E5] shadow-sm"><span className="text-2xl block mb-0.5">ðŸ“Š</span><span className="text-lg font-black text-[#3C3C3C]">{progressPercent}%</span><span className="text-[9px] font-bold text-[#AFAFAF] block">Progreso</span></div>
+            <div className="bg-white rounded-2xl p-3 text-center border-2 border-[#E5E5E5] shadow-sm"><span className="text-2xl block mb-0.5">🏅</span><span className="text-lg font-black text-[#3C3C3C]">{unlockedIds.length}</span><span className="text-[9px] font-bold text-[#AFAFAF] block">Logros</span></div>
+            <div className="bg-white rounded-2xl p-3 text-center border-2 border-[#E5E5E5] shadow-sm"><span className="text-2xl block mb-0.5">⭐</span><span className="text-lg font-black text-[#3C3C3C]">{totalPoints}</span><span className="text-[9px] font-bold text-[#AFAFAF] block">Puntos XP</span></div>
+            <div className="bg-white rounded-2xl p-3 text-center border-2 border-[#E5E5E5] shadow-sm"><span className="text-2xl block mb-0.5">📊</span><span className="text-lg font-black text-[#3C3C3C]">{progressPercent}%</span><span className="text-[9px] font-bold text-[#AFAFAF] block">Progreso</span></div>
           </div>
         </div>
       </div>
@@ -160,7 +160,7 @@ const AchievementsScreen = ({ onBack, userStats, onShowRanking, onShowFriends, p
         <div className="grid grid-cols-2 gap-2">
           {onShowRanking && (
             <button onClick={onShowRanking} className="bg-gradient-to-r from-[#2563EB] to-[#3B82F6] text-white rounded-2xl p-3.5 flex items-center gap-2.5 active:scale-[0.97] transition-all shadow-[0_4px_0_#1E40AF] border-b-0">
-              <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center text-xl">ðŸ†</div>
+              <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center text-xl">🏆</div>
               <div className="text-left">
                 <p className="text-xs font-black">Ranking Global</p>
                 <p className="text-[9px] font-bold text-white/60">Compite con todos</p>
@@ -169,7 +169,7 @@ const AchievementsScreen = ({ onBack, userStats, onShowRanking, onShowFriends, p
           )}
           {onShowFriends && (
             <button onClick={onShowFriends} className="bg-gradient-to-r from-[#58CC02] to-[#6BD600] text-white rounded-2xl p-3.5 flex items-center gap-2.5 active:scale-[0.97] transition-all shadow-[0_4px_0_#46A302] border-b-0 relative">
-              <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center text-xl">ðŸ‘¥</div>
+              <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center text-xl">👥</div>
               <div className="text-left">
                 <p className="text-xs font-black">Amigos</p>
                 <p className="text-[9px] font-bold text-white/60">Agrega y compite</p>
@@ -186,20 +186,20 @@ const AchievementsScreen = ({ onBack, userStats, onShowRanking, onShowFriends, p
       <div className="px-4 pt-2 pb-2">
         <div className="bg-white rounded-2xl p-4 border-2 border-[#E5E5E5]">
           <div className="flex items-center gap-3 mb-2"><Trophy size={18} className="text-[#FFC800]" /><span className="text-sm font-black text-[#3C3C3C]">Progreso Total</span><span className="ml-auto text-xs font-black text-[#AFAFAF]">{unlockedIds.length}/{ACHIEVEMENTS.length}</span></div>
-          <div className="w-full bg-[#E5E5E5] rounded-full h-4 overflow-hidden"><div className="h-full bg-gradient-to-r from-[#58CC02] to-[#46A302] rounded-full transition-all duration-1000 relative" style={{ width: `${Math.max(progressPercent, 3)}%` }}><div className="absolute right-1 top-1/2 -translate-y-1/2 text-[8px]">ðŸƒ</div></div></div>
+          <div className="w-full bg-[#E5E5E5] rounded-full h-4 overflow-hidden"><div className="h-full bg-gradient-to-r from-[#58CC02] to-[#46A302] rounded-full transition-all duration-1000 relative" style={{ width: `${Math.max(progressPercent, 3)}%` }}><div className="absolute right-1 top-1/2 -translate-y-1/2 text-[8px]">🏃</div></div></div>
         </div>
       </div>
       <div className="px-4">
         <div className="flex gap-2 overflow-x-auto pb-3 scrollbar-hide">
-          {categories.map(cat => <button key={cat} onClick={() => setSelectedCategory(cat)} className={`flex-shrink-0 px-3.5 py-2 rounded-2xl font-black text-xs transition-all active:scale-95 border-2 whitespace-nowrap ${selectedCategory === cat ? 'bg-[#3C3C3C] text-white border-[#3C3C3C] shadow-md' : 'bg-white text-[#AFAFAF] border-[#E5E5E5]'}`}>{cat === 'all' ? 'ðŸŒŸ Todos' : `${CATEGORY_ICONS[cat] || 'ðŸ“‹'} ${cat}`}</button>)}
+          {categories.map(cat => <button key={cat} onClick={() => setSelectedCategory(cat)} className={`flex-shrink-0 px-3.5 py-2 rounded-2xl font-black text-xs transition-all active:scale-95 border-2 whitespace-nowrap ${selectedCategory === cat ? 'bg-[#3C3C3C] text-white border-[#3C3C3C] shadow-md' : 'bg-white text-[#AFAFAF] border-[#E5E5E5]'}`}>{cat === 'all' ? '🌟 Todos' : `${CATEGORY_ICONS[cat] || '📋'} ${cat}`}</button>)}
         </div>
         <div className="flex gap-2 mb-4">
-          <button onClick={() => setShowUnlockedOnly(false)} className={`px-3 py-1.5 rounded-xl text-[11px] font-black transition border-2 ${!showUnlockedOnly ? 'bg-[#58CC02] text-white border-[#46A302]' : 'bg-white text-[#AFAFAF] border-[#E5E5E5]'}`}>ðŸ“‹ Todos ({filteredAchievements.length})</button>
-          <button onClick={() => setShowUnlockedOnly(true)} className={`px-3 py-1.5 rounded-xl text-[11px] font-black transition border-2 ${showUnlockedOnly ? 'bg-[#58CC02] text-white border-[#46A302]' : 'bg-white text-[#AFAFAF] border-[#E5E5E5]'}`}>âœ… Desbloqueados ({filteredAchievements.filter(a => unlockedIds.includes(a.id)).length})</button>
+          <button onClick={() => setShowUnlockedOnly(false)} className={`px-3 py-1.5 rounded-xl text-[11px] font-black transition border-2 ${!showUnlockedOnly ? 'bg-[#58CC02] text-white border-[#46A302]' : 'bg-white text-[#AFAFAF] border-[#E5E5E5]'}`}>📋 Todos ({filteredAchievements.length})</button>
+          <button onClick={() => setShowUnlockedOnly(true)} className={`px-3 py-1.5 rounded-xl text-[11px] font-black transition border-2 ${showUnlockedOnly ? 'bg-[#58CC02] text-white border-[#46A302]' : 'bg-white text-[#AFAFAF] border-[#E5E5E5]'}`}>✅ Desbloqueados ({filteredAchievements.filter(a => unlockedIds.includes(a.id)).length})</button>
         </div>
       </div>
       <div className="px-4 space-y-3 pb-6">
-        {sorted.length === 0 && <div className="text-center py-12"><span className="text-5xl block mb-3">ðŸ”</span><p className="text-sm font-black text-[#AFAFAF]">No hay logros aquÃ­ aÃºn</p></div>}
+        {sorted.length === 0 && <div className="text-center py-12"><span className="text-5xl block mb-3">🔍</span><p className="text-sm font-black text-[#AFAFAF]">No hay logros aquí aún</p></div>}
         {sorted.map((a, idx) => <AchievementCard key={a.id} achievement={a} isUnlocked={unlockedIds.includes(a.id)} onCelebrate={handleCelebrate} animDelay={idx * 60} />)}
       </div>
       {celebratingAchievement && (
@@ -209,12 +209,12 @@ const AchievementsScreen = ({ onBack, userStats, onShowRanking, onShowFriends, p
               <div className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${RARITY_CONFIG[celebratingAchievement.rarity].gradient} opacity-20 animate-ping`} />
               <div className={`relative w-full h-full rounded-3xl bg-gradient-to-br ${RARITY_CONFIG[celebratingAchievement.rarity].gradient} flex items-center justify-center shadow-xl`}><span className="text-5xl">{celebratingAchievement.icon}</span></div>
             </div>
-            <div className="flex justify-center gap-1 mb-2">{Array.from({ length: RARITY_CONFIG[celebratingAchievement.rarity].stars }).map((_, i) => <span key={i} className="text-lg animate-bounce" style={{ animationDelay: `${i * 100}ms` }}>â­</span>)}</div>
-            <h2 className="text-2xl font-black text-[#FFC800] mb-1">Â¡Logro Desbloqueado!</h2>
+            <div className="flex justify-center gap-1 mb-2">{Array.from({ length: RARITY_CONFIG[celebratingAchievement.rarity].stars }).map((_, i) => <span key={i} className="text-lg animate-bounce" style={{ animationDelay: `${i * 100}ms` }}>⭐</span>)}</div>
+            <h2 className="text-2xl font-black text-[#FFC800] mb-1">¡Logro Desbloqueado!</h2>
             <p className="text-lg font-black text-[#3C3C3C]">{celebratingAchievement.title}</p>
             <p className="text-[#AFAFAF] text-sm font-semibold mt-1 mb-3">{celebratingAchievement.description}</p>
             <div className="inline-flex items-center gap-2 bg-[#D7FFB8] text-[#58CC02] px-4 py-2 rounded-xl mb-4"><Zap size={16} /><span className="text-lg font-black">+{celebratingAchievement.points} XP</span></div>
-            <div><button onClick={() => setCelebratingAchievement(null)} className="w-full py-3.5 btn-3d btn-3d-green rounded-xl text-sm">Â¡Genial! ðŸŽ‰</button></div>
+            <div><button onClick={() => setCelebratingAchievement(null)} className="w-full py-3.5 btn-3d btn-3d-green rounded-xl text-sm">¡Genial! 🎉</button></div>
           </div>
         </div>
       )}
@@ -242,13 +242,13 @@ const AchievementUnlockPopup = ({ achievements, onDismiss }) => {
           <div className={`absolute inset-2 rounded-2xl bg-gradient-to-br ${r.gradient} opacity-30 animate-pulse`} />
           <div className={`relative w-full h-full rounded-3xl bg-gradient-to-br ${r.gradient} flex items-center justify-center shadow-2xl border-b-4 border-black/10`}><span className="text-6xl drop-shadow-lg">{a.icon}</span></div>
         </div>
-        <p className="text-xs font-black text-[#AFAFAF] uppercase tracking-widest mb-1">ðŸŽŠ Â¡Nuevo Logro!</p>
+        <p className="text-xs font-black text-[#AFAFAF] uppercase tracking-widest mb-1">🎊 ¡Nuevo Logro!</p>
         <h2 className="text-2xl font-black text-[#3C3C3C] mb-1">{a.title}</h2>
         <p className="text-sm text-[#777] font-semibold mb-3">{a.description}</p>
-        <div className="flex justify-center gap-1 mb-3">{Array.from({ length: r.stars }).map((_, i) => <span key={i} className="text-xl animate-bounce" style={{ animationDelay: `${i * 150}ms` }}>â­</span>)}</div>
+        <div className="flex justify-center gap-1 mb-3">{Array.from({ length: r.stars }).map((_, i) => <span key={i} className="text-xl animate-bounce" style={{ animationDelay: `${i * 150}ms` }}>⭐</span>)}</div>
         <div className="inline-flex items-center gap-2 bg-[#D7FFB8] text-[#58CC02] px-5 py-2.5 rounded-2xl mb-5"><Zap size={18} /><span className="text-xl font-black">+{a.points} XP</span></div>
         {achievements.length > 1 && <p className="text-[10px] font-bold text-[#AFAFAF] mb-3">Logro {idx + 1} de {achievements.length}</p>}
-        <button onClick={onDismiss} className="w-full py-3.5 btn-3d btn-3d-green rounded-2xl text-sm">{idx < achievements.length - 1 ? 'Â¡Siguiente! â†’' : 'Â¡IncreÃ­ble! ðŸŽ‰'}</button>
+        <button onClick={onDismiss} className="w-full py-3.5 btn-3d btn-3d-green rounded-2xl text-sm">{idx < achievements.length - 1 ? '¡Siguiente! →' : '¡Increíble! 🎉'}</button>
       </div>
     </div>
   );
@@ -261,8 +261,8 @@ const AchievementToast = ({ achievement, onDismiss }) => {
     <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 animate-slide-up">
       <div className="bg-gradient-to-r from-[#FFC800] to-[#FF9600] text-[#3C3C3C] px-5 py-3 rounded-2xl border-b-4 border-[#E58600] flex items-center gap-3 font-black shadow-2xl">
         <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-2xl shadow-inner">{achievement.icon}</div>
-        <div><p className="text-[9px] text-[#3C3C3C]/50 uppercase tracking-wider font-black">Â¡Logro Desbloqueado!</p><p className="font-black text-sm">{achievement.title}</p><p className="text-[10px] text-[#3C3C3C]/70 font-bold">+{achievement.points} XP</p></div>
-        <span className="text-2xl animate-bounce">ðŸŽ‰</span>
+        <div><p className="text-[9px] text-[#3C3C3C]/50 uppercase tracking-wider font-black">¡Logro Desbloqueado!</p><p className="font-black text-sm">{achievement.title}</p><p className="text-[10px] text-[#3C3C3C]/70 font-bold">+{achievement.points} XP</p></div>
+        <span className="text-2xl animate-bounce">🎉</span>
       </div>
     </div>
   );

@@ -1,20 +1,20 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChevronRight, ChevronLeft, Sparkles, Star, Zap, RotateCcw, Check } from 'lucide-react';
 
-// Lazy-imported after definition to avoid circular â€” using inline ROBOT_SKINS_ONBOARDING
+// Lazy-imported after definition to avoid circular — using inline ROBOT_SKINS_ONBOARDING
 const ROBOT_SKINS_ONBOARDING = [
-  { id: 'chispitas', name: 'Chispitas', icon: 'âš¡', rarity: 'common', rarityColor: '#58CC02', config: { head: 'round', eyes: 'round', mouth: 'smile', body: 'box', accessory: 'antenna', color: 'blue', arms: 'normal', legs: 'normal', pattern: 'lightning' } },
-  { id: 'galaxia', name: 'Galaxia', icon: 'ðŸŒŒ', rarity: 'rare', rarityColor: '#A855F7', config: { head: 'alien', eyes: 'star_eyes', mouth: 'open', body: 'rounded', accessory: 'halo', color: 'purple', arms: 'wings', legs: 'hover', pattern: 'dots' } },
-  { id: 'guerrero', name: 'Guerrero', icon: 'âš”ï¸', rarity: 'epic', rarityColor: '#FF4B4B', config: { head: 'shield', eyes: 'angry', mouth: 'grr', body: 'armor', accessory: 'horns', color: 'red', arms: 'claws', legs: 'treads', pattern: 'star_emblem' } },
-  { id: 'dulce', name: 'Dulce', icon: 'ðŸ’–', rarity: 'rare', rarityColor: '#A855F7', config: { head: 'bunny', eyes: 'heart', mouth: 'kiss', body: 'rounded', accessory: 'bow', color: 'pink', arms: 'normal', legs: 'springs', pattern: 'heart_emblem' } },
-  { id: 'ninja', name: 'Ninja', icon: 'ðŸ¥·', rarity: 'epic', rarityColor: '#FF4B4B', config: { head: 'square', eyes: 'angry', mouth: 'line', body: 'slim', accessory: 'goggles', color: 'gray', arms: 'claws', legs: 'spider', pattern: 'none' } },
-  { id: 'cientifico', name: 'CientÃ­fico', icon: 'ðŸ”¬', rarity: 'rare', rarityColor: '#A855F7', config: { head: 'square', eyes: 'glasses', mouth: 'zigzag', body: 'mech', accessory: 'antenna', color: 'cyan', arms: 'pincers', legs: 'normal', pattern: 'circuit' } },
-  { id: 'naturaleza', name: 'Naturaleza', icon: 'ðŸŒ¿', rarity: 'common', rarityColor: '#58CC02', config: { head: 'bear', eyes: 'happy', mouth: 'tongue', body: 'rounded', accessory: 'flower', color: 'green', arms: 'normal', legs: 'normal', pattern: 'dots' } },
-  { id: 'rey_dorado', name: 'Rey Dorado', icon: 'ðŸ‘‘', rarity: 'legendary', rarityColor: '#FFC800', config: { head: 'diamond', eyes: 'star_eyes', mouth: 'teeth', body: 'armor', accessory: 'crown', color: 'gold', arms: 'muscles', legs: 'hover', pattern: 'gear' } },
-  { id: 'mecanico', name: 'MecÃ¡nico', icon: 'ðŸ”§', rarity: 'common', rarityColor: '#58CC02', config: { head: 'square', eyes: 'screen', mouth: 'line', body: 'tank', accessory: 'headphones', color: 'orange', arms: 'pincers', legs: 'wheels', pattern: 'gear' } },
-  { id: 'astronauta', name: 'Astronauta', icon: 'ðŸš€', rarity: 'epic', rarityColor: '#FF4B4B', config: { head: 'octagon', eyes: 'big', mouth: 'open', body: 'mech', accessory: 'propeller', color: 'sky', arms: 'wings', legs: 'hover', pattern: 'star_emblem' } },
-  { id: 'hada', name: 'Hada Digital', icon: 'ðŸ§š', rarity: 'legendary', rarityColor: '#FFC800', config: { head: 'cat', eyes: 'heart', mouth: 'smile', body: 'slim', accessory: 'halo', color: 'pink', arms: 'wings', legs: 'hover', pattern: 'heart_emblem' } },
-  { id: 'explorador', name: 'Explorador', icon: 'ðŸ§­', rarity: 'common', rarityColor: '#58CC02', config: { head: 'helmet', eyes: 'wink', mouth: 'smile', body: 'barrel', accessory: 'goggles', color: 'teal', arms: 'normal', legs: 'treads', pattern: 'stripes' } },
+  { id: 'chispitas', name: 'Chispitas', icon: '⚡', rarity: 'common', rarityColor: '#58CC02', config: { head: 'round', eyes: 'round', mouth: 'smile', body: 'box', accessory: 'antenna', color: 'blue', arms: 'normal', legs: 'normal', pattern: 'lightning' } },
+  { id: 'galaxia', name: 'Galaxia', icon: '🌌', rarity: 'rare', rarityColor: '#3B82F6', config: { head: 'alien', eyes: 'star_eyes', mouth: 'open', body: 'rounded', accessory: 'halo', color: 'purple', arms: 'wings', legs: 'hover', pattern: 'dots' } },
+  { id: 'guerrero', name: 'Guerrero', icon: '⚔️', rarity: 'epic', rarityColor: '#FF4B4B', config: { head: 'shield', eyes: 'angry', mouth: 'grr', body: 'armor', accessory: 'horns', color: 'red', arms: 'claws', legs: 'treads', pattern: 'star_emblem' } },
+  { id: 'dulce', name: 'Dulce', icon: '💖', rarity: 'rare', rarityColor: '#3B82F6', config: { head: 'bunny', eyes: 'heart', mouth: 'kiss', body: 'rounded', accessory: 'bow', color: 'pink', arms: 'normal', legs: 'springs', pattern: 'heart_emblem' } },
+  { id: 'ninja', name: 'Ninja', icon: '🥷', rarity: 'epic', rarityColor: '#FF4B4B', config: { head: 'square', eyes: 'angry', mouth: 'line', body: 'slim', accessory: 'goggles', color: 'gray', arms: 'claws', legs: 'spider', pattern: 'none' } },
+  { id: 'cientifico', name: 'Científico', icon: '🔬', rarity: 'rare', rarityColor: '#3B82F6', config: { head: 'square', eyes: 'glasses', mouth: 'zigzag', body: 'mech', accessory: 'antenna', color: 'cyan', arms: 'pincers', legs: 'normal', pattern: 'circuit' } },
+  { id: 'naturaleza', name: 'Naturaleza', icon: '🌿', rarity: 'common', rarityColor: '#58CC02', config: { head: 'bear', eyes: 'happy', mouth: 'tongue', body: 'rounded', accessory: 'flower', color: 'green', arms: 'normal', legs: 'normal', pattern: 'dots' } },
+  { id: 'rey_dorado', name: 'Rey Dorado', icon: '👑', rarity: 'legendary', rarityColor: '#FFC800', config: { head: 'diamond', eyes: 'star_eyes', mouth: 'teeth', body: 'armor', accessory: 'crown', color: 'gold', arms: 'muscles', legs: 'hover', pattern: 'gear' } },
+  { id: 'mecanico', name: 'Mecánico', icon: '🔧', rarity: 'common', rarityColor: '#58CC02', config: { head: 'square', eyes: 'screen', mouth: 'line', body: 'tank', accessory: 'headphones', color: 'orange', arms: 'pincers', legs: 'wheels', pattern: 'gear' } },
+  { id: 'astronauta', name: 'Astronauta', icon: '🚀', rarity: 'epic', rarityColor: '#FF4B4B', config: { head: 'octagon', eyes: 'big', mouth: 'open', body: 'mech', accessory: 'propeller', color: 'sky', arms: 'wings', legs: 'hover', pattern: 'star_emblem' } },
+  { id: 'hada', name: 'Hada Digital', icon: '🧚', rarity: 'legendary', rarityColor: '#FFC800', config: { head: 'cat', eyes: 'heart', mouth: 'smile', body: 'slim', accessory: 'halo', color: 'pink', arms: 'wings', legs: 'hover', pattern: 'heart_emblem' } },
+  { id: 'explorador', name: 'Explorador', icon: '🧭', rarity: 'common', rarityColor: '#58CC02', config: { head: 'helmet', eyes: 'wink', mouth: 'smile', body: 'barrel', accessory: 'goggles', color: 'teal', arms: 'normal', legs: 'treads', pattern: 'stripes' } },
 ];
 
 // ============================================
@@ -29,7 +29,7 @@ const HEADS = [
   { id: 'cat', label: 'Gatito', path: (c) => `<circle cx="50" cy="42" r="24" fill="${c}" stroke="${c}99" stroke-width="2"/><polygon points="30,22 26,4 42,18" fill="${c}" stroke="${c}99" stroke-width="2"/><polygon points="70,22 74,4 58,18" fill="${c}" stroke="${c}99" stroke-width="2"/>` },
   { id: 'alien', label: 'Alien', path: (c) => `<ellipse cx="50" cy="40" rx="30" ry="24" fill="${c}" stroke="${c}99" stroke-width="2"/><circle cx="32" cy="16" r="8" fill="${c}" stroke="${c}99" stroke-width="2"/><circle cx="68" cy="16" r="8" fill="${c}" stroke="${c}99" stroke-width="2"/><line x1="32" y1="24" x2="38" y2="32" stroke="${c}99" stroke-width="2"/><line x1="68" y1="24" x2="62" y2="32" stroke="${c}99" stroke-width="2"/>` },
   { id: 'star', label: 'Estrella', path: (c) => `<polygon points="50,6 57,28 80,28 62,42 68,64 50,50 32,64 38,42 20,28 43,28" fill="${c}" stroke="${c}99" stroke-width="2" stroke-linejoin="round"/>` },
-  { id: 'octagon', label: 'OctÃ¡gono', path: (c) => `<polygon points="35,12 65,12 80,28 80,50 65,62 35,62 20,50 20,28" fill="${c}" stroke="${c}99" stroke-width="2"/><polygon points="40,18 60,18 70,28 70,44 60,52 40,52 30,44 30,28" fill="${c}CC" opacity="0.3"/>` },
+  { id: 'octagon', label: 'Octágono', path: (c) => `<polygon points="35,12 65,12 80,28 80,50 65,62 35,62 20,50 20,28" fill="${c}" stroke="${c}99" stroke-width="2"/><polygon points="40,18 60,18 70,28 70,44 60,52 40,52 30,44 30,28" fill="${c}CC" opacity="0.3"/>` },
   { id: 'bunny', label: 'Conejito', path: (c) => `<circle cx="50" cy="44" r="22" fill="${c}" stroke="${c}99" stroke-width="2"/><ellipse cx="36" cy="16" rx="6" ry="18" fill="${c}" stroke="${c}99" stroke-width="2" transform="rotate(-10 36 16)"/><ellipse cx="64" cy="16" rx="6" ry="18" fill="${c}" stroke="${c}99" stroke-width="2" transform="rotate(10 64 16)"/><ellipse cx="36" cy="14" rx="3" ry="14" fill="${c}CC"/><ellipse cx="64" cy="14" rx="3" ry="14" fill="${c}CC"/>` },
   { id: 'bear', label: 'Osito', path: (c) => `<circle cx="50" cy="42" r="24" fill="${c}" stroke="${c}99" stroke-width="2"/><circle cx="30" cy="22" r="10" fill="${c}" stroke="${c}99" stroke-width="2"/><circle cx="70" cy="22" r="10" fill="${c}" stroke="${c}99" stroke-width="2"/><circle cx="30" cy="22" r="6" fill="${c}CC"/><circle cx="70" cy="22" r="6" fill="${c}CC"/>` },
   { id: 'shield', label: 'Escudo', path: (c) => `<path d="M50,8 L78,22 L78,42 Q78,62 50,68 Q22,62 22,42 L22,22 Z" fill="${c}" stroke="${c}99" stroke-width="2"/>` },
@@ -42,13 +42,13 @@ const EYES = [
   { id: 'screen', label: 'Pantalla', path: () => `<rect x="30" y="30" width="14" height="10" rx="2" fill="#00FF88" stroke="#333" stroke-width="1.5"/><rect x="56" y="30" width="14" height="10" rx="2" fill="#00FF88" stroke="#333" stroke-width="1.5"/><rect x="33" y="33" width="3" height="4" fill="#005533"/><rect x="39" y="33" width="3" height="4" fill="#005533"/><rect x="59" y="33" width="3" height="4" fill="#005533"/><rect x="65" y="33" width="3" height="4" fill="#005533"/>` },
   { id: 'big', label: 'Grandes', path: () => `<circle cx="38" cy="36" r="10" fill="white" stroke="#333" stroke-width="1.5"/><circle cx="62" cy="36" r="10" fill="white" stroke="#333" stroke-width="1.5"/><circle cx="40" cy="35" r="5" fill="#333"/><circle cx="64" cy="35" r="5" fill="#333"/><circle cx="42" cy="33" r="2" fill="white"/>` },
   { id: 'angry', label: 'Valientes', path: () => `<line x1="30" y1="30" x2="44" y2="34" stroke="#333" stroke-width="2.5" stroke-linecap="round"/><line x1="70" y1="30" x2="56" y2="34" stroke="#333" stroke-width="2.5" stroke-linecap="round"/><circle cx="38" cy="38" r="5" fill="white" stroke="#333" stroke-width="1.5"/><circle cx="62" cy="38" r="5" fill="white" stroke="#333" stroke-width="1.5"/><circle cx="39" cy="38" r="2.5" fill="#333"/><circle cx="63" cy="38" r="2.5" fill="#333"/>` },
-  { id: 'heart', label: 'CorazÃ³n', path: () => `<path d="M34 35 C34 30 28 28 28 33 C28 38 34 42 34 42 C34 42 40 38 40 33 C40 28 34 30 34 35Z" fill="#FF4B6E" stroke="#333" stroke-width="1"/><path d="M66 35 C66 30 60 28 60 33 C60 38 66 42 66 42 C66 42 72 38 72 33 C72 28 66 30 66 35Z" fill="#FF4B6E" stroke="#333" stroke-width="1"/>` },
+  { id: 'heart', label: 'Corazón', path: () => `<path d="M34 35 C34 30 28 28 28 33 C28 38 34 42 34 42 C34 42 40 38 40 33 C40 28 34 30 34 35Z" fill="#FF4B6E" stroke="#333" stroke-width="1"/><path d="M66 35 C66 30 60 28 60 33 C60 38 66 42 66 42 C66 42 72 38 72 33 C72 28 66 30 66 35Z" fill="#FF4B6E" stroke="#333" stroke-width="1"/>` },
   { id: 'star_eyes', label: 'Estrellas', path: () => `<polygon points="38,32 40,36 44,36 41,39 42,43 38,40 34,43 35,39 32,36 36,36" fill="#FFD700" stroke="#E5A800" stroke-width="1"/><polygon points="62,32 64,36 68,36 65,39 66,43 62,40 58,43 59,39 56,36 60,36" fill="#FFD700" stroke="#E5A800" stroke-width="1"/>` },
   { id: 'x_eyes', label: 'Mareados', path: () => `<line x1="33" y1="33" x2="43" y2="43" stroke="#333" stroke-width="2.5" stroke-linecap="round"/><line x1="43" y1="33" x2="33" y2="43" stroke="#333" stroke-width="2.5" stroke-linecap="round"/><line x1="57" y1="33" x2="67" y2="43" stroke="#333" stroke-width="2.5" stroke-linecap="round"/><line x1="67" y1="33" x2="57" y2="43" stroke="#333" stroke-width="2.5" stroke-linecap="round"/>` },
   { id: 'glasses', label: 'Lentes', path: () => `<circle cx="38" cy="38" r="9" fill="white" stroke="#555" stroke-width="2.5"/><circle cx="62" cy="38" r="9" fill="white" stroke="#555" stroke-width="2.5"/><line x1="47" y1="38" x2="53" y2="38" stroke="#555" stroke-width="2.5"/><line x1="29" y1="36" x2="22" y2="33" stroke="#555" stroke-width="2"/><line x1="71" y1="36" x2="78" y2="33" stroke="#555" stroke-width="2"/><circle cx="40" cy="37" r="3.5" fill="#333"/><circle cx="64" cy="37" r="3.5" fill="#333"/>` },
-  { id: 'wink', label: 'GuiÃ±o', path: () => `<circle cx="38" cy="38" r="7" fill="white" stroke="#333" stroke-width="1.5"/><circle cx="40" cy="37" r="3.5" fill="#333"/><circle cx="41.5" cy="35.5" r="1.5" fill="white"/><path d="M56 38 Q62 32 68 38" fill="none" stroke="#333" stroke-width="2.5" stroke-linecap="round"/>` },
-  { id: 'sleepy', label: 'DormilÃ³n', path: () => `<path d="M32 38 L44 38" stroke="#333" stroke-width="2.5" stroke-linecap="round"/><path d="M30 35 Q38 31 46 35" fill="none" stroke="#333" stroke-width="1.5"/><path d="M56 38 L68 38" stroke="#333" stroke-width="2.5" stroke-linecap="round"/><path d="M54 35 Q62 31 70 35" fill="none" stroke="#333" stroke-width="1.5"/>` },
-  { id: 'cyclops', label: 'CÃ­clope', path: () => `<circle cx="50" cy="36" r="12" fill="white" stroke="#333" stroke-width="2"/><circle cx="52" cy="35" r="6" fill="#333"/><circle cx="54" cy="33" r="2.5" fill="white"/>` },
+  { id: 'wink', label: 'Guiño', path: () => `<circle cx="38" cy="38" r="7" fill="white" stroke="#333" stroke-width="1.5"/><circle cx="40" cy="37" r="3.5" fill="#333"/><circle cx="41.5" cy="35.5" r="1.5" fill="white"/><path d="M56 38 Q62 32 68 38" fill="none" stroke="#333" stroke-width="2.5" stroke-linecap="round"/>` },
+  { id: 'sleepy', label: 'Dormilón', path: () => `<path d="M32 38 L44 38" stroke="#333" stroke-width="2.5" stroke-linecap="round"/><path d="M30 35 Q38 31 46 35" fill="none" stroke="#333" stroke-width="1.5"/><path d="M56 38 L68 38" stroke="#333" stroke-width="2.5" stroke-linecap="round"/><path d="M54 35 Q62 31 70 35" fill="none" stroke="#333" stroke-width="1.5"/>` },
+  { id: 'cyclops', label: 'Cíclope', path: () => `<circle cx="50" cy="36" r="12" fill="white" stroke="#333" stroke-width="2"/><circle cx="52" cy="35" r="6" fill="#333"/><circle cx="54" cy="33" r="2.5" fill="white"/>` },
 ];
 
 const MOUTHS = [
@@ -61,7 +61,7 @@ const MOUTHS = [
   { id: 'fangs', label: 'Colmillos', path: () => `<path d="M38 50 Q50 58 62 50" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round"/><polygon points="42,50 44,57 46,50" fill="white" stroke="#333" stroke-width="1"/><polygon points="54,50 56,57 58,50" fill="white" stroke="#333" stroke-width="1"/>` },
   { id: 'cat_mouth', label: 'Gatuno', path: () => `<path d="M40 50 L46 54 L50 48 L54 54 L60 50" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>` },
   { id: 'whistle', label: 'Silbido', path: () => `<circle cx="50" cy="52" r="5" fill="#333"/><circle cx="50" cy="51" r="3" fill="#555"/>` },
-  { id: 'grr', label: 'GruÃ±Ã³n', path: () => `<rect x="36" y="48" width="28" height="12" rx="2" fill="#333"/><rect x="40" y="50" width="4" height="8" rx="1" fill="white"/><rect x="48" y="50" width="4" height="8" rx="1" fill="white"/><rect x="56" y="50" width="4" height="8" rx="1" fill="white"/>` },
+  { id: 'grr', label: 'Gruñón', path: () => `<rect x="36" y="48" width="28" height="12" rx="2" fill="#333"/><rect x="40" y="50" width="4" height="8" rx="1" fill="white"/><rect x="48" y="50" width="4" height="8" rx="1" fill="white"/><rect x="56" y="50" width="4" height="8" rx="1" fill="white"/>` },
   { id: 'kiss', label: 'Besito', path: () => `<path d="M44 50 Q50 44 56 50" fill="#FF6B9D" stroke="#E55A8A" stroke-width="1"/><ellipse cx="50" cy="53" rx="6" ry="4" fill="#FF6B9D" stroke="#E55A8A" stroke-width="1"/>` },
   { id: 'braces', label: 'Brackets', path: () => `<path d="M38 50 Q50 60 62 50" fill="none" stroke="#333" stroke-width="2.5" stroke-linecap="round"/><line x1="42" y1="52" x2="42" y2="55" stroke="#88AAFF" stroke-width="1.5"/><line x1="47" y1="53" x2="47" y2="56" stroke="#88AAFF" stroke-width="1.5"/><line x1="53" y1="53" x2="53" y2="56" stroke="#88AAFF" stroke-width="1.5"/><line x1="58" y1="52" x2="58" y2="55" stroke="#88AAFF" stroke-width="1.5"/>` },
 ];
@@ -80,10 +80,10 @@ const BODIES = [
 const ACCESSORIES = [
   { id: 'none', label: 'Ninguno', path: () => `` },
   { id: 'antenna', label: 'Antena', path: (c) => `<line x1="50" y1="0" x2="50" y2="-20" stroke="${c}" stroke-width="3" stroke-linecap="round"/><circle cx="50" cy="-24" r="5" fill="#FF4B4B"><animate attributeName="opacity" values="1;0.3;1" dur="1s" repeatCount="indefinite"/></circle>` },
-  { id: 'propeller', label: 'HÃ©lice', path: (c) => `<line x1="50" y1="0" x2="50" y2="-12" stroke="${c}" stroke-width="3"/><ellipse cx="50" cy="-16" rx="18" ry="4" fill="${c}88"><animateTransform attributeName="transform" type="rotate" from="0 50 -16" to="360 50 -16" dur="0.5s" repeatCount="indefinite"/></ellipse>` },
+  { id: 'propeller', label: 'Hélice', path: (c) => `<line x1="50" y1="0" x2="50" y2="-12" stroke="${c}" stroke-width="3"/><ellipse cx="50" cy="-16" rx="18" ry="4" fill="${c}88"><animateTransform attributeName="transform" type="rotate" from="0 50 -16" to="360 50 -16" dur="0.5s" repeatCount="indefinite"/></ellipse>` },
   { id: 'crown', label: 'Corona', path: () => `<polygon points="34,-2 38,-16 44,-6 50,-18 56,-6 62,-16 66,-2" fill="#FFC800" stroke="#E5A800" stroke-width="1.5"/><circle cx="44" cy="-10" r="2" fill="#FF4B4B"/><circle cx="50" cy="-14" r="2" fill="#1CB0F6"/><circle cx="56" cy="-10" r="2" fill="#58CC02"/>` },
-  { id: 'bow', label: 'MoÃ±o', path: () => `<ellipse cx="38" cy="-4" rx="10" ry="7" fill="#FF6B9D"/><ellipse cx="62" cy="-4" rx="10" ry="7" fill="#FF6B9D"/><circle cx="50" cy="-2" r="4" fill="#FF4B6E"/>` },
-  { id: 'headphones', label: 'AudÃ­fonos', path: () => `<path d="M22 35 Q22 8 50 8 Q78 8 78 35" fill="none" stroke="#555" stroke-width="4"/><rect x="16" y="28" width="12" height="16" rx="4" fill="#555"/><rect x="72" y="28" width="12" height="16" rx="4" fill="#555"/>` },
+  { id: 'bow', label: 'Moño', path: () => `<ellipse cx="38" cy="-4" rx="10" ry="7" fill="#FF6B9D"/><ellipse cx="62" cy="-4" rx="10" ry="7" fill="#FF6B9D"/><circle cx="50" cy="-2" r="4" fill="#FF4B6E"/>` },
+  { id: 'headphones', label: 'Audífonos', path: () => `<path d="M22 35 Q22 8 50 8 Q78 8 78 35" fill="none" stroke="#555" stroke-width="4"/><rect x="16" y="28" width="12" height="16" rx="4" fill="#555"/><rect x="72" y="28" width="12" height="16" rx="4" fill="#555"/>` },
   { id: 'horns', label: 'Cuernos', path: () => `<path d="M30,4 Q24,-14 20,-8 Q23,-1 30,4" fill="#FF4444" stroke="#CC0000" stroke-width="1.5"/><path d="M70,4 Q76,-14 80,-8 Q77,-1 70,4" fill="#FF4444" stroke="#CC0000" stroke-width="1.5"/>` },
   { id: 'halo', label: 'Aureola', path: () => `<ellipse cx="50" cy="-10" rx="22" ry="6" fill="none" stroke="#FFD700" stroke-width="3"/><ellipse cx="50" cy="-10" rx="22" ry="6" fill="#FFD700" opacity="0.2"/>` },
   { id: 'cap', label: 'Gorra', path: () => `<path d="M26,14 Q26,-2 50,-2 Q74,-2 74,14" fill="#FF4444" stroke="#CC0000" stroke-width="1.5"/><rect x="22" y="12" width="56" height="6" rx="3" fill="#CC0000" stroke="#AA0000" stroke-width="1"/><ellipse cx="78" cy="8" rx="8" ry="4" fill="#CC0000"/>` },
@@ -96,7 +96,7 @@ const ARMS = [
   { id: 'claws', label: 'Garras', path: (c) => `<g transform="rotate(-10 11 72)"><rect x="4" y="72" width="14" height="24" rx="5" fill="${c}" stroke="${c}99" stroke-width="1.5"/><path d="M6,95 L5,103 L9,99 L11,105 L13,99 L17,103 L16,95" fill="${c}" stroke="${c}99" stroke-width="1"/></g><g transform="rotate(10 89 72)"><rect x="82" y="72" width="14" height="24" rx="5" fill="${c}" stroke="${c}99" stroke-width="1.5"/><path d="M84,95 L83,103 L87,99 L89,105 L91,99 L95,103 L94,95" fill="${c}" stroke="${c}99" stroke-width="1"/></g>` },
   { id: 'pincers', label: 'Pinzas', path: (c) => `<rect x="6" y="72" width="10" height="22" rx="5" fill="${c}" stroke="${c}99" stroke-width="1.5" transform="rotate(-10 11 72)"/><path d="M4,94 Q2,88 6,94 Q10,100 4,94" fill="none" stroke="${c}" stroke-width="2.5" transform="rotate(-10 11 72)"/><path d="M14,94 Q18,88 14,94 Q10,100 14,94" fill="none" stroke="${c}" stroke-width="2.5" transform="rotate(-10 11 72)"/><path d="M3,92 L7,100 M17,92 L13,100" stroke="${c}" stroke-width="2" transform="rotate(-10 11 72)"/><rect x="84" y="72" width="10" height="22" rx="5" fill="${c}" stroke="${c}99" stroke-width="1.5" transform="rotate(10 89 72)"/><path d="M81,92 L85,100 M95,92 L91,100" stroke="${c}" stroke-width="2" transform="rotate(10 89 72)"/>` },
   { id: 'muscles', label: 'Musculoso', path: (c) => `<path d="M4,72 Q-2,82 4,92 Q10,102 16,98 L18,72 Z" fill="${c}" stroke="${c}99" stroke-width="1.5" transform="rotate(-8 10 72)"/><path d="M82,72 L84,98 Q90,102 96,92 Q102,82 96,72 Z" fill="${c}" stroke="${c}99" stroke-width="1.5" transform="rotate(8 90 72)"/>` },
-  { id: 'tentacles', label: 'TentÃ¡culos', path: (c) => `<path d="M14,72 Q-2,85 8,95 Q18,105 6,115" fill="none" stroke="${c}" stroke-width="5" stroke-linecap="round"/><circle cx="6" cy="115" r="3" fill="${c}"/><path d="M86,72 Q102,85 92,95 Q82,105 94,115" fill="none" stroke="${c}" stroke-width="5" stroke-linecap="round"/><circle cx="94" cy="115" r="3" fill="${c}"/>` },
+  { id: 'tentacles', label: 'Tentáculos', path: (c) => `<path d="M14,72 Q-2,85 8,95 Q18,105 6,115" fill="none" stroke="${c}" stroke-width="5" stroke-linecap="round"/><circle cx="6" cy="115" r="3" fill="${c}"/><path d="M86,72 Q102,85 92,95 Q82,105 94,115" fill="none" stroke="${c}" stroke-width="5" stroke-linecap="round"/><circle cx="94" cy="115" r="3" fill="${c}"/>` },
   { id: 'wings', label: 'Alas', path: (c) => `<path d="M18,74 Q-8,65 -5,85 Q0,102 18,95" fill="${c}88" stroke="${c}99" stroke-width="1.5"/><path d="M10,78 Q0,74 2,86 Q5,96 16,92" fill="${c}55" stroke="none"/><path d="M82,74 Q108,65 105,85 Q100,102 82,95" fill="${c}88" stroke="${c}99" stroke-width="1.5"/><path d="M90,78 Q100,74 98,86 Q95,96 84,92" fill="${c}55" stroke="none"/>` },
 ];
 
@@ -106,14 +106,14 @@ const LEGS = [
   { id: 'treads', label: 'Orugas', path: (c) => `<rect x="24" y="116" width="20" height="14" rx="7" fill="#555" stroke="#333" stroke-width="1.5"/><rect x="56" y="116" width="20" height="14" rx="7" fill="#555" stroke="#333" stroke-width="1.5"/><line x1="28" y1="118" x2="28" y2="128" stroke="#777" stroke-width="1"/><line x1="34" y1="118" x2="34" y2="128" stroke="#777" stroke-width="1"/><line x1="40" y1="118" x2="40" y2="128" stroke="#777" stroke-width="1"/><line x1="60" y1="118" x2="60" y2="128" stroke="#777" stroke-width="1"/><line x1="66" y1="118" x2="66" y2="128" stroke="#777" stroke-width="1"/><line x1="72" y1="118" x2="72" y2="128" stroke="#777" stroke-width="1"/>` },
   { id: 'springs', label: 'Resortes', path: (c) => `<path d="M36,115 L32,118 L40,121 L32,124 L40,127 L36,130" fill="none" stroke="${c}" stroke-width="2.5" stroke-linecap="round"/><rect x="32" y="128" width="8" height="4" rx="2" fill="${c}DD"/><path d="M64,115 L60,118 L68,121 L60,124 L68,127 L64,130" fill="none" stroke="${c}" stroke-width="2.5" stroke-linecap="round"/><rect x="60" y="128" width="8" height="4" rx="2" fill="${c}DD"/>` },
   { id: 'hover', label: 'Flotador', path: (c) => `<ellipse cx="50" cy="126" rx="24" ry="4" fill="${c}44"/><ellipse cx="50" cy="122" rx="20" ry="3" fill="${c}88" stroke="${c}99" stroke-width="1"/><path d="M36,124 L38,130 L40,124" fill="#FF8800" opacity="0.7"><animate attributeName="opacity" values="0.7;0.3;0.7" dur="0.5s" repeatCount="indefinite"/></path><path d="M48,124 L50,132 L52,124" fill="#FF6600" opacity="0.8"><animate attributeName="opacity" values="0.8;0.4;0.8" dur="0.4s" repeatCount="indefinite"/></path><path d="M60,124 L62,130 L64,124" fill="#FF8800" opacity="0.7"><animate attributeName="opacity" values="0.7;0.3;0.7" dur="0.6s" repeatCount="indefinite"/></path>` },
-  { id: 'spider', label: 'AraÃ±a', path: (c) => `<line x1="34" y1="115" x2="20" y2="128" stroke="${c}" stroke-width="2.5" stroke-linecap="round"/><line x1="40" y1="118" x2="28" y2="130" stroke="${c}" stroke-width="2.5" stroke-linecap="round"/><line x1="46" y1="118" x2="38" y2="130" stroke="${c}" stroke-width="2.5" stroke-linecap="round"/><line x1="66" y1="115" x2="80" y2="128" stroke="${c}" stroke-width="2.5" stroke-linecap="round"/><line x1="60" y1="118" x2="72" y2="130" stroke="${c}" stroke-width="2.5" stroke-linecap="round"/><line x1="54" y1="118" x2="62" y2="130" stroke="${c}" stroke-width="2.5" stroke-linecap="round"/>` },
+  { id: 'spider', label: 'Araña', path: (c) => `<line x1="34" y1="115" x2="20" y2="128" stroke="${c}" stroke-width="2.5" stroke-linecap="round"/><line x1="40" y1="118" x2="28" y2="130" stroke="${c}" stroke-width="2.5" stroke-linecap="round"/><line x1="46" y1="118" x2="38" y2="130" stroke="${c}" stroke-width="2.5" stroke-linecap="round"/><line x1="66" y1="115" x2="80" y2="128" stroke="${c}" stroke-width="2.5" stroke-linecap="round"/><line x1="60" y1="118" x2="72" y2="130" stroke="${c}" stroke-width="2.5" stroke-linecap="round"/><line x1="54" y1="118" x2="62" y2="130" stroke="${c}" stroke-width="2.5" stroke-linecap="round"/>` },
 ];
 
 const PATTERNS = [
   { id: 'none', label: 'Ninguno', path: () => `` },
   { id: 'star_emblem', label: 'Estrella', path: () => `<polygon points="50,12 53,20 62,20 55,25 58,33 50,28 42,33 45,25 38,20 47,20" fill="#FFD700" stroke="#E5A800" stroke-width="1" opacity="0.9"/>` },
   { id: 'lightning', label: 'Rayo', path: () => `<polygon points="52,10 46,22 52,22 44,36 56,20 50,20 56,10" fill="#FFD700" stroke="#E5A800" stroke-width="0.5"/>` },
-  { id: 'heart_emblem', label: 'CorazÃ³n', path: () => `<path d="M50,18 C50,14 44,10 40,14 C36,18 40,24 50,30 C60,24 64,18 60,14 C56,10 50,14 50,18Z" fill="#FF4B6E" stroke="#CC3355" stroke-width="1" opacity="0.85"/>` },
+  { id: 'heart_emblem', label: 'Corazón', path: () => `<path d="M50,18 C50,14 44,10 40,14 C36,18 40,24 50,30 C60,24 64,18 60,14 C56,10 50,14 50,18Z" fill="#FF4B6E" stroke="#CC3355" stroke-width="1" opacity="0.85"/>` },
   { id: 'gear', label: 'Engranaje', path: () => `<circle cx="50" cy="22" r="8" fill="none" stroke="#FFD700" stroke-width="2.5"/><circle cx="50" cy="22" r="4" fill="#FFD700" opacity="0.5"/><rect x="48" y="12" width="4" height="4" rx="1" fill="#FFD700"/><rect x="48" y="28" width="4" height="4" rx="1" fill="#FFD700"/><rect x="40" y="20" width="4" height="4" rx="1" fill="#FFD700"/><rect x="56" y="20" width="4" height="4" rx="1" fill="#FFD700"/>` },
   { id: 'stripes', label: 'Rayas', path: (c) => `<line x1="30" y1="12" x2="30" y2="42" stroke="${c}44" stroke-width="3"/><line x1="40" y1="8" x2="40" y2="46" stroke="${c}44" stroke-width="3"/><line x1="60" y1="8" x2="60" y2="46" stroke="${c}44" stroke-width="3"/><line x1="70" y1="12" x2="70" y2="42" stroke="${c}44" stroke-width="3"/>` },
   { id: 'dots', label: 'Puntos', path: () => `<circle cx="38" cy="16" r="3" fill="white" opacity="0.4"/><circle cx="50" cy="14" r="2.5" fill="white" opacity="0.3"/><circle cx="62" cy="16" r="3" fill="white" opacity="0.4"/><circle cx="44" cy="28" r="2" fill="white" opacity="0.3"/><circle cx="56" cy="28" r="2" fill="white" opacity="0.3"/><circle cx="50" cy="38" r="2.5" fill="white" opacity="0.35"/>` },
@@ -123,19 +123,19 @@ const PATTERNS = [
 const COLORS = [
   { id: 'blue', hex: '#3B82F6', label: 'Azul' },
   { id: 'cyan', hex: '#06B6D4', label: 'Cian' },
-  { id: 'indigo', hex: '#6366F1', label: 'Ãndigo' },
+  { id: 'indigo', hex: '#6366F1', label: 'Índigo' },
   { id: 'green', hex: '#22C55E', label: 'Verde' },
   { id: 'red', hex: '#EF4444', label: 'Rojo' },
   { id: 'orange', hex: '#F97316', label: 'Naranja' },
   { id: 'pink', hex: '#EC4899', label: 'Rosa' },
-  { id: 'purple', hex: '#A855F7', label: 'Morado' },
+  { id: 'purple', hex: '#3B82F6', label: 'Morado' },
   { id: 'yellow', hex: '#EAB308', label: 'Amarillo' },
   { id: 'teal', hex: '#14B8A6', label: 'Turquesa' },
   { id: 'gray', hex: '#6B7280', label: 'Gris' },
   { id: 'gold', hex: '#D4A017', label: 'Dorado' },
   { id: 'lime', hex: '#84CC16', label: 'Lima' },
   { id: 'sky', hex: '#38BDF8', label: 'Cielo' },
-  { id: 'crimson', hex: '#DC2626', label: 'CarmesÃ­' },
+  { id: 'crimson', hex: '#DC2626', label: 'Carmesí' },
   { id: 'mint', hex: '#34D399', label: 'Menta' },
 ];
 
@@ -182,7 +182,7 @@ export const RobotAvatar = ({ config, size = 120, animate = false }) => {
 
 // Mini version for nav/header
 export const RobotMini = ({ config, size = 36 }) => {
-  if (!config) return <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center text-lg">ðŸ¤–</div>;
+  if (!config) return <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center text-lg">🤖</div>;
   return (
     <div className="rounded-full overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center border-2 border-blue-200"
       style={{ width: size, height: size }}>
@@ -199,95 +199,95 @@ const STORY_CHAPTERS = [
   {
     id: 'awakening',
     title: 'El Despertar',
-    description: 'Tu robot acaba de despertar en el Laboratorio de CultivaTec. No sabe nada del mundo... Â¡pero contigo va a aprender todo!',
+    description: 'Tu robot acaba de despertar en el Laboratorio de CultivaTec. No sabe nada del mundo... ¡pero contigo va a aprender todo!',
     unlockAt: 0, // modules completed
-    emoji: 'ðŸŒŸ'
+    emoji: '🌟'
   },
   {
     id: 'first_spark',
     title: 'La Primera Chispa',
-    description: 'Â¡Tu robot descubriÃ³ la electricidad! AprendiÃ³ que los electrones son pequeÃ±as partÃ­culas que le dan energÃ­a. Ahora puede encender su luz interior.',
+    description: '¡Tu robot descubrió la electricidad! Aprendió que los electrones son pequeñas partículas que le dan energía. Ahora puede encender su luz interior.',
     unlockAt: 1,
-    emoji: 'âš¡'
+    emoji: '⚡'
   },
   {
     id: 'circuit_path',
     title: 'El Camino de los Circuitos',
-    description: 'Tu robot aprendiÃ³ a construir circuitos. Ahora puede conectar cables y hacer que la energÃ­a fluya. Â¡EstÃ¡ creciendo!',
+    description: 'Tu robot aprendió a construir circuitos. Ahora puede conectar cables y hacer que la energía fluya. ¡Está creciendo!',
     unlockAt: 3,
-    emoji: 'ðŸ”Œ'
+    emoji: '🔌'
   },
   {
     id: 'code_language',
     title: 'El Lenguaje Secreto',
-    description: 'Tu robot descubriÃ³ Python, el lenguaje de los robots. Ahora puede entender instrucciones y seguir Ã³rdenes programadas.',
+    description: 'Tu robot descubrió Python, el lenguaje de los robots. Ahora puede entender instrucciones y seguir órdenes programadas.',
     unlockAt: 5,
-    emoji: 'ðŸ’»'
+    emoji: '💻'
   },
   {
     id: 'sensor_eyes',
     title: 'Los Ojos del Robot',
-    description: 'Tu robot aprendiÃ³ sobre sensores. Ahora puede "ver" la luz, "sentir" la distancia y percibir el mundo a su alrededor.',
+    description: 'Tu robot aprendió sobre sensores. Ahora puede "ver" la luz, "sentir" la distancia y percibir el mundo a su alrededor.',
     unlockAt: 7,
-    emoji: 'ðŸ‘ï¸'
+    emoji: '👁️'
   },
   {
     id: 'movement',
     title: 'Los Primeros Pasos',
-    description: 'Tu robot aprendiÃ³ a moverse con motores. Ya puede caminar, girar y explorar. Â¡Es casi independiente!',
+    description: 'Tu robot aprendió a moverse con motores. Ya puede caminar, girar y explorar. ¡Es casi independiente!',
     unlockAt: 9,
-    emoji: 'ðŸ¦¿'
+    emoji: '🦿'
   },
   {
     id: 'intelligence',
     title: 'El Cerebro Despierta',
-    description: 'Tu robot ahora tiene inteligencia artificial bÃ¡sica. Puede tomar decisiones simples por sÃ­ mismo. Â¡EstÃ¡s creando vida!',
+    description: 'Tu robot ahora tiene inteligencia artificial básica. Puede tomar decisiones simples por sí mismo. ¡Estás creando vida!',
     unlockAt: 11,
-    emoji: 'ðŸ§ '
+    emoji: '🧠'
   },
   {
     id: 'graduation',
     title: 'El Ingeniero Graduado',
-    description: 'Â¡Tu robot completÃ³ todo su entrenamiento! Ahora es un robot completo que sabe de electricidad, circuitos, programaciÃ³n y sensores. Â¡Lo lograste!',
+    description: '¡Tu robot completó todo su entrenamiento! Ahora es un robot completo que sabe de electricidad, circuitos, programación y sensores. ¡Lo lograste!',
     unlockAt: 13,
-    emoji: 'ðŸŽ“'
+    emoji: '🎓'
   }
 ];
 
 // ============================================
-// Robot Welcome Story â€” Interactive dialogue
+// Robot Welcome Story — Interactive dialogue
 // ============================================
 
 const ROBOT_DIALOGUE = [
   {
     id: 'wake',
-    emoji: 'âœ¨',
-    getText: (name, user) => `*bzzz... bip bip...* Â¿DÃ³nde... dÃ³nde estoy? Ah... Â¡Hola! Mi nombre es ${name}. Â¡Acabo de despertar en el Laboratorio de CultivaTec!`,
+    emoji: '✨',
+    getText: (name, user) => `*bzzz... bip bip...* ¿Dónde... dónde estoy? Ah... ¡Hola! Mi nombre es ${name}. ¡Acabo de despertar en el Laboratorio de CultivaTec!`,
   },
   {
     id: 'confused',
-    emoji: 'ðŸ¤”',
-    getText: (name, user) => `Mmm... parece que no sÃ© mucho todavÃ­a. No entiendo quÃ© es la electricidad, ni cÃ³mo funcionan los circuitos, ni nada de programaciÃ³n... Â¡Necesito un maestro!`,
+    emoji: '🤔',
+    getText: (name, user) => `Mmm... parece que no sé mucho todavía. No entiendo qué es la electricidad, ni cómo funcionan los circuitos, ni nada de programación... ¡Necesito un maestro!`,
   },
   {
     id: 'you',
-    emoji: 'ðŸŒŸ',
-    getText: (name, user) => `Â¡Espera! Â¿TÃº eres ${user}? El profesor me dijo que vendrÃ­as. Â¡TÃº vas a ser mi maestro! Juntos vamos a aprender de todo.`,
+    emoji: '🌟',
+    getText: (name, user) => `¡Espera! ¿Tú eres ${user}? El profesor me dijo que vendrías. ¡Tú vas a ser mi maestro! Juntos vamos a aprender de todo.`,
   },
   {
     id: 'mission',
-    emoji: 'ðŸŽ¯',
-    getText: (name, user) => `Tu misiÃ³n es completar las lecciones de la Biblioteca. Cada mÃ³dulo que completes me enseÃ±arÃ¡ algo nuevo: electricidad, circuitos, sensores, programaciÃ³n...`,
+    emoji: '🎯',
+    getText: (name, user) => `Tu misión es completar las lecciones de la Biblioteca. Cada módulo que completes me enseñará algo nuevo: electricidad, circuitos, sensores, programación...`,
   },
   {
     id: 'features',
-    emoji: 'ðŸ› ï¸',
-    getText: (name, user) => `Â¡Hay mucho por explorar! Puedes practicar cÃ³digo en el Taller, resolver retos de programaciÃ³n, simular robots, construir circuitos virtuales y hasta ganar trofeos. Â¡Ah, y puedes cambiar mi apariencia cuando quieras tocÃ¡ndome en la pantalla!`,
+    emoji: '🛠️',
+    getText: (name, user) => `¡Hay mucho por explorar! Puedes practicar código en el Taller, resolver retos de programación, simular robots, construir circuitos virtuales y hasta ganar trofeos. ¡Ah, y puedes cambiar mi apariencia cuando quieras tocándome en la pantalla!`,
   },
   {
     id: 'ready',
-    emoji: 'ðŸš€',
-    getText: (name, user) => `Â¡Estoy listo, ${user}! Con cada lecciÃ³n que completes, yo crecerÃ© y me harÃ© mÃ¡s fuerte. Â¿Empezamos esta aventura juntos? Â¡Vamos a ser los mejores del laboratorio!`,
+    emoji: '🚀',
+    getText: (name, user) => `¡Estoy listo, ${user}! Con cada lección que completes, yo creceré y me haré más fuerte. ¿Empezamos esta aventura juntos? ¡Vamos a ser los mejores del laboratorio!`,
   },
 ];
 
@@ -338,9 +338,9 @@ const RobotWelcomeStory = ({ robotConfig, robotName, userName, onComplete }) => 
           <RobotAvatar config={robotConfig} size={120} animate />
         </div>
         {/* Animated particles around robot */}
-        <div className="absolute -top-2 -right-4 text-2xl animate-bounce" style={{ animationDelay: '0s' }}>âœ¨</div>
-        <div className="absolute -top-1 -left-3 text-xl animate-bounce" style={{ animationDelay: '0.3s' }}>âš¡</div>
-        <div className="absolute bottom-2 -right-3 text-lg animate-pulse" style={{ animationDelay: '0.6s' }}>ðŸ’«</div>
+        <div className="absolute -top-2 -right-4 text-2xl animate-bounce" style={{ animationDelay: '0s' }}>✨</div>
+        <div className="absolute -top-1 -left-3 text-xl animate-bounce" style={{ animationDelay: '0.3s' }}>⚡</div>
+        <div className="absolute bottom-2 -right-3 text-lg animate-pulse" style={{ animationDelay: '0.6s' }}>💫</div>
       </div>
 
       {/* Robot name badge */}
@@ -373,9 +373,9 @@ const RobotWelcomeStory = ({ robotConfig, robotName, userName, onComplete }) => 
       <button onClick={handleNext}
         className="w-full py-4 rounded-2xl bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-black text-lg shadow-lg shadow-blue-500/30 active:scale-95 transition-all flex items-center justify-center gap-2">
         {isTyping ? (
-          <>Saltar â–¸â–¸</>
+          <>Saltar ▸▸</>
         ) : isLast ? (
-          <><Sparkles size={22}/> Â¡Comenzar la Aventura!</>
+          <><Sparkles size={22}/> ¡Comenzar la Aventura!</>
         ) : (
           <>Siguiente <ChevronRight size={22}/></>
         )}
@@ -425,16 +425,16 @@ const OnboardingScreen = ({ onComplete, firebaseProfile }) => {
   };
 
   const builderTabs = [
-    { id: 'skins', label: 'ðŸŒŸ', fullLabel: 'Skins', items: [], key: 'skins' },
-    { id: 'head', label: 'ðŸ—£ï¸', fullLabel: 'Cabeza', items: HEADS, key: 'head' },
-    { id: 'eyes', label: 'ðŸ‘€', fullLabel: 'Ojos', items: EYES, key: 'eyes' },
-    { id: 'mouth', label: 'ðŸ‘„', fullLabel: 'Boca', items: MOUTHS, key: 'mouth' },
-    { id: 'body', label: 'ðŸ¦¾', fullLabel: 'Cuerpo', items: BODIES, key: 'body' },
-    { id: 'arms', label: 'ðŸ’ª', fullLabel: 'Brazos', items: ARMS, key: 'arms' },
-    { id: 'legs', label: 'ðŸ¦µ', fullLabel: 'Piernas', items: LEGS, key: 'legs' },
-    { id: 'pattern', label: 'â­', fullLabel: 'Emblema', items: PATTERNS, key: 'pattern' },
-    { id: 'accessory', label: 'ðŸŽ©', fullLabel: 'Accesorio', items: ACCESSORIES, key: 'accessory' },
-    { id: 'color', label: 'ðŸŽ¨', fullLabel: 'Color', items: COLORS, key: 'color' },
+    { id: 'skins', label: '🌟', fullLabel: 'Skins', items: [], key: 'skins' },
+    { id: 'head', label: '🗣️', fullLabel: 'Cabeza', items: HEADS, key: 'head' },
+    { id: 'eyes', label: '👀', fullLabel: 'Ojos', items: EYES, key: 'eyes' },
+    { id: 'mouth', label: '👄', fullLabel: 'Boca', items: MOUTHS, key: 'mouth' },
+    { id: 'body', label: '🦾', fullLabel: 'Cuerpo', items: BODIES, key: 'body' },
+    { id: 'arms', label: '💪', fullLabel: 'Brazos', items: ARMS, key: 'arms' },
+    { id: 'legs', label: '🦵', fullLabel: 'Piernas', items: LEGS, key: 'legs' },
+    { id: 'pattern', label: '⭐', fullLabel: 'Emblema', items: PATTERNS, key: 'pattern' },
+    { id: 'accessory', label: '🎩', fullLabel: 'Accesorio', items: ACCESSORIES, key: 'accessory' },
+    { id: 'color', label: '🎨', fullLabel: 'Color', items: COLORS, key: 'color' },
   ];
 
   const getPreviewViewBox = (category) => {
@@ -468,16 +468,16 @@ const OnboardingScreen = ({ onComplete, firebaseProfile }) => {
               <img src="/logo-v2.png" alt="CultivaTec" className="w-full h-full object-contain" onError={(e) => { e.target.style.display='none'; }}/>
             </div>
             <h1 className="text-4xl font-black mb-3 bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">
-              Â¡Bienvenido a CultivaTec!
+              ¡Bienvenido a CultivaTec!
             </h1>
             <p className="text-blue-200 text-lg mb-4 leading-relaxed">
-              Una aventura donde aprenderÃ¡s <span className="font-black text-cyan-300">robÃ³tica, electrÃ³nica y programaciÃ³n</span> mientras construyes tu propio compaÃ±ero robot.
+              Una aventura donde aprenderás <span className="font-black text-cyan-300">robótica, electrónica y programación</span> mientras construyes tu propio compañero robot.
             </p>
             <div className="grid grid-cols-3 gap-3 mb-8">
               {[
-                { icon: 'âš¡', label: 'Electricidad', desc: 'Aprende cÃ³mo funciona' },
-                { icon: 'ðŸ”Œ', label: 'Circuitos', desc: 'Construye circuitos' },
-                { icon: 'ðŸ¤–', label: 'Robots', desc: 'Crea tu robot' },
+                { icon: '⚡', label: 'Electricidad', desc: 'Aprende cómo funciona' },
+                { icon: '🔌', label: 'Circuitos', desc: 'Construye circuitos' },
+                { icon: '🤖', label: 'Robots', desc: 'Crea tu robot' },
               ].map((item, i) => (
                 <div key={i} className="bg-white/10 backdrop-blur rounded-xl p-3 border border-white/10">
                   <div className="text-2xl mb-1">{item.icon}</div>
@@ -487,12 +487,12 @@ const OnboardingScreen = ({ onComplete, firebaseProfile }) => {
               ))}
             </div>
             <p className="text-blue-300/80 text-sm mb-6">
-              En CultivaTec, todos pueden aprender robÃ³tica sin importar la edad ni la experiencia. 
-              Cada lecciÃ³n es una aventura y tÃº eres el hÃ©roe.
+              En CultivaTec, todos pueden aprender robótica sin importar la edad ni la experiencia. 
+              Cada lección es una aventura y tú eres el héroe.
             </p>
             <button onClick={() => setStep(1)}
               className="w-full py-4 rounded-2xl bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-black text-lg shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all active:scale-95 flex items-center justify-center gap-2">
-              Â¡Crear mi Robot! <ChevronRight size={24}/>
+              ¡Crear mi Robot! <ChevronRight size={24}/>
             </button>
           </div>
         )}
@@ -501,8 +501,8 @@ const OnboardingScreen = ({ onComplete, firebaseProfile }) => {
           <div className="max-w-lg w-full animate-scale-in">
             {/* Header */}
             <div className="text-center mb-3">
-              <h2 className="text-2xl font-black mb-1">ðŸ¤– Crea tu Robot CompaÃ±ero</h2>
-              <p className="text-blue-300 text-sm">Personaliza cada detalle â€” Â¡hay mÃ¡s de {totalCombinations.toLocaleString()} combinaciones!</p>
+              <h2 className="text-2xl font-black mb-1">🤖 Crea tu Robot Compañero</h2>
+              <p className="text-blue-300 text-sm">Personaliza cada detalle — ¡hay más de {totalCombinations.toLocaleString()} combinaciones!</p>
             </div>
 
             {/* Robot Preview with Pedestal */}
@@ -532,8 +532,8 @@ const OnboardingScreen = ({ onComplete, firebaseProfile }) => {
                 className="flex-1 py-2.5 px-4 rounded-xl bg-white/10 border-2 border-white/20 text-white text-center font-bold placeholder-white/30 outline-none focus:border-cyan-400 transition-colors text-sm"
                 maxLength={16}/>
               <button onClick={randomize}
-                className="py-2.5 px-3 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold text-xs shadow-lg active:scale-95 transition-all whitespace-nowrap flex items-center gap-1">
-                ðŸŽ² Random
+                className="py-2.5 px-3 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold text-xs shadow-lg active:scale-95 transition-all whitespace-nowrap flex items-center gap-1">
+                🎲 Random
               </button>
             </div>
 
@@ -573,7 +573,7 @@ const OnboardingScreen = ({ onComplete, firebaseProfile }) => {
                             : 'bg-white/5 hover:bg-white/10 active:scale-95'}`}>
                         <div className="absolute top-0.5 right-0.5 text-[7px] font-black px-1 py-0.5 rounded-full text-white"
                           style={{ backgroundColor: skin.rarityColor }}>
-                          {skin.rarity === 'legendary' ? 'â˜…â˜…â˜…' : skin.rarity === 'epic' ? 'â˜…â˜…' : skin.rarity === 'rare' ? 'â˜…' : ''}
+                          {skin.rarity === 'legendary' ? '★★★' : skin.rarity === 'epic' ? '★★' : skin.rarity === 'rare' ? '★' : ''}
                         </div>
                         <div className="w-12 h-12 flex items-center justify-center">
                           <RobotAvatar config={skin.config} size={45} />
@@ -618,9 +618,9 @@ const OnboardingScreen = ({ onComplete, firebaseProfile }) => {
                             ? 'bg-blue-500/30 ring-2 ring-cyan-400 scale-[1.03]' 
                             : 'bg-white/5 hover:bg-white/10 active:scale-95'}`}>
                         {item.id === 'none' && builderTab === 'pattern' ? (
-                          <div className="w-10 h-10 flex items-center justify-center text-white/40 text-lg">âœ•</div>
+                          <div className="w-10 h-10 flex items-center justify-center text-white/40 text-lg">✕</div>
                         ) : item.id === 'none' && builderTab === 'accessory' ? (
-                          <div className="w-10 h-10 flex items-center justify-center text-white/40 text-lg">âœ•</div>
+                          <div className="w-10 h-10 flex items-center justify-center text-white/40 text-lg">✕</div>
                         ) : (
                           <svg width="42" height="42" viewBox={viewBox}>
                             <g dangerouslySetInnerHTML={{ __html: item.path(currentColor) }}/>
@@ -637,17 +637,17 @@ const OnboardingScreen = ({ onComplete, firebaseProfile }) => {
             {/* Navigation */}
             <div className="flex gap-3">
               <button onClick={() => setStep(0)} className="flex-1 py-3 rounded-xl bg-white/10 border border-white/20 font-bold hover:bg-white/20 transition-colors flex items-center justify-center gap-1">
-                <ChevronLeft size={18}/> AtrÃ¡s
+                <ChevronLeft size={18}/> Atrás
               </button>
               <button onClick={() => setStep(2)}
                 className="flex-1 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 font-bold shadow-lg shadow-blue-500/30 active:scale-95 transition-all flex items-center justify-center gap-2">
-                <Sparkles size={16}/> Â¡Listo!
+                <Sparkles size={16}/> ¡Listo!
               </button>
             </div>
           </div>
         )}
 
-        {/* Step 2: Story intro â€” Robot speaks! */}
+        {/* Step 2: Story intro — Robot speaks! */}
         {step === 2 && (
           <RobotWelcomeStory 
             robotConfig={robotConfig} 
@@ -698,7 +698,7 @@ export const StoryProgress = ({ modulesCompleted = 0, robotConfig, robotName, us
               <p className="text-[10px] text-blue-300 mt-0.5">Siguiente: {nextChapter.emoji} {nextChapter.title}</p>
             </div>
           )}
-          {!nextChapter && <p className="text-[10px] text-yellow-300 font-bold">ðŸŽ“ Â¡Historia completada!</p>}
+          {!nextChapter && <p className="text-[10px] text-yellow-300 font-bold">🎓 ¡Historia completada!</p>}
         </div>
         <ChevronRight size={16} className="text-blue-300 flex-shrink-0"/>
       </div>
@@ -730,7 +730,7 @@ export const StoryProgress = ({ modulesCompleted = 0, robotConfig, robotName, us
                     {unlocked ? (
                       <p className="text-blue-200 text-xs leading-relaxed">{ch.description}</p>
                     ) : (
-                      <p className="text-white/30 text-xs">ðŸ”’ Completa {ch.unlockAt} mÃ³dulos para desbloquear</p>
+                      <p className="text-white/30 text-xs">🔒 Completa {ch.unlockAt} módulos para desbloquear</p>
                     )}
                   </div>
                 );

@@ -1,4 +1,4 @@
-﻿import React, { useState, useCallback, useRef, useEffect } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { ArrowLeft, Play, RotateCcw, Trash2, Zap, Cpu, ChevronRight, Pause, ChevronUp, ChevronDown, X, Users, Gamepad2, Trophy, Upload, Wifi, Check, Monitor, Volume2, VolumeX, BookOpen, Wrench, AlertTriangle, Lightbulb, Package, CheckCircle } from 'lucide-react';
 import RobotBuildGamesHub from './RobotBuildGames';
 import AxonMerge from './AxonMerge';
@@ -6,7 +6,7 @@ import SumoBotPush from './SumoBotPush';
 import { RobotMini } from '../Onboarding';
 
 /* ================================================================
-   IMÃGENES SVG INLINE DE PIEZAS REALES
+   IMÁGENES SVG INLINE DE PIEZAS REALES
    ================================================================ */
 const PartSVG = ({ partId, size = 60 }) => {
   const s = size;
@@ -136,23 +136,23 @@ const PartSVG = ({ partId, size = 60 }) => {
         <rect x="16" y="22" width="48" height="36" rx="4" fill="#166534" stroke="#14532D" strokeWidth="2"/>
         <rect x="58" y="32" width="8" height="16" rx="2" fill="#22C55E"/>
         <text x="40" y="38" textAnchor="middle" fontSize="9" fill="#86EFAC" fontWeight="bold">9V</text>
-        <text x="40" y="48" textAnchor="middle" fontSize="6" fill="#4ADE80">+ âˆ’</text>
+        <text x="40" y="48" textAnchor="middle" fontSize="6" fill="#4ADE80">+ −</text>
         <rect x="22" y="58" width="8" height="8" rx="1" fill="#EF4444"/>
         <rect x="50" y="58" width="8" height="8" rx="1" fill="#1F2937"/>
-        <text x="40" y="76" textAnchor="middle" fontSize="6" fill="#22C55E" fontWeight="bold">BaterÃ­a</text>
+        <text x="40" y="76" textAnchor="middle" fontSize="6" fill="#22C55E" fontWeight="bold">Batería</text>
       </svg>
     ),
     sensor_sound: (
       <svg width={s} height={s} viewBox="0 0 80 80">
         <rect x="18" y="22" width="44" height="26" rx="3" fill="#312E81" stroke="#4338CA" strokeWidth="1.5"/>
-        <circle cx="40" cy="35" r="8" fill="#0C1632" stroke="#6366F1" strokeWidth="1.5"/>
+        <circle cx="40" cy="35" r="8" fill="#1E1B4B" stroke="#6366F1" strokeWidth="1.5"/>
         <circle cx="40" cy="35" r="3" fill="#818CF8"/>
         <rect x="28" y="48" width="4" height="10" rx="1" fill="#A5B4FC"/>
         <rect x="38" y="48" width="4" height="10" rx="1" fill="#A5B4FC"/>
         <rect x="48" y="48" width="4" height="10" rx="1" fill="#A5B4FC"/>
         <path d="M50 28 Q55 22 58 28" fill="none" stroke="#818CF8" strokeWidth="1.5"/>
         <path d="M52 28 Q58 18 62 28" fill="none" stroke="#818CF8" strokeWidth="1" opacity="0.5"/>
-        <text x="40" y="70" textAnchor="middle" fontSize="6" fill="#818CF8" fontWeight="bold">MicrÃ³fono</text>
+        <text x="40" y="70" textAnchor="middle" fontSize="6" fill="#818CF8" fontWeight="bold">Micrófono</text>
       </svg>
     ),
     buzzer: (
@@ -216,7 +216,7 @@ const PartSVG = ({ partId, size = 60 }) => {
    ================================================================ */
 const ROBOT_TEMPLATES = [
   {
-    id: 'sumo', name: 'Robot Sumo', icon: 'ðŸ¤¼',
+    id: 'sumo', name: 'Robot Sumo', icon: '🤼',
     color: 'from-red-500 to-orange-600',
     desc: 'Robot de combate que empuja al oponente fuera del ring.',
     parts: ['chassis_sumo','motor_dc','motor_dc','wheel','wheel','sensor_ultra','arduino','battery','driver_l298n','blade'],
@@ -224,25 +224,25 @@ const ROBOT_TEMPLATES = [
     arena: 'sumo',
   },
   {
-    id: 'line', name: 'Sigue LÃ­neas', icon: 'ã€°ï¸',
+    id: 'line', name: 'Sigue Líneas', icon: '〰️',
     color: 'from-blue-500 to-cyan-600',
-    desc: 'Robot veloz que detecta y sigue una lÃ­nea negra.',
+    desc: 'Robot veloz que detecta y sigue una línea negra.',
     parts: ['chassis_line','motor_dc','motor_dc','wheel','wheel','sensor_ir','sensor_ir','arduino','battery','driver_l298n'],
     program: ['repeat_forever','read_sensors','if_line_left','turn_left','end_if','if_line_right','turn_right','end_if','if_line_center','move_forward','end_if'],
     arena: 'line',
   },
   {
-    id: 'dog', name: 'Perro Robot', icon: 'ðŸ•',
+    id: 'dog', name: 'Perro Robot', icon: '🐕',
     color: 'from-amber-500 to-yellow-600',
-    desc: 'Robot cuadrÃºpedo que camina, se sienta y ladra.',
+    desc: 'Robot cuadrúpedo que camina, se sienta y ladra.',
     parts: ['chassis_dog','servo','servo','servo','servo','sensor_ultra','sensor_sound','arduino','battery','buzzer','led_rgb'],
     program: ['repeat_forever','walk_forward','wait_1s','check_distance','if_obstacle','sit','bark','wait_1s','turn_left','end_if'],
     arena: 'field',
   },
   {
-    id: 'free', name: 'Libre', icon: 'ðŸ”§',
-    color: 'from-blue-500 to-blue-600',
-    desc: 'DiseÃ±a tu propio robot desde cero.',
+    id: 'free', name: 'Libre', icon: '🔧',
+    color: 'from-blue-500 to-purple-600',
+    desc: 'Diseña tu propio robot desde cero.',
     parts: [],
     program: [],
     arena: 'field',
@@ -254,68 +254,68 @@ const ROBOT_TEMPLATES = [
    ================================================================ */
 const ASSEMBLY_INSTRUCTIONS = {
   sumo: {
-    title: 'ðŸ¤¼ Robot Sumo de Combate',
+    title: '🤼 Robot Sumo de Combate',
     difficulty: 'Intermedio',
     time: '2-3 horas',
-    age: '10+ aÃ±os',
-    intro: 'Â¡Vamos a construir un robot sÃºper fuerte que puede empujar a otros robots fuera del ring! Este robot usa sensores para detectar enemigos y tiene una rampa frontal para levantarlos.',
+    age: '10+ años',
+    intro: '¡Vamos a construir un robot súper fuerte que puede empujar a otros robots fuera del ring! Este robot usa sensores para detectar enemigos y tiene una rampa frontal para levantarlos.',
     materials: [
-      { name: 'Arduino UNO', emoji: 'ðŸ”Œ', desc: 'El cerebro del robot', quantity: 1, buyTip: 'Busca en Amazon o tiendas de electrÃ³nica local' },
-      { name: 'Driver L298N', emoji: 'âš¡', desc: 'Controla los motores', quantity: 1, buyTip: 'Viene en mÃ³dulo rojo con disipador' },
-      { name: 'Motor DC con rueda', emoji: 'ðŸ”„', desc: 'Hace que el robot se mueva', quantity: 2, buyTip: 'Los amarillos con caja reductora son perfectos' },
-      { name: 'Sensor UltrasÃ³nico HC-SR04', emoji: 'ðŸ‘ï¸', desc: 'Detecta enemigos a distancia', quantity: 1, buyTip: 'Tiene 4 pines: VCC, Trig, Echo, GND' },
-      { name: 'BaterÃ­a 9V o Pack 6xAA', emoji: 'ðŸ”‹', desc: 'EnergÃ­a para todo el robot', quantity: 1, buyTip: 'Las recargables son mejores para el ambiente' },
-      { name: 'Chasis de acrÃ­lico o madera', emoji: 'ðŸ“¦', desc: 'El cuerpo del robot', quantity: 1, buyTip: 'Puedes hacerlo con una caja de CD vieja' },
-      { name: 'Cables jumper', emoji: 'ðŸ”—', desc: 'Conectan todo', quantity: 20, buyTip: 'Macho-macho y macho-hembra' },
-      { name: 'Rampa de metal o plÃ¡stico', emoji: 'â›ï¸', desc: 'Para levantar enemigos', quantity: 1, buyTip: 'Una regla de metal doblada funciona' },
-      { name: 'Tornillos y tuercas', emoji: 'ðŸ”©', desc: 'Para fijar piezas', quantity: 15, buyTip: 'M3 son los mÃ¡s comunes' },
+      { name: 'Arduino UNO', emoji: '🔌', desc: 'El cerebro del robot', quantity: 1, buyTip: 'Busca en Amazon o tiendas de electrónica local' },
+      { name: 'Driver L298N', emoji: '⚡', desc: 'Controla los motores', quantity: 1, buyTip: 'Viene en módulo rojo con disipador' },
+      { name: 'Motor DC con rueda', emoji: '🔄', desc: 'Hace que el robot se mueva', quantity: 2, buyTip: 'Los amarillos con caja reductora son perfectos' },
+      { name: 'Sensor Ultrasónico HC-SR04', emoji: '👁️', desc: 'Detecta enemigos a distancia', quantity: 1, buyTip: 'Tiene 4 pines: VCC, Trig, Echo, GND' },
+      { name: 'Batería 9V o Pack 6xAA', emoji: '🔋', desc: 'Energía para todo el robot', quantity: 1, buyTip: 'Las recargables son mejores para el ambiente' },
+      { name: 'Chasis de acrílico o madera', emoji: '📦', desc: 'El cuerpo del robot', quantity: 1, buyTip: 'Puedes hacerlo con una caja de CD vieja' },
+      { name: 'Cables jumper', emoji: '🔗', desc: 'Conectan todo', quantity: 20, buyTip: 'Macho-macho y macho-hembra' },
+      { name: 'Rampa de metal o plástico', emoji: '⛏️', desc: 'Para levantar enemigos', quantity: 1, buyTip: 'Una regla de metal doblada funciona' },
+      { name: 'Tornillos y tuercas', emoji: '🔩', desc: 'Para fijar piezas', quantity: 15, buyTip: 'M3 son los más comunes' },
     ],
     tools: ['Destornillador', 'Pinzas', 'Cinta aislante', 'Pegamento caliente'],
     steps: [
       {
-        title: 'ðŸ“¦ Paso 1: Prepara el Chasis',
-        emoji: 'ðŸ“¦',
-        description: 'Primero necesitamos hacer la base donde irÃ¡n todas las piezas.',
+        title: '📦 Paso 1: Prepara el Chasis',
+        emoji: '📦',
+        description: 'Primero necesitamos hacer la base donde irán todas las piezas.',
         details: [
-          '1. Toma tu chasis de acrÃ­lico o madera (una caja rectangular de unos 15x10 cm es perfecta)',
-          '2. Marca con un lÃ¡piz dÃ³nde irÃ¡n los motores (en las esquinas traseras)',
-          '3. Haz 4 agujeros pequeÃ±os para fijar cada motor',
-          'Â¡Tip! Si usas una caja de CD, ya tiene buen tamaÃ±o'
+          '1. Toma tu chasis de acrílico o madera (una caja rectangular de unos 15x10 cm es perfecta)',
+          '2. Marca con un lápiz dónde irán los motores (en las esquinas traseras)',
+          '3. Haz 4 agujeros pequeños para fijar cada motor',
+          '¡Tip! Si usas una caja de CD, ya tiene buen tamaño'
         ],
         safety: 'Pide ayuda a un adulto si necesitas hacer agujeros',
-        image: 'ðŸ“'
+        image: '📐'
       },
       {
-        title: 'ðŸ”„ Paso 2: Instala los Motores',
-        emoji: 'ðŸ”„',
-        description: 'Los motores son los mÃºsculos del robot, Â¡le dan movimiento!',
+        title: '🔄 Paso 2: Instala los Motores',
+        emoji: '🔄',
+        description: 'Los motores son los músculos del robot, ¡le dan movimiento!',
         details: [
           '1. Coloca los dos motores DC en las esquinas traseras del chasis',
           '2. Los ejes de los motores deben apuntar hacia afuera',
           '3. Fija cada motor con 2 tornillos o usa abrazaderas',
           '4. Conecta las ruedas a los ejes de los motores',
-          'Â¡Importante! Los cables de cada motor deben quedar accesibles'
+          '¡Importante! Los cables de cada motor deben quedar accesibles'
         ],
         safety: 'No aprietes demasiado los tornillos para no romper el motor',
-        image: 'âš™ï¸'
+        image: '⚙️'
       },
       {
-        title: 'ðŸ‘ï¸ Paso 3: Coloca el Sensor UltrasÃ³nico',
-        emoji: 'ðŸ‘ï¸',
+        title: '👁️ Paso 3: Coloca el Sensor Ultrasónico',
+        emoji: '👁️',
         description: 'Este sensor es como los ojos del robot, detecta cosas a distancia.',
         details: [
-          '1. El sensor tiene dos cÃ­rculos (parecen ojos) - ese lado va hacia adelante',
-          '2. FÃ­jalo en la parte delantera del chasis, a unos 3-4 cm del suelo',
-          '3. Usa pegamento caliente o haz un soporte con cartÃ³n',
-          '4. Debe poder "ver" hacia el frente sin obstÃ¡culos'
+          '1. El sensor tiene dos círculos (parecen ojos) - ese lado va hacia adelante',
+          '2. Fíjalo en la parte delantera del chasis, a unos 3-4 cm del suelo',
+          '3. Usa pegamento caliente o haz un soporte con cartón',
+          '4. Debe poder "ver" hacia el frente sin obstáculos'
         ],
         safety: 'El pegamento caliente quema, pide ayuda a un adulto',
-        image: 'ðŸ‘€'
+        image: '👀'
       },
       {
-        title: 'ðŸ”Œ Paso 4: Monta el Arduino',
-        emoji: 'ðŸ”Œ',
-        description: 'El Arduino es el cerebro del robot, aquÃ­ va el programa.',
+        title: '🔌 Paso 4: Monta el Arduino',
+        emoji: '🔌',
+        description: 'El Arduino es el cerebro del robot, aquí va el programa.',
         details: [
           '1. Coloca el Arduino en el centro del chasis',
           '2. Puedes pegarlo con cinta doble cara o atornillarlo',
@@ -323,84 +323,84 @@ const ASSEMBLY_INSTRUCTIONS = {
           '4. Deja espacio alrededor para los cables'
         ],
         safety: 'No toques los componentes del Arduino con los dedos mojados',
-        image: 'ðŸ§ '
+        image: '🧠'
       },
       {
-        title: 'âš¡ Paso 5: Conecta el Driver L298N',
-        emoji: 'âš¡',
-        description: 'El driver amplifica la seÃ±al del Arduino para mover los motores.',
+        title: '⚡ Paso 5: Conecta el Driver L298N',
+        emoji: '⚡',
+        description: 'El driver amplifica la señal del Arduino para mover los motores.',
         details: [
           '1. Coloca el driver L298N cerca de los motores',
           '2. Conecta los cables de los motores a las salidas OUT1-OUT2 y OUT3-OUT4',
           '3. Conecta IN1, IN2, IN3, IN4 a los pines digitales del Arduino (ej: 5, 6, 9, 10)',
           '4. Conecta GND del driver al GND del Arduino',
-          '5. El pin 12V del driver va a la baterÃ­a positivo (+)'
+          '5. El pin 12V del driver va a la batería positivo (+)'
         ],
-        safety: 'Verifica la polaridad antes de conectar la baterÃ­a',
-        image: 'ðŸ”—'
+        safety: 'Verifica la polaridad antes de conectar la batería',
+        image: '🔗'
       },
       {
-        title: 'ðŸ”‹ Paso 6: Instala la BaterÃ­a',
-        emoji: 'ðŸ”‹',
-        description: 'La baterÃ­a es la energÃ­a que hace funcionar todo.',
+        title: '🔋 Paso 6: Instala la Batería',
+        emoji: '🔋',
+        description: 'La batería es la energía que hace funcionar todo.',
         details: [
-          '1. El positivo (+) de la baterÃ­a va al pin 12V del driver',
-          '2. El negativo (-) va al GND (tierra) comÃºn',
-          '3. Puedes agregar un interruptor para encender/apagar fÃ¡cilmente',
-          '4. Fija la baterÃ­a con velcro o una banda elÃ¡stica'
+          '1. El positivo (+) de la batería va al pin 12V del driver',
+          '2. El negativo (-) va al GND (tierra) común',
+          '3. Puedes agregar un interruptor para encender/apagar fácilmente',
+          '4. Fija la batería con velcro o una banda elástica'
         ],
-        safety: 'Nunca conectes la baterÃ­a al revÃ©s, puede daÃ±ar los componentes',
-        image: 'âš¡'
+        safety: 'Nunca conectes la batería al revés, puede dañar los componentes',
+        image: '⚡'
       },
       {
-        title: 'â›ï¸ Paso 7: Agrega la Rampa Frontal',
-        emoji: 'â›ï¸',
+        title: '⛏️ Paso 7: Agrega la Rampa Frontal',
+        emoji: '⛏️',
         description: 'La rampa es el arma del robot, levanta a los enemigos.',
         details: [
-          '1. Corta una pieza de metal o plÃ¡stico resistente de unos 12 cm',
-          '2. DÃ³blala un poco para formar un Ã¡ngulo de unos 30 grados',
-          '3. FÃ­jala en la parte delantera, debajo del sensor',
+          '1. Corta una pieza de metal o plástico resistente de unos 12 cm',
+          '2. Dóblala un poco para formar un ángulo de unos 30 grados',
+          '3. Fíjala en la parte delantera, debajo del sensor',
           '4. Debe tocar el suelo ligeramente para poder levantar otros robots'
         ],
         safety: 'Cuidado con los bordes del metal, pueden cortar',
-        image: 'ðŸ›¡ï¸'
+        image: '🛡️'
       },
       {
-        title: 'ðŸ”— Paso 8: Conecta el Sensor al Arduino',
-        emoji: 'ðŸ”—',
+        title: '🔗 Paso 8: Conecta el Sensor al Arduino',
+        emoji: '🔗',
         description: 'Ahora conectamos los ojos al cerebro.',
         details: [
-          '1. VCC del sensor â†’ 5V del Arduino',
-          '2. GND del sensor â†’ GND del Arduino',
-          '3. TRIG del sensor â†’ Pin digital 7 del Arduino',
-          '4. ECHO del sensor â†’ Pin digital 8 del Arduino',
-          'Â¡Listo! El sensor ya puede enviar informaciÃ³n al Arduino'
+          '1. VCC del sensor → 5V del Arduino',
+          '2. GND del sensor → GND del Arduino',
+          '3. TRIG del sensor → Pin digital 7 del Arduino',
+          '4. ECHO del sensor → Pin digital 8 del Arduino',
+          '¡Listo! El sensor ya puede enviar información al Arduino'
         ],
-        safety: 'AsegÃºrate de que no haya cables sueltos que puedan hacer cortocircuito',
-        image: 'ðŸ”Œ'
+        safety: 'Asegúrate de que no haya cables sueltos que puedan hacer cortocircuito',
+        image: '🔌'
       },
       {
-        title: 'âœ… Paso 9: Prueba Final',
-        emoji: 'âœ…',
-        description: 'Â¡Es hora de probar tu robot sumo!',
+        title: '✅ Paso 9: Prueba Final',
+        emoji: '✅',
+        description: '¡Es hora de probar tu robot sumo!',
         details: [
-          '1. Revisa todas las conexiones una Ãºltima vez',
+          '1. Revisa todas las conexiones una última vez',
           '2. Carga el programa de sumo en el Arduino',
           '3. Enciende el robot con el interruptor',
-          '4. Pon tu mano frente al sensor - el robot deberÃ­a reaccionar',
-          'Â¡Felicidades! Tu robot sumo estÃ¡ listo para competir'
+          '4. Pon tu mano frente al sensor - el robot debería reaccionar',
+          '¡Felicidades! Tu robot sumo está listo para competir'
         ],
-        safety: 'Prueba primero en un espacio amplio lejos de objetos frÃ¡giles',
-        image: 'ðŸŽ‰'
+        safety: 'Prueba primero en un espacio amplio lejos de objetos frágiles',
+        image: '🎉'
       }
     ],
     tips: [
-      'ðŸ’¡ El peso es importante: un robot mÃ¡s pesado es mÃ¡s difÃ­cil de empujar',
-      'ðŸ’¡ Las ruedas de goma tienen mejor agarre que las de plÃ¡stico',
-      'ðŸ’¡ Baja el centro de gravedad poniendo la baterÃ­a abajo',
-      'ðŸ’¡ El sensor debe estar a la altura del chasis enemigo'
+      '💡 El peso es importante: un robot más pesado es más difícil de empujar',
+      '💡 Las ruedas de goma tienen mejor agarre que las de plástico',
+      '💡 Baja el centro de gravedad poniendo la batería abajo',
+      '💡 El sensor debe estar a la altura del chasis enemigo'
     ],
-    code: `// CÃ³digo bÃ¡sico para Robot Sumo
+    code: `// Código básico para Robot Sumo
 #define TRIG 7
 #define ECHO 8
 #define MOTOR_IZQ_A 5
@@ -420,7 +420,7 @@ void setup() {
 void loop() {
   int distancia = medirDistancia();
   if (distancia < 30) {
-    // Â¡Enemigo detectado! Atacar
+    // ¡Enemigo detectado! Atacar
     avanzar(255);
   } else {
     // Buscar enemigo girando
@@ -439,26 +439,26 @@ int medirDistancia() {
 }`
   },
   line: {
-    title: 'ã€°ï¸ Robot Sigue LÃ­neas Veloz',
+    title: '〰️ Robot Sigue Líneas Veloz',
     difficulty: 'Principiante',
     time: '1-2 horas',
-    age: '8+ aÃ±os',
-    intro: 'Â¡Este robot es sÃºper inteligente! Puede seguir una lÃ­nea negra en el piso sin perderse. Usa sensores infrarrojos que detectan colores claros y oscuros.',
+    age: '8+ años',
+    intro: '¡Este robot es súper inteligente! Puede seguir una línea negra en el piso sin perderse. Usa sensores infrarrojos que detectan colores claros y oscuros.',
     materials: [
-      { name: 'Arduino UNO', emoji: 'ðŸ”Œ', desc: 'El cerebro del robot', quantity: 1, buyTip: 'TambiÃ©n sirve un Arduino Nano' },
-      { name: 'Driver L298N', emoji: 'âš¡', desc: 'Controla los motores', quantity: 1, buyTip: 'O un driver L293D mÃ¡s pequeÃ±o' },
-      { name: 'Motor DC con rueda', emoji: 'ðŸ”„', desc: 'Para moverse', quantity: 2, buyTip: 'Los amarillos de caja reductora' },
-      { name: 'Sensor Infrarrojo TCRT5000', emoji: 'ðŸ”´', desc: 'Detecta la lÃ­nea negra', quantity: 2, buyTip: 'O mÃ³dulos FC-51 que ya vienen armados' },
-      { name: 'BaterÃ­a 9V o Pack 4xAA', emoji: 'ðŸ”‹', desc: 'EnergÃ­a', quantity: 1, buyTip: 'Las AA duran mÃ¡s' },
-      { name: 'Chasis de robot 2WD', emoji: 'ðŸ“¦', desc: 'Body del robot', quantity: 1, buyTip: 'Venden kits con chasis y motores' },
-      { name: 'Rueda loca', emoji: 'ðŸ”µ', desc: 'Tercer punto de apoyo', quantity: 1, buyTip: 'Una canica en un soporte tambiÃ©n sirve' },
-      { name: 'Cables jumper', emoji: 'ðŸ”—', desc: 'Para conectar', quantity: 15, buyTip: 'Macho-hembra mayormente' },
+      { name: 'Arduino UNO', emoji: '🔌', desc: 'El cerebro del robot', quantity: 1, buyTip: 'También sirve un Arduino Nano' },
+      { name: 'Driver L298N', emoji: '⚡', desc: 'Controla los motores', quantity: 1, buyTip: 'O un driver L293D más pequeño' },
+      { name: 'Motor DC con rueda', emoji: '🔄', desc: 'Para moverse', quantity: 2, buyTip: 'Los amarillos de caja reductora' },
+      { name: 'Sensor Infrarrojo TCRT5000', emoji: '🔴', desc: 'Detecta la línea negra', quantity: 2, buyTip: 'O módulos FC-51 que ya vienen armados' },
+      { name: 'Batería 9V o Pack 4xAA', emoji: '🔋', desc: 'Energía', quantity: 1, buyTip: 'Las AA duran más' },
+      { name: 'Chasis de robot 2WD', emoji: '📦', desc: 'Body del robot', quantity: 1, buyTip: 'Venden kits con chasis y motores' },
+      { name: 'Rueda loca', emoji: '🔵', desc: 'Tercer punto de apoyo', quantity: 1, buyTip: 'Una canica en un soporte también sirve' },
+      { name: 'Cables jumper', emoji: '🔗', desc: 'Para conectar', quantity: 15, buyTip: 'Macho-hembra mayormente' },
     ],
-    tools: ['Destornillador pequeÃ±o', 'Cinta aislante'],
+    tools: ['Destornillador pequeño', 'Cinta aislante'],
     steps: [
       {
-        title: 'ðŸ“¦ Paso 1: Arma el Chasis',
-        emoji: 'ðŸ“¦',
+        title: '📦 Paso 1: Arma el Chasis',
+        emoji: '📦',
         description: 'Prepara la base del robot con los motores y ruedas.',
         details: [
           '1. Si compraste un kit, sigue las instrucciones para armar el chasis',
@@ -467,72 +467,72 @@ int medirDistancia() {
           '4. Pon la rueda loca en la parte delantera'
         ],
         safety: 'Fija bien los motores para que no se muevan',
-        image: 'ðŸš—'
+        image: '🚗'
       },
       {
-        title: 'ðŸ”´ Paso 2: Instala los Sensores IR',
-        emoji: 'ðŸ”´',
+        title: '🔴 Paso 2: Instala los Sensores IR',
+        emoji: '🔴',
         description: 'Los sensores van debajo del robot, mirando al piso.',
         details: [
           '1. Coloca los dos sensores en la parte delantera, separados unos 3 cm',
           '2. Deben estar a solo 0.5-1 cm del suelo',
-          '3. Apuntan hacia abajo para "ver" la lÃ­nea',
+          '3. Apuntan hacia abajo para "ver" la línea',
           '4. Uno va a la izquierda de centro, otro a la derecha',
-          'La distancia entre ellos debe ser menor que el ancho de la lÃ­nea'
+          'La distancia entre ellos debe ser menor que el ancho de la línea'
         ],
         safety: 'Los sensores son delicados, no los presiones mucho',
-        image: 'ðŸ‘ï¸'
+        image: '👁️'
       },
       {
-        title: 'ðŸ”Œ Paso 3: Monta el Arduino y Driver',
-        emoji: 'ðŸ”Œ',
-        description: 'Coloca los componentes electrÃ³nicos en el chasis.',
+        title: '🔌 Paso 3: Monta el Arduino y Driver',
+        emoji: '🔌',
+        description: 'Coloca los componentes electrónicos en el chasis.',
         details: [
           '1. El Arduino va en el centro o parte trasera',
           '2. El driver L298N cerca de los motores',
           '3. Usa cinta doble cara o tornillos para fijarlos',
           '4. Deja el puerto USB accesible'
         ],
-        safety: 'Evita que los componentes toquen partes metÃ¡licas',
-        image: 'ðŸ§ '
+        safety: 'Evita que los componentes toquen partes metálicas',
+        image: '🧠'
       },
       {
-        title: 'ðŸ”— Paso 4: Conecta Todo',
-        emoji: 'ðŸ”—',
+        title: '🔗 Paso 4: Conecta Todo',
+        emoji: '🔗',
         description: 'Hora de cablear todas las conexiones.',
         details: [
-          '1. Motores â†’ OUT del driver (izq: OUT1-2, der: OUT3-4)',
-          '2. Driver IN1-IN4 â†’ Pines Arduino 5, 6, 9, 10',
-          '3. Sensor izquierdo OUT â†’ Arduino A0',
-          '4. Sensor derecho OUT â†’ Arduino A1',
-          '5. VCC de sensores â†’ 5V, GND â†’ GND',
-          '6. BaterÃ­a + â†’ Driver 12V, BaterÃ­a - â†’ GND comÃºn'
+          '1. Motores → OUT del driver (izq: OUT1-2, der: OUT3-4)',
+          '2. Driver IN1-IN4 → Pines Arduino 5, 6, 9, 10',
+          '3. Sensor izquierdo OUT → Arduino A0',
+          '4. Sensor derecho OUT → Arduino A1',
+          '5. VCC de sensores → 5V, GND → GND',
+          '6. Batería + → Driver 12V, Batería - → GND común'
         ],
         safety: 'Revisa dos veces antes de encender',
-        image: 'âš¡'
+        image: '⚡'
       },
       {
-        title: 'âœ… Paso 5: Prepara la Pista y Prueba',
-        emoji: 'âœ…',
-        description: 'Â¡Crea una pista y prueba tu robot!',
+        title: '✅ Paso 5: Prepara la Pista y Prueba',
+        emoji: '✅',
+        description: '¡Crea una pista y prueba tu robot!',
         details: [
-          '1. Dibuja una lÃ­nea negra en papel blanco (cinta elÃ©ctrica funciona)',
-          '2. La lÃ­nea debe ser de unos 2-3 cm de ancho',
+          '1. Dibuja una línea negra en papel blanco (cinta eléctrica funciona)',
+          '2. La línea debe ser de unos 2-3 cm de ancho',
           '3. Carga el programa en el Arduino',
-          '4. Pon el robot sobre la lÃ­nea y enciÃ©ndelo',
-          '5. Ajusta la sensibilidad con el potenciÃ³metro del sensor si es necesario'
+          '4. Pon el robot sobre la línea y enciéndelo',
+          '5. Ajusta la sensibilidad con el potenciómetro del sensor si es necesario'
         ],
         safety: 'Prueba con curvas suaves primero',
-        image: 'ðŸ'
+        image: '🏁'
       }
     ],
     tips: [
-      'ðŸ’¡ La lÃ­nea debe ser negra sobre fondo blanco para mejor detecciÃ³n',
-      'ðŸ’¡ Ajusta la altura de los sensores si no detecta bien',
-      'ðŸ’¡ Empieza con velocidad lenta para que no se salga de la lÃ­nea',
-      'ðŸ’¡ Las curvas cerradas son mÃ¡s difÃ­ciles'
+      '💡 La línea debe ser negra sobre fondo blanco para mejor detección',
+      '💡 Ajusta la altura de los sensores si no detecta bien',
+      '💡 Empieza con velocidad lenta para que no se salga de la línea',
+      '💡 Las curvas cerradas son más difíciles'
     ],
-    code: `// CÃ³digo bÃ¡sico para Robot Sigue LÃ­neas
+    code: `// Código básico para Robot Sigue Líneas
 #define SENSOR_IZQ A0
 #define SENSOR_DER A1
 #define MOTOR_IZQ_A 5
@@ -553,162 +553,162 @@ void loop() {
   int izq = analogRead(SENSOR_IZQ);
   int der = analogRead(SENSOR_DER);
   
-  // Umbral de detecciÃ³n (ajustar segÃºn sensor)
+  // Umbral de detección (ajustar según sensor)
   bool lineaIzq = izq > 500;
   bool lineaDer = der > 500;
   
   if (lineaIzq && lineaDer) {
-    avanzar(velocidad);  // LÃ­nea en centro
+    avanzar(velocidad);  // Línea en centro
   } else if (lineaIzq) {
-    girarIzquierda(velocidad);  // LÃ­nea a la izq
+    girarIzquierda(velocidad);  // Línea a la izq
   } else if (lineaDer) {
-    girarDerecha(velocidad);  // LÃ­nea a la der
+    girarDerecha(velocidad);  // Línea a la der
   } else {
-    detener();  // PerdiÃ³ la lÃ­nea
+    detener();  // Perdió la línea
   }
   delay(10);
 }`
   },
   dog: {
-    title: 'ðŸ• Perro Robot CuadrÃºpedo',
+    title: '🐕 Perro Robot Cuadrúpedo',
     difficulty: 'Avanzado',
     time: '4-6 horas',
-    age: '12+ aÃ±os',
-    intro: 'Â¡Este es el proyecto mÃ¡s divertido! Vamos a construir un perrito robot que camina con 4 patas, puede sentarse, ladrar y hasta detectar obstÃ¡culos. Usa servomotores para mover las patas.',
+    age: '12+ años',
+    intro: '¡Este es el proyecto más divertido! Vamos a construir un perrito robot que camina con 4 patas, puede sentarse, ladrar y hasta detectar obstáculos. Usa servomotores para mover las patas.',
     materials: [
-      { name: 'Arduino UNO o Nano', emoji: 'ðŸ”Œ', desc: 'El cerebro del perrito', quantity: 1, buyTip: 'Nano si quieres algo mÃ¡s compacto' },
-      { name: 'Servo Motor SG90', emoji: 'ðŸ¦¿', desc: 'Para mover las patas', quantity: 4, buyTip: 'Los pequeÃ±os azules son perfectos' },
-      { name: 'Sensor UltrasÃ³nico HC-SR04', emoji: 'ðŸ‘ï¸', desc: 'Para ver obstÃ¡culos', quantity: 1, buyTip: 'SerÃ¡ la nariz del perrito' },
-      { name: 'MÃ³dulo de sonido/micrÃ³fono', emoji: 'ðŸ‘‚', desc: 'Para escuchar comandos', quantity: 1, buyTip: 'MÃ³dulo KY-037 o similar' },
-      { name: 'Buzzer activo', emoji: 'ðŸ”Š', desc: 'Para ladrar', quantity: 1, buyTip: 'Los pequeÃ±os de 5V' },
-      { name: 'LED RGB', emoji: 'ðŸ’¡', desc: 'Los ojos del perrito', quantity: 1, buyTip: 'O 2 LEDs normales' },
-      { name: 'BaterÃ­a LiPo 7.4V o Pack 6xAA', emoji: 'ðŸ”‹', desc: 'EnergÃ­a', quantity: 1, buyTip: '4 servos necesitan buena energÃ­a' },
-      { name: 'Cuerpo impreso 3D o cartÃ³n', emoji: 'ðŸ“¦', desc: 'El cuerpo del perrito', quantity: 1, buyTip: 'Hay muchos diseÃ±os gratis en Thingiverse' },
-      { name: 'Cables y conectores', emoji: 'ðŸ”—', desc: 'Para todo', quantity: 20, buyTip: 'Los servos traen sus propios cables' },
+      { name: 'Arduino UNO o Nano', emoji: '🔌', desc: 'El cerebro del perrito', quantity: 1, buyTip: 'Nano si quieres algo más compacto' },
+      { name: 'Servo Motor SG90', emoji: '🦿', desc: 'Para mover las patas', quantity: 4, buyTip: 'Los pequeños azules son perfectos' },
+      { name: 'Sensor Ultrasónico HC-SR04', emoji: '👁️', desc: 'Para ver obstáculos', quantity: 1, buyTip: 'Será la nariz del perrito' },
+      { name: 'Módulo de sonido/micrófono', emoji: '👂', desc: 'Para escuchar comandos', quantity: 1, buyTip: 'Módulo KY-037 o similar' },
+      { name: 'Buzzer activo', emoji: '🔊', desc: 'Para ladrar', quantity: 1, buyTip: 'Los pequeños de 5V' },
+      { name: 'LED RGB', emoji: '💡', desc: 'Los ojos del perrito', quantity: 1, buyTip: 'O 2 LEDs normales' },
+      { name: 'Batería LiPo 7.4V o Pack 6xAA', emoji: '🔋', desc: 'Energía', quantity: 1, buyTip: '4 servos necesitan buena energía' },
+      { name: 'Cuerpo impreso 3D o cartón', emoji: '📦', desc: 'El cuerpo del perrito', quantity: 1, buyTip: 'Hay muchos diseños gratis en Thingiverse' },
+      { name: 'Cables y conectores', emoji: '🔗', desc: 'Para todo', quantity: 20, buyTip: 'Los servos traen sus propios cables' },
     ],
     tools: ['Destornillador', 'Pistola de silicona', 'Tijeras', 'Regla'],
     steps: [
       {
-        title: 'ðŸ“ Paso 1: DiseÃ±a o Consigue el Cuerpo',
-        emoji: 'ðŸ“',
+        title: '📐 Paso 1: Diseña o Consigue el Cuerpo',
+        emoji: '📐',
         description: 'Necesitas un cuerpo con espacio para 4 servos.',
         details: [
           '1. Si tienes impresora 3D, busca "quadruped robot" en Thingiverse',
-          '2. Si no, puedes hacer uno con cartÃ³n grueso o madera',
+          '2. Si no, puedes hacer uno con cartón grueso o madera',
           '3. El cuerpo debe tener 4 espacios para los servos (las caderas)',
           '4. Cada pata necesita 1 servo para moverse arriba/abajo',
-          'TamaÃ±o recomendado: cuerpo de 10x6 cm, patas de 5 cm'
+          'Tamaño recomendado: cuerpo de 10x6 cm, patas de 5 cm'
         ],
         safety: 'Si usas tijeras o cutter, ten cuidado',
-        image: 'ðŸ—ï¸'
+        image: '🏗️'
       },
       {
-        title: 'ðŸ¦¿ Paso 2: Prepara las Patas',
-        emoji: 'ðŸ¦¿',
-        description: 'Cada pata tiene un servo y una extensiÃ³n.',
+        title: '🦿 Paso 2: Prepara las Patas',
+        emoji: '🦿',
+        description: 'Cada pata tiene un servo y una extensión.',
         details: [
           '1. Toma el brazo (horn) que viene con cada servo',
-          '2. Pega o atornilla una extensiÃ³n de cartÃ³n/madera de 5 cm',
+          '2. Pega o atornilla una extensión de cartón/madera de 5 cm',
           '3. Haz 4 patas iguales',
           '4. Puedes agregar una punta de goma para mejor agarre',
           'Las patas delanteras y traseras son iguales'
         ],
         safety: 'El pegamento caliente puede quemar',
-        image: 'ðŸ¦µ'
+        image: '🦵'
       },
       {
-        title: 'âš™ï¸ Paso 3: Instala los Servos',
-        emoji: 'âš™ï¸',
+        title: '⚙️ Paso 3: Instala los Servos',
+        emoji: '⚙️',
         description: 'Coloca los 4 servos en el cuerpo.',
         details: [
           '1. Los servos van en las 4 esquinas del cuerpo',
           '2. El eje de cada servo debe apuntar hacia afuera y abajo',
-          '3. FÃ­jalos con tornillos o pegamento caliente',
-          '4. AsegÃºrate de que todos giren libremente',
+          '3. Fíjalos con tornillos o pegamento caliente',
+          '4. Asegúrate de que todos giren libremente',
           '5. Conecta los brazos con las patas a cada servo'
         ],
         safety: 'No fuerces los servos, son delicados',
-        image: 'ðŸ”§'
+        image: '🔧'
       },
       {
-        title: 'ðŸ‘ƒ Paso 4: Agrega la Cabeza',
-        emoji: 'ðŸ‘ƒ',
+        title: '👃 Paso 4: Agrega la Cabeza',
+        emoji: '👃',
         description: 'La cabeza tiene el sensor, buzzer y LEDs.',
         details: [
-          '1. Haz una caja pequeÃ±a para la cabeza (4x3x3 cm)',
-          '2. El sensor ultrasÃ³nico va al frente (es la nariz)',
-          '3. Pon el LED RGB arriba (serÃ¡n los ojos)',
+          '1. Haz una caja pequeña para la cabeza (4x3x3 cm)',
+          '2. El sensor ultrasónico va al frente (es la nariz)',
+          '3. Pon el LED RGB arriba (serán los ojos)',
           '4. El buzzer va adentro (para ladrar)',
           '5. Pega la cabeza al frente del cuerpo'
         ],
         safety: 'Deja espacio para los cables que salen de la cabeza',
-        image: 'ðŸ¶'
+        image: '🐶'
       },
       {
-        title: 'ðŸ”Œ Paso 5: Monta la ElectrÃ³nica',
-        emoji: 'ðŸ”Œ',
-        description: 'Coloca el Arduino y la baterÃ­a en el cuerpo.',
+        title: '🔌 Paso 5: Monta la Electrónica',
+        emoji: '🔌',
+        description: 'Coloca el Arduino y la batería en el cuerpo.',
         details: [
           '1. El Arduino va en la parte superior del cuerpo',
-          '2. La baterÃ­a va debajo o atrÃ¡s para equilibrar peso',
+          '2. La batería va debajo o atrás para equilibrar peso',
           '3. Organiza los cables para que no estorben las patas',
-          '4. Usa velcro para poder quitar la baterÃ­a fÃ¡cilmente'
+          '4. Usa velcro para poder quitar la batería fácilmente'
         ],
         safety: 'Verifica que nada se atore con las patas al moverse',
-        image: 'ðŸ§ '
+        image: '🧠'
       },
       {
-        title: 'ðŸ”— Paso 6: Conecta los Servos',
-        emoji: 'ðŸ”—',
-        description: 'Cada servo tiene 3 cables: seÃ±al, VCC, GND.',
+        title: '🔗 Paso 6: Conecta los Servos',
+        emoji: '🔗',
+        description: 'Cada servo tiene 3 cables: señal, VCC, GND.',
         details: [
-          '1. Servo pata delantera izquierda â†’ Pin 3',
-          '2. Servo pata delantera derecha â†’ Pin 5',
-          '3. Servo pata trasera izquierda â†’ Pin 6',
-          '4. Servo pata trasera derecha â†’ Pin 9',
+          '1. Servo pata delantera izquierda → Pin 3',
+          '2. Servo pata delantera derecha → Pin 5',
+          '3. Servo pata trasera izquierda → Pin 6',
+          '4. Servo pata trasera derecha → Pin 9',
           '5. IMPORTANTE: Los servos necesitan buena corriente',
-          'Conecta VCC de servos a la baterÃ­a, no al Arduino 5V'
+          'Conecta VCC de servos a la batería, no al Arduino 5V'
         ],
         safety: '4 servos juntos pueden consumir mucha corriente',
-        image: 'âš¡'
+        image: '⚡'
       },
       {
-        title: 'ðŸŽ›ï¸ Paso 7: Conecta Sensores y Salidas',
-        emoji: 'ðŸŽ›ï¸',
-        description: 'Conecta el sensor, micrÃ³fono, buzzer y LEDs.',
+        title: '🎛️ Paso 7: Conecta Sensores y Salidas',
+        emoji: '🎛️',
+        description: 'Conecta el sensor, micrófono, buzzer y LEDs.',
         details: [
-          '1. Sensor ultrasÃ³nico: TRIGâ†’Pin 7, ECHOâ†’Pin 8',
-          '2. MicrÃ³fono OUT â†’ Pin A0',
-          '3. Buzzer â†’ Pin 11',
-          '4. LED RGB: Râ†’Pin 10, Gâ†’Pin 12, Bâ†’Pin 13',
+          '1. Sensor ultrasónico: TRIG→Pin 7, ECHO→Pin 8',
+          '2. Micrófono OUT → Pin A0',
+          '3. Buzzer → Pin 11',
+          '4. LED RGB: R→Pin 10, G→Pin 12, B→Pin 13',
           '5. Todos los GND juntos, VCC a 5V del Arduino'
         ],
-        safety: 'El LED RGB puede necesitar resistencias de 220Î©',
-        image: 'ðŸ“¡'
+        safety: 'El LED RGB puede necesitar resistencias de 220Ω',
+        image: '📡'
       },
       {
-        title: 'âœ… Paso 8: Calibra y Programa',
-        emoji: 'âœ…',
-        description: 'Â¡Hora de dar vida a tu perrito!',
+        title: '✅ Paso 8: Calibra y Programa',
+        emoji: '✅',
+        description: '¡Hora de dar vida a tu perrito!',
         details: [
-          '1. Carga un programa de prueba que ponga todos los servos a 90Â°',
-          '2. Con los servos a 90Â°, ajusta las patas para que estÃ©n rectas',
+          '1. Carga un programa de prueba que ponga todos los servos a 90°',
+          '2. Con los servos a 90°, ajusta las patas para que estén rectas',
           '3. Carga el programa completo de caminar',
           '4. Prueba cada movimiento: caminar, sentarse, ladrar',
-          'Â¡Felicidades! Tu perrito robot estÃ¡ vivo ðŸŽ‰'
+          '¡Felicidades! Tu perrito robot está vivo 🎉'
         ],
-        safety: 'Si un servo hace ruido raro, apÃ¡galo y revisa',
-        image: 'ðŸ•'
+        safety: 'Si un servo hace ruido raro, apágalo y revisa',
+        image: '🐕'
       }
     ],
     tips: [
-      'ðŸ’¡ Calibra los servos a 90Â° antes de pegar las patas',
-      'ðŸ’¡ Usa una fuente de alimentaciÃ³n externa para los servos',
-      'ðŸ’¡ El equilibrio es importante: distribuye el peso uniformemente',
-      'ðŸ’¡ Empieza con movimientos pequeÃ±os y lentos',
-      'ðŸ’¡ Los servos se calientan si se bloquean, Â¡ten cuidado!'
+      '💡 Calibra los servos a 90° antes de pegar las patas',
+      '💡 Usa una fuente de alimentación externa para los servos',
+      '💡 El equilibrio es importante: distribuye el peso uniformemente',
+      '💡 Empieza con movimientos pequeños y lentos',
+      '💡 Los servos se calientan si se bloquean, ¡ten cuidado!'
     ],
-    code: `// CÃ³digo bÃ¡sico para Perro Robot
+    code: `// Código básico para Perro Robot
 #include <Servo.h>
 
 Servo pataFI, pataFD, pataTI, pataTD;
@@ -726,7 +726,7 @@ void setup() {
   pinMode(TRIG, OUTPUT);
   pinMode(ECHO, INPUT);
   
-  // PosiciÃ³n inicial: parado
+  // Posición inicial: parado
   posicionParado();
 }
 
@@ -776,68 +776,68 @@ void loop() {
 }`
   },
   free: {
-    title: 'ðŸ”§ DiseÃ±o Libre',
+    title: '🔧 Diseño Libre',
     difficulty: 'Variable',
     time: 'Lo que necesites',
     age: 'Todas las edades',
-    intro: 'Â¡AquÃ­ puedes crear el robot que imagines! Usa las piezas disponibles para diseÃ±ar tu propia creaciÃ³n. No hay reglas, solo tu creatividad.',
+    intro: '¡Aquí puedes crear el robot que imagines! Usa las piezas disponibles para diseñar tu propia creación. No hay reglas, solo tu creatividad.',
     materials: [
-      { name: 'Depende de tu diseÃ±o', emoji: 'â“', desc: 'Elige las piezas que necesites', quantity: 0, buyTip: 'Empieza simple y ve agregando' },
+      { name: 'Depende de tu diseño', emoji: '❓', desc: 'Elige las piezas que necesites', quantity: 0, buyTip: 'Empieza simple y ve agregando' },
     ],
     tools: ['Lo que tengas disponible'],
     steps: [
       {
-        title: 'ðŸ’­ Paso 1: Imagina tu Robot',
-        emoji: 'ðŸ’­',
-        description: 'Â¿QuÃ© quieres que haga tu robot?',
+        title: '💭 Paso 1: Imagina tu Robot',
+        emoji: '💭',
+        description: '¿Qué quieres que haga tu robot?',
         details: [
-          '1. Piensa en la funciÃ³n principal: Â¿se mueve? Â¿detecta cosas? Â¿hace sonidos?',
+          '1. Piensa en la función principal: ¿se mueve? ¿detecta cosas? ¿hace sonidos?',
           '2. Dibuja un boceto simple en papel',
           '3. Haz una lista de las piezas que necesitas',
-          '4. Â¡SÃ© creativo! No hay respuestas incorrectas'
+          '4. ¡Sé creativo! No hay respuestas incorrectas'
         ],
         safety: 'Empieza con algo simple y ve mejorando',
-        image: 'âœ¨'
+        image: '✨'
       },
       {
-        title: 'ðŸ”§ Paso 2: Construye y Experimenta',
-        emoji: 'ðŸ”§',
-        description: 'Â¡Manos a la obra!',
+        title: '🔧 Paso 2: Construye y Experimenta',
+        emoji: '🔧',
+        description: '¡Manos a la obra!',
         details: [
           '1. Arma tu robot paso a paso',
-          '2. Prueba cada parte antes de agregar mÃ¡s',
+          '2. Prueba cada parte antes de agregar más',
           '3. No tengas miedo de equivocarte',
           '4. Los mejores inventores aprenden de sus errores'
         ],
         safety: 'Recuerda pedir ayuda si usas herramientas peligrosas',
-        image: 'ðŸ› ï¸'
+        image: '🛠️'
       }
     ],
     tips: [
-      'ðŸ’¡ Empieza simple: un motor y un sensor son suficientes para empezar',
-      'ðŸ’¡ Usa materiales reciclados para el cuerpo',
-      'ðŸ’¡ Busca inspiraciÃ³n en Internet pero hazlo tuyo',
-      'ðŸ’¡ Â¡DiviÃ©rtete experimentando!'
+      '💡 Empieza simple: un motor y un sensor son suficientes para empezar',
+      '💡 Usa materiales reciclados para el cuerpo',
+      '💡 Busca inspiración en Internet pero hazlo tuyo',
+      '💡 ¡Diviértete experimentando!'
     ],
-    code: `// Tu cÃ³digo aquÃ­
-// Ejemplo bÃ¡sico:
+    code: `// Tu código aquí
+// Ejemplo básico:
 void setup() {
   // Configura tus pines
 }
 
 void loop() {
-  // Tu lÃ³gica aquÃ­
+  // Tu lógica aquí
 }`
   }
 };
 
 // Frases del robot para TTS
 const ROBOT_INSTRUCTION_PHRASES = [
-  'Â¡Escucha con atenciÃ³n!',
-  'Â¡Te explico este paso!',
-  'Â¡Esto es importante!',
-  'Â¡Vamos con el siguiente!',
-  'Â¡Presta mucha atenciÃ³n!',
+  '¡Escucha con atención!',
+  '¡Te explico este paso!',
+  '¡Esto es importante!',
+  '¡Vamos con el siguiente!',
+  '¡Presta mucha atención!',
 ];
 
 const ALL_PARTS = [
@@ -847,11 +847,11 @@ const ALL_PARTS = [
   { id: 'motor_dc', name: 'Motor DC', cat: 'Motores', svg: 'motor_dc' },
   { id: 'servo', name: 'Servo Motor', cat: 'Motores', svg: 'servo' },
   { id: 'wheel', name: 'Rueda Goma', cat: 'Ruedas', svg: 'wheel' },
-  { id: 'sensor_ultra', name: 'UltrasÃ³nico', cat: 'Sensores', svg: 'sensor_ultra' },
+  { id: 'sensor_ultra', name: 'Ultrasónico', cat: 'Sensores', svg: 'sensor_ultra' },
   { id: 'sensor_ir', name: 'Infrarrojo', cat: 'Sensores', svg: 'sensor_ir' },
-  { id: 'sensor_sound', name: 'MicrÃ³fono', cat: 'Sensores', svg: 'sensor_sound' },
+  { id: 'sensor_sound', name: 'Micrófono', cat: 'Sensores', svg: 'sensor_sound' },
   { id: 'arduino', name: 'Arduino UNO', cat: 'Control', svg: 'arduino' },
-  { id: 'battery', name: 'BaterÃ­a 9V', cat: 'EnergÃ­a', svg: 'battery' },
+  { id: 'battery', name: 'Batería 9V', cat: 'Energía', svg: 'battery' },
   { id: 'driver_l298n', name: 'Driver L298N', cat: 'Control', svg: 'driver_l298n' },
   { id: 'buzzer', name: 'Buzzer', cat: 'Otros', svg: 'buzzer' },
   { id: 'led_rgb', name: 'LED RGB', cat: 'Otros', svg: 'led_rgb' },
@@ -859,73 +859,73 @@ const ALL_PARTS = [
 ];
 
 const PROGRAM_BLOCKS = [
-  { id: 'move_forward', label: 'â¬†ï¸ Avanzar', cat: 'Movimiento', color: 'bg-blue-500', code: 'avanzar(150);', hint: 'El robot va hacia adelante' },
-  { id: 'move_forward_fast', label: 'â© Avanzar RÃ¡pido', cat: 'Movimiento', color: 'bg-blue-600', code: 'avanzar(255);', hint: 'Â¡A toda velocidad!' },
-  { id: 'move_backward', label: 'â¬‡ï¸ Retroceder', cat: 'Movimiento', color: 'bg-blue-400', code: 'retroceder(150);', hint: 'Va para atrÃ¡s' },
-  { id: 'turn_left', label: 'â¬…ï¸ Girar Izquierda', cat: 'Movimiento', color: 'bg-indigo-500', code: 'girarIzq();', hint: 'Gira hacia la izquierda' },
-  { id: 'turn_right', label: 'âž¡ï¸ Girar Derecha', cat: 'Movimiento', color: 'bg-indigo-500', code: 'girarDer();', hint: 'Gira hacia la derecha' },
-  { id: 'turn_180', label: 'ðŸ”„ Giro 180Â°', cat: 'Movimiento', color: 'bg-indigo-600', code: 'giro180();', hint: 'Da media vuelta' },
-  { id: 'stop', label: 'â¹ï¸ Detener', cat: 'Movimiento', color: 'bg-gray-500', code: 'detener();', hint: 'El robot se para' },
-  { id: 'walk_forward', label: 'ðŸ¾ Caminar', cat: 'Movimiento', color: 'bg-amber-500', code: 'caminar(4);', hint: 'Mueve las 4 patas' },
-  { id: 'sit', label: 'ðŸ• Sentarse', cat: 'Movimiento', color: 'bg-amber-400', code: 'sentarse();', hint: 'El perro se sienta' },
-  { id: 'detect_enemy', label: 'ðŸ“¡ Buscar Enemigo', cat: 'Sensores', color: 'bg-cyan-500', code: 'dist = ultrasonico.medir();', hint: 'Revisa si hay alguien cerca' },
-  { id: 'read_sensors', label: 'ðŸ”´ Leer Sensores', cat: 'Sensores', color: 'bg-cyan-500', code: 'sL=leerIR(A0); sR=leerIR(A1);', hint: 'Lee los ojos infrarrojos' },
-  { id: 'check_distance', label: 'ðŸ“ Medir Distancia', cat: 'Sensores', color: 'bg-cyan-400', code: 'dist = ultrasonico.medir();', hint: 'Â¿QuÃ© tan lejos estÃ¡ algo?' },
-  { id: 'if_enemy_near', label: 'ðŸš¨ Si Enemigo Cerca', cat: 'Pregunta', color: 'bg-amber-500', code: 'if (dist < 25) {', hint: 'Â¿Hay alguien a menos de 25cm?' },
-  { id: 'if_obstacle', label: 'ðŸš§ Si Hay ObstÃ¡culo', cat: 'Pregunta', color: 'bg-amber-500', code: 'if (dist < 20) {', hint: 'Â¿Hay algo bloqueando?' },
-  { id: 'if_line_left', label: 'â†©ï¸ Si LÃ­nea a Izq.', cat: 'Pregunta', color: 'bg-amber-500', code: 'if (sL > umbral) {', hint: 'Â¿La lÃ­nea estÃ¡ a la izquierda?' },
-  { id: 'if_line_right', label: 'â†ªï¸ Si LÃ­nea a Der.', cat: 'Pregunta', color: 'bg-amber-500', code: 'if (sR > umbral) {', hint: 'Â¿La lÃ­nea estÃ¡ a la derecha?' },
-  { id: 'if_line_center', label: 'â¬†ï¸ Si LÃ­nea al Centro', cat: 'Pregunta', color: 'bg-amber-400', code: 'if (sL<umbral && sR<umbral) {', hint: 'Â¿La lÃ­nea estÃ¡ al medio?' },
-  { id: 'if_edge', label: 'âš ï¸ Si Borde del Ring', cat: 'Pregunta', color: 'bg-orange-500', code: 'if (sensorBorde == LOW) {', hint: 'Â¡Cuidado con la orilla!' },
-  { id: 'else', label: 'â†”ï¸ Si No...', cat: 'Pregunta', color: 'bg-yellow-500', code: '} else {', hint: 'QuÃ© hacer si la respuesta es NO' },
-  { id: 'end_if', label: 'ðŸ”š Fin Pregunta', cat: 'Pregunta', color: 'bg-yellow-400', code: '}', hint: 'Cierra la pregunta' },
-  { id: 'wait_1s', label: 'â±ï¸ Esperar 1 seg', cat: 'Control', color: 'bg-blue-500', code: 'delay(1000);', hint: 'Pausa de 1 segundo' },
-  { id: 'wait_half', label: 'â±ï¸ Esperar 0.5 seg', cat: 'Control', color: 'bg-blue-400', code: 'delay(500);', hint: 'Pausa cortita' },
-  { id: 'repeat_forever', label: 'â™¾ï¸ Repetir Siempre', cat: 'Control', color: 'bg-blue-600', code: 'while(true) {', hint: 'Hace lo mismo una y otra vez' },
-  { id: 'repeat_3', label: 'ðŸ” Repetir 3 veces', cat: 'Control', color: 'bg-blue-500', code: 'for(int i=0;i<3;i++){', hint: 'Repite 3 veces' },
-  { id: 'bark', label: 'ðŸ”Š Ladrar', cat: 'AcciÃ³n', color: 'bg-rose-500', code: 'tone(BUZZER,1000,200);', hint: 'Â¡El robot hace sonido!' },
-  { id: 'led_on', label: 'ðŸ’¡ Prender Luz', cat: 'AcciÃ³n', color: 'bg-rose-400', code: 'digitalWrite(LED,HIGH);', hint: 'Â¡Se enciende la lucecita!' },
-  { id: 'led_off', label: 'ðŸ”Œ Apagar Luz', cat: 'AcciÃ³n', color: 'bg-rose-300', code: 'digitalWrite(LED,LOW);', hint: 'Se apaga la lucecita' },
+  { id: 'move_forward', label: '⬆️ Avanzar', cat: 'Movimiento', color: 'bg-blue-500', code: 'avanzar(150);', hint: 'El robot va hacia adelante' },
+  { id: 'move_forward_fast', label: '⏩ Avanzar Rápido', cat: 'Movimiento', color: 'bg-blue-600', code: 'avanzar(255);', hint: '¡A toda velocidad!' },
+  { id: 'move_backward', label: '⬇️ Retroceder', cat: 'Movimiento', color: 'bg-blue-400', code: 'retroceder(150);', hint: 'Va para atrás' },
+  { id: 'turn_left', label: '⬅️ Girar Izquierda', cat: 'Movimiento', color: 'bg-indigo-500', code: 'girarIzq();', hint: 'Gira hacia la izquierda' },
+  { id: 'turn_right', label: '➡️ Girar Derecha', cat: 'Movimiento', color: 'bg-indigo-500', code: 'girarDer();', hint: 'Gira hacia la derecha' },
+  { id: 'turn_180', label: '🔄 Giro 180°', cat: 'Movimiento', color: 'bg-indigo-600', code: 'giro180();', hint: 'Da media vuelta' },
+  { id: 'stop', label: '⏹️ Detener', cat: 'Movimiento', color: 'bg-gray-500', code: 'detener();', hint: 'El robot se para' },
+  { id: 'walk_forward', label: '🐾 Caminar', cat: 'Movimiento', color: 'bg-amber-500', code: 'caminar(4);', hint: 'Mueve las 4 patas' },
+  { id: 'sit', label: '🐕 Sentarse', cat: 'Movimiento', color: 'bg-amber-400', code: 'sentarse();', hint: 'El perro se sienta' },
+  { id: 'detect_enemy', label: '📡 Buscar Enemigo', cat: 'Sensores', color: 'bg-cyan-500', code: 'dist = ultrasonico.medir();', hint: 'Revisa si hay alguien cerca' },
+  { id: 'read_sensors', label: '🔴 Leer Sensores', cat: 'Sensores', color: 'bg-cyan-500', code: 'sL=leerIR(A0); sR=leerIR(A1);', hint: 'Lee los ojos infrarrojos' },
+  { id: 'check_distance', label: '📏 Medir Distancia', cat: 'Sensores', color: 'bg-cyan-400', code: 'dist = ultrasonico.medir();', hint: '¿Qué tan lejos está algo?' },
+  { id: 'if_enemy_near', label: '🚨 Si Enemigo Cerca', cat: 'Pregunta', color: 'bg-amber-500', code: 'if (dist < 25) {', hint: '¿Hay alguien a menos de 25cm?' },
+  { id: 'if_obstacle', label: '🚧 Si Hay Obstáculo', cat: 'Pregunta', color: 'bg-amber-500', code: 'if (dist < 20) {', hint: '¿Hay algo bloqueando?' },
+  { id: 'if_line_left', label: '↩️ Si Línea a Izq.', cat: 'Pregunta', color: 'bg-amber-500', code: 'if (sL > umbral) {', hint: '¿La línea está a la izquierda?' },
+  { id: 'if_line_right', label: '↪️ Si Línea a Der.', cat: 'Pregunta', color: 'bg-amber-500', code: 'if (sR > umbral) {', hint: '¿La línea está a la derecha?' },
+  { id: 'if_line_center', label: '⬆️ Si Línea al Centro', cat: 'Pregunta', color: 'bg-amber-400', code: 'if (sL<umbral && sR<umbral) {', hint: '¿La línea está al medio?' },
+  { id: 'if_edge', label: '⚠️ Si Borde del Ring', cat: 'Pregunta', color: 'bg-orange-500', code: 'if (sensorBorde == LOW) {', hint: '¡Cuidado con la orilla!' },
+  { id: 'else', label: '↔️ Si No...', cat: 'Pregunta', color: 'bg-yellow-500', code: '} else {', hint: 'Qué hacer si la respuesta es NO' },
+  { id: 'end_if', label: '🔚 Fin Pregunta', cat: 'Pregunta', color: 'bg-yellow-400', code: '}', hint: 'Cierra la pregunta' },
+  { id: 'wait_1s', label: '⏱️ Esperar 1 seg', cat: 'Control', color: 'bg-purple-500', code: 'delay(1000);', hint: 'Pausa de 1 segundo' },
+  { id: 'wait_half', label: '⏱️ Esperar 0.5 seg', cat: 'Control', color: 'bg-purple-400', code: 'delay(500);', hint: 'Pausa cortita' },
+  { id: 'repeat_forever', label: '♾️ Repetir Siempre', cat: 'Control', color: 'bg-purple-600', code: 'while(true) {', hint: 'Hace lo mismo una y otra vez' },
+  { id: 'repeat_3', label: '🔁 Repetir 3 veces', cat: 'Control', color: 'bg-purple-500', code: 'for(int i=0;i<3;i++){', hint: 'Repite 3 veces' },
+  { id: 'bark', label: '🔊 Ladrar', cat: 'Acción', color: 'bg-rose-500', code: 'tone(BUZZER,1000,200);', hint: '¡El robot hace sonido!' },
+  { id: 'led_on', label: '💡 Prender Luz', cat: 'Acción', color: 'bg-rose-400', code: 'digitalWrite(LED,HIGH);', hint: '¡Se enciende la lucecita!' },
+  { id: 'led_off', label: '🔌 Apagar Luz', cat: 'Acción', color: 'bg-rose-300', code: 'digitalWrite(LED,LOW);', hint: 'Se apaga la lucecita' },
 ];
 
 // Kid-friendly tips for each build phase
 const BUILD_TIPS = {
   sumo: [
-    'ðŸ¤– Un robot sumo necesita ser pesado y fuerte',
-    'ðŸ‘ï¸ El sensor ultrasÃ³nico son los "ojos" del robot',
-    'âš™ï¸ Los motores son los "mÃºsculos" que lo mueven',
-    'ðŸ§  El Arduino es el "cerebro" - procesa la informaciÃ³n',
-    'ðŸ”‹ Sin baterÃ­a no hay energÃ­a - como comer le da energÃ­a a tu cuerpo',
+    '🤖 Un robot sumo necesita ser pesado y fuerte',
+    '👁️ El sensor ultrasónico son los "ojos" del robot',
+    '⚙️ Los motores son los "músculos" que lo mueven',
+    '🧠 El Arduino es el "cerebro" - procesa la información',
+    '🔋 Sin batería no hay energía - como comer le da energía a tu cuerpo',
   ],
   line: [
-    'ã€°ï¸ Los sensores infrarrojos detectan colores claros y oscuros',
-    'ðŸ”´ Funcionan como tus ojos mirando al piso',
-    'âš™ï¸ Los motores giran las ruedas para seguir la lÃ­nea',
-    'ðŸ§  El Arduino decide: Â¿giro izquierda o derecha?',
-    'ðŸ’¡ La velocidad del robot depende de cuÃ¡nta energÃ­a le des',
+    '〰️ Los sensores infrarrojos detectan colores claros y oscuros',
+    '🔴 Funcionan como tus ojos mirando al piso',
+    '⚙️ Los motores giran las ruedas para seguir la línea',
+    '🧠 El Arduino decide: ¿giro izquierda o derecha?',
+    '💡 La velocidad del robot depende de cuánta energía le des',
   ],
   dog: [
-    'ðŸ• Cada pata tiene un servo motor que la mueve',
-    'ðŸ¦¿ Los servos giran a posiciones exactas (como un reloj)',
-    'ðŸ‘‚ El micrÃ³fono escucha sonidos a su alrededor',
-    'ðŸ”Š El buzzer es como una bocina pequeÃ±a para ladrar',
-    'ðŸ‘ï¸ El sensor ultrasÃ³nico le ayuda a no chocar con cosas',
+    '🐕 Cada pata tiene un servo motor que la mueve',
+    '🦿 Los servos giran a posiciones exactas (como un reloj)',
+    '👂 El micrófono escucha sonidos a su alrededor',
+    '🔊 El buzzer es como una bocina pequeña para ladrar',
+    '👁️ El sensor ultrasónico le ayuda a no chocar con cosas',
   ],
   free: [
-    'âœ¨ Â¡Usa tu imaginaciÃ³n para crear algo Ãºnico!',
-    'ðŸ”§ Puedes combinar cualquier pieza que quieras',
-    'ðŸ’¡ Empieza con pocas piezas e ir agregando',
-    'ðŸ§ª Â¡Experimenta! No hay respuestas equivocadas',
+    '✨ ¡Usa tu imaginación para crear algo único!',
+    '🔧 Puedes combinar cualquier pieza que quieras',
+    '💡 Empieza con pocas piezas e ir agregando',
+    '🧪 ¡Experimenta! No hay respuestas equivocadas',
   ],
 };
 
 // Kid-friendly programming tips
 const PROGRAM_TIPS = [
-  'ðŸ’¡ Las instrucciones se ejecutan de arriba hacia abajo, como leer',
-  'ðŸ”„ "Repetir" hace que el robot haga lo mismo muchas veces',
-  'â“ Las "Preguntas" hacen que el robot tome decisiones',
-  'ðŸ“¡ Los "Sensores" son como los sentidos del robot',
-  'âš¡ Puedes subir y bajar bloques para cambiar el orden',
+  '💡 Las instrucciones se ejecutan de arriba hacia abajo, como leer',
+  '🔄 "Repetir" hace que el robot haga lo mismo muchas veces',
+  '❓ Las "Preguntas" hacen que el robot tome decisiones',
+  '📡 Los "Sensores" son como los sentidos del robot',
+  '⚡ Puedes subir y bajar bloques para cambiar el orden',
 ];
 
 /* ================================================================
@@ -947,7 +947,7 @@ const DraggablePart = ({ part, index, onRemove }) => {
       <button
         onClick={() => onRemove(index)}
         className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-500 text-white rounded-full text-[10px] font-bold flex items-center justify-center opacity-0 group-hover:opacity-100 transition shadow-md hover:bg-red-600 z-10"
-      >Ã—</button>
+      >×</button>
     </div>
   );
 };
@@ -974,53 +974,53 @@ const CatalogPart = ({ part, onAdd }) => (
    ================================================================ */
 const CHASSIS_SLOTS = {
   sumo: [
-    { id: 'chassis', label: 'Chasis', x: 50, y: 42, w: 44, h: 28, accepts: ['Chasis'], icon: 'ðŸ—ï¸' },
-    { id: 'brain', label: 'Arduino', x: 50, y: 34, w: 18, h: 12, accepts: ['Control'], icon: 'ðŸ§ ' },
-    { id: 'motor_l', label: 'Motor Izq', x: 22, y: 50, w: 14, h: 14, accepts: ['Motores'], icon: 'âš™ï¸' },
-    { id: 'motor_r', label: 'Motor Der', x: 78, y: 50, w: 14, h: 14, accepts: ['Motores'], icon: 'âš™ï¸' },
-    { id: 'wheel_l', label: 'Rueda Izq', x: 14, y: 50, w: 12, h: 16, accepts: ['Ruedas'], icon: 'â­•' },
-    { id: 'wheel_r', label: 'Rueda Der', x: 86, y: 50, w: 12, h: 16, accepts: ['Ruedas'], icon: 'â­•' },
-    { id: 'sensor_f', label: 'Sensor', x: 50, y: 22, w: 16, h: 10, accepts: ['Sensores'], icon: 'ðŸ“¡' },
-    { id: 'power', label: 'BaterÃ­a', x: 50, y: 58, w: 14, h: 10, accepts: ['EnergÃ­a'], icon: 'ðŸ”‹' },
-    { id: 'driver', label: 'Driver', x: 35, y: 50, w: 12, h: 10, accepts: ['Control'], icon: 'ðŸ”Œ' },
-    { id: 'extra', label: 'Extra', x: 50, y: 68, w: 14, h: 10, accepts: ['Otros'], icon: 'âž•' },
+    { id: 'chassis', label: 'Chasis', x: 50, y: 42, w: 44, h: 28, accepts: ['Chasis'], icon: '🏗️' },
+    { id: 'brain', label: 'Arduino', x: 50, y: 34, w: 18, h: 12, accepts: ['Control'], icon: '🧠' },
+    { id: 'motor_l', label: 'Motor Izq', x: 22, y: 50, w: 14, h: 14, accepts: ['Motores'], icon: '⚙️' },
+    { id: 'motor_r', label: 'Motor Der', x: 78, y: 50, w: 14, h: 14, accepts: ['Motores'], icon: '⚙️' },
+    { id: 'wheel_l', label: 'Rueda Izq', x: 14, y: 50, w: 12, h: 16, accepts: ['Ruedas'], icon: '⭕' },
+    { id: 'wheel_r', label: 'Rueda Der', x: 86, y: 50, w: 12, h: 16, accepts: ['Ruedas'], icon: '⭕' },
+    { id: 'sensor_f', label: 'Sensor', x: 50, y: 22, w: 16, h: 10, accepts: ['Sensores'], icon: '📡' },
+    { id: 'power', label: 'Batería', x: 50, y: 58, w: 14, h: 10, accepts: ['Energía'], icon: '🔋' },
+    { id: 'driver', label: 'Driver', x: 35, y: 50, w: 12, h: 10, accepts: ['Control'], icon: '🔌' },
+    { id: 'extra', label: 'Extra', x: 50, y: 68, w: 14, h: 10, accepts: ['Otros'], icon: '➕' },
   ],
   line: [
-    { id: 'chassis', label: 'Chasis', x: 50, y: 42, w: 40, h: 24, accepts: ['Chasis'], icon: 'ðŸ—ï¸' },
-    { id: 'brain', label: 'Arduino', x: 50, y: 34, w: 18, h: 12, accepts: ['Control'], icon: 'ðŸ§ ' },
-    { id: 'motor_l', label: 'Motor Izq', x: 24, y: 48, w: 14, h: 14, accepts: ['Motores'], icon: 'âš™ï¸' },
-    { id: 'motor_r', label: 'Motor Der', x: 76, y: 48, w: 14, h: 14, accepts: ['Motores'], icon: 'âš™ï¸' },
-    { id: 'wheel_l', label: 'Rueda Izq', x: 16, y: 48, w: 12, h: 16, accepts: ['Ruedas'], icon: 'â­•' },
-    { id: 'wheel_r', label: 'Rueda Der', x: 84, y: 48, w: 12, h: 16, accepts: ['Ruedas'], icon: 'â­•' },
-    { id: 'sensor_l', label: 'IR Izq', x: 38, y: 22, w: 12, h: 10, accepts: ['Sensores'], icon: 'ðŸ”´' },
-    { id: 'sensor_r', label: 'IR Der', x: 62, y: 22, w: 12, h: 10, accepts: ['Sensores'], icon: 'ðŸ”´' },
-    { id: 'power', label: 'BaterÃ­a', x: 50, y: 58, w: 14, h: 10, accepts: ['EnergÃ­a'], icon: 'ðŸ”‹' },
-    { id: 'driver', label: 'Driver', x: 50, y: 50, w: 12, h: 10, accepts: ['Control'], icon: 'ðŸ”Œ' },
+    { id: 'chassis', label: 'Chasis', x: 50, y: 42, w: 40, h: 24, accepts: ['Chasis'], icon: '🏗️' },
+    { id: 'brain', label: 'Arduino', x: 50, y: 34, w: 18, h: 12, accepts: ['Control'], icon: '🧠' },
+    { id: 'motor_l', label: 'Motor Izq', x: 24, y: 48, w: 14, h: 14, accepts: ['Motores'], icon: '⚙️' },
+    { id: 'motor_r', label: 'Motor Der', x: 76, y: 48, w: 14, h: 14, accepts: ['Motores'], icon: '⚙️' },
+    { id: 'wheel_l', label: 'Rueda Izq', x: 16, y: 48, w: 12, h: 16, accepts: ['Ruedas'], icon: '⭕' },
+    { id: 'wheel_r', label: 'Rueda Der', x: 84, y: 48, w: 12, h: 16, accepts: ['Ruedas'], icon: '⭕' },
+    { id: 'sensor_l', label: 'IR Izq', x: 38, y: 22, w: 12, h: 10, accepts: ['Sensores'], icon: '🔴' },
+    { id: 'sensor_r', label: 'IR Der', x: 62, y: 22, w: 12, h: 10, accepts: ['Sensores'], icon: '🔴' },
+    { id: 'power', label: 'Batería', x: 50, y: 58, w: 14, h: 10, accepts: ['Energía'], icon: '🔋' },
+    { id: 'driver', label: 'Driver', x: 50, y: 50, w: 12, h: 10, accepts: ['Control'], icon: '🔌' },
   ],
   dog: [
-    { id: 'chassis', label: 'Cuerpo', x: 50, y: 38, w: 36, h: 22, accepts: ['Chasis'], icon: 'ðŸ—ï¸' },
-    { id: 'brain', label: 'Arduino', x: 50, y: 32, w: 16, h: 10, accepts: ['Control'], icon: 'ðŸ§ ' },
-    { id: 'leg_fl', label: 'Pata FI', x: 26, y: 56, w: 12, h: 14, accepts: ['Motores'], icon: 'ðŸ¦¿' },
-    { id: 'leg_fr', label: 'Pata FD', x: 74, y: 56, w: 12, h: 14, accepts: ['Motores'], icon: 'ðŸ¦¿' },
-    { id: 'leg_bl', label: 'Pata TI', x: 30, y: 42, w: 12, h: 14, accepts: ['Motores'], icon: 'ðŸ¦¿' },
-    { id: 'leg_br', label: 'Pata TD', x: 70, y: 42, w: 12, h: 14, accepts: ['Motores'], icon: 'ðŸ¦¿' },
-    { id: 'sensor_f', label: 'Sensor', x: 50, y: 20, w: 14, h: 10, accepts: ['Sensores'], icon: 'ðŸ“¡' },
-    { id: 'power', label: 'BaterÃ­a', x: 50, y: 52, w: 14, h: 10, accepts: ['EnergÃ­a'], icon: 'ðŸ”‹' },
-    { id: 'speaker', label: 'Buzzer', x: 38, y: 22, w: 10, h: 8, accepts: ['Otros'], icon: 'ðŸ”Š' },
-    { id: 'led', label: 'LED', x: 62, y: 22, w: 10, h: 8, accepts: ['Otros'], icon: 'ðŸ’¡' },
+    { id: 'chassis', label: 'Cuerpo', x: 50, y: 38, w: 36, h: 22, accepts: ['Chasis'], icon: '🏗️' },
+    { id: 'brain', label: 'Arduino', x: 50, y: 32, w: 16, h: 10, accepts: ['Control'], icon: '🧠' },
+    { id: 'leg_fl', label: 'Pata FI', x: 26, y: 56, w: 12, h: 14, accepts: ['Motores'], icon: '🦿' },
+    { id: 'leg_fr', label: 'Pata FD', x: 74, y: 56, w: 12, h: 14, accepts: ['Motores'], icon: '🦿' },
+    { id: 'leg_bl', label: 'Pata TI', x: 30, y: 42, w: 12, h: 14, accepts: ['Motores'], icon: '🦿' },
+    { id: 'leg_br', label: 'Pata TD', x: 70, y: 42, w: 12, h: 14, accepts: ['Motores'], icon: '🦿' },
+    { id: 'sensor_f', label: 'Sensor', x: 50, y: 20, w: 14, h: 10, accepts: ['Sensores'], icon: '📡' },
+    { id: 'power', label: 'Batería', x: 50, y: 52, w: 14, h: 10, accepts: ['Energía'], icon: '🔋' },
+    { id: 'speaker', label: 'Buzzer', x: 38, y: 22, w: 10, h: 8, accepts: ['Otros'], icon: '🔊' },
+    { id: 'led', label: 'LED', x: 62, y: 22, w: 10, h: 8, accepts: ['Otros'], icon: '💡' },
   ],
   free: [
-    { id: 'chassis', label: 'Chasis', x: 50, y: 42, w: 44, h: 28, accepts: ['Chasis'], icon: 'ðŸ—ï¸' },
-    { id: 'brain', label: 'Arduino', x: 50, y: 32, w: 18, h: 12, accepts: ['Control'], icon: 'ðŸ§ ' },
-    { id: 'motor_l', label: 'Motor Izq', x: 22, y: 50, w: 14, h: 14, accepts: ['Motores'], icon: 'âš™ï¸' },
-    { id: 'motor_r', label: 'Motor Der', x: 78, y: 50, w: 14, h: 14, accepts: ['Motores'], icon: 'âš™ï¸' },
-    { id: 'wheel_l', label: 'Rueda Izq', x: 14, y: 50, w: 12, h: 16, accepts: ['Ruedas'], icon: 'â­•' },
-    { id: 'wheel_r', label: 'Rueda Der', x: 86, y: 50, w: 12, h: 16, accepts: ['Ruedas'], icon: 'â­•' },
-    { id: 'sensor_f', label: 'Sensor', x: 50, y: 20, w: 16, h: 10, accepts: ['Sensores'], icon: 'ðŸ“¡' },
-    { id: 'power', label: 'BaterÃ­a', x: 50, y: 60, w: 14, h: 10, accepts: ['EnergÃ­a'], icon: 'ðŸ”‹' },
-    { id: 'driver', label: 'Driver', x: 36, y: 50, w: 12, h: 10, accepts: ['Control'], icon: 'ðŸ”Œ' },
-    { id: 'extra1', label: 'Extra 1', x: 34, y: 68, w: 12, h: 10, accepts: ['Otros'], icon: 'âž•' },
-    { id: 'extra2', label: 'Extra 2', x: 66, y: 68, w: 12, h: 10, accepts: ['Otros'], icon: 'âž•' },
+    { id: 'chassis', label: 'Chasis', x: 50, y: 42, w: 44, h: 28, accepts: ['Chasis'], icon: '🏗️' },
+    { id: 'brain', label: 'Arduino', x: 50, y: 32, w: 18, h: 12, accepts: ['Control'], icon: '🧠' },
+    { id: 'motor_l', label: 'Motor Izq', x: 22, y: 50, w: 14, h: 14, accepts: ['Motores'], icon: '⚙️' },
+    { id: 'motor_r', label: 'Motor Der', x: 78, y: 50, w: 14, h: 14, accepts: ['Motores'], icon: '⚙️' },
+    { id: 'wheel_l', label: 'Rueda Izq', x: 14, y: 50, w: 12, h: 16, accepts: ['Ruedas'], icon: '⭕' },
+    { id: 'wheel_r', label: 'Rueda Der', x: 86, y: 50, w: 12, h: 16, accepts: ['Ruedas'], icon: '⭕' },
+    { id: 'sensor_f', label: 'Sensor', x: 50, y: 20, w: 16, h: 10, accepts: ['Sensores'], icon: '📡' },
+    { id: 'power', label: 'Batería', x: 50, y: 60, w: 14, h: 10, accepts: ['Energía'], icon: '🔋' },
+    { id: 'driver', label: 'Driver', x: 36, y: 50, w: 12, h: 10, accepts: ['Control'], icon: '🔌' },
+    { id: 'extra1', label: 'Extra 1', x: 34, y: 68, w: 12, h: 10, accepts: ['Otros'], icon: '➕' },
+    { id: 'extra2', label: 'Extra 2', x: 66, y: 68, w: 12, h: 10, accepts: ['Otros'], icon: '➕' },
   ],
 };
 
@@ -1117,7 +1117,7 @@ const ChassisAssemblyView = ({ template, workspace, slotAssignments, onSlotDrop,
                 <PartSVG partId={part.svg} size={Math.min(slot.w * 2.5, 52)} />
                 <span className="text-[7px] font-bold text-gray-300 mt-0 leading-tight">{part.name}</span>
                 {/* Remove hint */}
-                <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white rounded-full text-[8px] font-bold flex items-center justify-center opacity-0 group-hover:opacity-100 transition shadow-md" style={{fontSize:'7px'}}>âœ•</div>
+                <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white rounded-full text-[8px] font-bold flex items-center justify-center opacity-0 group-hover:opacity-100 transition shadow-md" style={{fontSize:'7px'}}>✕</div>
                 {/* Glow pulse */}
                 <div className="absolute inset-0 rounded-xl pointer-events-none" style={{
                   boxShadow: `0 0 8px ${colors.accent}30`,
@@ -1132,7 +1132,7 @@ const ChassisAssemblyView = ({ template, workspace, slotAssignments, onSlotDrop,
       {/* Bottom label */}
       <div className="absolute bottom-2 left-1/2 -translate-x-1/2 z-20">
         <div className="backdrop-blur-md bg-black/30 rounded-full px-3 py-1 border border-white/10">
-          <span className="text-[8px] text-gray-400 font-bold">Arrastra piezas a los slots Â· Toca para remover</span>
+          <span className="text-[8px] text-gray-400 font-bold">Arrastra piezas a los slots · Toca para remover</span>
         </div>
       </div>
     </div>
@@ -1155,7 +1155,7 @@ const FirmwareUpload = ({ isUploading, uploadProgress, uploadStep, uploadLog }) 
           </span>
         </div>
         <span className="text-[10px] font-mono text-gray-300">
-          {uploadProgress < 100 ? 'Compilando...' : 'âœ… Listo'}
+          {uploadProgress < 100 ? 'Compilando...' : '✅ Listo'}
         </span>
       </div>
 
@@ -1214,7 +1214,7 @@ const FirmwareUpload = ({ isUploading, uploadProgress, uploadStep, uploadLog }) 
         <div className="mx-4 mb-3 bg-green-900/40 border border-green-600/30 rounded-xl px-3 py-2 flex items-center gap-2">
           <Check size={14} className="text-green-400"/>
           <div>
-            <div className="text-[10px] font-bold text-green-300">Â¡Programa cargado exitosamente!</div>
+            <div className="text-[10px] font-bold text-green-300">¡Programa cargado exitosamente!</div>
             <div className="text-[9px] text-green-500">Robot listo para operar</div>
           </div>
         </div>
@@ -1250,22 +1250,22 @@ const VirtualDPad = ({ player, color, onMove, onStop, compact = false }) => {
   return (
     <div className={`flex flex-col items-center ${pad}`}>
       <div className={`text-[9px] font-bold mb-1 px-2 py-0.5 rounded-full bg-gradient-to-r ${bg} text-white shadow-md`}>
-        {player === 1 ? 'ðŸ”µ J1' : 'ðŸ”´ J2'} {compact ? '' : `Â· ${player === 1 ? 'WASD' : 'â†‘â†“â†â†’'}`}
+        {player === 1 ? '🔵 J1' : '🔴 J2'} {compact ? '' : `· ${player === 1 ? 'WASD' : '↑↓←→'}`}
       </div>
       <div className="grid grid-cols-3 gap-1">
         <div/>
         <button className={btnBase + ' ' + btnColor}
-          onPointerDown={() => startHold('up')} onPointerUp={stopHold} onPointerLeave={stopHold}>â–²</button>
+          onPointerDown={() => startHold('up')} onPointerUp={stopHold} onPointerLeave={stopHold}>▲</button>
         <div/>
         <button className={btnBase + ' ' + btnColor}
-          onPointerDown={() => startHold('left')} onPointerUp={stopHold} onPointerLeave={stopHold}>â—„</button>
+          onPointerDown={() => startHold('left')} onPointerUp={stopHold} onPointerLeave={stopHold}>◄</button>
         <button className={`${sz} rounded-xl flex items-center justify-center font-bold text-xs transition active:scale-90 bg-gray-600/60 text-gray-300 border border-gray-500/30 select-none`}
-          onPointerDown={onStop}>â¹</button>
+          onPointerDown={onStop}>⏹</button>
         <button className={btnBase + ' ' + btnColor}
-          onPointerDown={() => startHold('right')} onPointerUp={stopHold} onPointerLeave={stopHold}>â–º</button>
+          onPointerDown={() => startHold('right')} onPointerUp={stopHold} onPointerLeave={stopHold}>►</button>
         <div/>
         <button className={btnBase + ' ' + btnColor}
-          onPointerDown={() => startHold('down')} onPointerUp={stopHold} onPointerLeave={stopHold}>â–¼</button>
+          onPointerDown={() => startHold('down')} onPointerUp={stopHold} onPointerLeave={stopHold}>▼</button>
         <div/>
       </div>
     </div>
@@ -1377,8 +1377,8 @@ const BattleArena = ({ robotType, arenaType, isActive, p1Pos, p2Pos, p1Trail, p2
             <div className="text-lg font-black text-white leading-none">{scores[0]}</div>
           </div>
           <div className="backdrop-blur-md bg-black/50 rounded-lg px-3 py-1 border border-white/10">
-            <div className="text-[8px] text-gray-400 font-bold tracking-wider">âš”ï¸ BATALLA</div>
-            {isActive && <div className="text-[7px] text-blue-300 font-bold text-center">EN JUEGO</div>}
+            <div className="text-[8px] text-gray-400 font-bold tracking-wider">⚔️ BATALLA</div>
+            {isActive && <div className="text-[7px] text-purple-300 font-bold text-center">EN JUEGO</div>}
           </div>
           <div className="backdrop-blur-md bg-red-900/60 rounded-lg px-2 py-1 border border-red-400/30">
             <div className="text-[7px] text-red-300 font-bold uppercase text-right">Jugador 2</div>
@@ -1402,7 +1402,7 @@ const BattleArena = ({ robotType, arenaType, isActive, p1Pos, p2Pos, p1Trail, p2
           background: 'radial-gradient(circle, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.8) 100%)',
         }}>
           <div className="text-center animate-scale-in">
-            <div className="text-5xl mb-2">ðŸ†</div>
+            <div className="text-5xl mb-2">🏆</div>
             <div className="px-6 py-3 rounded-2xl font-bold shadow-2xl" style={{
               background: winner === 1 
                 ? 'linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%)' 
@@ -1410,9 +1410,9 @@ const BattleArena = ({ robotType, arenaType, isActive, p1Pos, p2Pos, p1Trail, p2
               color: 'white', border: '2px solid rgba(255,255,255,0.3)',
               boxShadow: '0 8px 40px rgba(0,0,0,0.4)',
             }}>
-              <div className="text-lg font-black">Â¡Jugador {winner} Gana!</div>
+              <div className="text-lg font-black">¡Jugador {winner} Gana!</div>
               <div className="text-xs opacity-80 mt-0.5">
-                {winner === 1 ? 'ðŸ”µ' : 'ðŸ”´'} Victoria por empuje
+                {winner === 1 ? '🔵' : '🔴'} Victoria por empuje
               </div>
             </div>
           </div>
@@ -1430,7 +1430,7 @@ const Robot3DSVG = ({ type, isFailed, isMoving, rotation }) => {
     sumo: { body: '#374151', accent: '#EF4444', wheel: '#1F2937', detail: '#F59E0B' },
     line: { body: '#DBEAFE', accent: '#3B82F6', wheel: '#1E3A8A', detail: '#06B6D4' },
     dog:  { body: '#FCD34D', accent: '#D97706', wheel: '#92400E', detail: '#1F2937' },
-    free: { body: '#8B5CF6', accent: '#6D28D9', wheel: '#1E40AF', detail: '#A78BFA' },
+    free: { body: '#8B5CF6', accent: '#1D4ED8', wheel: '#4C1D95', detail: '#93C5FD' },
   };
   const c = colors[type] || colors.free;
 
@@ -1531,7 +1531,7 @@ const Robot3DSVG = ({ type, isFailed, isMoving, rotation }) => {
 };
 
 /* ================================================================
-   SIMULATION ARENA COMPONENT â€” 3D PERSPECTIVE
+   SIMULATION ARENA COMPONENT — 3D PERSPECTIVE
    ================================================================ */
 const SimulationArena = ({ robotType, isRunning, simStep, totalSteps, simAction, simFailed, workspace, manualPos, isManual }) => {
   const [robotPos, setRobotPos] = useState({ x: 50, y: 50, rotation: 0 });
@@ -1815,9 +1815,9 @@ const SimulationArena = ({ robotType, isRunning, simStep, totalSteps, simAction,
           {simFailed && (
             <div className="absolute inset-0 flex items-center justify-center">
               <svg width="70" height="70" viewBox="0 0 70 70" className="absolute">
-                <text x="35" y="25" textAnchor="middle" fontSize="18" opacity="0.9">âš¡</text>
-                <text x="50" y="45" textAnchor="middle" fontSize="12" opacity="0.7">ðŸ’¥</text>
-                <text x="18" y="40" textAnchor="middle" fontSize="10" opacity="0.6">ðŸ’¨</text>
+                <text x="35" y="25" textAnchor="middle" fontSize="18" opacity="0.9">⚡</text>
+                <text x="50" y="45" textAnchor="middle" fontSize="12" opacity="0.7">💥</text>
+                <text x="18" y="40" textAnchor="middle" fontSize="10" opacity="0.6">💨</text>
               </svg>
             </div>
           )}
@@ -1831,7 +1831,7 @@ const SimulationArena = ({ robotType, isRunning, simStep, totalSteps, simAction,
           <div className="backdrop-blur-md bg-black/40 rounded-lg px-2.5 py-1.5 border border-white/10">
             <div className="text-[8px] text-gray-400 font-bold uppercase tracking-wider">Arena</div>
             <div className="text-[10px] text-white font-bold">{
-              arenaType === 'sumo' ? 'ðŸ¥Š Ring Sumo' : arenaType === 'line' ? 'ã€°ï¸ Pista' : 'ðŸŒ¿ Campo'
+              arenaType === 'sumo' ? '🥊 Ring Sumo' : arenaType === 'line' ? '〰️ Pista' : '🌿 Campo'
             }</div>
           </div>
           {(isRunning || isManual) && (
@@ -1841,7 +1841,7 @@ const SimulationArena = ({ robotType, isRunning, simStep, totalSteps, simAction,
                 <span className={`inline-block w-1.5 h-1.5 rounded-full ${simFailed ? 'bg-red-400' : 'bg-green-400'}`} style={{
                   animation: simFailed ? 'none' : 'pulse 1.5s infinite',
                 }}/>
-                {simFailed ? 'ERROR' : isManual ? 'ðŸŽ® Manual' : 'Activo'}
+                {simFailed ? 'ERROR' : isManual ? '🎮 Manual' : 'Activo'}
               </div>
             </div>
           )}
@@ -1861,7 +1861,7 @@ const SimulationArena = ({ robotType, isRunning, simStep, totalSteps, simAction,
                 width: `${(simStep/Math.max(totalSteps,1))*100}%`,
                 background: simFailed 
                   ? 'linear-gradient(90deg, #EF4444, #F87171)' 
-                  : 'linear-gradient(90deg, #6366F1, #818CF8, #A78BFA)',
+                  : 'linear-gradient(90deg, #6366F1, #818CF8, #93C5FD)',
                 boxShadow: simFailed ? '0 0 8px rgba(239,68,68,0.5)' : '0 0 8px rgba(99,102,241,0.5)',
               }}/>
             </div>
@@ -1880,8 +1880,8 @@ const SimulationArena = ({ robotType, isRunning, simStep, totalSteps, simAction,
             border: '1px solid rgba(255,255,255,0.2)',
             boxShadow: '0 8px 32px rgba(220,38,38,0.4)',
           }}>
-            <span className="text-lg block mb-0.5">âš ï¸</span>
-            Â¡Fallo en simulaciÃ³n!
+            <span className="text-lg block mb-0.5">⚠️</span>
+            ¡Fallo en simulación!
           </div>
         </div>
       )}
@@ -1890,7 +1890,7 @@ const SimulationArena = ({ robotType, isRunning, simStep, totalSteps, simAction,
       {!isRunning && !isManual && trail.length === 0 && (
         <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
           <div className="text-center">
-            <div className="text-4xl mb-2" style={{animation: 'float 3s ease-in-out infinite'}}>{robotType?.icon || 'ðŸ¤–'}</div>
+            <div className="text-4xl mb-2" style={{animation: 'float 3s ease-in-out infinite'}}>{robotType?.icon || '🤖'}</div>
             <div className="backdrop-blur-md bg-black/30 rounded-xl px-4 py-2 border border-white/10">
               <p className="text-xs font-bold text-white/70">Listo para simular</p>
             </div>
@@ -2285,19 +2285,19 @@ export default function RobotSimulator({ onBack }) {
 
     const steps = [
       { pct: 5, step: 'Conectando con Arduino...', log: { text: '> Detectando placa en COM3...', type: 'info' }, delay: 600 },
-      { pct: 10, step: 'Placa detectada', log: { text: 'âœ“ Arduino UNO detectado en COM3 (ATmega328P)', type: 'ok' }, delay: 800 },
+      { pct: 10, step: 'Placa detectada', log: { text: '✓ Arduino UNO detectado en COM3 (ATmega328P)', type: 'ok' }, delay: 800 },
       { pct: 15, step: 'Compilando sketch...', log: { text: '> Compilando sketch para Arduino UNO...', type: 'info' }, delay: 500 },
       { pct: 25, step: 'Compilando...', log: { text: '  Incluyendo biblioteca: Servo.h', type: 'info' }, delay: 400 },
       { pct: 35, step: 'Compilando...', log: { text: '  Incluyendo biblioteca: NewPing.h', type: 'info' }, delay: 300 },
       { pct: 45, step: 'Compilando dependencias...', log: { text: `  Compilando ${program.length} bloques de programa...`, type: 'progress' }, delay: 600 },
-      { pct: 55, step: 'Verificando cÃ³digo...', log: { text: 'âœ“ CompilaciÃ³n exitosa (0 errores, 0 warnings)', type: 'ok' }, delay: 700 },
-      { pct: 60, step: 'Preparando firmware...', log: { text: `> TamaÃ±o del sketch: ${1024 + program.length * 128} bytes (${Math.min(98, 3 + program.length * 4)}% del mÃ¡ximo)`, type: 'progress' }, delay: 500 },
+      { pct: 55, step: 'Verificando código...', log: { text: '✓ Compilación exitosa (0 errores, 0 warnings)', type: 'ok' }, delay: 700 },
+      { pct: 60, step: 'Preparando firmware...', log: { text: `> Tamaño del sketch: ${1024 + program.length * 128} bytes (${Math.min(98, 3 + program.length * 4)}% del máximo)`, type: 'progress' }, delay: 500 },
       { pct: 65, step: 'Iniciando upload...', log: { text: '> Reseteando placa via DTR...', type: 'info' }, delay: 600 },
       { pct: 70, step: 'Subiendo firmware...', log: { text: '> Cargando bootloader... OK', type: 'ok' }, delay: 500 },
-      { pct: 78, step: 'Transfiriendo datos...', log: { text: 'â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–‘â–‘â–‘â–‘â–‘ 70% - Escribiendo flash...', type: 'progress' }, delay: 700 },
-      { pct: 88, step: 'Transfiriendo datos...', log: { text: 'â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–‘ 94% - Verificando...', type: 'progress' }, delay: 600 },
-      { pct: 95, step: 'Verificando firmware...', log: { text: 'âœ“ VerificaciÃ³n de firmware: OK', type: 'ok' }, delay: 500 },
-      { pct: 100, step: 'Â¡Upload completo!', log: { text: 'âœ“ Â¡Programa cargado exitosamente! Robot listo.', type: 'ok' }, delay: 400 },
+      { pct: 78, step: 'Transfiriendo datos...', log: { text: '██████████░░░░░ 70% - Escribiendo flash...', type: 'progress' }, delay: 700 },
+      { pct: 88, step: 'Transfiriendo datos...', log: { text: '████████████████░ 94% - Verificando...', type: 'progress' }, delay: 600 },
+      { pct: 95, step: 'Verificando firmware...', log: { text: '✓ Verificación de firmware: OK', type: 'ok' }, delay: 500 },
+      { pct: 100, step: '¡Upload completo!', log: { text: '✓ ¡Programa cargado exitosamente! Robot listo.', type: 'ok' }, delay: 400 },
     ];
 
     let i = 0;
@@ -2430,7 +2430,7 @@ export default function RobotSimulator({ onBack }) {
     let failStep = -1;
     let failReason = '';
     
-    if (!hasBattery) { willFail = true; failStep = 0; failReason = 'Sin baterÃ­a el robot no enciende.'; }
+    if (!hasBattery) { willFail = true; failStep = 0; failReason = 'Sin batería el robot no enciende.'; }
     if (!hasController) { willFail = true; failStep = 0; failReason = 'Sin Arduino no puede procesar instrucciones.'; }
     
     // Check if sumo has blade
@@ -2441,22 +2441,22 @@ export default function RobotSimulator({ onBack }) {
     setSimRunning(true);
     setSimStep(0);
     setSimFailed(false);
-    setSimLog([{ text: 'ðŸš€ Cargando programa al Arduino...', type: 'system' }]);
+    setSimLog([{ text: '🚀 Cargando programa al Arduino...', type: 'system' }]);
     
     setTimeout(() => {
-      setSimLog(prev => [...prev, { text: 'âœ… Programa cargado exitosamente', type: 'system' },
-        { text: `ðŸ”‹ BaterÃ­a conectada: ${hasBattery ? '9V OK' : 'âŒ NO'}`, type: hasBattery ? 'ok' : 'error' },
-        { text: `ðŸ§  Controlador: ${hasController ? 'Arduino UNO listo' : 'âŒ NO'}`, type: hasController ? 'ok' : 'error' },
-        { text: `âš™ï¸ Motores: ${workspace.filter(p => p.cat === 'Motores').length} detectados`, type: 'ok' },
-        { text: 'â–¶ï¸ Iniciando ejecuciÃ³n...', type: 'system' },
-        { text: 'â”€'.repeat(30), type: 'divider' },
+      setSimLog(prev => [...prev, { text: '✅ Programa cargado exitosamente', type: 'system' },
+        { text: `🔋 Batería conectada: ${hasBattery ? '9V OK' : '❌ NO'}`, type: hasBattery ? 'ok' : 'error' },
+        { text: `🧠 Controlador: ${hasController ? 'Arduino UNO listo' : '❌ NO'}`, type: hasController ? 'ok' : 'error' },
+        { text: `⚙️ Motores: ${workspace.filter(p => p.cat === 'Motores').length} detectados`, type: 'ok' },
+        { text: '▶️ Iniciando ejecución...', type: 'system' },
+        { text: '─'.repeat(30), type: 'divider' },
       ]);
     }, 600);
 
     let step = 0;
     simRef.current = setInterval(() => {
       if (willFail && step === failStep) {
-        setSimLog(prev => [...prev, { text: `âŒ ERROR: ${failReason}`, type: 'error' }]);
+        setSimLog(prev => [...prev, { text: `❌ ERROR: ${failReason}`, type: 'error' }]);
         setSimFailed(true);
         setSimRunning(false);
         clearInterval(simRef.current);
@@ -2465,8 +2465,8 @@ export default function RobotSimulator({ onBack }) {
       
       if (step >= program.length) {
         setSimLog(prev => [...prev, 
-          { text: 'â”€'.repeat(30), type: 'divider' },
-          { text: 'ðŸ Â¡Programa ejecutado completamente!', type: 'success' }
+          { text: '─'.repeat(30), type: 'divider' },
+          { text: '🏁 ¡Programa ejecutado completamente!', type: 'success' }
         ]);
         setSimRunning(false);
         clearInterval(simRef.current);
@@ -2486,7 +2486,7 @@ export default function RobotSimulator({ onBack }) {
     clearInterval(simRef.current);
     setSimRunning(false);
     setSimAction('');
-    setSimLog(prev => [...prev, { text: 'â¹ï¸ SimulaciÃ³n detenida por usuario', type: 'system' }]);
+    setSimLog(prev => [...prev, { text: '⏹️ Simulación detenida por usuario', type: 'system' }]);
   };
 
   const resetSim = () => {
@@ -2529,21 +2529,21 @@ export default function RobotSimulator({ onBack }) {
           </button>
           <div className="text-center">
             <div className="flex justify-center mb-3">
-              <div className="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500/30 to-blue-600/30 border border-blue-400/30 flex items-center justify-center backdrop-blur-sm">
-                <span className="text-4xl">ðŸ¤–</span>
-                <div className="absolute -right-1 -top-1 w-4 h-4 rounded-full bg-green-400 border-2 border-[#0C1632] led-dot" style={{ color: '#4ade80' }} />
+              <div className="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500/30 to-purple-600/30 border border-blue-400/30 flex items-center justify-center backdrop-blur-sm">
+                <span className="text-4xl">🤖</span>
+                <div className="absolute -right-1 -top-1 w-4 h-4 rounded-full bg-green-400 border-2 border-[#1E1B4B] led-dot" style={{ color: '#4ade80' }} />
               </div>
             </div>
-            <h1 className="text-2xl font-black text-white glow-text-purple">Centro de RobÃ³tica</h1>
+            <h1 className="text-2xl font-black text-white glow-text-purple">Centro de Robótica</h1>
             <p className="text-blue-300/80 text-sm font-bold mt-1.5">
-              Selecciona una estaciÃ³n para comenzar
+              Selecciona una estación para comenzar
             </p>
           </div>
         </div>
 
         {/* Robot avatar */}
         <div className="flex justify-center -mt-1 mb-4 relative z-10">
-          <div className="bg-[#0C1632]/80 rounded-full p-1.5 border border-blue-400/30 shadow-lg shadow-blue-500/10">
+          <div className="bg-[#1E1B4B]/80 rounded-full p-1.5 border border-blue-400/30 shadow-lg shadow-blue-500/10">
             <RobotMini config={robotConfig} size={44} />
           </div>
         </div>
@@ -2564,7 +2564,7 @@ export default function RobotSimulator({ onBack }) {
                 className="mech-btn mech-btn-cyan p-4 station-scanline active:scale-[0.97] transition-transform">
                 <div className="flex items-center gap-4 relative z-10">
                   <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-cyan-500/30 to-blue-600/30 border border-cyan-400/30 flex items-center justify-center text-3xl flex-shrink-0">
-                    ðŸ§©
+                    🧩
                   </div>
                   <div className="flex-grow min-w-0">
                     <h3 className="text-base font-black text-white">Axon Merge</h3>
@@ -2577,8 +2577,8 @@ export default function RobotSimulator({ onBack }) {
                   </div>
                 </div>
                 <div className="flex gap-2 mt-3 relative z-10">
-                  <span className="station-tag text-cyan-300"><Zap size={10} /> FÃ­sica real</span>
-                  <span className="station-tag text-blue-300"><Cpu size={10} /> 10 niveles</span>
+                  <span className="station-tag text-cyan-300"><Zap size={10} /> Física real</span>
+                  <span className="station-tag text-purple-300"><Cpu size={10} /> 10 niveles</span>
                 </div>
               </div>
 
@@ -2587,7 +2587,7 @@ export default function RobotSimulator({ onBack }) {
                 className="mech-btn mech-btn-red p-4 station-scanline active:scale-[0.97] transition-transform">
                 <div className="flex items-center gap-4 relative z-10">
                   <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-red-500/30 to-orange-600/30 border border-red-400/30 flex items-center justify-center text-3xl flex-shrink-0">
-                    ðŸ¤¼
+                    🤼
                   </div>
                   <div className="flex-grow min-w-0">
                     <h3 className="text-base font-black text-white">SumoBot Push</h3>
@@ -2612,7 +2612,7 @@ export default function RobotSimulator({ onBack }) {
             <div className="station-header station-header-amber mb-3">
               <Wrench size={18} className="text-amber-400" />
               <span className="text-sm font-black text-amber-300 glow-text-amber tracking-wide uppercase">Taller</span>
-              <span className="text-[10px] font-bold text-amber-400/50 ml-1">â€” ConstrucciÃ³n de Robots</span>
+              <span className="text-[10px] font-bold text-amber-400/50 ml-1">— Construcción de Robots</span>
               <div className="led-dot ml-auto" style={{ color: '#fbbf24' }} />
             </div>
 
@@ -2652,14 +2652,14 @@ export default function RobotSimulator({ onBack }) {
                     </div>
                     {instructions && t.id !== 'free' ? (
                       <div className="flex gap-2 mt-3 relative z-10 flex-wrap">
-                        <span className="station-tag text-blue-300">ðŸŽ“ {instructions.difficulty}</span>
-                        <span className="station-tag text-cyan-300">â±ï¸ {instructions.time}</span>
-                        <span className="station-tag text-green-300">ðŸ“¦ {t.parts.length} piezas</span>
+                        <span className="station-tag text-purple-300">🎓 {instructions.difficulty}</span>
+                        <span className="station-tag text-cyan-300">⏱️ {instructions.time}</span>
+                        <span className="station-tag text-green-300">📦 {t.parts.length} piezas</span>
                       </div>
                     ) : t.id === 'free' ? (
                       <div className="flex gap-2 mt-3 relative z-10">
-                        <span className="station-tag text-green-300">âœ¨ DiseÃ±o libre</span>
-                        <span className="station-tag text-blue-300">â™¾ï¸ Sin lÃ­mites</span>
+                        <span className="station-tag text-green-300">✨ Diseño libre</span>
+                        <span className="station-tag text-blue-300">♾️ Sin límites</span>
                       </div>
                     ) : null}
                   </div>
@@ -2683,7 +2683,7 @@ export default function RobotSimulator({ onBack }) {
     return (
       <div className="min-h-full galaxy-bg animate-fade-in flex flex-col relative">
         {/* Header */}
-        <div className="relative z-10 bg-gradient-to-b from-[#0F1A3E]/95 to-[#0C1632]/90 px-5 pt-4 pb-5 border-b border-blue-500/30">
+        <div className="relative z-10 bg-gradient-to-b from-[#0F1A3E]/95 to-[#1E1B4B]/90 px-5 pt-4 pb-5 border-b border-blue-500/30">
           <div className="flex justify-between items-center mb-3">
             <button onClick={() => { stopSpeaking(); setPhase('select'); }} 
               className="text-blue-300/70 hover:text-white flex items-center text-sm font-black active:scale-95 transition">
@@ -2692,7 +2692,7 @@ export default function RobotSimulator({ onBack }) {
             <div className="flex items-center gap-2">
               <div className="bg-blue-500/20 border border-blue-400/30 px-3 py-1.5 rounded-full flex items-center gap-1.5">
                 <span className="text-lg">{template.icon}</span>
-                <span className="text-xs font-black text-blue-200">{template.name}</span>
+                <span className="text-xs font-black text-violet-200">{template.name}</span>
               </div>
             </div>
           </div>
@@ -2702,7 +2702,7 @@ export default function RobotSimulator({ onBack }) {
           {/* Progress bar */}
           <div className="bg-white/10 rounded-full h-3 overflow-hidden border border-blue-400/20">
             <div 
-              className="bg-gradient-to-r from-blue-400 to-blue-500 h-full rounded-full transition-all duration-500"
+              className="bg-gradient-to-r from-blue-400 to-purple-500 h-full rounded-full transition-all duration-500"
               style={{ width: `${progress}%` }}
             />
           </div>
@@ -2712,22 +2712,22 @@ export default function RobotSimulator({ onBack }) {
         </div>
 
         {/* Robot Avatar with speech */}
-        <div className="flex justify-center py-4 bg-gradient-to-b from-[#0C1632]/60 to-transparent relative z-10">
+        <div className="flex justify-center py-4 bg-gradient-to-b from-[#1E1B4B]/60 to-transparent relative z-10">
           <div className="relative">
             <div className={`rounded-full p-1 shadow-lg border-2 transition-all duration-300 ${
-              isSpeaking ? 'border-green-400 bg-green-900/30 animate-pulse shadow-green-400/20' : 'border-blue-400/30 bg-[#0C1632]/80'
+              isSpeaking ? 'border-green-400 bg-green-900/30 animate-pulse shadow-green-400/20' : 'border-blue-400/30 bg-[#1E1B4B]/80'
             }`}>
               <RobotMini config={robotConfig} size={64} />
             </div>
             {isSpeaking && (
               <div className="absolute -right-2 -top-2">
-                <span className="text-2xl animate-bounce">ðŸ”Š</span>
+                <span className="text-2xl animate-bounce">🔊</span>
               </div>
             )}
           </div>
           <div className="ml-3 flex flex-col justify-center">
             <p className="text-sm font-black text-blue-300">
-              {isSpeaking ? 'Â¡Escucha con atenciÃ³n!' : 'Â¡Toca el botÃ³n para que te lea!'}
+              {isSpeaking ? '¡Escucha con atención!' : '¡Toca el botón para que te lea!'}
             </p>
             <button 
               onClick={() => currentStepData && (isSpeaking ? stopSpeaking() : speakStep(currentStepData))}
@@ -2752,7 +2752,7 @@ export default function RobotSimulator({ onBack }) {
                 : 'bg-white/5 text-blue-300/60 border-white/5 hover:bg-white/10'
             }`}
           >
-            ðŸ“¦ Materiales
+            📦 Materiales
           </button>
           <button 
             onClick={() => { setShowMaterials(false); setShowCode(false); }}
@@ -2762,7 +2762,7 @@ export default function RobotSimulator({ onBack }) {
                 : 'bg-white/5 text-blue-300/60 border-white/5 hover:bg-white/10'
             }`}
           >
-            ðŸ”§ Pasos
+            🔧 Pasos
           </button>
           <button 
             onClick={() => { setShowMaterials(false); setShowCode(true); }}
@@ -2772,7 +2772,7 @@ export default function RobotSimulator({ onBack }) {
                 : 'bg-white/5 text-blue-300/60 border-white/5 hover:bg-white/10'
             }`}
           >
-            ðŸ’» CÃ³digo
+            💻 Código
           </button>
         </div>
 
@@ -2821,7 +2821,7 @@ export default function RobotSimulator({ onBack }) {
                 <div className="flex flex-wrap gap-2">
                   {instructions?.tools?.map((tool, i) => (
                     <span key={i} className="station-tag text-amber-300">
-                      ðŸ”§ {tool}
+                      🔧 {tool}
                     </span>
                   ))}
                 </div>
@@ -2830,7 +2830,7 @@ export default function RobotSimulator({ onBack }) {
               {/* Tips */}
               <div className="station-panel p-4">
                 <h3 className="text-base font-black text-cyan-300 mb-2 flex items-center gap-2">
-                  <Lightbulb size={18}/> Consejos Ãštiles
+                  <Lightbulb size={18}/> Consejos Útiles
                 </h3>
                 <div className="space-y-2">
                   {instructions?.tips?.map((tip, i) => (
@@ -2848,7 +2848,7 @@ export default function RobotSimulator({ onBack }) {
               {currentStepData && (
                 <div className="station-panel p-4">
                   <div className="flex items-center gap-3 mb-3 relative z-10">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500/40 to-blue-600/40 border border-blue-400/30 flex items-center justify-center text-2xl">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500/40 to-purple-600/40 border border-blue-400/30 flex items-center justify-center text-2xl">
                       {currentStepData.emoji}
                     </div>
                     <div className="flex-grow">
@@ -2869,11 +2869,11 @@ export default function RobotSimulator({ onBack }) {
                   <p className="text-sm text-blue-300/80 mb-4 font-medium relative z-10">{currentStepData.description}</p>
                   
                   <div className="bg-white/5 border border-blue-400/20 rounded-xl p-3 mb-3 relative z-10">
-                    <h4 className="text-xs font-black text-blue-400/70 mb-2">ðŸ“‹ INSTRUCCIONES:</h4>
+                    <h4 className="text-xs font-black text-blue-400/70 mb-2">📋 INSTRUCCIONES:</h4>
                     <div className="space-y-2">
                       {currentStepData.details?.map((detail, i) => (
-                        <p key={i} className="text-sm text-blue-200/90 flex items-start gap-2">
-                          <span className="text-cyan-400 mt-0.5">â€¢</span>
+                        <p key={i} className="text-sm text-violet-200/90 flex items-start gap-2">
+                          <span className="text-cyan-400 mt-0.5">•</span>
                           {detail}
                         </p>
                       ))}
@@ -2884,7 +2884,7 @@ export default function RobotSimulator({ onBack }) {
                     <div className="bg-amber-500/10 border border-amber-400/30 rounded-xl p-3 flex items-start gap-2 relative z-10">
                       <AlertTriangle size={18} className="text-amber-400 flex-shrink-0 mt-0.5"/>
                       <div>
-                        <span className="text-xs font-black text-amber-300">âš ï¸ SEGURIDAD:</span>
+                        <span className="text-xs font-black text-amber-300">⚠️ SEGURIDAD:</span>
                         <p className="text-xs text-amber-300/80 mt-0.5">{currentStepData.safety}</p>
                       </div>
                     </div>
@@ -2900,7 +2900,7 @@ export default function RobotSimulator({ onBack }) {
                   className={`flex-1 py-3 rounded-xl font-black text-sm flex items-center justify-center gap-1 transition border ${
                     currentStep === 0 
                       ? 'bg-white/5 text-blue-400/30 border-white/5' 
-                      : 'bg-white/10 text-blue-200 border-blue-400/20 active:scale-95'
+                      : 'bg-white/10 text-violet-200 border-blue-400/20 active:scale-95'
                   }`}
                 >
                   <ChevronUp size={16}/> Anterior
@@ -2926,7 +2926,7 @@ export default function RobotSimulator({ onBack }) {
 
               {/* All steps overview */}
               <div className="station-panel p-4">
-                <h4 className="text-sm font-black text-blue-300 mb-3 relative z-10">ðŸ“ Todos los Pasos</h4>
+                <h4 className="text-sm font-black text-blue-300 mb-3 relative z-10">📝 Todos los Pasos</h4>
                 <div className="space-y-2 relative z-10">
                   {steps.map((step, i) => (
                     <button
@@ -2972,19 +2972,19 @@ export default function RobotSimulator({ onBack }) {
                 </pre>
               </div>
               <p className="text-xs text-blue-300/50 text-center mt-3">
-                ðŸ’¡ Copia este cÃ³digo y pÃ©galo en Arduino IDE
+                💡 Copia este código y pégalo en Arduino IDE
               </p>
             </div>
           )}
         </div>
 
         {/* Bottom action button */}
-        <div className="fixed bottom-20 left-0 right-0 px-4 pb-4 bg-gradient-to-t from-[#0C1632] via-[#0C1632]/90 to-transparent pt-6 z-20">
+        <div className="fixed bottom-20 left-0 right-0 px-4 pb-4 bg-gradient-to-t from-[#1E1B4B] via-[#1E1B4B]/90 to-transparent pt-6 z-20">
           <button
             onClick={() => { stopSpeaking(); setPhase('build'); }}
-            className="w-full py-4 rounded-2xl bg-gradient-to-r from-blue-500/40 to-blue-600/40 border border-blue-400/50 text-white font-black text-lg shadow-xl shadow-blue-500/20 active:scale-[0.98] transition flex items-center justify-center gap-2"
+            className="w-full py-4 rounded-2xl bg-gradient-to-r from-blue-500/40 to-purple-600/40 border border-blue-400/50 text-white font-black text-lg shadow-xl shadow-blue-500/20 active:scale-[0.98] transition flex items-center justify-center gap-2"
           >
-            <Wrench size={20}/> Ir al Simulador Virtual â†’
+            <Wrench size={20}/> Ir al Simulador Virtual →
           </button>
         </div>
       </div>
@@ -2998,24 +2998,24 @@ export default function RobotSimulator({ onBack }) {
   return (
     <div className="min-h-full galaxy-bg flex flex-col animate-fade-in relative">
       {/* Header */}
-      <div className="relative z-10 bg-gradient-to-b from-[#0F1A3E]/95 to-[#0C1632]/90 px-5 pt-4 pb-5 border-b border-blue-500/30">
+      <div className="relative z-10 bg-gradient-to-b from-[#0F1A3E]/95 to-[#1E1B4B]/90 px-5 pt-4 pb-5 border-b border-blue-500/30">
         <div className="flex justify-between items-center mb-2">
           <button onClick={() => { resetSim(); setPhase('select'); }} className="text-blue-300/70 hover:text-white flex items-center text-sm font-black active:scale-95 transition">
             <ArrowLeft size={18} className="mr-1" /> Taller
           </button>
           <div className="flex items-center bg-blue-500/20 border border-blue-400/30 px-3 py-1 rounded-full">
             <span className="mr-1.5">{template?.icon}</span>
-            <span className="text-xs font-black text-blue-200">{template?.name}</span>
+            <span className="text-xs font-black text-violet-200">{template?.name}</span>
           </div>
         </div>
         {/* Phase tabs */}
         <div className="flex gap-1 mt-2">
           {[
-            { id: 'instructions', label: 'ðŸ“– GuÃ­a' },
-            { id: 'build', label: 'ðŸ”§ Armar' },
-            { id: 'program', label: 'ðŸ’» Prog.' },
-            { id: 'simulate', label: 'â–¶ï¸ Simular' },
-            { id: 'battle', label: 'âš”ï¸ Batalla' },
+            { id: 'instructions', label: '📖 Guía' },
+            { id: 'build', label: '🔧 Armar' },
+            { id: 'program', label: '💻 Prog.' },
+            { id: 'simulate', label: '▶️ Simular' },
+            { id: 'battle', label: '⚔️ Batalla' },
           ].map(tab => (
             <button key={tab.id}
               onClick={() => { setPhase(tab.id); if (tab.id !== 'simulate') { resetSim(); stopManualMode(); } if (tab.id !== 'battle') { resetBattle(); } if (tab.id === 'instructions') stopSpeaking(); }}
@@ -3038,14 +3038,14 @@ export default function RobotSimulator({ onBack }) {
             {/* Kid-friendly welcome tip */}
             <div className="station-panel p-4">
               <div className="flex items-start gap-3 relative z-10">
-                <div className="text-3xl animate-bounce">ðŸ”§</div>
+                <div className="text-3xl animate-bounce">🔧</div>
                 <div>
-                  <h3 className="text-base font-black text-blue-200">Â¡Hora de Armar tu Robot!</h3>
+                  <h3 className="text-base font-black text-violet-200">¡Hora de Armar tu Robot!</h3>
                   <p className="text-sm text-blue-300/70 mt-1">
-                    {template?.id === 'sumo' && 'Coloca las piezas en tu robot de combate. Â¡Necesita ser fuerte y rÃ¡pido!'}
-                    {template?.id === 'line' && 'Arma tu robot seguidor de lÃ­neas. Â¡Debe tener buenos sensores para no perderse!'}
-                    {template?.id === 'dog' && 'Construye tu perrito robot. Â¡Necesita 4 patas, ojos y una voz para ladrar!'}
-                    {template?.id === 'free' && 'Â¡Crea lo que imagines! Elige las piezas que quieras.'}
+                    {template?.id === 'sumo' && 'Coloca las piezas en tu robot de combate. ¡Necesita ser fuerte y rápido!'}
+                    {template?.id === 'line' && 'Arma tu robot seguidor de líneas. ¡Debe tener buenos sensores para no perderse!'}
+                    {template?.id === 'dog' && 'Construye tu perrito robot. ¡Necesita 4 patas, ojos y una voz para ladrar!'}
+                    {template?.id === 'free' && '¡Crea lo que imagines! Elige las piezas que quieras.'}
                   </p>
                 </div>
               </div>
@@ -3055,7 +3055,7 @@ export default function RobotSimulator({ onBack }) {
             <div className="station-panel p-4">
               <div className="flex justify-between items-center mb-3 relative z-10">
                 <h3 className="text-base font-black text-white flex items-center">
-                  ðŸ¤– Tu Robot
+                  🤖 Tu Robot
                   <span className="ml-2 text-xs font-black text-blue-300 bg-blue-500/20 px-2.5 py-1 rounded-full border border-blue-400/20">{workspace.length} piezas</span>
                 </h3>
                 {workspace.length > 0 && (
@@ -3078,14 +3078,14 @@ export default function RobotSimulator({ onBack }) {
 
               {/* Component checklist - more descriptive */}
               <div className="mt-4 space-y-2 relative z-10">
-                <p className="text-xs font-black text-blue-400/70">ðŸ“‹ Â¿Tu robot tiene todo lo necesario?</p>
+                <p className="text-xs font-black text-blue-400/70">📋 ¿Tu robot tiene todo lo necesario?</p>
                 {[
-                  { ok: hasController, label: 'ðŸ§  Cerebro (Arduino)', desc: 'Piensa y toma decisiones' },
-                  { ok: hasBattery, label: 'ðŸ”‹ EnergÃ­a (BaterÃ­a)', desc: 'Le da poder para moverse' },
-                  { ok: hasMotor, label: 'âš™ï¸ MÃºsculos (Motor)', desc: 'Lo hace caminar o rodar' },
+                  { ok: hasController, label: '🧠 Cerebro (Arduino)', desc: 'Piensa y toma decisiones' },
+                  { ok: hasBattery, label: '🔋 Energía (Batería)', desc: 'Le da poder para moverse' },
+                  { ok: hasMotor, label: '⚙️ Músculos (Motor)', desc: 'Lo hace caminar o rodar' },
                 ].map((c, i) => (
                   <div key={i} className={`flex items-center gap-3 p-2.5 rounded-xl text-sm transition border ${c.ok ? 'bg-green-500/10 border-green-400/30' : 'bg-red-500/10 border-red-400/30'}`}>
-                    <span className="text-lg">{c.ok ? 'âœ…' : 'âŒ'}</span>
+                    <span className="text-lg">{c.ok ? '✅' : '❌'}</span>
                     <div>
                       <span className={`font-black ${c.ok ? 'text-green-300' : 'text-red-400'}`}>{c.label}</span>
                       <p className={`text-xs ${c.ok ? 'text-green-400/70' : 'text-red-400/70'}`}>{c.desc}</p>
@@ -3098,7 +3098,7 @@ export default function RobotSimulator({ onBack }) {
             {/* Kid-friendly build tips */}
             {template && BUILD_TIPS[template.id] && (
               <div className="station-panel p-4">
-                <h4 className="text-sm font-black text-amber-300 mb-2 flex items-center gap-1 relative z-10">ðŸ’¡ Â¿SabÃ­as que...?</h4>
+                <h4 className="text-sm font-black text-amber-300 mb-2 flex items-center gap-1 relative z-10">💡 ¿Sabías que...?</h4>
                 <p className="text-sm text-blue-300/70 relative z-10">
                   {BUILD_TIPS[template.id][Math.floor(Math.random() * BUILD_TIPS[template.id].length)]}
                 </p>
@@ -3112,16 +3112,16 @@ export default function RobotSimulator({ onBack }) {
 
             {/* Parts catalog with drag */}
             <div className="station-panel p-4">
-              <h3 className="text-base font-black text-white mb-1 relative z-10">ðŸ“¦ Piezas Disponibles</h3>
-              <p className="text-sm text-blue-300/60 font-medium mb-3 relative z-10">ðŸ‘† Toca una pieza para agregarla a tu robot</p>
+              <h3 className="text-base font-black text-white mb-1 relative z-10">📦 Piezas Disponibles</h3>
+              <p className="text-sm text-blue-300/60 font-medium mb-3 relative z-10">👆 Toca una pieza para agregarla a tu robot</p>
               <div className="flex gap-2 overflow-x-auto pb-2 mb-3 -mx-1 px-1 relative z-10">
                 {partCategories.map(cat => {
-                  const catEmoji = { 'Chasis': 'ðŸ“¦', 'Motores': 'âš™ï¸', 'Ruedas': 'ðŸ”µ', 'Sensores': 'ðŸ‘ï¸', 'Control': 'ðŸ§ ', 'EnergÃ­a': 'ðŸ”‹', 'Otros': 'ðŸ”§' };
+                  const catEmoji = { 'Chasis': '📦', 'Motores': '⚙️', 'Ruedas': '🔵', 'Sensores': '👁️', 'Control': '🧠', 'Energía': '🔋', 'Otros': '🔧' };
                   return (
                     <button key={cat} onClick={() => setPartCat(cat)}
                       className={`whitespace-nowrap px-3 py-2 rounded-full text-xs font-black transition active:scale-95 flex items-center gap-1 border
                         ${partCat === cat ? 'bg-blue-500/30 text-white border-blue-400/50 shadow-lg shadow-blue-500/20' : 'bg-white/5 text-blue-300/60 border-white/10 hover:bg-white/10'}`}>
-                      {catEmoji[cat] || 'ðŸ“¦'} {cat}
+                      {catEmoji[cat] || '📦'} {cat}
                     </button>
                   );
                 })}
@@ -3149,7 +3149,7 @@ export default function RobotSimulator({ onBack }) {
                     className="flex flex-col items-center p-3 bg-white/5 rounded-2xl border border-blue-400/20 cursor-grab active:cursor-grabbing hover:border-blue-400/50 hover:bg-blue-500/10 hover:shadow-lg hover:shadow-blue-500/10 transition active:scale-95 group"
                   >
                     <PartSVG partId={part.svg} size={60} />
-                    <span className="text-xs font-black text-blue-200 mt-2 text-center leading-tight">{part.name}</span>
+                    <span className="text-xs font-black text-violet-200 mt-2 text-center leading-tight">{part.name}</span>
                     <span className="text-[10px] text-blue-400/50 font-bold mt-0.5">{part.cat}</span>
                   </div>
                 ))}
@@ -3164,11 +3164,11 @@ export default function RobotSimulator({ onBack }) {
             {/* Kid-friendly intro */}
             <div className="station-panel p-4">
               <div className="flex items-start gap-3 relative z-10">
-                <div className="text-3xl animate-bounce">ðŸ’»</div>
+                <div className="text-3xl animate-bounce">💻</div>
                 <div>
-                  <h3 className="text-base font-black text-cyan-300">Â¡Programa tu Robot!</h3>
+                  <h3 className="text-base font-black text-cyan-300">¡Programa tu Robot!</h3>
                   <p className="text-sm text-blue-300/70 mt-1">
-                    Agrega instrucciones para decirle a tu robot quÃ© hacer.
+                    Agrega instrucciones para decirle a tu robot qué hacer.
                     Es como darle una receta: primero haz esto, luego aquello...
                   </p>
                 </div>
@@ -3179,7 +3179,7 @@ export default function RobotSimulator({ onBack }) {
             <div className="station-panel p-4">
               <div className="flex justify-between items-center mb-3 relative z-10">
                 <h3 className="text-base font-black text-white flex items-center">
-                  ðŸ“ Instrucciones del Robot
+                  📝 Instrucciones del Robot
                   <span className="ml-2 text-xs font-black text-blue-300 bg-blue-500/20 px-2.5 py-1 rounded-full border border-blue-400/20">{program.length} pasos</span>
                 </h3>
                 {program.length > 0 && (
@@ -3190,9 +3190,9 @@ export default function RobotSimulator({ onBack }) {
               </div>
               {program.length === 0 ? (
                 <div className="text-center py-8 bg-white/5 rounded-xl border border-dashed border-blue-400/20 relative z-10">
-                  <span className="text-5xl block mb-3">ðŸ“</span>
-                  <p className="text-sm font-bold text-blue-300">Â¡Tu robot no tiene instrucciones!</p>
-                  <p className="text-xs text-blue-400/50 mt-1">Agrega bloques de abajo para enseÃ±arle quÃ© hacer ðŸ‘‡</p>
+                  <span className="text-5xl block mb-3">📝</span>
+                  <p className="text-sm font-bold text-blue-300">¡Tu robot no tiene instrucciones!</p>
+                  <p className="text-xs text-blue-400/50 mt-1">Agrega bloques de abajo para enseñarle qué hacer 👇</p>
                 </div>
               ) : (
                 <div className="space-y-2 max-h-[300px] overflow-y-auto pr-1">
@@ -3223,7 +3223,7 @@ export default function RobotSimulator({ onBack }) {
 
             {/* Programming tip */}
             <div className="station-panel p-4">
-              <h4 className="text-sm font-black text-amber-300 mb-1 flex items-center gap-1 relative z-10">ðŸ’¡ Consejo</h4>
+              <h4 className="text-sm font-black text-amber-300 mb-1 flex items-center gap-1 relative z-10">💡 Consejo</h4>
               <p className="text-sm text-blue-300/70 relative z-10">
                 {PROGRAM_TIPS[program.length % PROGRAM_TIPS.length]}
               </p>
@@ -3233,7 +3233,7 @@ export default function RobotSimulator({ onBack }) {
             {program.length > 0 && (
               <div className="station-panel p-4 overflow-hidden">
                 <h3 className="text-sm font-bold text-green-300 mb-2 flex items-center relative z-10">
-                  <Zap size={14} className="mr-1.5 text-green-400"/> AsÃ­ se ve en cÃ³digo real
+                  <Zap size={14} className="mr-1.5 text-green-400"/> Así se ve en código real
                 </h3>
                 <p className="text-xs text-blue-400/50 mb-3 relative z-10">Esto es lo que un programador escribe en su computadora:</p>
                 <pre className="text-xs text-green-400 font-mono overflow-x-auto leading-relaxed relative z-10">
@@ -3256,7 +3256,7 @@ ${program.map(b => `  ${b.code}`).join('\n')}
                 {!isUploading && uploadProgress === 0 && (
                   <button onClick={startUpload}
                     className="w-full py-4 btn-3d btn-3d-green rounded-xl text-sm flex items-center justify-center gap-2 font-black">
-                    <Upload size={18}/> ðŸ“¡ Enviar Programa al Robot
+                    <Upload size={18}/> 📡 Enviar Programa al Robot
                   </button>
                 )}
                 {/* Upload progress */}
@@ -3278,16 +3278,16 @@ ${program.map(b => `  ${b.code}`).join('\n')}
 
             {/* Block palette */}
             <div className="station-panel p-4">
-              <h3 className="text-base font-black text-white mb-1 relative z-10">ðŸ§© Bloques de Instrucciones</h3>
-              <p className="text-sm text-blue-300/60 font-medium mb-3 relative z-10">ðŸ‘† Toca un bloque para agregarlo al programa</p>
+              <h3 className="text-base font-black text-white mb-1 relative z-10">🧩 Bloques de Instrucciones</h3>
+              <p className="text-sm text-blue-300/60 font-medium mb-3 relative z-10">👆 Toca un bloque para agregarlo al programa</p>
               <div className="flex gap-2 overflow-x-auto pb-2 mb-3 -mx-1 px-1 relative z-10">
                 {blockCategories.map(cat => {
-                  const catEmoji = { 'Movimiento': 'ðŸƒ', 'Sensores': 'ðŸ‘ï¸', 'Pregunta': 'â“', 'Control': 'ðŸŽ®', 'AcciÃ³n': 'âš¡' };
+                  const catEmoji = { 'Movimiento': '🏃', 'Sensores': '👁️', 'Pregunta': '❓', 'Control': '🎮', 'Acción': '⚡' };
                   return (
                     <button key={cat} onClick={() => setBlockCat(cat)}
                       className={`whitespace-nowrap px-3 py-2 rounded-full text-xs font-black transition active:scale-95 flex items-center gap-1 border
                         ${blockCat === cat ? 'bg-blue-500/30 text-white border-blue-400/50 shadow-lg shadow-blue-500/20' : 'bg-white/5 text-blue-300/60 border-white/10 hover:bg-white/10'}`}>
-                      {catEmoji[cat] || 'ðŸ“¦'} {cat}
+                      {catEmoji[cat] || '📦'} {cat}
                     </button>
                   );
                 })}
@@ -3314,13 +3314,13 @@ ${program.map(b => `  ${b.code}`).join('\n')}
             {/* Kid-friendly intro */}
             <div className="station-panel p-4">
               <div className="flex items-start gap-3 relative z-10">
-                <div className="text-3xl animate-bounce">â–¶ï¸</div>
+                <div className="text-3xl animate-bounce">▶️</div>
                 <div>
-                  <h3 className="text-base font-black text-green-300">Â¡Mira tu Robot en AcciÃ³n!</h3>
+                  <h3 className="text-base font-black text-green-300">¡Mira tu Robot en Acción!</h3>
                   <p className="text-sm text-blue-300/70 mt-1">
                     {manualMode 
-                      ? 'ðŸŽ® Â¡TÃº controlas el robot! Usa los botones o el teclado para moverlo.' 
-                      : 'ðŸ¤– El robot sigue las instrucciones que le programaste. Â¡Observa quÃ© pasa!'}
+                      ? '🎮 ¡Tú controlas el robot! Usa los botones o el teclado para moverlo.' 
+                      : '🤖 El robot sigue las instrucciones que le programaste. ¡Observa qué pasa!'}
                   </p>
                 </div>
               </div>
@@ -3332,14 +3332,14 @@ ${program.map(b => `  ${b.code}`).join('\n')}
                 className={`flex-1 py-3.5 rounded-2xl text-sm font-black transition active:scale-95 flex flex-col items-center justify-center gap-1 border
                   ${!manualMode ? 'bg-indigo-500/30 text-white border-indigo-400/50 shadow-lg shadow-indigo-500/20' : 'bg-white/5 text-blue-300/50 border-white/10 hover:bg-white/10'}`}>
                 <Cpu size={20}/>
-                <span>AutomÃ¡tico</span>
+                <span>Automático</span>
                 <span className={`text-[10px] font-medium ${!manualMode ? 'text-indigo-300' : 'text-blue-400/40'}`}>El robot piensa solo</span>
               </button>
               <button onClick={startManualMode}
                 className={`flex-1 py-3.5 rounded-2xl text-sm font-black transition active:scale-95 flex flex-col items-center justify-center gap-1 border
                   ${manualMode ? 'bg-emerald-500/30 text-white border-emerald-400/50 shadow-lg shadow-emerald-500/20' : 'bg-white/5 text-blue-300/50 border-white/10 hover:bg-white/10'}`}>
                 <Gamepad2 size={20}/>
-                <span>TÃº lo Controlas</span>
+                <span>Tú lo Controlas</span>
                 <span className={`text-[10px] font-medium ${manualMode ? 'text-emerald-300' : 'text-blue-400/40'}`}>Como un videojuego</span>
               </button>
             </div>
@@ -3364,7 +3364,7 @@ ${program.map(b => `  ${b.code}`).join('\n')}
                   <div className="relative z-10">
                   <VirtualDPad player={1} onMove={handleManualMove} onStop={handleManualStop} />
                   <p className="text-xs text-blue-400/50 text-center mt-3 font-bold">
-                    ðŸŽ® Toca las flechas o usa WASD en tu teclado
+                    🎮 Toca las flechas o usa WASD en tu teclado
                   </p>
                   </div>
                 </div>
@@ -3374,17 +3374,17 @@ ${program.map(b => `  ${b.code}`).join('\n')}
             {/* Checklist (before start) - only in auto mode - more kid-friendly */}
             {!manualMode && !simRunning && simLog.length === 0 && (
               <div className="station-panel p-4">
-                <h3 className="text-base font-black text-white mb-1 relative z-10">ðŸš€ Â¿Listo para Despegar?</h3>
+                <h3 className="text-base font-black text-white mb-1 relative z-10">🚀 ¿Listo para Despegar?</h3>
                 <p className="text-sm text-blue-300/60 mb-3 relative z-10">Revisemos que tu robot tenga todo lo necesario:</p>
                 <div className="space-y-2.5 relative z-10">
                   {[
-                    { ok: hasController, label: 'ðŸ§  Cerebro (Arduino)', desc: 'Para pensar y decidir', emoji: 'ðŸ§ ' },
-                    { ok: hasBattery, label: 'ðŸ”‹ EnergÃ­a (BaterÃ­a)', desc: 'Para tener poder', emoji: 'ðŸ”‹' },
-                    { ok: hasMotor, label: 'âš™ï¸ MÃºsculos (Motor)', desc: 'Para moverse', emoji: 'âš™ï¸' },
-                    { ok: program.length > 0, label: `ðŸ“ Instrucciones (${program.length} pasos)`, desc: 'Lo que el robot harÃ¡', emoji: 'ðŸ“' },
+                    { ok: hasController, label: '🧠 Cerebro (Arduino)', desc: 'Para pensar y decidir', emoji: '🧠' },
+                    { ok: hasBattery, label: '🔋 Energía (Batería)', desc: 'Para tener poder', emoji: '🔋' },
+                    { ok: hasMotor, label: '⚙️ Músculos (Motor)', desc: 'Para moverse', emoji: '⚙️' },
+                    { ok: program.length > 0, label: `📝 Instrucciones (${program.length} pasos)`, desc: 'Lo que el robot hará', emoji: '📝' },
                   ].map((item, i) => (
                     <div key={i} className={`flex items-center gap-3 p-3 rounded-xl text-sm font-bold transition border ${item.ok ? 'bg-green-500/10 border-green-400/30' : 'bg-red-500/10 border-red-400/30'}`}>
-                      <span className="text-xl">{item.ok ? 'âœ…' : 'âŒ'}</span>
+                      <span className="text-xl">{item.ok ? '✅' : '❌'}</span>
                       <div>
                         <span className={item.ok ? 'text-green-300' : 'text-red-400'}>{item.label}</span>
                         <p className={`text-xs font-medium ${item.ok ? 'text-green-400/70' : 'text-red-400/70'}`}>{item.desc}</p>
@@ -3394,9 +3394,9 @@ ${program.map(b => `  ${b.code}`).join('\n')}
                 </div>
                 {!canSimulate && (
                   <div className="mt-4 bg-amber-500/10 border border-amber-400/30 rounded-xl p-3 text-center relative z-10">
-                    <span className="text-2xl">ðŸ¤”</span>
+                    <span className="text-2xl">🤔</span>
                     <p className="text-sm text-amber-300 font-bold mt-1">
-                      Tu robot necesita mÃ¡s cosas para funcionar
+                      Tu robot necesita más cosas para funcionar
                     </p>
                     <p className="text-xs text-amber-400/60 mt-0.5">
                       Regresa a "Armar" o "Programar" para completarlo
@@ -3411,7 +3411,7 @@ ${program.map(b => `  ${b.code}`).join('\n')}
               <div className="station-panel overflow-hidden">
                 <div className="flex justify-between items-center px-4 py-3 bg-white/5 border-b border-blue-400/20 relative z-10">
                   <h3 className="text-sm font-bold text-blue-300 flex items-center">
-                    <Zap size={14} className="mr-1.5 text-green-400"/> ðŸ“º Lo que hace tu Robot
+                    <Zap size={14} className="mr-1.5 text-green-400"/> 📺 Lo que hace tu Robot
                   </h3>
                   <button onClick={resetSim} className="text-xs font-bold text-blue-400/60 bg-white/5 border border-blue-400/20 px-3 py-1.5 rounded-lg hover:bg-white/10 transition flex items-center">
                     <RotateCcw size={12} className="mr-1"/> Reiniciar
@@ -3427,7 +3427,7 @@ ${program.map(b => `  ${b.code}`).join('\n')}
                       ${log.type === 'move' ? 'text-blue-300 bg-blue-900/20' : ''}
                       ${log.type === 'sensor' ? 'text-cyan-300 bg-cyan-900/20' : ''}
                       ${log.type === 'condition' ? 'text-amber-300 bg-amber-900/20' : ''}
-                      ${log.type === 'control' ? 'text-blue-300 bg-blue-900/20' : ''}
+                      ${log.type === 'control' ? 'text-purple-300 bg-purple-900/20' : ''}
                       ${log.type === 'action' ? 'text-rose-300 bg-rose-900/20' : ''}
                       ${log.type === 'divider' ? 'text-gray-600' : ''}
                     `}>
@@ -3441,12 +3441,12 @@ ${program.map(b => `  ${b.code}`).join('\n')}
 
             {/* Parts summary - more visual */}
             <div className="station-panel p-4">
-              <h3 className="text-sm font-black text-blue-300 mb-2 relative z-10">ðŸ”§ Piezas de tu Robot:</h3>
+              <h3 className="text-sm font-black text-blue-300 mb-2 relative z-10">🔧 Piezas de tu Robot:</h3>
               <div className="flex flex-wrap gap-2 relative z-10">
                 {workspace.map((p) => (
                   <div key={p.uid} className="flex items-center gap-2 bg-blue-500/10 border border-blue-400/20 rounded-xl px-3 py-1.5">
                     <PartSVG partId={p.svg} size={24}/>
-                    <span className="text-xs font-bold text-blue-200">{p.name}</span>
+                    <span className="text-xs font-bold text-violet-200">{p.name}</span>
                   </div>
                 ))}
               </div>
@@ -3460,26 +3460,26 @@ ${program.map(b => `  ${b.code}`).join('\n')}
             {/* Battle info card - kid-friendly */}
             {!battleActive && !winner && countdown === 0 && (
               <div className="station-panel p-5 text-center">
-                <div className="text-6xl mb-3 animate-bounce relative z-10">âš”ï¸</div>
-                <h3 className="text-xl font-black text-white relative z-10">Â¡Modo Batalla!</h3>
-                <p className="text-sm text-blue-300/70 mt-2 mb-5 relative z-10">Juega con un amigo: Â¡cada uno controla un robot y tiene que empujar al otro fuera!</p>
+                <div className="text-6xl mb-3 animate-bounce relative z-10">⚔️</div>
+                <h3 className="text-xl font-black text-white relative z-10">¡Modo Batalla!</h3>
+                <p className="text-sm text-blue-300/70 mt-2 mb-5 relative z-10">Juega con un amigo: ¡cada uno controla un robot y tiene que empujar al otro fuera!</p>
                 
                 <div className="grid grid-cols-2 gap-4 mb-5 relative z-10">
                   <div className="bg-blue-500/15 border border-blue-400/30 p-4 rounded-2xl">
-                    <div className="text-3xl mb-2">ðŸ”µ</div>
+                    <div className="text-3xl mb-2">🔵</div>
                     <div className="text-sm font-black text-blue-300">Jugador 1</div>
                     <div className="bg-blue-500/10 border border-blue-400/20 rounded-lg p-2 mt-2">
-                      <p className="text-xs font-bold text-blue-300">ðŸŽ® Controles:</p>
+                      <p className="text-xs font-bold text-blue-300">🎮 Controles:</p>
                       <p className="text-xs text-blue-300/70 mt-1">Teclas <span className="font-mono bg-blue-500/20 px-1 rounded">W</span> <span className="font-mono bg-blue-500/20 px-1 rounded">A</span> <span className="font-mono bg-blue-500/20 px-1 rounded">S</span> <span className="font-mono bg-blue-500/20 px-1 rounded">D</span></p>
                       <p className="text-xs text-blue-300/70">o D-Pad izquierdo</p>
                     </div>
                   </div>
                   <div className="bg-red-500/15 border border-red-400/30 p-4 rounded-2xl">
-                    <div className="text-3xl mb-2">ðŸ”´</div>
+                    <div className="text-3xl mb-2">🔴</div>
                     <div className="text-sm font-black text-red-300">Jugador 2</div>
                     <div className="bg-red-500/10 border border-red-400/20 rounded-lg p-2 mt-2">
-                      <p className="text-xs font-bold text-red-300">ðŸŽ® Controles:</p>
-                      <p className="text-xs text-red-300/70 mt-1">Teclas <span className="font-mono bg-red-500/20 px-1 rounded">â†‘</span> <span className="font-mono bg-red-500/20 px-1 rounded">â†</span> <span className="font-mono bg-red-500/20 px-1 rounded">â†“</span> <span className="font-mono bg-red-500/20 px-1 rounded">â†’</span></p>
+                      <p className="text-xs font-bold text-red-300">🎮 Controles:</p>
+                      <p className="text-xs text-red-300/70 mt-1">Teclas <span className="font-mono bg-red-500/20 px-1 rounded">↑</span> <span className="font-mono bg-red-500/20 px-1 rounded">←</span> <span className="font-mono bg-red-500/20 px-1 rounded">↓</span> <span className="font-mono bg-red-500/20 px-1 rounded">→</span></p>
                       <p className="text-xs text-red-300/70">o D-Pad derecho</p>
                     </div>
                   </div>
@@ -3487,15 +3487,15 @@ ${program.map(b => `  ${b.code}`).join('\n')}
                 
                 <div className="bg-amber-500/10 border border-amber-400/30 rounded-xl p-3 mb-4 relative z-10">
                   <p className="text-sm text-amber-300 font-bold flex items-center justify-center gap-1">
-                    ðŸŸï¸ {template?.arena === 'sumo' ? 'Â¡Saca al rival del ring para ganar!' : 'Â¡Empuja al rival fuera del campo!'}
+                    🏟️ {template?.arena === 'sumo' ? '¡Saca al rival del ring para ganar!' : '¡Empuja al rival fuera del campo!'}
                   </p>
-                  <p className="text-xs text-yellow-600 mt-1">â±ï¸ Tienes 30 segundos por ronda</p>
+                  <p className="text-xs text-yellow-600 mt-1">⏱️ Tienes 30 segundos por ronda</p>
                 </div>
                 
                 <div className="flex items-center justify-center gap-3">
-                  <div className="bg-blue-100 px-4 py-2 rounded-full">
-                    <Trophy size={16} className="inline mr-1.5 -mt-0.5 text-blue-600"/>
-                    <span className="text-base font-black text-blue-700">Marcador: {scores[0]} - {scores[1]}</span>
+                  <div className="bg-purple-100 px-4 py-2 rounded-full">
+                    <Trophy size={16} className="inline mr-1.5 -mt-0.5 text-purple-600"/>
+                    <span className="text-base font-black text-purple-700">Marcador: {scores[0]} - {scores[1]}</span>
                   </div>
                 </div>
               </div>
@@ -3522,7 +3522,7 @@ ${program.map(b => `  ${b.code}`).join('\n')}
                 {battleActive && !winner && (
                   <div className="text-center">
                     <span className={`inline-block text-lg font-black px-4 py-1 rounded-full ${battleTimer <= 5 ? 'bg-red-100 text-red-600 animate-pulse' : 'bg-gray-100 text-gray-700'}`}>
-                      â±ï¸ {battleTimer}s
+                      ⏱️ {battleTimer}s
                     </span>
                   </div>
                 )}
@@ -3562,49 +3562,49 @@ ${program.map(b => `  ${b.code}`).join('\n')}
           {phase === 'instructions' && (
             <button onClick={() => setPhase('build')}
               className="w-full py-4 rounded-2xl text-base font-black flex items-center justify-center gap-2 shadow-xl bg-blue-500/30 border border-blue-400/50 text-white shadow-blue-500/20 active:scale-[0.98] transition">
-              ðŸ”§ Ir a Armar el Robot <ChevronRight size={20}/>
+              🔧 Ir a Armar el Robot <ChevronRight size={20}/>
             </button>
           )}
           {phase === 'build' && (
             <button onClick={() => setPhase('program')}
               className="w-full py-4 rounded-2xl text-base font-black flex items-center justify-center gap-2 shadow-xl bg-blue-500/30 border border-blue-400/50 text-white shadow-blue-500/20 active:scale-[0.98] transition">
-              ðŸ’» Siguiente: Â¡Programar! <ChevronRight size={20}/>
+              💻 Siguiente: ¡Programar! <ChevronRight size={20}/>
             </button>
           )}
           {phase === 'program' && (
             <button onClick={() => setPhase('simulate')}
               className="w-full py-4 rounded-2xl text-base font-black flex items-center justify-center gap-2 shadow-xl bg-green-500/30 border border-green-400/50 text-white shadow-green-500/20 active:scale-[0.98] transition">
-              â–¶ï¸ Siguiente: Â¡Ver en AcciÃ³n! <ChevronRight size={20}/>
+              ▶️ Siguiente: ¡Ver en Acción! <ChevronRight size={20}/>
             </button>
           )}
           {phase === 'simulate' && !manualMode && !simRunning && (
             <button onClick={runSimulation} disabled={!canSimulate}
               className={`w-full py-4 rounded-2xl text-base font-black flex items-center justify-center gap-2 shadow-xl active:scale-[0.98] transition border
                 ${canSimulate ? 'bg-green-500/30 border-green-400/50 text-white shadow-green-500/20' : 'bg-white/5 border-white/10 text-blue-400/40 cursor-not-allowed'}`}>
-              <Play size={20}/> {canSimulate ? 'ðŸš€ Â¡Arrancar Robot!' : 'âš ï¸ Falta completar el robot'}
+              <Play size={20}/> {canSimulate ? '🚀 ¡Arrancar Robot!' : '⚠️ Falta completar el robot'}
             </button>
           )}
           {phase === 'simulate' && !manualMode && simRunning && (
             <button onClick={stopSim}
               className="w-full py-4 rounded-2xl text-base font-black flex items-center justify-center gap-2 shadow-xl bg-red-500/30 border border-red-400/50 text-white shadow-red-500/20 active:scale-[0.98] transition">
-              <Pause size={20}/> â¹ï¸ Detener Robot
+              <Pause size={20}/> ⏹️ Detener Robot
             </button>
           )}
           {phase === 'simulate' && manualMode && (
             <div className="bg-emerald-500/15 border border-emerald-400/40 rounded-2xl py-3 px-4 text-center shadow-lg">
-              <span className="text-sm font-black text-emerald-300">ðŸŽ® Â¡EstÃ¡s controlando el robot! Usa las flechas del D-Pad</span>
+              <span className="text-sm font-black text-emerald-300">🎮 ¡Estás controlando el robot! Usa las flechas del D-Pad</span>
             </div>
           )}
           {phase === 'battle' && !battleActive && !winner && countdown === 0 && (
             <button onClick={startBattle}
               className="w-full py-4 rounded-2xl text-base font-black flex items-center justify-center gap-2 shadow-xl bg-blue-500/30 border border-blue-400/50 text-white shadow-blue-500/20 active:scale-[0.98] transition">
-              <Users size={20}/> âš”ï¸ Â¡Iniciar Batalla!
+              <Users size={20}/> ⚔️ ¡Iniciar Batalla!
             </button>
           )}
           {phase === 'battle' && battleActive && (
             <button onClick={resetBattle}
               className="w-full py-4 rounded-2xl text-base font-black flex items-center justify-center gap-2 shadow-xl bg-red-500/30 border border-red-400/50 text-white shadow-red-500/20 active:scale-[0.98] transition">
-              <Pause size={20}/> â¹ï¸ Detener Batalla
+              <Pause size={20}/> ⏹️ Detener Batalla
             </button>
           )}
         </div>
@@ -3623,34 +3623,34 @@ function getSimMessage(block, template, workspace) {
   const randIR = Math.floor(Math.random() * 1024);
 
   const map = {
-    'move_forward':      { log: `âš™ï¸ ${name} avanza a velocidad media`, action: 'Avanza medio', type: 'move' },
-    'move_forward_fast': { log: `âš¡ Â¡${name} avanza a MÃXIMA velocidad!`, action: 'Avanza rÃ¡pido', type: 'move' },
-    'move_backward':     { log: `âš™ï¸ ${name} retrocede`, action: 'Retrocede', type: 'move' },
-    'turn_left':         { log: `â†©ï¸ ${name} gira a la izquierda`, action: 'Gira izquierda', type: 'move' },
-    'turn_right':        { log: `â†ªï¸ ${name} gira a la derecha`, action: 'Gira derecha', type: 'move' },
-    'turn_180':          { log: `ðŸ”„ Â¡${name} gira 180Â°!`, action: 'Giro 180', type: 'move' },
-    'stop':              { log: `â¹ï¸ ${name} se detiene`, action: 'Detiene', type: 'move' },
-    'walk_forward':      { log: `ðŸ¾ ${name} camina (pata 1â†’2â†’3â†’4)`, action: 'Camina', type: 'move' },
-    'sit':               { log: `ðŸ• ${name} se sienta (servos a 90Â°)`, action: 'Sienta', type: 'move' },
-    'detect_enemy':      { log: `ðŸ“¡ Sensor ultrasÃ³nico: ${hasSensor ? `distancia = ${randDist}cm` : 'âš ï¸ SIN SENSOR'}`, action: '', type: 'sensor' },
-    'read_sensors':      { log: `ðŸ”´ Sensores IR: izq=${randIR} der=${1024-randIR}`, action: '', type: 'sensor' },
-    'check_distance':    { log: `ðŸ“ Distancia medida: ${randDist}cm`, action: '', type: 'sensor' },
-    'if_enemy_near':     { log: `ðŸš¨ Â¿Enemigo cerca (< 25cm)? â†’ ${randDist < 25 ? 'SÃ' : 'NO'}`, action: '', type: 'condition' },
-    'if_obstacle':       { log: `ðŸš§ Â¿ObstÃ¡culo (< 20cm)? â†’ ${randDist < 20 ? 'SÃ' : 'NO'}`, action: '', type: 'condition' },
-    'if_line_left':      { log: `â†©ï¸ Â¿LÃ­nea izquierda? â†’ ${randIR > 500 ? 'SÃ' : 'NO'}`, action: randIR > 500 ? 'Gira izquierda' : '', type: 'condition' },
-    'if_line_right':     { log: `â†ªï¸ Â¿LÃ­nea derecha? â†’ ${randIR < 500 ? 'SÃ' : 'NO'}`, action: randIR < 500 ? 'Gira derecha' : '', type: 'condition' },
-    'if_line_center':    { log: `â¬†ï¸ Â¿LÃ­nea al centro? â†’ ${Math.random()>0.4 ? 'SÃ' : 'NO'}`, action: 'Avanza', type: 'condition' },
-    'if_edge':           { log: `âš ï¸ Â¿Borde del ring? â†’ ${Math.random()>0.7 ? 'Â¡SÃ!' : 'NO'}`, action: '', type: 'condition' },
-    'else':              { log: `â†”ï¸ Ejecutando bloque else...`, action: '', type: 'control' },
-    'end_if':            { log: `ðŸ”š Fin del bloque condicional`, action: '', type: 'control' },
-    'wait_1s':           { log: `â±ï¸ Esperando 1 segundo...`, action: '', type: 'control' },
-    'wait_half':         { log: `â±ï¸ Esperando 0.5 segundos...`, action: '', type: 'control' },
-    'repeat_forever':    { log: `â™¾ï¸ Inicio de bucle infinito`, action: '', type: 'control' },
-    'repeat_3':          { log: `ðŸ” Inicio de bucle (3 repeticiones)`, action: '', type: 'control' },
-    'bark':              { log: `ðŸ”Š Â¡${name} ladra! BEEP-BEEP!`, action: 'Ladra', type: 'action' },
-    'led_on':            { log: `ðŸ’¡ LED encendido`, action: '', type: 'action' },
-    'led_off':           { log: `ðŸ”Œ LED apagado`, action: '', type: 'action' },
+    'move_forward':      { log: `⚙️ ${name} avanza a velocidad media`, action: 'Avanza medio', type: 'move' },
+    'move_forward_fast': { log: `⚡ ¡${name} avanza a MÁXIMA velocidad!`, action: 'Avanza rápido', type: 'move' },
+    'move_backward':     { log: `⚙️ ${name} retrocede`, action: 'Retrocede', type: 'move' },
+    'turn_left':         { log: `↩️ ${name} gira a la izquierda`, action: 'Gira izquierda', type: 'move' },
+    'turn_right':        { log: `↪️ ${name} gira a la derecha`, action: 'Gira derecha', type: 'move' },
+    'turn_180':          { log: `🔄 ¡${name} gira 180°!`, action: 'Giro 180', type: 'move' },
+    'stop':              { log: `⏹️ ${name} se detiene`, action: 'Detiene', type: 'move' },
+    'walk_forward':      { log: `🐾 ${name} camina (pata 1→2→3→4)`, action: 'Camina', type: 'move' },
+    'sit':               { log: `🐕 ${name} se sienta (servos a 90°)`, action: 'Sienta', type: 'move' },
+    'detect_enemy':      { log: `📡 Sensor ultrasónico: ${hasSensor ? `distancia = ${randDist}cm` : '⚠️ SIN SENSOR'}`, action: '', type: 'sensor' },
+    'read_sensors':      { log: `🔴 Sensores IR: izq=${randIR} der=${1024-randIR}`, action: '', type: 'sensor' },
+    'check_distance':    { log: `📏 Distancia medida: ${randDist}cm`, action: '', type: 'sensor' },
+    'if_enemy_near':     { log: `🚨 ¿Enemigo cerca (< 25cm)? → ${randDist < 25 ? 'SÍ' : 'NO'}`, action: '', type: 'condition' },
+    'if_obstacle':       { log: `🚧 ¿Obstáculo (< 20cm)? → ${randDist < 20 ? 'SÍ' : 'NO'}`, action: '', type: 'condition' },
+    'if_line_left':      { log: `↩️ ¿Línea izquierda? → ${randIR > 500 ? 'SÍ' : 'NO'}`, action: randIR > 500 ? 'Gira izquierda' : '', type: 'condition' },
+    'if_line_right':     { log: `↪️ ¿Línea derecha? → ${randIR < 500 ? 'SÍ' : 'NO'}`, action: randIR < 500 ? 'Gira derecha' : '', type: 'condition' },
+    'if_line_center':    { log: `⬆️ ¿Línea al centro? → ${Math.random()>0.4 ? 'SÍ' : 'NO'}`, action: 'Avanza', type: 'condition' },
+    'if_edge':           { log: `⚠️ ¿Borde del ring? → ${Math.random()>0.7 ? '¡SÍ!' : 'NO'}`, action: '', type: 'condition' },
+    'else':              { log: `↔️ Ejecutando bloque else...`, action: '', type: 'control' },
+    'end_if':            { log: `🔚 Fin del bloque condicional`, action: '', type: 'control' },
+    'wait_1s':           { log: `⏱️ Esperando 1 segundo...`, action: '', type: 'control' },
+    'wait_half':         { log: `⏱️ Esperando 0.5 segundos...`, action: '', type: 'control' },
+    'repeat_forever':    { log: `♾️ Inicio de bucle infinito`, action: '', type: 'control' },
+    'repeat_3':          { log: `🔁 Inicio de bucle (3 repeticiones)`, action: '', type: 'control' },
+    'bark':              { log: `🔊 ¡${name} ladra! BEEP-BEEP!`, action: 'Ladra', type: 'action' },
+    'led_on':            { log: `💡 LED encendido`, action: '', type: 'action' },
+    'led_off':           { log: `🔌 LED apagado`, action: '', type: 'action' },
   };
 
-  return map[block.id] || { log: `â–¶ï¸ Ejecutando: ${block.label}`, action: '', type: 'system' };
+  return map[block.id] || { log: `▶️ Ejecutando: ${block.label}`, action: '', type: 'system' };
 }
