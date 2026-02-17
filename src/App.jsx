@@ -18,6 +18,7 @@ import RankingScreen from './components/RankingScreen';
 import FriendsScreen from './components/FriendsScreen';
 import RobotSkinEditor from './components/RobotSkinEditor';
 import SettingsScreen from './components/SettingsScreen';
+import BahiaChatarraScreen from './components/BahiaChatarraScreen';
 
 // --- FIREBASE REAL ---
 import { onAuthChange, loginUser, registerUser, logoutUser, getCurrentUser } from './firebase/auth';
@@ -2703,7 +2704,7 @@ const SectionBanner = ({ section, modulesInSection, userScores, sectionIndex, al
 };
 
 // --- WORLD MAP SCREEN (Selección de Mundos) ---
-const WorldMapScreen = ({ userScores, onSelectWorld, userProfile, firebaseProfile, onShowAchievements, onShowLicenses, onLogout, onEditRobot, userStats, onGoToCircuits, onGoToProgramming, onShowSettings }) => {
+const WorldMapScreen = ({ userScores, onSelectWorld, userProfile, firebaseProfile, onShowAchievements, onShowLicenses, onLogout, onEditRobot, userStats, onGoToCircuits, onGoToProgramming, onGoToBahia, onShowSettings }) => {
     // Generate stars deterministically
     const stars = React.useMemo(() => 
         Array.from({ length: 80 }, (_, i) => ({
@@ -2894,6 +2895,41 @@ const WorldMapScreen = ({ userScores, onSelectWorld, userProfile, firebaseProfil
                             <h3 className="text-xs font-black text-[#93C5FD] leading-tight">Estación de</h3>
                             <h3 className="text-xs font-black text-[#93C5FD] leading-tight">Programación</h3>
                             <span className="text-[9px] font-bold text-purple-200/50 mt-0.5 block">Tutoriales y retos</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Bahía de la Chatarra Estelar */}
+            <div className="px-4 max-w-xl mx-auto relative z-10 mb-6">
+                <div className="flex justify-center">
+                    <div className="flex flex-col items-center gap-2">
+                        <button onClick={onGoToBahia}
+                            className="group relative active:scale-90 transition-transform duration-200 focus:outline-none"
+                            style={{ animation: 'float-planet 6.5s ease-in-out infinite 0.4s' }}>
+                            {/* Outer glow ring */}
+                            <div className="absolute inset-[-16px] rounded-full pointer-events-none opacity-60 group-hover:opacity-100 transition-opacity duration-500"
+                                style={{ background: 'radial-gradient(circle, rgba(245,158,11,0.4) 0%, rgba(245,158,11,0.1) 40%, transparent 70%)', filter: 'blur(8px)' }}></div>
+                            {/* Bahia image */}
+                            <img src="/bahia.png" alt="Bahía de la Chatarra Estelar"
+                                className="w-28 h-28 sm:w-32 sm:h-32 object-contain relative z-10 group-hover:scale-110 transition-transform duration-300"
+                                style={{ filter: 'drop-shadow(0 0 18px rgba(245,158,11,0.6)) drop-shadow(0 0 40px rgba(245,158,11,0.3))' }} />
+                            {/* Thruster glow */}
+                            <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-14 h-5 rounded-full bg-[#F59E0B]/40 blur-lg z-0" style={{ animation: 'twinkle 2s ease-in-out infinite 0.2s' }}></div>
+                            {/* Sparkles */}
+                            <div className="absolute top-1 right-1 w-2 h-2 bg-[#F59E0B]/70 rounded-full" style={{ animation: 'twinkle 2s ease-in-out infinite' }}></div>
+                            <div className="absolute bottom-5 left-1 w-1.5 h-1.5 bg-amber-300/50 rounded-full" style={{ animation: 'twinkle 2.5s ease-in-out infinite 0.7s' }}></div>
+                            <div className="absolute top-8 left-0 w-1 h-1 bg-[#F59E0B]/40 rounded-full" style={{ animation: 'twinkle 3s ease-in-out infinite 1.2s' }}></div>
+                            {/* Floating scrap emoji orbit */}
+                            <div className="absolute inset-[-18px] rounded-full pointer-events-none" style={{ animation: 'orbit-ring 12s linear infinite' }}>
+                                <span className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 text-xs opacity-60">🔩</span>
+                            </div>
+                        </button>
+                        {/* Info below */}
+                        <div className="text-center mt-1">
+                            <h3 className="text-xs font-black text-[#F59E0B] leading-tight">Bahía de la</h3>
+                            <h3 className="text-xs font-black text-[#F59E0B] leading-tight">Chatarra Estelar</h3>
+                            <span className="text-[9px] font-bold text-purple-200/50 mt-0.5 block">Robots caseros paso a paso</span>
                         </div>
                     </div>
                 </div>
@@ -4806,6 +4842,7 @@ export default function App() {
                         userStats={userStats}
                         onGoToCircuits={() => setCurrentTab('CircuitLab')}
                         onGoToProgramming={() => setCurrentTab('ProgrammingStation')}
+                        onGoToBahia={() => setCurrentTab('BahiaChatarra')}
                         onShowSettings={() => setViewMode('settings')}
                     />;
                 } else {
@@ -4858,6 +4895,11 @@ export default function App() {
                     }}
                 />;
                 break;
+            case 'BahiaChatarra':
+                ScreenContent = <BahiaChatarraScreen
+                    onBack={() => { setCurrentTab('Biblioteca'); setCurrentWorldIndex(null); }}
+                />;
+                break;
             case 'CircuitLab':
                 ScreenContent = <CircuitLabScreen 
                     onBack={() => { setCurrentTab('Biblioteca'); setCurrentWorldIndex(null); }}
@@ -4884,6 +4926,7 @@ export default function App() {
                     userStats={userStats}
                     onGoToCircuits={() => setCurrentTab('CircuitLab')}
                     onGoToProgramming={() => setCurrentTab('ProgrammingStation')}
+                    onGoToBahia={() => setCurrentTab('BahiaChatarra')}
                     onShowSettings={() => setViewMode('settings')}
                 />; 
         }
