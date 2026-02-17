@@ -408,137 +408,115 @@ const UserProfileCard = ({ player, onClose, currentUserId, currentUserProfile, f
   };
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 animate-fade-in" onClick={onClose}>
-      <div className="w-full sm:max-w-sm rounded-t-3xl sm:rounded-3xl animate-scale-in flex flex-col" style={{ background: 'linear-gradient(180deg, #1E293B, #0F172A)', maxHeight: '85vh' }} onClick={e => e.stopPropagation()}>
-        {/* Scrollable content */}
-        <div className="overflow-y-auto flex-grow rounded-t-3xl sm:rounded-3xl">
-        {/* Gradient header with robot */}
-        <div className="relative px-5 pt-5 pb-10 text-center overflow-hidden rounded-t-3xl" style={{ background: 'linear-gradient(135deg, #0E7490, #164E63, #0B1120)' }}>
-          {/* Floating particles */}
-          <div className="absolute top-4 left-8 w-1.5 h-1.5 rounded-full bg-cyan-400/40" style={{ animation: 'float 3s ease-in-out infinite' }} />
-          <div className="absolute top-12 right-12 w-1 h-1 rounded-full bg-cyan-300/30" style={{ animation: 'float 4s ease-in-out infinite 0.5s' }} />
-          <div className="absolute bottom-8 left-16 w-1 h-1 rounded-full bg-blue-400/30" style={{ animation: 'float 3.5s ease-in-out infinite 1s' }} />
-          <div className="absolute top-6 right-20 w-2 h-2 rounded-full bg-purple-400/20" style={{ animation: 'float 5s ease-in-out infinite 0.3s' }} />
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-end sm:items-center justify-center animate-fade-in" onClick={onClose}>
+      <div className="w-full sm:max-w-sm rounded-t-3xl sm:rounded-3xl animate-scale-in" style={{ background: 'linear-gradient(180deg, #1E293B, #0F172A)', maxHeight: '90vh', overflowY: 'auto' }} onClick={e => e.stopPropagation()}>
 
+        {/* Header */}
+        <div className="relative px-5 pt-4 pb-6 text-center rounded-t-3xl" style={{ background: 'linear-gradient(135deg, #0E7490, #164E63, #0B1120)' }}>
           <button onClick={onClose} className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/15 flex items-center justify-center active:scale-90 transition z-10">
             <X size={16} className="text-white" />
           </button>
-
-          {/* Large robot skin */}
-          <div className="relative mx-auto mb-3" style={{ width: 140, height: 140 }}>
+          <div className="relative mx-auto" style={{ width: 160, height: 160 }}>
             <div className="absolute inset-[-16px] rounded-full animate-pulse" style={{ background: `radial-gradient(circle, ${skinData.rarityColor}35, transparent 70%)` }} />
-            <div className="w-full h-full rounded-[24px] border-2 flex items-center justify-center overflow-hidden" style={{
-              background: 'linear-gradient(135deg, #1E293B, #0F172A)',
-              borderColor: `${skinData.rarityColor}50`,
-              boxShadow: `0 0 40px ${skinData.rarityColor}30, 0 0 80px ${skinData.rarityColor}15`,
-            }}>
-              <RobotAvatar config={player.robotConfig} size={120} />
+            <div className="w-full h-full rounded-[28px] border-2 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #1E293B, #0F172A)', borderColor: `${skinData.rarityColor}50`, boxShadow: `0 0 40px ${skinData.rarityColor}30` }}>
+              <RobotAvatar config={player.robotConfig} size={140} />
             </div>
-            {/* Rarity badge */}
-            <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full text-[8px] font-black text-white whitespace-nowrap shadow-lg" style={{ backgroundColor: skinData.rarityColor }}>
-              {skinData.name} · {skinData.rarityLabel}
-            </div>
+          </div>
+          <div className="inline-block mt-2 px-3 py-1 rounded-full text-[9px] font-black text-white" style={{ backgroundColor: skinData.rarityColor }}>
+            {skinData.name} · {skinData.rarityLabel}
           </div>
         </div>
 
-        {/* Profile info */}
-        <div className="px-5 -mt-4">
-          {/* Username & level & badges */}
-          <div className="text-center mb-3">
-            <h3 className="text-lg font-black text-white break-words leading-snug px-2 mb-0.5">{player.username || 'Anónimo'}</h3>
-            <div className="flex items-center justify-center gap-1.5 flex-wrap">
-              {isAdminEmail(player.email) && (
-                <span className="px-1.5 py-0.5 bg-gradient-to-r from-[#FF4B4B] to-[#FF9600] text-white text-[7px] font-black rounded-md uppercase">ADMIN</span>
-              )}
-              {player.adminBadges?.map(b => (
-                <span key={b.id} title={b.name} className="text-lg">{b.emoji}</span>
-              ))}
-            </div>
-            <p className="text-xs font-bold text-cyan-400 mt-1">{lv.emoji} Nivel {lv.level} · {lv.title}</p>
-            {/* Level progress */}
-            <div className="mt-2 flex items-center gap-2 max-w-[200px] mx-auto">
-              <div className="flex-grow h-1.5 bg-[#0F172A] rounded-full overflow-hidden border border-[#334155]/50">
-                <div className="h-full rounded-full transition-all" style={{
-                  width: `${lv.progress * 100}%`,
-                  background: lv.isMaxLevel ? 'linear-gradient(90deg, #FFC800, #FF9600)' : 'linear-gradient(90deg, #22D3EE, #06B6D4)',
-                }} />
-              </div>
-              <span className="text-[8px] font-bold text-[#475569]">{lv.isMaxLevel ? 'MAX' : `${Math.round(lv.progress * 100)}%`}</span>
-            </div>
-          </div>
-
-          {/* Stats grid - 4 columns */}
-          <div className="grid grid-cols-4 gap-1.5 mb-3">
-            <div className="p-2.5 rounded-xl border border-orange-500/20 text-center" style={{ background: 'linear-gradient(135deg, #7C2D1210, #9A341208)' }}>
-              <Flame size={16} className="text-orange-400 mx-auto mb-0.5" />
-              <p className="text-sm font-black text-orange-300">{player.currentStreak || 0}</p>
-              <p className="text-[8px] font-bold text-gray-500">Racha</p>
-            </div>
-            <div className="p-2.5 rounded-xl border border-cyan-500/20 text-center" style={{ background: 'linear-gradient(135deg, #0E749010, #164E6308)' }}>
-              <Star size={16} className="text-cyan-400 mx-auto mb-0.5" />
-              <p className="text-sm font-black text-cyan-300">{((player.totalPoints || 0) / 1000).toFixed(1)}k</p>
-              <p className="text-[8px] font-bold text-gray-500">XP</p>
-            </div>
-            <div className="p-2.5 rounded-xl border border-green-500/20 text-center" style={{ background: 'linear-gradient(135deg, #14532D10, #16653408)' }}>
-              <BookOpen size={16} className="text-green-400 mx-auto mb-0.5" />
-              <p className="text-sm font-black text-green-300">{completedMods}</p>
-              <p className="text-[8px] font-bold text-gray-500">Módulos</p>
-            </div>
-            <div className="p-2.5 rounded-xl border border-purple-500/20 text-center" style={{ background: 'linear-gradient(135deg, #581C8710, #6B21A808)' }}>
-              <Users size={16} className="text-purple-400 mx-auto mb-0.5" />
-              <p className="text-sm font-black text-purple-300">{player.friendsCount || 0}</p>
-              <p className="text-[8px] font-bold text-gray-500">Amigos</p>
-            </div>
-          </div>
-
-          {/* Current world */}
-          <div className="p-3 rounded-xl border border-[#334155] mb-3" style={{ background: '#0F172ACC' }}>
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold text-gray-400">📍 Mundo actual</span>
-              <span className="text-xs font-black text-cyan-300">{currentWorldName}</span>
-            </div>
-          </div>
-
-          {/* Action buttons */}
-          <div className="space-y-2 pb-5">
-            {!isSelf && (
-              isFriend || requestStatus === 'already_friends' ? (
-                <div className="w-full py-3 rounded-xl bg-[#059669]/15 border border-[#059669]/30 text-center">
-                  <div className="flex items-center justify-center gap-2">
-                    <UserCheck size={16} className="text-emerald-400" />
-                    <span className="text-sm font-black text-emerald-400">Ya son amigos</span>
-                  </div>
-                </div>
-              ) : requestStatus === 'sent' || requestStatus === 'already_sent' ? (
-                <div className="w-full py-3 rounded-xl bg-[#22D3EE]/10 border border-[#22D3EE]/30 text-center">
-                  <div className="flex items-center justify-center gap-2">
-                    <Clock size={16} className="text-cyan-400" />
-                    <span className="text-sm font-black text-cyan-400">Solicitud enviada</span>
-                  </div>
-                </div>
-              ) : requestStatus === 'error' ? (
-                <div className="w-full py-3 rounded-xl bg-red-500/10 border border-red-500/30 text-center">
-                  <span className="text-sm font-black text-red-400">Error al enviar solicitud</span>
-                </div>
-              ) : (
-                <button onClick={handleAddFriend} disabled={sendingRequest}
-                  className="w-full py-3 rounded-xl bg-gradient-to-r from-[#58CC02] to-[#4CAF00] text-white font-black text-sm active:scale-95 transition-all shadow-lg shadow-green-500/20 flex items-center justify-center gap-2 disabled:opacity-50">
-                  {sendingRequest ? (
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  ) : (
-                    <><UserPlus size={16} /> Agregar Amigo</>
-                  )}
-                </button>
-              )
+        {/* Username */}
+        <div className="px-5 pt-4 pb-2 text-center">
+          <h3 className="text-xl font-black text-white leading-snug">{player.username || 'Anónimo'}</h3>
+          <div className="flex items-center justify-center gap-1.5 flex-wrap mt-1">
+            {isAdminEmail(player.email) && (
+              <span className="px-1.5 py-0.5 bg-gradient-to-r from-[#FF4B4B] to-[#FF9600] text-white text-[7px] font-black rounded-md uppercase">ADMIN</span>
             )}
-
-            <button onClick={onClose}
-              className="w-full py-3 rounded-xl bg-[#1E293B] border border-[#334155] text-gray-400 font-black text-sm active:scale-95 transition-all">
-              Cerrar
-            </button>
+            {player.adminBadges?.map(b => (
+              <span key={b.id} title={b.name} className="text-lg">{b.emoji}</span>
+            ))}
+          </div>
+          <p className="text-xs font-bold text-cyan-400 mt-1">{lv.emoji} Nivel {lv.level} · {lv.title}</p>
+          <div className="mt-2 flex items-center gap-2 max-w-[200px] mx-auto">
+            <div className="flex-grow h-1.5 bg-[#0F172A] rounded-full overflow-hidden border border-[#334155]/50">
+              <div className="h-full rounded-full transition-all" style={{ width: `${lv.progress * 100}%`, background: lv.isMaxLevel ? 'linear-gradient(90deg, #FFC800, #FF9600)' : 'linear-gradient(90deg, #22D3EE, #06B6D4)' }} />
+            </div>
+            <span className="text-[8px] font-bold text-[#475569]">{lv.isMaxLevel ? 'MAX' : `${Math.round(lv.progress * 100)}%`}</span>
           </div>
         </div>
-        </div>{/* end scrollable */}
+
+        {/* Stats */}
+        <div className="grid grid-cols-4 gap-1.5 px-5 mb-3">
+          <div className="p-2.5 rounded-xl border border-orange-500/20 text-center" style={{ background: 'linear-gradient(135deg, #7C2D1210, #9A341208)' }}>
+            <Flame size={16} className="text-orange-400 mx-auto mb-0.5" />
+            <p className="text-sm font-black text-orange-300">{player.currentStreak || 0}</p>
+            <p className="text-[8px] font-bold text-gray-500">Racha</p>
+          </div>
+          <div className="p-2.5 rounded-xl border border-cyan-500/20 text-center" style={{ background: 'linear-gradient(135deg, #0E749010, #164E6308)' }}>
+            <Star size={16} className="text-cyan-400 mx-auto mb-0.5" />
+            <p className="text-sm font-black text-cyan-300">{((player.totalPoints || 0) / 1000).toFixed(1)}k</p>
+            <p className="text-[8px] font-bold text-gray-500">XP</p>
+          </div>
+          <div className="p-2.5 rounded-xl border border-green-500/20 text-center" style={{ background: 'linear-gradient(135deg, #14532D10, #16653408)' }}>
+            <BookOpen size={16} className="text-green-400 mx-auto mb-0.5" />
+            <p className="text-sm font-black text-green-300">{completedMods}</p>
+            <p className="text-[8px] font-bold text-gray-500">Módulos</p>
+          </div>
+          <div className="p-2.5 rounded-xl border border-purple-500/20 text-center" style={{ background: 'linear-gradient(135deg, #581C8710, #6B21A808)' }}>
+            <Users size={16} className="text-purple-400 mx-auto mb-0.5" />
+            <p className="text-sm font-black text-purple-300">{player.friendsCount || 0}</p>
+            <p className="text-[8px] font-bold text-gray-500">Amigos</p>
+          </div>
+        </div>
+
+        {/* Current world */}
+        <div className="p-3 mx-5 rounded-xl border border-[#334155] mb-3" style={{ background: '#0F172ACC' }}>
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] font-bold text-gray-400">📍 Mundo actual</span>
+            <span className="text-xs font-black text-cyan-300">{currentWorldName}</span>
+          </div>
+        </div>
+
+        {/* Action buttons */}
+        <div className="space-y-2 px-5 pb-6">
+          {!isSelf && (
+            isFriend || requestStatus === 'already_friends' ? (
+              <div className="w-full py-3 rounded-xl bg-[#059669]/15 border border-[#059669]/30 text-center">
+                <div className="flex items-center justify-center gap-2">
+                  <UserCheck size={16} className="text-emerald-400" />
+                  <span className="text-sm font-black text-emerald-400">Ya son amigos</span>
+                </div>
+              </div>
+            ) : requestStatus === 'sent' || requestStatus === 'already_sent' ? (
+              <div className="w-full py-3 rounded-xl bg-[#22D3EE]/10 border border-[#22D3EE]/30 text-center">
+                <div className="flex items-center justify-center gap-2">
+                  <Clock size={16} className="text-cyan-400" />
+                  <span className="text-sm font-black text-cyan-400">Solicitud enviada</span>
+                </div>
+              </div>
+            ) : requestStatus === 'error' ? (
+              <div className="w-full py-3 rounded-xl bg-red-500/10 border border-red-500/30 text-center">
+                <span className="text-sm font-black text-red-400">Error al enviar solicitud</span>
+              </div>
+            ) : (
+              <button onClick={handleAddFriend} disabled={sendingRequest}
+                className="w-full py-3 rounded-xl bg-gradient-to-r from-[#58CC02] to-[#4CAF00] text-white font-black text-sm active:scale-95 transition-all shadow-lg shadow-green-500/20 flex items-center justify-center gap-2 disabled:opacity-50">
+                {sendingRequest ? (
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                ) : (
+                  <><UserPlus size={16} /> Agregar Amigo</>
+                )}
+              </button>
+            )
+          )}
+          <button onClick={onClose}
+            className="w-full py-3 rounded-xl bg-[#1E293B] border border-[#334155] text-gray-400 font-black text-sm active:scale-95 transition-all">
+            Cerrar
+          </button>
+        </div>
+
       </div>
     </div>
   );
