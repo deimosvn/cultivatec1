@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Trophy, Star, Lock, CheckCircle, Zap } from 'lucide-react';
+import { playClick, playTab, playAchievement } from '../utils/retroSounds';
 
 const ACHIEVEMENTS = [
   { id: 'first_module', title: 'Primer Paso', description: 'Completa tu primer módulo', icon: '👣', category: 'Aprendizaje', points: 10, condition: (s) => s.modulesCompleted >= 1, rarity: 'común' },
@@ -121,7 +122,7 @@ const AchievementsScreen = ({ onBack, userStats, onShowRanking, onShowFriends, p
   const lv = getLevel(totalPoints);
   const prevT = lv.level === 1 ? 0 : lv.level === 2 ? 20 : lv.level === 3 ? 50 : 100;
   const lvProg = lv.nextAt ? ((totalPoints - prevT) / (lv.nextAt - prevT)) * 100 : 100;
-  const handleCelebrate = (a) => { setCelebratingAchievement(a); setShowConfetti(true); setTimeout(() => setShowConfetti(false), 3000); };
+  const handleCelebrate = (a) => { playAchievement(); setCelebratingAchievement(a); setShowConfetti(true); setTimeout(() => setShowConfetti(false), 3000); };
 
   return (
     <div className="pb-24 min-h-full flex flex-col animate-fade-in" style={{ background: 'linear-gradient(180deg, #0B1120 0%, #0E1A30 50%, #0F172A 100%)' }}>
@@ -193,7 +194,7 @@ const AchievementsScreen = ({ onBack, userStats, onShowRanking, onShowFriends, p
       </div>
       <div className="px-4">
         <div className="flex gap-2 overflow-x-auto pb-3 scrollbar-hide">
-          {categories.map(cat => <button key={cat} onClick={() => setSelectedCategory(cat)} className={`flex-shrink-0 px-3.5 py-2 rounded-2xl font-black text-xs transition-all active:scale-95 border whitespace-nowrap ${selectedCategory === cat ? 'bg-[#22D3EE] text-[#0F172A] border-[#22D3EE] shadow-md shadow-[#22D3EE]/20' : 'text-[#64748B] border-[#334155] bg-[#1E293B]/60'}`}>{cat === 'all' ? '🌟 Todos' : `${CATEGORY_ICONS[cat] || '📋'} ${cat}`}</button>)}
+          {categories.map(cat => <button key={cat} onClick={() => { playTab(); setSelectedCategory(cat); }} className={`flex-shrink-0 px-3.5 py-2 rounded-2xl font-black text-xs transition-all active:scale-95 border whitespace-nowrap ${selectedCategory === cat ? 'bg-[#22D3EE] text-[#0F172A] border-[#22D3EE] shadow-md shadow-[#22D3EE]/20' : 'text-[#64748B] border-[#334155] bg-[#1E293B]/60'}`}>{cat === 'all' ? '🌟 Todos' : `${CATEGORY_ICONS[cat] || '📋'} ${cat}`}</button>)}
         </div>
         <div className="flex gap-2 mb-4">
           <button onClick={() => setShowUnlockedOnly(false)} className={`px-3 py-1.5 rounded-xl text-[11px] font-black transition border ${!showUnlockedOnly ? 'bg-[#22C55E] text-white border-[#16A34A] shadow-md shadow-green-500/20' : 'text-[#64748B] border-[#334155] bg-[#1E293B]/60'}`}>📋 Todos ({filteredAchievements.length})</button>

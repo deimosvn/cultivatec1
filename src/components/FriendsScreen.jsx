@@ -13,6 +13,7 @@ import {
   acceptFriendRequest, rejectFriendRequest, getFriendsList, removeFriend,
   onPendingRequestsChange, onFriendsChange, calculateLevel,
 } from '../firebase/firestore';
+import { playTab, playFriendAccept, playClick, playWrong, playDelete, playNotification } from '../utils/retroSounds';
 import { RobotAvatar } from '../Onboarding';
 
 const FriendAvatar = ({ config, size = 44 }) => {
@@ -202,8 +203,10 @@ const FriendsScreen = ({ onBack, currentUserId, currentUserProfile }) => {
         toUser.uid,
         toUser.username
       );
+      playNotification();
       setRequestSent(true);
     } catch (err) {
+      playWrong();
       setError(err.message || 'Error al enviar solicitud.');
     }
     setSendingRequest(false);
@@ -219,6 +222,7 @@ const FriendsScreen = ({ onBack, currentUserId, currentUserProfile }) => {
         request.fromUsername,
         request.toUsername || currentUserProfile?.username
       );
+      playFriendAccept();
     } catch (err) {
       console.error('Error accepting friend request:', err);
     }
@@ -227,6 +231,7 @@ const FriendsScreen = ({ onBack, currentUserId, currentUserProfile }) => {
   // Rechazar solicitud
   const handleReject = async (request) => {
     try {
+      playWrong();
       await rejectFriendRequest(request.id);
     } catch (err) {
       console.error('Error rejecting friend request:', err);
@@ -291,7 +296,7 @@ const FriendsScreen = ({ onBack, currentUserId, currentUserProfile }) => {
         ].map(t => (
           <button
             key={t.id}
-            onClick={() => setTab(t.id)}
+            onClick={() => { playTab(); setTab(t.id); }}
             className={`flex items-center gap-1.5 px-4 py-2.5 rounded-2xl text-xs font-black transition-all active:scale-95 border-2 whitespace-nowrap ${
               tab === t.id
                 ? 'bg-[#58CC02] text-white border-[#46A302] shadow-md'

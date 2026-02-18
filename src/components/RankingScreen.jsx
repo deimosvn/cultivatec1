@@ -9,6 +9,7 @@ import { getGlobalRanking, onRankingChange, getFriendsList, adminDeleteUser, adm
 import { calculateLevel, LEVEL_THRESHOLDS } from '../firebase/firestore';
 import { RobotMini, RobotAvatar } from '../Onboarding';
 import { ROBOT_SKINS } from './RobotSkinEditor';
+import { playTab, playClick, playDelete, playNotification, playFriendAccept } from '../utils/retroSounds';
 
 // ============================================
 // INSIGNIAS DISPONIBLES PARA REGALAR (ADMIN)
@@ -79,6 +80,7 @@ const AdminActionModal = ({ player, onClose, onDelete, onGiftBadge, onGiftSkin }
 
   const handleDelete = async () => {
     try {
+      playDelete();
       await onDelete(player.uid);
       setActionDone('deleted');
       setTimeout(() => onClose(), 1500);
@@ -91,6 +93,7 @@ const AdminActionModal = ({ player, onClose, onDelete, onGiftBadge, onGiftSkin }
     setGiftingBadge(badge.id);
     try {
       await onGiftBadge(player.uid, badge);
+      playNotification();
       setActionDone(`badge_${badge.id}`);
       setGiftingBadge(null);
     } catch (e) {
@@ -103,6 +106,7 @@ const AdminActionModal = ({ player, onClose, onDelete, onGiftBadge, onGiftSkin }
     setGiftingSkin(skin.id);
     try {
       await onGiftSkin(player.uid, skin);
+      playNotification();
       setActionDone(`skin_${skin.id}`);
       setGiftingSkin(null);
     } catch (e) {
@@ -147,7 +151,7 @@ const AdminActionModal = ({ player, onClose, onDelete, onGiftBadge, onGiftSkin }
             { id: 'badges', icon: <Award size={14} />, label: 'Insignias' },
             { id: 'skins', icon: <Palette size={14} />, label: 'Skins' },
           ].map(t => (
-            <button key={t.id} onClick={() => setActiveTab(t.id)}
+            <button key={t.id} onClick={() => { playTab(); setActiveTab(t.id); }}
               className={`flex-1 flex items-center justify-center gap-1.5 py-3 text-xs font-black transition-all border-b-2 ${
                 activeTab === t.id ? 'text-[#22D3EE] border-[#22D3EE]' : 'text-[#64748B] border-transparent'
               }`}>
@@ -901,7 +905,7 @@ const RankingScreen = ({ onBack, currentUserId, currentUserProfile, isAdmin = fa
       <div className="px-4 pt-4 pb-2 flex items-center gap-2">
         <div className="flex gap-2 flex-grow bg-[#0F172A]/80 rounded-2xl p-1.5 border border-[#334155]/50">
           <button
-            onClick={() => setTab('global')}
+            onClick={() => { playTab(); setTab('global'); }}
             className={`flex items-center gap-1.5 flex-1 justify-center py-2.5 rounded-xl text-xs font-black transition-all active:scale-95 ${
               tab === 'global'
                 ? 'bg-[#22D3EE] text-[#0F172A] shadow-lg shadow-[#22D3EE]/30'
@@ -911,7 +915,7 @@ const RankingScreen = ({ onBack, currentUserId, currentUserProfile, isAdmin = fa
             <Globe size={14} /> Global
           </button>
           <button
-            onClick={() => setTab('friends')}
+            onClick={() => { playTab(); setTab('friends'); }}
             className={`flex items-center gap-1.5 flex-1 justify-center py-2.5 rounded-xl text-xs font-black transition-all active:scale-95 ${
               tab === 'friends'
                 ? 'bg-[#22D3EE] text-[#0F172A] shadow-lg shadow-[#22D3EE]/30'

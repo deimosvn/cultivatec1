@@ -6,6 +6,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { X, Sparkles, RotateCcw, ChevronLeft, ChevronRight, Check, Star, BookOpen, Lock, Wrench, ChevronDown } from 'lucide-react';
 import { RobotAvatar } from '../Onboarding';
+import { playSelect, playSave, playShuffle, playPageFlip, playError, playSkinUnlock } from '../utils/retroSounds';
 
 // ============================================
 // ROBOT STORY DIALOGUE
@@ -424,6 +425,7 @@ const RobotStoryTab = ({ robotConfig, robotName, userName, storyIndex, setStoryI
   }, [storyIndex, storyTyping]);
 
   const handleTap = () => {
+    playPageFlip();
     if (storyTyping) { setStoryText(fullText); setStoryTyping(false); return; }
     if (!isLast) { setStoryIndex(prev => prev + 1); setStoryTyping(true); }
   };
@@ -507,20 +509,24 @@ const RobotSkinEditor = ({ isOpen, onClose, currentConfig, currentName, onSave, 
 
   const handleSelectSkin = (skin) => {
     if (unlockedSkinIds && !unlockedSkinIds.has(skin.id)) {
+      playError();
       setLockedPreview(skin);
       return;
     }
+    playSelect();
     setSelectedSkin(skin.id);
     setRobotConfig({ ...skin.config });
   };
 
   const handleSave = () => {
+    playSave();
     onSave(robotConfig, robotName);
     setShowSavedMessage(true);
     setTimeout(() => { setShowSavedMessage(false); onClose(); }, 1200);
   };
 
   const randomize = () => {
+    playShuffle();
     const available = unlockedSkinIds ? ROBOT_SKINS.filter(s => unlockedSkinIds.has(s.id)) : ROBOT_SKINS;
     if (available.length === 0) return;
     const randomSkin = available[Math.floor(Math.random() * available.length)];

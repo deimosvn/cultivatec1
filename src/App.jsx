@@ -20,6 +20,13 @@ import FriendsScreen from './components/FriendsScreen';
 import RobotSkinEditor, { getUnlockedSkinIds, ROBOT_SKINS } from './components/RobotSkinEditor';
 import SettingsScreen from './components/SettingsScreen';
 import BahiaChatarraScreen from './components/BahiaChatarraScreen';
+import {
+  playClick, playTab, playNavigate, playBack, playCorrect, playWrong, playXP, playLevelUp,
+  playVictory, playAchievement, playSkinUnlock, playError, playStart, playToggleOn, playToggleOff,
+  playSave, playSelect, playLogin, playLogout, playFriendAccept, playNotification, playStreak,
+  playBlockSnap, playBlockUnsnap, playWorldEnter, playPageFlip, playTimerWarning, playShuffle,
+  playExpand, playCollapse, playFavorite, playDelete
+} from './utils/retroSounds';
 
 // --- FIREBASE REAL ---
 import { onAuthChange, loginUser, registerUser, logoutUser, getCurrentUser } from './firebase/auth';
@@ -3381,9 +3388,11 @@ const MatchingGameSection = ({ section, setXpEarned, setShowXpPop, setMascotMood
         if (!selectedMatch) { setSelectedMatch(item); return; }
         if (selectedMatch.side === item.side) { setSelectedMatch(item); return; }
         if (selectedMatch.pairIdx === item.pairIdx) {
+            playCorrect();
             setMatchedPairs(prev => { const n = new Set(prev); n.add(item.pairIdx + '-left'); n.add(item.pairIdx + '-right'); return n; });
             setSelectedMatch(null);
             if (matchedPairs.size + 2 >= pairs.length * 2) {
+                playLevelUp();
                 setXpEarned(p => p + 20);
                 setShowXpPop(true);
                 setTimeout(() => setShowXpPop(false), 1000);
@@ -3392,6 +3401,7 @@ const MatchingGameSection = ({ section, setXpEarned, setShowXpPop, setMascotMood
                 onComplete?.();
             }
         } else {
+            playWrong();
             setMatchState(prev => ({ ...prev, [selectedMatch.id]: 'wrong', [item.id]: 'wrong' }));
             setTimeout(() => setMatchState(prev => { const n = { ...prev }; delete n[selectedMatch.id]; delete n[item.id]; return n; }), 600);
             setSelectedMatch(null);
@@ -3464,6 +3474,7 @@ const TrueFalseSection = ({ section, setXpEarned, setShowXpPop, setMascotMood, o
         const newAnswers = { ...tfAnswers, [idx]: isCorrect ? 'correct' : 'wrong' };
         setTfAnswers(newAnswers);
         if (isCorrect) {
+            playCorrect();
             setXpEarned(p => p + 10);
             setShowXpPop(true);
             setTimeout(() => setShowXpPop(false), 1000);
@@ -3474,8 +3485,9 @@ const TrueFalseSection = ({ section, setXpEarned, setShowXpPop, setMascotMood, o
                 if (sIdx === idx) return isCorrect;
                 return newAnswers[sIdx] === 'correct';
             });
-            if (allCorrect) onComplete?.();
+            if (allCorrect) { playLevelUp(); onComplete?.(); }
         } else {
+            playWrong();
             setMascotMood('sad');
             setTimeout(() => setMascotMood('thinking'), 1500);
         }
@@ -3618,6 +3630,7 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete, userPr
         const isCorrect = optionIdx === correctIdx;
         setQuizAnswers(prev => ({ ...prev, [sectionIdx]: isCorrect ? 'correct' : 'wrong' }));
         if (isCorrect) {
+            playCorrect();
             markStepSolved(sectionIdx);
             setXpEarned(p => p + 15);
             setShowXpPop(true);
@@ -3625,6 +3638,7 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete, userPr
             setMascotMood('celebrating');
             setTimeout(() => setMascotMood('happy'), 2000);
         } else {
+            playWrong();
             setMascotMood('sad');
             setTimeout(() => setMascotMood('thinking'), 1500);
         }
@@ -3644,6 +3658,7 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete, userPr
     };
 
     const goNext = () => {
+        playNavigate();
         markStepComplete();
         if (currentStep < totalSteps - 1) {
             setCurrentStep(currentStep + 1);
@@ -3656,11 +3671,12 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete, userPr
             setQuizResultData(result);
             setShowCelebration(true);
             setMascotMood('celebrating');
+            playVictory();
             onModuleComplete?.(currentModule.id, xpEarned + 10, result);
         }
     };
 
-    const goPrev = () => { if (currentStep > 0) setCurrentStep(currentStep - 1); };
+    const goPrev = () => { if (currentStep > 0) { playBack(); setCurrentStep(currentStep - 1); } };
     const progressPercent = Math.round(((completedSteps.size) / totalSteps) * 100);
 
     const mascotEmojis = { happy: '😊', thinking: '🤔', celebrating: '🥳', sad: '😅', reading: '📖' };
@@ -5570,10 +5586,12 @@ const ChallengeView = ({ currentChallengeId, startChallenge, goToMenu, userScore
     };
 
     const handleSelectBlock = useCallback((blockId) => {
+        playBlockSnap();
         handleBlockMove(blockId, challengeBlocks, setChallengeBlocks, setUserSolution);
     }, [challengeBlocks, challengeStatus]);
 
     const handleUnselectBlock = useCallback((blockId) => {
+        playBlockUnsnap();
         handleBlockMove(blockId, userSolution, setUserSolution, setChallengeBlocks);
     }, [userSolution, challengeStatus]);
     
@@ -5589,6 +5607,7 @@ const ChallengeView = ({ currentChallengeId, startChallenge, goToMenu, userScore
         
         const isCorrect = userIds.every((id, index) => id === solutionIds[index]);
         setChallengeStatus(isCorrect ? 'correct' : 'incorrect');
+        if (isCorrect) { playVictory(); } else { playWrong(); }
         
         if (isCorrect) {
             setShowExplanations(true);
@@ -5627,7 +5646,7 @@ const ChallengeView = ({ currentChallengeId, startChallenge, goToMenu, userScore
                         });
                         if (newlyUnlocked.length > 0) {
                             newStats._unlockedIds = [...(prev._unlockedIds || []), ...newlyUnlocked.map(a => a.id)];
-                            setTimeout(() => setUnlockedPopupAchievement(newlyUnlocked[0]), 800);
+                            setTimeout(() => { playAchievement(); setUnlockedPopupAchievement(newlyUnlocked[0]); }, 800);
                         }
                     }
                     return newStats;
@@ -5876,7 +5895,7 @@ const BottomNavBar = ({ currentTab, onSelectTab, setViewMode }) => {
                             return (
                                 <button
                                     key={tab.id}
-                                    onClick={() => { onSelectTab(tab.id); setViewMode('menu'); }}
+                                    onClick={() => { playTab(); onSelectTab(tab.id); setViewMode('menu'); }}
                                     className="pixel-nav-center relative -mt-6 flex flex-col items-center"
                                 >
                                     <div className={`pixel-center-box w-[54px] h-[54px] rounded-lg flex items-center justify-center border-[3px] transition-all
@@ -5898,6 +5917,7 @@ const BottomNavBar = ({ currentTab, onSelectTab, setViewMode }) => {
                             <button
                                 key={tab.id}
                                 onClick={() => {
+                                    playTab();
                                     if (tab.isAchievements) {
                                         setViewMode('achievements');
                                     } else if (tab.isRanking) {
@@ -6098,7 +6118,9 @@ export default function App() {
         setAuthError('');
         setAuthLoading(true);
         try {
+            playClick();
             await loginUser(email, password);
+            playLogin();
         } catch (err) {
             const msg = err.code === 'auth/user-not-found' ? 'Usuario no encontrado. Verifica tu email o nombre de usuario.'
                 : err.code === 'auth/wrong-password' ? 'Contraseña incorrecta.'
@@ -6106,6 +6128,7 @@ export default function App() {
                 : err.code === 'auth/invalid-credential' ? 'Credenciales inválidas. Verifica tu email/usuario y contraseña.'
                 : err.message || 'Error al iniciar sesión.';
             setAuthError(msg);
+            playError();
             setAuthLoading(false);
         }
     };
@@ -6114,18 +6137,22 @@ export default function App() {
         setAuthError('');
         setAuthLoading(true);
         try {
+            playClick();
             await registerUser(email, password, username, fullName, userProfile?.robotConfig, userProfile?.robotName);
+            playLogin();
         } catch (err) {
             const msg = err.code === 'auth/email-already-in-use' ? 'Este email ya está registrado.'
                 : err.code === 'auth/weak-password' ? 'La contraseña es muy débil.'
                 : err.message || 'Error al registrarse.';
             setAuthError(msg);
+            playError();
             setAuthLoading(false);
         }
     };
 
     const handleLogout = async () => {
         try {
+            playLogout();
             await logoutUser();
             setUserId(null);
             setFirebaseProfile(null);
@@ -6201,7 +6228,7 @@ export default function App() {
                     });
                     if (newlyUnlocked && !prev._unlockedIds?.includes(newlyUnlocked.id)) {
                         newStats._unlockedIds = [...(prev._unlockedIds || []), newlyUnlocked.id];
-                        setTimeout(() => setUnlockedPopupAchievement(newlyUnlocked), 1500);
+                        setTimeout(() => { playAchievement(); setUnlockedPopupAchievement(newlyUnlocked); }, 1500);
                     }
                 }
                 return newStats;
@@ -6240,6 +6267,7 @@ export default function App() {
     };
 
     const handleRobotSave = (newConfig, newName) => {
+        playSave();
         const updatedProfile = {
             ...userProfile,
             robotConfig: newConfig,
@@ -6356,6 +6384,7 @@ export default function App() {
     }
 
     const goToMenu = (tab = currentTab) => {
+        playBack();
         setCurrentTab(tab);
         setViewMode('menu'); 
         setCurrentModuleId(null);
@@ -6369,10 +6398,11 @@ export default function App() {
         if (moduleIdx > 0 && !isModuleUnlocked(userScores, moduleIdx, currentWorldModules)) {
             const prevModule = currentWorldModules[moduleIdx - 1];
             const prevName = prevModule?.titulo || 'el módulo anterior';
+            playError();
             alert(`🔒 Este módulo está bloqueado.\n\nPrimero completa: "${prevName}"`);
             return;
         }
-        
+        playStart();
         setCurrentModuleId(moduleId);
         const moduleData = currentWorldModules.find(m => m.id === moduleId) || ALL_MODULES.find(m => m.id === moduleId);
         
@@ -6398,6 +6428,7 @@ export default function App() {
 
     const handleQuizComplete = (moduleId, correct, total, score) => {
         const percentage = Math.round((correct / total) * 100);
+        if (percentage >= 70) { playVictory(); } else { playWrong(); }
         
         // Check if module was already completed — no XP for retakes
         const alreadyCompleted = completedModules.has(moduleId) || 
@@ -6552,6 +6583,7 @@ export default function App() {
                     ScreenContent = <WorldMapScreen 
                         userScores={userScores}
                         onSelectWorld={(idx) => {
+                            playWorldEnter();
                             setCurrentWorldIndex(idx);
                             // Track entered worlds for skin unlock system
                             try {
@@ -6646,6 +6678,7 @@ export default function App() {
                 ScreenContent = <WorldMapScreen 
                     userScores={userScores}
                     onSelectWorld={(idx) => {
+                        playWorldEnter();
                         setCurrentWorldIndex(idx);
                         // Track entered worlds for skin unlock system
                         try {

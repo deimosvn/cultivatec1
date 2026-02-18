@@ -5,6 +5,7 @@
 
 import React, { useState } from 'react';
 import { ArrowLeft, Eye, EyeOff, User, Mail, Lock, Zap, Bot, Sparkles, FileText } from 'lucide-react';
+import { playClick, playTab, playError } from '../utils/retroSounds';
 
 const AuthScreen = ({ onLogin, onRegister, isLoading, error }) => {
   const [mode, setMode] = useState('login'); // 'login' | 'register'
@@ -20,6 +21,7 @@ const AuthScreen = ({ onLogin, onRegister, isLoading, error }) => {
   const validateUsername = (u) => /^[a-zA-Z0-9_]{3,20}$/.test(u);
 
   const handleSubmit = () => {
+    playClick();
     setLocalError('');
 
     if (mode === 'login') {
@@ -89,7 +91,7 @@ const AuthScreen = ({ onLogin, onRegister, isLoading, error }) => {
           {/* Tabs */}
           <div className="flex rounded-2xl overflow-hidden mb-5 border-2 border-white/20">
             <button
-              onClick={() => { setMode('login'); setLocalError(''); }}
+              onClick={() => { playTab(); setMode('login'); setLocalError(''); }}
               className={`flex-1 py-3 text-sm font-black transition-all ${
                 mode === 'login'
                   ? 'bg-white text-[#2563EB]'
@@ -99,7 +101,7 @@ const AuthScreen = ({ onLogin, onRegister, isLoading, error }) => {
               Iniciar Sesión
             </button>
             <button
-              onClick={() => { setMode('register'); setLocalError(''); }}
+              onClick={() => { playTab(); setMode('register'); setLocalError(''); }}
               className={`flex-1 py-3 text-sm font-black transition-all ${
                 mode === 'register'
                   ? 'bg-white text-[#2563EB]'

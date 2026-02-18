@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, User, FileText, LogOut, Info, ChevronRight, Save, X, Shield, Smartphone } from 'lucide-react';
+import { setSoundEnabled as setGlobalSoundEnabled, isSoundEnabled, saveSoundPrefs, playToggleOn, playToggleOff, playClick, playSave } from '../utils/retroSounds';
 
 const APP_VERSION = '2.5.0';
 
@@ -12,9 +13,7 @@ const SettingsScreen = ({ onBack, firebaseProfile, userId, onUpdateProfile, onLo
   const [ttsSpeed, setTtsSpeed] = useState(() => {
     try { return parseFloat(localStorage.getItem('cultivatec_ttsSpeed') || '1'); } catch { return 1; }
   });
-  const [soundEnabled, setSoundEnabled] = useState(() => {
-    try { return localStorage.getItem('cultivatec_sound') !== 'false'; } catch { return true; }
-  });
+  const [soundEnabled, setSoundEnabled] = useState(() => isSoundEnabled());
 
   const fullName = firebaseProfile?.fullName || firebaseProfile?.username || 'Estudiante';
   const username = firebaseProfile?.username || '';
@@ -33,6 +32,7 @@ const SettingsScreen = ({ onBack, firebaseProfile, userId, onUpdateProfile, onLo
 
   const handleSave = async () => {
     if (!editValue.trim()) return;
+    playSave();
     setSaving(true);
     try {
       if (editingField === 'fullName') {
@@ -55,7 +55,9 @@ const SettingsScreen = ({ onBack, firebaseProfile, userId, onUpdateProfile, onLo
   const handleSoundToggle = () => {
     const newVal = !soundEnabled;
     setSoundEnabled(newVal);
-    localStorage.setItem('cultivatec_sound', String(newVal));
+    setGlobalSoundEnabled(newVal);
+    saveSoundPrefs();
+    if (newVal) { playToggleOn(); } else { /* already muted */ }
   };
 
   const handleLogout = () => {

@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { Search, Volume2, VolumeX, Lightbulb, ChevronDown, Star } from 'lucide-react';
 import { RobotAvatar } from '../Onboarding';
+import { playTab, playExpand, playCollapse, playFavorite, playClick } from '../utils/retroSounds';
 
 // --- BASE DE DATOS DEL GLOSARIO (96 términos educativos) ---
 export const GLOSSARY_TERMS = [
@@ -222,6 +223,7 @@ const GlossaryScreen = ({ robotConfig, robotName = 'Robi' }) => {
   }, [searchTerm, selectedCategory, showFavoritesOnly, favoriteTerms]);
 
   const toggleFavorite = (termId) => {
+    playFavorite();
     setFavoriteTerms(prev =>
       prev.includes(termId) ? prev.filter(id => id !== termId) : [...prev, termId]
     );
@@ -236,6 +238,7 @@ const GlossaryScreen = ({ robotConfig, robotName = 'Robi' }) => {
   };
 
   const speakTerm = (term) => {
+    playClick();
     if (!('speechSynthesis' in window)) return;
     if (speakingTermId === term.id) { stopSpeaking(); return; }
 
@@ -366,7 +369,7 @@ const GlossaryScreen = ({ robotConfig, robotName = 'Robi' }) => {
             return (
               <button
                 key={cat.id}
-                onClick={() => setSelectedCategory(cat.id)}
+                onClick={() => { playTab(); setSelectedCategory(cat.id); }}
                 className={`flex-shrink-0 px-3 py-2 rounded-2xl font-black text-[7px] transition-all duration-200 active:scale-95 flex items-center gap-1.5 border-2 ${
                   isActive
                     ? 'shadow-lg scale-[1.03]'
@@ -437,7 +440,7 @@ const GlossaryScreen = ({ robotConfig, robotName = 'Robi' }) => {
                   }}
                 >
                   {/* Term header */}
-                  <div className="p-3 cursor-pointer flex items-center gap-3" onClick={() => setExpandedTerm(isExpanded ? null : term.id)}>
+                  <div className="p-3 cursor-pointer flex items-center gap-3" onClick={() => { isExpanded ? playCollapse() : playExpand(); setExpandedTerm(isExpanded ? null : term.id); }}>
                     <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-xl border"
                       style={{ backgroundColor: `${catData.color}10`, borderColor: `${catData.color}25` }}>
                       {term.emoji}

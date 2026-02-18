@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { ArrowLeft, CheckCircle, XCircle, Trophy, RotateCcw, Star, Zap } from 'lucide-react';
+import { playClick, playCorrect, playWrong, playNavigate, playStreak, playBack, playTimerWarning, playVictory } from '../utils/retroSounds';
 
 // --- BANCO DE PREGUNTAS POR MÓDULO ---
 const QUIZ_DATA = {
@@ -1443,16 +1444,19 @@ const QuizScreen = ({ moduleId, moduleName, onBack, onComplete }) => {
     const isCorrect = answerIndex === question.correct;
     
     if (isCorrect) {
+      playCorrect();
       const timeBonus = Math.max(0, timeLeft);
       const streakBonus = streak >= 2 ? 5 : 0;
       const points = 10 + timeBonus + streakBonus;
       setScore(prev => prev + points);
       setStreak(prev => {
         const newStreak = prev + 1;
+        if (newStreak >= 3) playStreak();
         setMaxStreak(current => Math.max(current, newStreak));
         return newStreak;
       });
     } else {
+      playWrong();
       setStreak(0);
     }
 
@@ -1467,6 +1471,7 @@ const QuizScreen = ({ moduleId, moduleName, onBack, onComplete }) => {
 
   const nextQuestion = () => {
     if (currentQuestion + 1 >= totalQuestions) {
+      playVictory();
       setQuizCompleted(true);
       const correctCount = answers.length > 0 
         ? answers.filter(a => a.isCorrect).length + (selectedAnswer === question.correct ? 1 : 0)
@@ -1482,6 +1487,7 @@ const QuizScreen = ({ moduleId, moduleName, onBack, onComplete }) => {
   };
 
   const restartQuiz = () => {
+    playClick();
     setCurrentQuestion(0);
     setSelectedAnswer(null);
     setShowExplanation(false);
