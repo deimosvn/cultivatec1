@@ -525,6 +525,67 @@ const CHALLENGES = [
     explanation: 'La mejor forma de aprender es experimentando. Prueba, falla, y vuelve a intentar. ¡Así aprenden los verdaderos ingenieros!',
     requiredComponents: [], goal: 'Experimenta', xp: 0, unlocked: true, isFreeMode: true,
     validation: () => true
+  },
+  // === MUNDO 5: DESIERTO DE LOS ROVERS ===
+  {
+    id: 9, title: 'Sensor de Proximidad del Rover', difficulty: 'experto', stars: 4,
+    description: 'Construye el circuito sensor del rover: Arduino lee un sensor y enciende un LED de alerta cuando detecta un obstáculo.',
+    hint: 'El Arduino lee el sensor y controla el LED. Conecta el sensor al pin analógico y el LED al pin digital con resistencia.',
+    explanation: 'Los rovers autónomos usan sensores de proximidad para detectar obstáculos. El Arduino lee la señal del sensor y decide si encender una alerta LED. ¡Es el sistema de "ojos" del rover!',
+    requiredComponents: ['battery', 'arduino', 'resistor', 'led_red'],
+    goal: 'Crea el sistema de detección del rover',
+    xp: 350, unlocked: false,
+    validation: (circuit) => {
+      const hasArduino = circuit.components.some(c => c.type === 'arduino' && c.isActive);
+      const hasLed = circuit.components.some(c => c.type === 'led_red');
+      const hasRes = circuit.components.some(c => c.type === 'resistor');
+      return hasArduino && hasLed && hasRes;
+    }
+  },
+  {
+    id: 10, title: 'Panel Solar del Rover', difficulty: 'experto', stars: 4,
+    description: 'Diseña el sistema de energía del rover: batería alimenta el Arduino y un motor con interruptor de emergencia.',
+    hint: 'La batería alimenta todo. El interruptor permite cortar la energía al motor en emergencias. El LED indica que hay energía.',
+    explanation: 'Los rovers necesitan gestión de energía inteligente. La batería (simula panel solar) alimenta el cerebro (Arduino) y los motores. El interruptor es el "kill switch" de seguridad.',
+    requiredComponents: ['battery', 'switch_comp', 'arduino', 'motor', 'led_green'],
+    goal: 'Energiza el rover completo',
+    xp: 400, unlocked: false,
+    validation: (circuit) => {
+      const hasMotor = circuit.components.some(c => c.type === 'motor');
+      const hasSwitch = circuit.components.some(c => c.type === 'switch_comp');
+      const hasArduino = circuit.components.some(c => c.type === 'arduino');
+      return hasMotor && hasSwitch && hasArduino;
+    }
+  },
+  // === MUNDO 6: BAHÍA DE LA AERO-BIOSFERA ===
+  {
+    id: 11, title: 'Sensor de Riego Inteligente', difficulty: 'difícil', stars: 3,
+    description: 'Construye un circuito de riego automatizado: un sensor activa una bomba (motor) cuando el suelo está seco.',
+    hint: 'El interruptor simula el sensor de humedad. Cuando se activa (suelo seco), enciende el motor (bomba de agua) y el LED indica riego activo.',
+    explanation: 'En agricultura de precisión, sensores de humedad detectan cuándo el suelo necesita agua. Un relay activa la bomba solo cuando es necesario. ¡Así se ahorra hasta 30% de agua!',
+    requiredComponents: ['battery', 'switch_comp', 'motor', 'led_blue', 'resistor'],
+    goal: 'Activa el riego cuando el sensor lo detecta',
+    xp: 250, unlocked: false,
+    validation: (circuit) => {
+      const hasMotor = circuit.components.some(c => c.type === 'motor');
+      const hasSwitch = circuit.components.some(c => c.type === 'switch_comp');
+      const hasLed = circuit.components.some(c => c.type === 'led_blue');
+      return hasMotor && hasSwitch && hasLed;
+    }
+  },
+  {
+    id: 12, title: 'Indicador LED del Dron', difficulty: 'difícil', stars: 3,
+    description: 'Diseña el sistema de luces de estado del dron agrícola: LED rojo (alarma), verde (operativo) y azul (transmitiendo datos).',
+    hint: 'Cada LED necesita su propia resistencia. El buzzer funciona como alarma sonora del dron. Todos se alimentan de la misma batería.',
+    explanation: 'Los drones agrícolas usan LEDs de colores para comunicar su estado: verde = todo bien, rojo = error/batería baja, azul = transmitiendo datos al servidor. El buzzer avisa si hay emergencia.',
+    requiredComponents: ['battery', 'resistor', 'resistor', 'resistor', 'led_red', 'led_green', 'led_blue', 'buzzer'],
+    goal: 'Enciende las 3 luces de estado y el buzzer',
+    xp: 300, unlocked: false,
+    validation: (circuit) => {
+      const leds = circuit.components.filter(c => c.type.startsWith('led_') && c.isActive).length;
+      const hasBuzzer = circuit.components.some(c => c.type === 'buzzer');
+      return leds >= 3 && hasBuzzer;
+    }
   }
 ];
 

@@ -45,7 +45,17 @@ export const MODULOS_DATA = [
             { titulo: "🧩 Conecta Robot con su Tipo", tipo: 'matching_game', instruccion: 'Conecta cada robot con su categoría correcta', pairs: [{ left: '🚗 Tesla Autopilot', right: 'Robot Móvil' }, { left: '🦾 Brazo de fábrica', right: 'Brazo Robótico' }, { left: '🐕 Spot de Boston Dynamics', right: 'Robot Bio-inspirado' }, { left: '🤖 Sophia', right: 'Robot Humanoide' }] },
             { titulo: "✅❌ ¿Verdadero o Falso?", tipo: 'true_false', statements: [{ text: 'La palabra "robot" viene del idioma japonés.', correct: false, explain: 'Viene del checo "robota" (trabajo forzado), inventada por Karel Čapek en 1920.' }, { text: 'Tu lavadora es un tipo de robot porque actúa sola.', correct: true, explain: '¡Sí! Tiene sensores, un programa y actuadores. Es un robot doméstico.' }, { text: 'Los robots solo existen en las fábricas.', correct: false, explain: 'Están en hospitales, el espacio, tu casa y muchos lugares más.' }, { text: 'Todo robot necesita sensores, cerebro y actuadores.', correct: true, explain: 'Esas son las 3 partes fundamentales de cualquier robot.' }] },
             { titulo: "💡 Tip del Ingeniero", tipo: 'tip', texto: "**No necesitas ser un genio para construir robots.** Solo necesitas curiosidad, paciencia y ganas de experimentar. ¡Los mejores ingenieros aprendieron cometiendo errores! Cada error es un paso más cerca del éxito. 🎯" },
-        ] 
+        
+            { titulo: "✅ Quiz: Historia de la Robótica", tipo: 'mini_quiz', pregunta: "¿De qué idioma proviene la palabra 'Robot'?", opciones: ["Japonés", "Inglés", "Checo", "Alemán"], respuestaCorrecta: 2, explicacion: "Viene del checo 'robota' que significa trabajo forzado, del escritor Karel Čapek en 1920. 📚" },
+            { titulo: "✅ Quiz: Robots en la Vida Real", tipo: 'mini_quiz', pregunta: "¿Qué robot explora la superficie de Marte actualmente?", opciones: ["Roomba", "Perseverance", "Sophia", "Spot"], respuestaCorrecta: 1, explicacion: "¡El rover Perseverance de NASA ha explorado Marte desde 2021 buscando señales de vida! 🚀" },
+            { titulo: "✅❌ Robots: ¿Verdadero o Falso?", tipo: 'true_false', statements: [{ text: 'Un robot necesita estar conectado a internet para funcionar.', correct: false, explain: 'Muchos robots funcionan sin internet, solo necesitan su programa y energía.' }, { text: 'Los robots pueden trabajar en lugares peligrosos para los humanos.', correct: true, explain: 'Trabajan en volcanes, el espacio, bajo el mar y zonas radiactivas.' }] },
+            { titulo: "✅ Quiz: Componentes Básicos", tipo: 'mini_quiz', pregunta: "¿Qué parte del robot toma las decisiones?", opciones: ["Los motores", "Los sensores", "El procesador/cerebro", "Las baterías"], respuestaCorrecta: 2, explicacion: "El procesador o cerebro (como Arduino) es quien toma decisiones basadas en la información de los sensores. 🧠" },
+            { titulo: "🧩 Robots y sus Funciones", tipo: 'matching_game', instruccion: 'Conecta cada robot con su función principal', pairs: [{ left: '🏥 Robot cirujano', right: 'Operaciones precisas' }, { left: '🌋 Robot explorador', right: 'Zonas peligrosas' }, { left: '🏭 Robot industrial', right: 'Ensamblar productos' }, { left: '🏠 Roomba', right: 'Limpiar el hogar' }] },
+            { titulo: "✅ Quiz: Historia de la Robótica", tipo: 'mini_quiz', pregunta: "¿Quién acuñó el término 'robot' por primera vez?", opciones: ["Isaac Asimov", "Karel Čapek en su obra R.U.R. (1920)", "Leonardo da Vinci", "Nikola Tesla"], respuestaCorrecta: 1, explicacion: "Karel Čapek usó 'robot' (del checo 'robota' = trabajo forzado) en su obra de teatro R.U.R. de 1920. ¡Tiene más de 100 años! 🎭" },
+            { titulo: "✅ Quiz: Leyes de la Robótica", tipo: 'mini_quiz', pregunta: "¿Quién escribió las famosas 3 leyes de la robótica?", opciones: ["Elon Musk", "Isaac Asimov en su ficción científica", "Albert Einstein", "Steve Jobs"], respuestaCorrecta: 1, explicacion: "Isaac Asimov las planteó en 1942. La 1ª ley: un robot no puede dañar a un ser humano. Son ficción pero inspiran la ética robótica real. 📚" },
+            { titulo: "✅ Quiz: Robot vs Autómata", tipo: 'mini_quiz', pregunta: "¿Cuál es la diferencia principal entre un robot y un autómata?", opciones: ["No hay diferencia", "El robot puede reprogramarse y adaptarse; el autómata repite una acción fija", "El autómata es más caro", "El robot es más pequeño"], respuestaCorrecta: 1, explicacion: "Un autómata (como un reloj cucú) hace siempre lo mismo. Un robot puede reprogramarse para nuevas tareas. ¡Flexibilidad! 🤖" },
+            { titulo: "✅ Quiz: Tipos de Robots", tipo: 'mini_quiz', pregunta: "¿Qué tipo de robot se usa en líneas de ensamblaje de automóviles?", opciones: ["Robot humanoide", "Robot industrial articulado (brazo robótico)", "Dron", "Robot social"], respuestaCorrecta: 1, explicacion: "Los brazos robóticos industriales sueldan, pintan y ensamblan miles de autos al día con precisión milimétrica. 🏭" },
+        ]
     },
     { 
         id: 'mod_partes_robot', 
@@ -96,7 +106,15 @@ export const MODULOS_DATA = [
             { titulo: "✅❌ ¿Verdadero o Falso?", tipo: 'true_false', statements: [{ text: 'El Arduino UNO tiene 6 pines analógicos.', correct: true, explain: 'Tiene 6: A0 a A5, para leer sensores analógicos.' }, { text: 'Un servo motor gira continuamente como una rueda.', correct: false, explain: 'Un servo se mueve a un ángulo exacto (0°-180°). El motor DC es el que gira continuamente.' }, { text: 'Una batería LiPo es recargable.', correct: true, explain: '¡Sí! Las baterías LiPo se recargan y son muy potentes.' }, { text: 'El sensor LDR detecta sonido.', correct: false, explain: 'El LDR detecta LUZ. Para sonido se usa un micrófono.' }] },
             { titulo: "🧩 Motor con su Uso", tipo: 'matching_game', instruccion: 'Conecta cada motor con su uso ideal', pairs: [{ left: '⚙️ Motor DC', right: 'Ruedas que giran siempre' }, { left: '🎯 Servo Motor', right: 'Garra a ángulo exacto' }, { left: '🦶 Motor Paso a Paso', right: 'Impresora 3D precisa' }] },
             { titulo: "💡 Tip del Ingeniero", tipo: 'tip', texto: "**Empieza simple.** Tu primer robot puede ser de cartón con un motor y un sensor. No necesitas comprar todo de una vez. ¡Los mejores inventos empezaron en un garaje con materiales simples! 🏠✨" },
-        ] 
+        
+            { titulo: "✅ Quiz: Fuentes de Energía", tipo: 'mini_quiz', pregunta: "¿Qué tipo de batería usan los drones por ser potente y recargable?", opciones: ["Pilas AA", "Batería 9V", "Batería LiPo", "Pila de botón"], respuestaCorrecta: 2, explicacion: "Las baterías LiPo (Litio-Polímero) son recargables, livianas y muy potentes. ¡Ideales para drones! ⚡" },
+            { titulo: "✅ Quiz: Pines del Arduino", tipo: 'mini_quiz', pregunta: "¿Cuántos pines digitales tiene el Arduino UNO?", opciones: ["6 pines", "14 pines", "20 pines", "8 pines"], respuestaCorrecta: 1, explicacion: "El Arduino UNO tiene 14 pines digitales (D0-D13) para conexiones de entrada/salida. 🔌" },
+            { titulo: "✅❌ Partes del Robot: ¿V o F?", tipo: 'true_false', statements: [{ text: 'El motor DC puede girar a un ángulo exacto como 45°.', correct: false, explain: 'El motor DC gira continuamente. Para ángulos exactos se usa el servo motor.' }, { text: 'El chasis de cartón es una buena opción para el primer robot.', correct: true, explain: 'Es barato, fácil de cortar y perfecto para prototipos iniciales.' }] },
+            { titulo: "✅ Quiz: Actuadores", tipo: 'mini_quiz', pregunta: "¿Qué es un actuador en un robot?", opciones: ["Un sensor", "Un componente que convierte energía en movimiento (motores, servos, pistones)", "Un cable", "Una batería"], respuestaCorrecta: 1, explicacion: "Los actuadores son los 'músculos' del robot. Motores DC, servos, stepper motors y actuadores neumáticos generan movimiento. 💪" },
+            { titulo: "✅ Quiz: Procesador del Robot", tipo: 'mini_quiz', pregunta: "¿Cuál es la función del microcontrolador en un robot?", opciones: ["Dar energía", "Procesar información de sensores y enviar comandos a actuadores (el cerebro)", "Solo almacenar datos", "Solo comunicarse"], respuestaCorrecta: 1, explicacion: "El microcontrolador es el cerebro: lee sensores → toma decisiones → controla motores. Arduino, ESP32, Raspberry Pi. 🧠" },
+            { titulo: "✅ Quiz: Fuente de Energía", tipo: 'mini_quiz', pregunta: "¿Cuál es el principal desafío de energía en robots móviles?", opciones: ["Son muy ruidosos", "Las baterías tienen duración limitada y añaden peso al robot", "No necesitan energía", "Siempre usan cables"], respuestaCorrecta: 1, explicacion: "Las baterías limitan el tiempo de operación y añaden peso. Equilibrar autonomía vs peso es un desafío constante en robótica móvil. 🔋" },
+            { titulo: "✅ Quiz: Sensores Básicos", tipo: 'mini_quiz', pregunta: "¿Qué tipo de sensor usarías para que un robot detecte una pared?", opciones: ["Sensor de temperatura", "Sensor de distancia (ultrasónico o infrarrojo)", "Sensor de luz", "Micrófono"], respuestaCorrecta: 1, explicacion: "Los sensores ultrasónicos (HC-SR04) e infrarrojos miden distancia. Detectan paredes, obstáculos y bordes de mesa. 📡" },
+        ]
     },
     { 
         id: 'mod_primer_proyecto', 
@@ -138,7 +156,16 @@ export const MODULOS_DATA = [
             { titulo: "✅ Quiz: Orden de Construcción", tipo: 'mini_quiz', pregunta: "¿Cuál es el orden CORRECTO para construir un robot?", opciones: ["Programar → Comprar materiales → Dibujar → Armar", "Comprar todo → Armar sin dibujar → Programar", "Dibujar → Lista de materiales → Armar chasis → Electrónica → Programar", "Conectar cables al azar → Ver si funciona"], respuestaCorrecta: 2, explicacion: "¡Correcto! Siempre empieza dibujando tu idea, luego haz la lista de materiales, arma el cuerpo, conecta la electrónica y por último programa. ¡Orden = éxito! 📝➡️🤖" },
             { titulo: "🎮 Reto Final: Presenta tu Robot", tipo: 'interactive_challenge', instruccion: "**Reto Creativo:** Imagina que estás en una feria de ciencias. Prepara una presentación de 1 minuto sobre tu robot:\n\n1. ¿Cómo se llama?\n2. ¿Qué problema resuelve?\n3. ¿Qué lo hace especial?\n\n¡Practícalo frente al espejo o con tu familia! Los ingenieros también necesitan saber explicar sus inventos. 🎤", recompensa: "🏅 Insignia: Ingeniero Diseñador" },
             { titulo: "💡 Tip del Ingeniero", tipo: 'tip', texto: "**El primer prototipo SIEMPRE se puede mejorar.** Los ingenieros hacen muchas versiones: v1, v2, v3... Cada versión es mejor que la anterior. ¡No busques la perfección, busca el progreso! 🚀" },
-        ] 
+        
+            { titulo: "✅ Quiz: Planificación", tipo: 'mini_quiz', pregunta: "¿Qué es lo PRIMERO que debe hacer un ingeniero antes de construir un robot?", opciones: ["Comprar materiales caros", "Dibujar y planificar el diseño", "Programar sin saber qué construir", "Conectar cables al azar"], respuestaCorrecta: 1, explicacion: "¡Siempre se empieza con un diseño en papel! Planificar ahorra tiempo y dinero. 📝" },
+            { titulo: "✅ Quiz: Misiones del Robot", tipo: 'mini_quiz', pregunta: "Si quieres un robot que participe en torneos y competencias, ¿qué tipo de misión elegirías?", opciones: ["Robot Ayudante", "Robot Explorador", "Robot Competidor", "Robot Mascota"], respuestaCorrecta: 2, explicacion: "¡Los robots competidores están diseñados para torneos de sumo, siguelíneas y más! 🏆" },
+            { titulo: "✅❌ Diseño de Robots: ¿V o F?", tipo: 'true_false', statements: [{ text: 'El tamaño ideal para un primer robot es entre 15 y 25 cm.', correct: true, explain: 'Ni muy grande ni muy pequeño, fácil de manejar y armar.' }, { text: 'Las baterías deben ir en la parte de arriba del robot para mejor estabilidad.', correct: false, explain: 'Deben ir en la BASE para mantener el centro de gravedad bajo y evitar que se voltee.' }] },
+            { titulo: "🧩 Misión y Sensor Ideal", tipo: 'matching_game', instruccion: 'Conecta cada misión con el sensor más útil', pairs: [{ left: '🌍 Explorar terrenos', right: 'Ultrasónico (distancia)' }, { left: '🏠 Seguir una línea', right: 'Infrarrojo (líneas)' }, { left: '🌡️ Monitorear ambiente', right: 'Sensor temperatura' }, { left: '🔆 Buscar luz solar', right: 'LDR (sensor de luz)' }] },
+            { titulo: "✅ Quiz: Materiales del Chasis", tipo: 'mini_quiz', pregunta: "¿Qué material es modular y reutilizable para construir un chasis de robot?", opciones: ["Aluminio soldado", "Lego/bloques de construcción", "Vidrio templado", "Cemento"], respuestaCorrecta: 1, explicacion: "¡Lego y bloques son modulares: puedes armar, desarmar y rediseñar fácilmente! 🧱" },
+            { titulo: "✅ Quiz: Prototipado", tipo: 'mini_quiz', pregunta: "¿Qué significa que un diseño sea 'modular'?", opciones: ["Que sea muy grande", "Que las piezas se pueden quitar y poner fácilmente", "Que solo funcione con un módulo", "Que no se puede modificar"], respuestaCorrecta: 1, explicacion: "Modular significa piezas intercambiables. Si algo falla, solo cambias esa parte sin desarmar todo. 🔧" },
+            { titulo: "✅ Quiz: Protoboard", tipo: 'mini_quiz', pregunta: "¿Cómo están conectadas las filas de una protoboard internamente?", opciones: ["No están conectadas", "Cada fila horizontal de 5 hoyos está conectada internamente", "Todas las filas están conectadas", "Solo las filas pares"], respuestaCorrecta: 1, explicacion: "En la zona central, cada fila de 5 hoyos comparte la misma línea eléctrica. Las columnas laterales son para alimentación (+/-). 🔌" },
+            { titulo: "✅ Quiz: Resistencia LED", tipo: 'mini_quiz', pregunta: "¿Por qué se necesita una resistencia al conectar un LED a Arduino?", opciones: ["Para que brille más", "Para limitar la corriente y evitar que el LED se queme", "Por estética", "No se necesita"], respuestaCorrecta: 1, explicacion: "Sin resistencia, el LED recibe demasiada corriente (>20mA) y se quema. Una resistencia de 220Ω-1KΩ lo protege. ¡Siempre con resistencia! ⚡" },
+        ]
     },
     // ===== SECCIÓN 1: FUNDAMENTOS (3 módulos originales, renumerados) =====
     { 
@@ -202,7 +229,13 @@ export const MODULOS_DATA = [
             { titulo: "🧩 Conecta Concepto y Definición", tipo: 'matching_game', instruccion: 'Relaciona cada concepto eléctrico', pairs: [{ left: '⬆️ Voltaje (V)', right: 'Fuerza que empuja electrones' }, { left: '🌊 Corriente (I)', right: 'Cantidad de electrones que fluyen' }, { left: '🧱 Resistencia (R)', right: 'Frena a los electrones' }, { left: '⚡ Circuito', right: 'Camino cerrado para electrones' }] },
             { titulo: "✅❌ Electricidad: ¿Verdadero o Falso?", tipo: 'true_false', statements: [{ text: 'El plástico es un buen conductor de electricidad.', correct: false, explain: 'El plástico es un AISLANTE. Bloquea la electricidad.' }, { text: 'Los rayos son electricidad natural.', correct: true, explain: 'Los rayos son descargas eléctricas de hasta 30,000°C.' }, { text: 'Si abres un interruptor, la electricidad sigue fluyendo.', correct: false, explain: 'Abrir el interruptor ROMPE el camino y la electricidad se detiene.' }, { text: 'El cobre es un excelente conductor eléctrico.', correct: true, explain: 'El cobre se usa en casi todos los cables eléctricos del mundo.' }] },
             { titulo: "💡 Tip del Ingeniero", tipo: 'tip', texto: "**La electricidad no es peligrosa si la respetas.** Los ingenieros trabajan con ella todos los días de forma segura siguiendo reglas simples. Con pilas y componentes de bajo voltaje (como Arduino a 5V) puedes experimentar tranquilamente. ¡La clave es siempre aprender antes de tocar! 🔒🧠" },
-        ] 
+        
+            { titulo: "✅ Quiz: Ley de Ohm", tipo: 'mini_quiz', pregunta: "Según la Ley de Ohm, si aumentas la resistencia en un circuito manteniendo el voltaje igual, ¿qué pasa con la corriente?", opciones: ["Aumenta", "Disminuye", "Se mantiene igual", "Se apaga"], respuestaCorrecta: 1, explicacion: "V = I × R → Si R sube y V es constante, la corriente I baja. ¡Más resistencia = menos flujo! ⚡" },
+            { titulo: "🧩 Conceptos Eléctricos", tipo: 'matching_game', instruccion: 'Conecta cada concepto con su unidad de medida', pairs: [{ left: '⚡ Voltaje', right: 'Voltios (V)' }, { left: '💧 Corriente', right: 'Amperios (A)' }, { left: '🚧 Resistencia', right: 'Ohmios (Ω)' }, { left: '🔋 Potencia', right: 'Watts (W)' }] },
+            { titulo: "✅ Quiz: Ley de Ohm", tipo: 'mini_quiz', pregunta: "¿Qué establece la Ley de Ohm?", opciones: ["V = I × R (voltaje = corriente × resistencia)", "V = I + R", "V = I / R", "V = I - R"], respuestaCorrecta: 0, explicacion: "V = I × R es la ley fundamental de la electricidad. Si conoces dos valores, calculas el tercero. ¡Memorízala! ⚡" },
+            { titulo: "✅ Quiz: Serie vs Paralelo", tipo: 'mini_quiz', pregunta: "¿Qué pasa con el voltaje en un circuito en serie?", opciones: ["Se multiplica", "Se divide entre los componentes (cada uno recibe una parte)", "Permanece igual para todos", "Desaparece"], respuestaCorrecta: 1, explicacion: "En serie, el voltaje total se reparte. 3 LEDs en serie con 9V = 3V por LED. En paralelo, todos reciben el mismo voltaje. 🔋" },
+            { titulo: "✅ Quiz: Corriente Continua", tipo: 'mini_quiz', pregunta: "¿Qué diferencia hay entre corriente continua (DC) y alterna (AC)?", opciones: ["No hay diferencia", "DC fluye en una sola dirección; AC cambia de dirección periódicamente", "DC es más peligrosa", "AC solo existe en laboratorios"], respuestaCorrecta: 1, explicacion: "DC (baterías, Arduino) fluye en una dirección. AC (enchufes de casa) cambia 50-60 veces por segundo. Los robots usan DC. ⚡" },
+        ]
     },
     { 
         id: 'mod_electon', 
@@ -250,8 +283,16 @@ export const MODULOS_DATA = [
                 "**Cautín (Soldador):** Para unir componentes permanentemente. ¡Solo con supervisión de un adulto!",
                 "**Cables Dupont:** Cables con puntas especiales para conectar componentes fácilmente."
             ]},
-            { titulo: "🎯 Actividad Práctica", tipo: 'activity', instruccion: "**Reto:** Consigue un multímetro y una pila. Pon el multímetro en modo voltaje (V) DC y mide el voltaje de la pila. ¿Marca exactamente lo que dice la etiqueta?", materiales: ["Multímetro", "Pila AA (1.5V) o 9V", "Cables de prueba"] }
-        ] 
+            { titulo: "🎯 Actividad Práctica", tipo: 'activity', instruccion: "**Reto:** Consigue un multímetro y una pila. Pon el multímetro en modo voltaje (V) DC y mide el voltaje de la pila. ¿Marca exactamente lo que dice la etiqueta?", materiales: ["Multímetro", "Pila AA (1.5V) o 9V", "Cables de prueba"] },
+            { titulo: "✅ Quiz: Capacitores", tipo: 'mini_quiz', pregunta: "¿Cuál es la función principal de un capacitor en un circuito?", opciones: ["Generar energía", "Almacenar y liberar carga eléctrica", "Medir temperatura", "Amplificar sonido"], respuestaCorrecta: 1, explicacion: "Los capacitores almacenan energía temporalmente y la liberan cuando se necesita. ¡Son como mini-baterías rápidas! ⚡" },
+            { titulo: "✅ Quiz: Diodos", tipo: 'mini_quiz', pregunta: "¿Qué hace un diodo en un circuito?", opciones: ["Permite que la corriente fluya en ambas direcciones", "Permite que la corriente fluya en UNA sola dirección", "Aumenta el voltaje", "Mide la resistencia"], respuestaCorrecta: 1, explicacion: "El diodo es como una válvula: deja pasar corriente solo en una dirección. ¡Protege tus circuitos! 🚦" },
+            { titulo: "✅❌ Electrónica: ¿V o F?", tipo: 'true_false', statements: [{ text: 'Un LED es un tipo especial de diodo que emite luz.', correct: true, explain: 'LED = Light Emitting Diode (Diodo Emisor de Luz).' }, { text: 'Un transistor solo puede funcionar como interruptor.', correct: false, explain: 'También puede amplificar señales, como en un amplificador de audio.' }] },
+            { titulo: "🧩 Componentes Electrónicos", tipo: 'matching_game', instruccion: 'Conecta cada componente con su función', pairs: [{ left: '💡 LED', right: 'Emitir luz' }, { left: '🔌 Resistencia', right: 'Limitar corriente' }, { left: '⚡ Capacitor', right: 'Almacenar carga' }, { left: '🔀 Transistor', right: 'Amplificar/conmutar' }] },
+            { titulo: "✅ Quiz: Diodo LED", tipo: 'mini_quiz', pregunta: "¿Qué significa LED?", opciones: ["Light Energy Device", "Light Emitting Diode (Diodo Emisor de Luz)", "Low Energy Display", "Laser Electronic Device"], respuestaCorrecta: 1, explicacion: "LED = Light Emitting Diode. Es un diodo que emite luz cuando la corriente pasa en una dirección. El largo es + y el corto es -. 💡" },
+            { titulo: "✅ Quiz: Transistor", tipo: 'mini_quiz', pregunta: "¿Para qué se usa un transistor en electrónica?", opciones: ["Solo como resistencia", "Como interruptor electrónico o amplificador de señal", "Solo para medir voltaje", "Para almacenar datos"], respuestaCorrecta: 1, explicacion: "El transistor es el componente más importante de la electrónica. Actúa como interruptor (on/off) o amplifica señales débiles. 🔧" },
+            { titulo: "✅ Quiz: Capacitor", tipo: 'mini_quiz', pregunta: "¿Cuál es la función principal de un capacitor?", opciones: ["Generar voltaje", "Almacenar y liberar carga eléctrica temporalmente", "Medir corriente", "Solo decorativo"], respuestaCorrecta: 1, explicacion: "Los capacitores almacenan energía brevemente. Se usan para filtrar ruido, estabilizar voltaje y temporizadores. ¡Son como mini baterías rápidas! ⚡" },
+            { titulo: "✅ Quiz: Circuito Integrado", tipo: 'mini_quiz', pregunta: "¿Qué es un circuito integrado (IC)?", opciones: ["Un cable largo", "Un chip con miles/millones de transistores miniaturizados", "Una resistencia grande", "Un tipo de batería"], respuestaCorrecta: 1, explicacion: "Un IC (chip) contiene millones de transistores en un espacio diminuto. El ATmega328 de Arduino tiene más de 30,000 transistores. 🔬" },
+        ]
     },
     { 
         id: 'mod_prog_gen', 
@@ -290,7 +331,17 @@ export const MODULOS_DATA = [
             { titulo: "✅ Quiz: Fuerza y Torque", tipo: 'mini_quiz', pregunta: "¿Qué es el TORQUE en un motor de robot?", opciones: ["La velocidad máxima del motor", "El peso del motor", "La fuerza de giro que permite mover las ruedas", "El color del motor"], respuestaCorrecta: 2, explicacion: "¡Exacto! El torque es la fuerza rotacional. Un motor con mucho torque puede mover cargas pesadas aunque sea lento. ¡Como un tractor vs un auto de carreras! ⚙️💪" },
             { titulo: "Fórmula: Relación de Engranajes", tipo: 'formula', texto: "La relación de transmisión se calcula así:", formula: "Relación = Dientes<sub>conducido</sub> ÷ Dientes<sub>conductor</sub>", explicacion: "Si el conductor tiene 10 dientes y el conducido 40, la relación es 4:1 (4x más fuerza, 4x menos velocidad)." },
             { titulo: "🎯 Actividad Práctica", tipo: 'activity', instruccion: "**Reto Lego:** Si tienes piezas Lego Technic, construye un tren de engranajes. Prueba cómo cambia la velocidad al intercambiar el engranaje grande con el pequeño.", materiales: ["Piezas Lego Technic o engranajes", "Cuaderno para dibujar observaciones"] }
-        ] 
+,
+            { titulo: "✅ Quiz: Engranajes", tipo: 'mini_quiz', pregunta: "¿Qué sucede cuando un engranaje grande mueve uno pequeño?", opciones: ["El pequeño gira más lento", "El pequeño gira más rápido", "Ambos giran a la misma velocidad", "El grande se detiene"], respuestaCorrecta: 1, explicacion: "Un engranaje grande moviendo uno pequeño aumenta la velocidad de rotación del pequeño. ¡Relación de transmisión! ⚙️" },
+            { titulo: "✅ Quiz: Palancas", tipo: 'mini_quiz', pregunta: "¿Qué tipo de palanca es un sube y baja (balancín)?", opciones: ["Palanca de primer grado", "Palanca de segundo grado", "Palanca de tercer grado", "No es una palanca"], respuestaCorrecta: 0, explicacion: "El sube y baja tiene el punto de apoyo (fulcro) en el centro: es una palanca de primer grado. ⚖️" },
+            { titulo: "✅ Quiz: Poleas", tipo: 'mini_quiz', pregunta: "¿Para qué sirve una polea en un robot?", opciones: ["Para medir distancia", "Para cambiar la dirección o magnitud de una fuerza", "Para generar electricidad", "Para conectar sensores"], respuestaCorrecta: 1, explicacion: "Las poleas permiten levantar objetos pesados con menos esfuerzo cambiando la dirección de la fuerza. 🏗️" },
+            { titulo: "✅❌ Mecánica: ¿V o F?", tipo: 'true_false', statements: [{ text: 'Los engranajes pueden aumentar o reducir la velocidad de rotación.', correct: true, explain: 'Dependiendo del tamaño, pueden multiplicar velocidad o fuerza (torque).' }, { text: 'El torque y la velocidad son lo mismo.', correct: false, explain: 'El torque es la fuerza de giro. Más torque = más fuerza pero generalmente menos velocidad.' }] },
+            { titulo: "🧩 Mecanismos y Usos", tipo: 'matching_game', instruccion: 'Conecta cada mecanismo con su uso en robótica', pairs: [{ left: '⚙️ Engranajes', right: 'Transmitir movimiento' }, { left: '🏗️ Poleas', right: 'Levantar objetos' }, { left: '⚖️ Palancas', right: 'Multiplicar fuerza' }, { left: '🔩 Tornillo sin fin', right: 'Reducir velocidad' }] },
+            { titulo: "✅ Quiz: Torque", tipo: 'mini_quiz', pregunta: "Si necesitas que un robot tenga MUCHA fuerza para subir una pendiente, ¿qué necesitas aumentar?", opciones: ["La velocidad", "El torque", "El número de sensores", "El tamaño del chasis"], respuestaCorrecta: 1, explicacion: "¡El torque! Es la fuerza de giro del motor. Más torque = más capacidad para mover cargas pesadas. 💪" },
+            { titulo: "✅ Quiz: Fricción", tipo: 'mini_quiz', pregunta: "¿Es la fricción siempre mala para un robot?", opciones: ["Sí, siempre hay que eliminarla", "No, las ruedas necesitan fricción para moverse", "Solo afecta a robots voladores", "No existe en robótica"], respuestaCorrecta: 1, explicacion: "¡Sin fricción las ruedas patinarían! La fricción es necesaria para tracción, pero hay que minimizarla en ejes y engranajes. 🛞" },
+            { titulo: "✅ Quiz: Variable", tipo: 'mini_quiz', pregunta: "¿Qué es una variable en programación?", opciones: ["Un cable", "Un espacio en memoria con nombre que almacena un valor que puede cambiar", "Un tipo de sensor", "Una función fija"], respuestaCorrecta: 1, explicacion: "Una variable es como una caja con etiqueta: int edad = 15; guarda el número 15 en la caja 'edad'. Puedes cambiarlo después. 📦" },
+            { titulo: "✅ Quiz: Bucle", tipo: 'mini_quiz', pregunta: "¿Cuál es la diferencia entre un bucle for y un while?", opciones: ["No hay diferencia", "For repite un número conocido de veces; while repite mientras una condición sea verdadera", "For es más rápido", "While solo funciona una vez"], respuestaCorrecta: 1, explicacion: "for(i=0; i<10; i++) repite 10 veces. while(distancia<20) repite hasta que distancia sea ≥20. Ambos son esenciales. 🔄" },
+        ]
     },
     { 
         id: 'mod_mecanica', 
@@ -337,7 +388,17 @@ export const MODULOS_DATA = [
                 "**Return:** Algunas funciones devuelven resultado: `int sumar(a, b) { return a + b; }`"
             ]},
             { titulo: "💡 Tip de Programador", tipo: 'tip', texto: "**Regla de oro:** Si copias y pegas el mismo código más de 2 veces, ¡conviértelo en una función! Así tu código será más corto, más limpio y más fácil de arreglar. 🎯" }
-        ] 
+,
+            { titulo: "✅ Quiz: Variables", tipo: 'mini_quiz', pregunta: "¿Qué es una variable en programación?", opciones: ["Un tipo de cable", "Un espacio de memoria que guarda un dato", "Un sensor especial", "Un motor programable"], respuestaCorrecta: 1, explicacion: "Una variable es como una caja con nombre donde guardas datos: números, texto, etc. 📦" },
+            { titulo: "✅ Quiz: Condicionales", tipo: 'mini_quiz', pregunta: "¿Qué instrucción usas para que el programa tome una decisión?", opciones: ["for", "while", "if/else", "print"], respuestaCorrecta: 2, explicacion: "if/else permite al programa decidir: SI algo es verdad, haz esto; SI NO, haz lo otro. 🔀" },
+            { titulo: "✅ Quiz: Ciclos", tipo: 'mini_quiz', pregunta: "¿Qué estructura repite un bloque de código varias veces?", opciones: ["if/else", "return", "for/while (ciclos)", "import"], respuestaCorrecta: 2, explicacion: "Los ciclos (for, while) repiten código: for repite un número fijo de veces, while repite mientras una condición sea verdadera. 🔄" },
+            { titulo: "✅❌ Programación: ¿V o F?", tipo: 'true_false', statements: [{ text: 'Una función es un bloque de código reutilizable con un nombre.', correct: true, explain: 'Las funciones organizan el código y permiten reutilizarlo llamándolo por su nombre.' }, { text: 'Los comentarios en el código son ejecutados por la computadora.', correct: false, explain: 'Los comentarios son ignorados por la computadora, son notas para los programadores.' }] },
+            { titulo: "🧩 Conceptos de Programación", tipo: 'matching_game', instruccion: 'Conecta cada concepto con su descripción', pairs: [{ left: '📦 Variable', right: 'Guarda un dato' }, { left: '🔀 if/else', right: 'Toma decisiones' }, { left: '🔄 for/while', right: 'Repite código' }, { left: '📋 Función', right: 'Código reutilizable' }] },
+            { titulo: "✅ Quiz: Errores Comunes", tipo: 'mini_quiz', pregunta: "¿Qué es un 'bug' en programación?", opciones: ["Un virus peligroso", "Un error o fallo en el código", "Un tipo de sensor", "Una marca de Arduino"], respuestaCorrecta: 1, explicacion: "Bug = error. El término viene de 1947 cuando una polilla causó un fallo en una computadora Harvard Mark II. 🐛" },
+            { titulo: "✅ Quiz: Algoritmos", tipo: 'mini_quiz', pregunta: "¿Qué es un algoritmo?", opciones: ["Un tipo de robot", "Una serie de pasos ordenados para resolver un problema", "Un lenguaje de programación", "Un componente electrónico"], respuestaCorrecta: 1, explicacion: "Un algoritmo es una receta: pasos claros y ordenados para resolver un problema. ¡Como una receta de cocina para la computadora! 📜" },
+            { titulo: "✅ Quiz: Engranajes", tipo: 'mini_quiz', pregunta: "¿Qué sucede cuando un engranaje grande mueve uno pequeño?", opciones: ["Se detienen", "El pequeño gira más rápido pero con menos fuerza (torque)", "El pequeño gira más lento", "Nada cambia"], respuestaCorrecta: 1, explicacion: "¡Relación de engranajes! Grande→pequeño = más velocidad, menos torque. Pequeño→grande = menos velocidad, más torque. ¡Trade-off! ⚙️" },
+            { titulo: "✅ Quiz: Torque vs Velocidad", tipo: 'mini_quiz', pregunta: "¿Qué necesita más un robot que sube una rampa: torque o velocidad?", opciones: ["Velocidad", "Torque (fuerza de giro) para vencer la gravedad", "Ninguno", "Ambos por igual siempre"], respuestaCorrecta: 1, explicacion: "Subir rampa = necesita fuerza. Los engranajes reductores sacrifican velocidad para multiplicar el torque. ¡Más fuerza en las ruedas! 💪" },
+        ]
     },
     { 
         id: 'mod_arduino', 
@@ -382,7 +443,18 @@ export const MODULOS_DATA = [
             ]},
             { titulo: "💡 Tip de Programador", tipo: 'tip', texto: "**Serial.println() es tu mejor amigo para encontrar errores.** Cuando tu robot no hace lo que esperas, agrega Serial.println() para ver qué valores tienen tus variables. 🔍" },
             { titulo: "🎯 Actividad: Semáforo Arduino", tipo: 'activity', instruccion: "**Proyecto Mini:** Conecta 3 LEDs (rojo, amarillo, verde) a los pines 10, 11 y 12. Programa un ciclo de semáforo: Verde 5s → Amarillo 2s → Rojo 5s.", materiales: ["Arduino UNO", "3 LEDs (rojo, amarillo, verde)", "3 Resistencias 220Ω", "Protoboard", "Cables"] }
-        ] 
+,
+            { titulo: "✅ Quiz: setup() y loop()", tipo: 'mini_quiz', pregunta: "¿Cuántas veces se ejecuta la función setup() en Arduino?", opciones: ["Infinitas veces", "Solo una vez al inicio", "Cada segundo", "Nunca"], respuestaCorrecta: 1, explicacion: "setup() se ejecuta UNA sola vez al encender o reiniciar el Arduino. loop() se repite infinitamente. 🔄" },
+            { titulo: "✅ Quiz: pinMode", tipo: 'mini_quiz', pregunta: "¿Qué hace la instrucción pinMode(13, OUTPUT)?", opciones: ["Lee el pin 13", "Configura el pin 13 como salida", "Apaga el pin 13", "Mide el voltaje del pin 13"], respuestaCorrecta: 1, explicacion: "pinMode configura un pin como OUTPUT (salida) para enviar señales, o INPUT (entrada) para recibir. 📌" },
+            { titulo: "✅ Quiz: digitalWrite", tipo: 'mini_quiz', pregunta: "¿Qué hace digitalWrite(13, HIGH)?", opciones: ["Apaga el pin 13", "Enciende el pin 13 enviando 5V", "Lee el valor del pin 13", "Configura el pin 13 como entrada"], respuestaCorrecta: 1, explicacion: "digitalWrite con HIGH envía 5 voltios al pin, encendiendo lo que esté conectado (LED, motor, etc.). 💡" },
+            { titulo: "✅ Quiz: delay()", tipo: 'mini_quiz', pregunta: "¿Qué hace delay(1000) en Arduino?", opciones: ["Espera 1 segundo", "Espera 1000 segundos", "Repite el código 1000 veces", "Enciende 1000 LEDs"], respuestaCorrecta: 0, explicacion: "delay(1000) pausa el programa durante 1000 milisegundos = 1 segundo. 1000ms = 1s ⏱️" },
+            { titulo: "✅❌ Arduino: ¿V o F?", tipo: 'true_false', statements: [{ text: 'analogRead() puede leer valores del 0 al 1023.', correct: true, explain: 'El Arduino tiene un ADC de 10 bits: 2^10 = 1024 niveles (0-1023).' }, { text: 'loop() se ejecuta solo una vez como setup().', correct: false, explain: 'loop() se repite infinitamente mientras el Arduino esté encendido.' }] },
+            { titulo: "🧩 Funciones Arduino", tipo: 'matching_game', instruccion: 'Conecta cada función con su descripción', pairs: [{ left: 'setup()', right: 'Se ejecuta una vez' }, { left: 'loop()', right: 'Se repite siempre' }, { left: 'digitalWrite()', right: 'Envía HIGH/LOW' }, { left: 'analogRead()', right: 'Lee valores 0-1023' }] },
+            { titulo: "✅ Quiz: Pines Analógicos", tipo: 'mini_quiz', pregunta: "¿Cuántos pines analógicos tiene el Arduino UNO?", opciones: ["14", "6", "20", "2"], respuestaCorrecta: 1, explicacion: "El Arduino UNO tiene 6 pines analógicos: A0 a A5, para leer sensores analógicos. 📊" },
+            { titulo: "✅ Quiz: Serial Monitor", tipo: 'mini_quiz', pregunta: "¿Para qué sirve Serial.begin(9600) en Arduino?", opciones: ["Encender un LED", "Iniciar la comunicación serial a 9600 baudios", "Configurar un motor", "Leer un sensor ultrasónico"], respuestaCorrecta: 1, explicacion: "Serial.begin(9600) inicia la comunicación serial para enviar datos al computador por el Monitor Serial. 📟" },
+            { titulo: "✅ Quiz: Pines Arduino", tipo: 'mini_quiz', pregunta: "¿Cuántos pines digitales tiene un Arduino UNO?", opciones: ["6", "14 pines digitales (0-13)", "20", "32"], respuestaCorrecta: 1, explicacion: "Arduino UNO tiene 14 pines digitales (D0-D13) y 6 pines analógicos (A0-A5). Los pines 0 y 1 son para serial (TX/RX). 📟" },
+            { titulo: "✅ Quiz: Setup y Loop", tipo: 'mini_quiz', pregunta: "¿Cuántas veces se ejecuta setup() vs loop() en Arduino?", opciones: ["Ambos una vez", "setup() una vez al inicio; loop() se repite infinitamente", "Ambos infinitamente", "setup() infinitamente, loop() una vez"], respuestaCorrecta: 1, explicacion: "setup() configura pines y serial UNA vez al encender. loop() se repite miles de veces por segundo. ¡El ciclo infinito del robot! 🔄" },
+        ]
     },
     { 
         id: 'mod_cpp', 
@@ -421,7 +493,17 @@ export const MODULOS_DATA = [
                 "**Diamante:** Una decisión con dos salidas: Sí / No."
             ]},
             { titulo: "🎯 Actividad: Diagrama del Robot", tipo: 'activity', instruccion: "**Reto:** Dibuja un diagrama de flujo para un robot que: 1) Avanza, 2) Lee sensor, 3) Si distancia < 20cm gira, 4) Si distancia >= 20cm sigue recto, 5) Vuelve al paso 1.", materiales: ["Papel", "Lápices de colores", "Regla"] }
-        ] 
+,
+            { titulo: "✅ Quiz: Operador AND", tipo: 'mini_quiz', pregunta: "En lógica booleana, ¿cuándo es verdadero A AND B?", opciones: ["Cuando A es verdadero", "Cuando B es verdadero", "Solo cuando AMBOS son verdaderos", "Cuando al menos uno es verdadero"], respuestaCorrecta: 2, explicacion: "AND requiere que AMBAS condiciones sean verdaderas. Si una es falsa, el resultado es falso. ✅ AND ✅ = ✅" },
+            { titulo: "✅ Quiz: Operador OR", tipo: 'mini_quiz', pregunta: "En lógica booleana, ¿cuándo es verdadero A OR B?", opciones: ["Solo cuando ambos son verdaderos", "Solo cuando ambos son falsos", "Cuando al menos uno es verdadero", "Nunca"], respuestaCorrecta: 2, explicacion: "OR es verdadero si al menos UNO de los dos es verdadero. Solo es falso cuando ambos son falsos. 🔀" },
+            { titulo: "✅ Quiz: Operador NOT", tipo: 'mini_quiz', pregunta: "¿Qué hace el operador NOT?", opciones: ["Suma dos valores", "Invierte el valor: verdadero→falso y falso→verdadero", "Multiplica por cero", "No hace nada"], respuestaCorrecta: 1, explicacion: "NOT invierte: NOT verdadero = falso, NOT falso = verdadero. ¡Es como un espejo lógico! 🪞" },
+            { titulo: "✅❌ Lógica: ¿V o F?", tipo: 'true_false', statements: [{ text: 'TRUE AND FALSE resulta en TRUE.', correct: false, explain: 'AND necesita que AMBOS sean TRUE. Si uno es FALSE, el resultado es FALSE.' }, { text: 'TRUE OR FALSE resulta en TRUE.', correct: true, explain: 'OR solo necesita que al menos UNO sea TRUE para dar TRUE.' }] },
+            { titulo: "🧩 Operadores Lógicos", tipo: 'matching_game', instruccion: 'Conecta cada operación con su resultado', pairs: [{ left: 'TRUE AND TRUE', right: 'TRUE' }, { left: 'TRUE AND FALSE', right: 'FALSE' }, { left: 'FALSE OR TRUE', right: 'TRUE' }, { left: 'NOT TRUE', right: 'FALSE' }] },
+            { titulo: "✅ Quiz: Tablas de Verdad", tipo: 'mini_quiz', pregunta: "¿Cuántas combinaciones posibles hay en una tabla de verdad con 2 variables (A y B)?", opciones: ["2 combinaciones", "4 combinaciones", "8 combinaciones", "16 combinaciones"], respuestaCorrecta: 1, explicacion: "Con 2 variables hay 2² = 4 combinaciones: (F,F), (F,V), (V,F), (V,V). Con 3 variables serían 8. 📊" },
+            { titulo: "✅ Quiz: Aplicación en Robots", tipo: 'mini_quiz', pregunta: "Si un robot debe avanzar solo cuando el sensor izquierdo Y el derecho NO detectan obstáculo, ¿qué operador usas?", opciones: ["OR", "NOT", "AND", "XOR"], respuestaCorrecta: 2, explicacion: "Usas AND: ambos sensores deben indicar camino libre para avanzar de forma segura. 🤖" },
+            { titulo: "✅ Quiz: Tipos de Datos C++", tipo: 'mini_quiz', pregunta: "¿Qué tipo de dato usarías para almacenar la distancia de un sensor (con decimales)?", opciones: ["int", "float (número con punto decimal)", "bool", "char"], respuestaCorrecta: 1, explicacion: "float almacena decimales: float distancia = 15.7; int solo enteros. Para sensores con precisión decimal, usa float. 📏" },
+            { titulo: "✅ Quiz: Funciones C++", tipo: 'mini_quiz', pregunta: "¿Por qué es bueno usar funciones en tu código de robot?", opciones: ["Para que sea más largo", "Para organizar, reutilizar código y hacer debugging más fácil", "No es necesario", "Solo para que compile"], respuestaCorrecta: 1, explicacion: "Las funciones dividen el código en bloques lógicos: moverAdelante(), leerSensor(), girar(). Más organizado, menos bugs. 🧩" },
+        ]
     },
     { 
         id: 'mod_python', 
@@ -453,7 +535,19 @@ export const MODULOS_DATA = [
             { titulo: "🎮 Reto: Calcula tu Resistencia", tipo: 'interactive_challenge', instruccion: "**Reto Matemático:** Usa la fórmula R = (Vfuente - VLED) ÷ ILED para calcular:\n\n1. Pila 9V, LED rojo (2V), corriente 20mA:\n   R = (9 - 2) ÷ 0.02 = ?\n\n2. Arduino 5V, LED azul (3.2V), corriente 20mA:\n   R = (5 - 3.2) ÷ 0.02 = ?\n\n3. Pila 3V (2xAA), LED verde (2.1V), corriente 15mA:\n   R = (3 - 2.1) ÷ 0.015 = ?\n\n¡Respuestas: 350Ω (usa 330Ω), 90Ω (usa 100Ω), 60Ω (usa 68Ω)!", recompensa: "🏅 Insignia: Calculador de Circuitos" },
             { titulo: "Fórmula: Calcular Resistencia", tipo: 'formula', texto: "Para saber qué resistencia necesitas:", formula: "R = (V<sub>fuente</sub> - V<sub>LED</sub>) ÷ I<sub>LED</sub>", explicacion: "Con pila de 9V, LED rojo (2V), corriente 20mA: R = (9-2) ÷ 0.02 = 350Ω. Usamos 330Ω o 470Ω." },
             { titulo: "💡 Tip de Seguridad", tipo: 'tip', texto: "**NUNCA conectes un LED directamente a una pila sin resistencia.** El LED se quemará en segundos. Piensa en la resistencia como un cinturón de seguridad. 🔒" }
-        ] 
+,
+            { titulo: "✅ Quiz: Componentes LED", tipo: 'mini_quiz', pregunta: "¿Por qué necesitas una resistencia al conectar un LED?", opciones: ["Para que brille más", "Para limitar la corriente y no quemar el LED", "Para que cambie de color", "No se necesita resistencia"], respuestaCorrecta: 1, explicacion: "Sin resistencia, demasiada corriente pasa por el LED y se quema. La resistencia limita el flujo. ¡Protege tus LEDs! 💡" },
+            { titulo: "✅ Quiz: Polaridad del LED", tipo: 'mini_quiz', pregunta: "¿Cómo identificas la pata positiva (ánodo) de un LED?", opciones: ["Es la pata más corta", "Es la pata más larga", "Ambas son iguales", "No tiene polaridad"], respuestaCorrecta: 1, explicacion: "La pata más LARGA es el ánodo (+) y la más corta es el cátodo (-). ¡Si lo conectas al revés no enciende! 💡" },
+            { titulo: "✅ Quiz: Resistencias", tipo: 'mini_quiz', pregunta: "¿De cuántos ohmios debería ser la resistencia típica para un LED con Arduino (5V)?", opciones: ["1Ω", "220Ω", "1,000,000Ω", "0Ω (sin resistencia)"], respuestaCorrecta: 1, explicacion: "220Ω es el valor estándar para LEDs con 5V. Limita la corriente a ~15mA, seguro para el LED. 🔧" },
+            { titulo: "✅❌ Circuitos LED: ¿V o F?", tipo: 'true_false', statements: [{ text: 'Un LED funciona igual sin importar la dirección en que se conecte.', correct: false, explain: 'El LED tiene polaridad: ánodo (+) y cátodo (-). Conectado al revés no enciende.' }, { text: 'Una protoboard/breadboard permite armar circuitos sin soldar.', correct: true, explain: 'Las protoboards tienen conexiones internas que permiten insertar componentes sin soldadura.' }] },
+            { titulo: "🧩 Circuito LED", tipo: 'matching_game', instruccion: 'Conecta cada componente con su rol en el circuito LED', pairs: [{ left: '🔋 Batería/Arduino', right: 'Fuente de energía' }, { left: '🔌 Resistencia 220Ω', right: 'Limita la corriente' }, { left: '💡 LED', right: 'Emite luz' }, { left: '🔗 Cables', right: 'Conectan componentes' }] },
+            { titulo: "✅ Quiz: Protoboard", tipo: 'mini_quiz', pregunta: "¿Cómo están conectadas internamente las filas de una protoboard?", opciones: ["Todas las filas están conectadas entre sí", "Cada fila de 5 huecos está conectada horizontalmente", "No hay conexión interna", "Solo los bordes están conectados"], respuestaCorrecta: 1, explicacion: "¡Cada fila de 5 huecos está conectada por dentro! Por eso puedes insertar componentes en la misma fila para conectarlos. 🔌" },
+            { titulo: "✅ Quiz: Colores LED", tipo: 'mini_quiz', pregunta: "¿Qué determina el color de un LED?", opciones: ["El voltaje de la batería", "El material semiconductor del LED", "La resistencia que uses", "La velocidad de la corriente"], respuestaCorrecta: 1, explicacion: "El color depende del material semiconductor: GaAs = rojo, GaN = azul/verde, InGaN = blanco. 🌈" },
+            { titulo: "✅ Quiz: Circuito Serie", tipo: 'mini_quiz', pregunta: "En un circuito en serie con 2 LEDs, si uno se quema, ¿qué pasa con el otro?", opciones: ["Brilla más fuerte", "También se apaga", "No le afecta", "Cambia de color"], respuestaCorrecta: 1, explicacion: "En serie, la corriente pasa por todos. Si uno se corta, se rompe el circuito y todos se apagan. 🔗" },
+            { titulo: "✅ Quiz: Plaqueta Arduino", tipo: 'mini_quiz', pregunta: "¿Qué pin del Arduino usarías para alimentar un LED con 5 voltios?", opciones: ["GND", "A0", "5V", "RESET"], respuestaCorrecta: 2, explicacion: "El pin 5V proporciona 5 voltios de salida. GND es tierra (negativo). Necesitas ambos para un circuito completo. ⚡" },
+            { titulo: "✅ Quiz: Python vs C++", tipo: 'mini_quiz', pregunta: "¿Cuál es la ventaja principal de Python sobre C++ para robótica?", opciones: ["Es más rápido", "Sintaxis más simple y más librerías de IA/visión artificial", "Funciona sin Internet", "No tiene ventajas"], respuestaCorrecta: 1, explicacion: "Python es más fácil de aprender y tiene librerías poderosas: OpenCV (visión), TensorFlow (IA), ROS. Ideal para robots avanzados. 🐍" },
+            { titulo: "✅ Quiz: Listas Python", tipo: 'mini_quiz', pregunta: "¿Qué es una lista en Python y para qué sirve en robótica?", opciones: ["Un documento de texto", "Una colección ordenada de datos: sensores = [15, 20, 30]", "Un tipo de motor", "Una función especial"], respuestaCorrecta: 1, explicacion: "Las listas almacenan múltiples datos: lecturas de sensores, rutas, comandos. lecturas = [10, 15, 12] guarda 3 distancias. 📋" },
+        ]
     },
     { 
         id: 'mod_robotica', 
@@ -484,7 +578,18 @@ export const MODULOS_DATA = [
                 "**Usa Serial.println():** Imprime mensajes para saber qué hace tu código."
             ]},
             { titulo: "✅ Quiz: Troubleshooting", tipo: 'mini_quiz', pregunta: "Tu LED no enciende con Arduino. ¿Cuál es lo PRIMERO que debes verificar?", opciones: ["Si la computadora tiene internet", "Si la mesa está nivelada", "La orientación del LED (pata larga al pin, corta a GND)", "El color del cable"], respuestaCorrecta: 2, explicacion: "¡Correcto! Lo más común es que el LED esté invertido. La pata larga (+) va al pin de salida y la corta (-) a GND. ¡Si está al revés, no enciende pero no se daña! 💡🔄" },
-        ] 
+        
+            { titulo: "✅ Quiz: Blink", tipo: 'mini_quiz', pregunta: "¿Qué hace el programa Blink en Arduino?", opciones: ["Lee un sensor", "Enciende y apaga un LED repetidamente", "Controla un motor", "Se conecta a internet"], respuestaCorrecta: 1, explicacion: "Blink es el 'Hola Mundo' de Arduino: enciende el LED, espera, lo apaga, espera, y repite. 💡" },
+            { titulo: "✅ Quiz: LED Integrado", tipo: 'mini_quiz', pregunta: "¿En qué pin está el LED integrado del Arduino UNO?", opciones: ["Pin 1", "Pin 7", "Pin 13", "Pin A0"], respuestaCorrecta: 2, explicacion: "El LED integrado (built-in LED) está conectado al pin 13. ¡Puedes probarlo sin conectar nada externo! 💡" },
+            { titulo: "✅ Quiz: Frecuencia de Parpadeo", tipo: 'mini_quiz', pregunta: "Si usas delay(500), ¿cuántas veces parpadea el LED por segundo?", opciones: ["Una vez por segundo", "Dos veces por segundo", "Cinco veces por segundo", "Diez veces por segundo"], respuestaCorrecta: 0, explicacion: "delay(500) = 500ms encendido + 500ms apagado = 1 ciclo por segundo. ¡Cambiando el delay cambias la velocidad! ⏱️" },
+            { titulo: "✅❌ LED Arduino: ¿V o F?", tipo: 'true_false', statements: [{ text: 'Para hacer parpadear un LED necesitas usar digitalWrite y delay.', correct: true, explain: 'digitalWrite enciende/apaga el LED, delay controla cuánto tiempo queda en cada estado.' }, { text: 'El Arduino puede encender LEDs de cualquier color sin componentes externos.', correct: false, explain: 'El LED integrado es solo uno. Para otros colores necesitas LEDs externos.' }] },
+            { titulo: "🧩 Funciones del Programa Blink", tipo: 'matching_game', instruccion: 'Conecta cada línea de código con lo que hace', pairs: [{ left: 'pinMode(13, OUTPUT)', right: 'Configura pin como salida' }, { left: 'digitalWrite(13, HIGH)', right: 'Enciende el LED' }, { left: 'digitalWrite(13, LOW)', right: 'Apaga el LED' }, { left: 'delay(1000)', right: 'Espera 1 segundo' }] },
+            { titulo: "✅ Quiz: PWM", tipo: 'mini_quiz', pregunta: "¿Qué función de Arduino permite controlar el BRILLO de un LED (no solo encender/apagar)?", opciones: ["digitalRead()", "analogWrite()", "Serial.print()", "pinMode()"], respuestaCorrecta: 1, explicacion: "analogWrite() envía señales PWM (0-255) que permiten variar el brillo del LED. 255 = máximo brillo, 0 = apagado. 🌟" },
+            { titulo: "✅ Quiz: Múltiples LEDs", tipo: 'mini_quiz', pregunta: "Si quieres controlar 3 LEDs independientemente, ¿cuántos pines digitales necesitas?", opciones: ["1 pin", "2 pines", "3 pines", "6 pines"], respuestaCorrecta: 2, explicacion: "¡Un pin por cada LED! Cada pin controla un LED de forma independiente. 3 LEDs = 3 pines. 🔌" },
+            { titulo: "✅ Quiz: Secuencia de LEDs", tipo: 'mini_quiz', pregunta: "Para hacer un efecto de 'luces de navidad' con 5 LEDs que se encienden en secuencia, ¿qué estructura de código usarías?", opciones: ["Solo if/else", "Un ciclo for con delay", "Solo delay", "analogRead"], respuestaCorrecta: 1, explicacion: "Un ciclo for recorre cada LED en orden, encendiéndolo y apagándolo con delay para crear la secuencia. 🎄" },
+            { titulo: "✅ Quiz: Lazo de Control", tipo: 'mini_quiz', pregunta: "¿Qué es el lazo de control Sentir-Pensar-Actuar en robótica?", opciones: ["Un tipo de cable", "El ciclo donde el robot lee sensores, procesa datos y ejecuta acciones", "Un lenguaje de programación", "Una marca de robot"], respuestaCorrecta: 1, explicacion: "Sentir (sensores) → Pensar (microcontrolador decide) → Actuar (motores ejecutan). Este ciclo se repite miles de veces por segundo. 🔄" },
+            { titulo: "✅ Quiz: Robot Reactivo", tipo: 'mini_quiz', pregunta: "¿Qué es un robot reactivo?", opciones: ["Un robot que se enoja", "Un robot que responde directamente a estímulos del entorno sin planificar", "Un robot que no se mueve", "Un robot que usa IA avanzada"], respuestaCorrecta: 1, explicacion: "Un robot reactivo actúa instantáneamente: 've' obstáculo → gira. No planifica rutas. Simple pero efectivo para evasión básica. 🏎️" },
+        ]
     },
     { 
         id: 'mod_componentes', 
@@ -515,7 +620,18 @@ export const MODULOS_DATA = [
             { titulo: "✅ Quiz: Control de Motor", tipo: 'mini_quiz', pregunta: "Para que un robot gire SOBRE SU EJE (como un trompo), ¿qué deben hacer los motores?", opciones: ["Ambos motores adelante", "Ambos motores detenidos", "Un motor rápido y otro lento", "Un motor adelante y el otro atrás"], respuestaCorrecta: 3, explicacion: "¡Correcto! Cuando un motor va hacia adelante y el otro hacia atrás, el robot gira sobre su propio eje. ¡Si ambos van iguales, avanza recto! 🔄🤖" },
             { titulo: "✅ Quiz: Velocidad PWM", tipo: 'mini_quiz', pregunta: "Si pones analogWrite(ENA, 127), ¿a qué porcentaje de velocidad va el motor?", opciones: ["100% (máxima velocidad)", "0% (detenido)", "Aproximadamente 50%", "127% (velocidad extra)"], respuestaCorrecta: 2, explicacion: "¡Correcto! El rango PWM es 0-255. 127 es aproximadamente la mitad (127÷255 ≈ 50%). Con 255 va al máximo y con 0 está detenido. ⚡50%" },
             { titulo: "🎯 Actividad: Coreografía Robot", tipo: 'activity', instruccion: "**Reto Divertido:** Programa una 'coreografía' para tu robot: adelante, gira derecha, adelante, gira izquierda, retrocede, gira en círculo. ¡Ponle música!", materiales: ["Robot con Arduino + L298N", "2 motores con ruedas", "Pila 9V"] }
-        ] 
+,
+            { titulo: "✅ Quiz: Driver de Motor", tipo: 'mini_quiz', pregunta: "¿Por qué no puedes conectar un motor DC directamente a un pin del Arduino?", opciones: ["El motor es muy pequeño", "El pin no puede dar suficiente corriente para el motor", "El Arduino no tiene pines", "Los motores no usan electricidad"], respuestaCorrecta: 1, explicacion: "Los pines del Arduino dan máximo ~40mA, pero un motor necesita 200-700mA. ¡Necesitas un driver como el L298N! ⚡" },
+            { titulo: "✅ Quiz: L298N", tipo: 'mini_quiz', pregunta: "¿Cuántos motores DC puede controlar simultáneamente el driver L298N?", opciones: ["1 motor", "2 motores", "4 motores", "6 motores"], respuestaCorrecta: 1, explicacion: "El L298N tiene 2 canales (puentes H), cada uno controla 1 motor DC. ¡Perfecto para un robot con 2 ruedas! 🤖" },
+            { titulo: "✅ Quiz: Dirección del Motor", tipo: 'mini_quiz', pregunta: "¿Cómo cambias la dirección de giro de un motor DC con el L298N?", opciones: ["Cambias la velocidad", "Inviertes las señales IN1 e IN2", "Desconectas el Arduino", "No se puede cambiar"], respuestaCorrecta: 1, explicacion: "Si IN1=HIGH, IN2=LOW gira en un sentido. IN1=LOW, IN2=HIGH gira al contrario. ¡Así tu robot va adelante y atrás! 🔄" },
+            { titulo: "✅❌ Motores: ¿V o F?", tipo: 'true_false', statements: [{ text: 'La velocidad de un motor DC se puede controlar con PWM (analogWrite).', correct: true, explain: 'PWM varía el voltaje promedio: 0=parado, 127=medio, 255=máxima velocidad.' }, { text: 'Un motor DC y un servo motor funcionan exactamente igual.', correct: false, explain: 'El motor DC gira continuamente, el servo se mueve a un ángulo específico (0°-180°).' }] },
+            { titulo: "🧩 Control de Motores", tipo: 'matching_game', instruccion: 'Conecta cada señal con su efecto', pairs: [{ left: 'IN1=HIGH, IN2=LOW', right: 'Gira en sentido horario' }, { left: 'IN1=LOW, IN2=HIGH', right: 'Gira en sentido antihorario' }, { left: 'IN1=LOW, IN2=LOW', right: 'Motor detenido' }, { left: 'ENA con PWM', right: 'Controla la velocidad' }] },
+            { titulo: "✅ Quiz: Alimentación", tipo: 'mini_quiz', pregunta: "¿Por qué el L298N necesita una fuente de alimentación SEPARADA del Arduino?", opciones: ["Por estética", "Los motores necesitan más corriente de la que el USB puede dar", "Para que sea más caro", "No necesita fuente separada"], respuestaCorrecta: 1, explicacion: "Los motores consumen mucha corriente (0.5-2A). El USB solo da 500mA. Una fuente separada (baterías) alimenta los motores sin sobrecargar el Arduino. 🔋" },
+            { titulo: "✅ Quiz: Puente H", tipo: 'mini_quiz', pregunta: "¿Qué es un 'Puente H' en el contexto de motores?", opciones: ["Un puente físico sobre un río", "Un circuito que permite invertir la polaridad del motor", "Un tipo de engranaje", "Un sensor de posición"], respuestaCorrecta: 1, explicacion: "El Puente H es un circuito con 4 transistores que permite cambiar la dirección de la corriente al motor, invirtiendo su giro. 🔀" },
+            { titulo: "✅ Quiz: Servo vs DC", tipo: 'mini_quiz', pregunta: "¿Qué motor usarías para las RUEDAS de un robot móvil?", opciones: ["Servo Motor (ángulo fijo)", "Motor Paso a Paso (muy lento)", "Motor DC (giro continuo)", "Motor de lavadora"], respuestaCorrecta: 2, explicacion: "¡Motor DC! Gira continuamente a buena velocidad, perfecto para ruedas. El servo es mejor para brazos y garras. 🛞" },
+            { titulo: "✅ Quiz: Multímetro", tipo: 'mini_quiz', pregunta: "¿Qué mide un multímetro en modo 'continuidad'?", opciones: ["La temperatura", "Si hay conexión eléctrica entre dos puntos (suena si hay contacto)", "La velocidad", "La presión"], respuestaCorrecta: 1, explicacion: "El modo continuidad verifica si dos puntos están conectados eléctricamente. Suena = hay conexión. Esencial para debug de circuitos. 🔊" },
+            { titulo: "✅ Quiz: Componentes SMD", tipo: 'mini_quiz', pregunta: "¿Qué son los componentes SMD?", opciones: ["Componentes muy grandes", "Componentes de Montaje Superficial, más pequeños que los tradicionales", "Cables especiales", "Tipo de sensor"], respuestaCorrecta: 1, explicacion: "SMD = Surface Mount Device. Son componentes miniaturizados que se sueldan directamente a la superficie de la PCB. ¡Más pequeños! 🔬" },
+        ]
     },
     { 
         id: 'mod_control', 
@@ -548,7 +664,17 @@ export const MODULOS_DATA = [
             { titulo: "✅ Quiz: PID", tipo: 'mini_quiz', pregunta: "Si tu robot siguelíneas zigzaguea mucho, ¿qué componente del PID ayuda a suavizar el movimiento?", opciones: ["P (Proporcional) - solo corrige el error actual", "I (Integral) - acumula errores pasados", "Ninguno, el zigzag es normal", "D (Derivativo) - predice y suaviza el movimiento"], respuestaCorrecta: 3, explicacion: "¡Correcto! La componente D (derivativa) mide qué tan rápido cambia el error y aplica un 'freno' para evitar que el robot se pase de la línea. ¡Es como anticipar una curva al conducir! 🏎️📐" },
             { titulo: "✅ Mini-Quiz Rápido", tipo: 'mini_quiz', pregunta: "Un tostador con temporizador fijo (sin medir si el pan está tostado) es un ejemplo de:", opciones: ["Control de Lazo Cerrado", "Control de Lazo Abierto", "Control PID"], respuestaCorrecta: 1, explicacion: "Es lazo abierto porque no mide el resultado. Un lazo cerrado mediría el color del pan y ajustaría." },
             { titulo: "Fórmula PID", tipo: 'formula', texto: "La ecuación del controlador PID:", formula: "Salida = Kp·e(t) + Ki·∫e(t)dt + Kd·de(t)/dt", explicacion: "e(t) = error (deseado - real). Kp, Ki, Kd son constantes que ajustas." }
-        ] 
+,
+            { titulo: "✅ Quiz: Lazo Abierto vs Cerrado", tipo: 'mini_quiz', pregunta: "¿Cuál es la diferencia principal entre un sistema de lazo abierto y uno de lazo cerrado?", opciones: ["El lazo abierto es más caro", "El lazo cerrado usa retroalimentación (sensores) para corregirse", "No hay diferencia", "El lazo abierto es más preciso"], respuestaCorrecta: 1, explicacion: "El lazo cerrado usa sensores para medir el resultado y corregir errores. ¡Como un termostato que mide la temperatura! 🌡️" },
+            { titulo: "✅ Quiz: PID", tipo: 'mini_quiz', pregunta: "¿Qué significan las letras P, I, D en un controlador PID?", opciones: ["Potencia, Intensidad, Dirección", "Proporcional, Integral, Derivativo", "Programar, Instalar, Depurar", "Positivo, Inverso, Digital"], respuestaCorrecta: 1, explicacion: "P=Proporcional (error actual), I=Integral (errores pasados acumulados), D=Derivativo (predicción del futuro). 🎯" },
+            { titulo: "✅ Quiz: Retroalimentación", tipo: 'mini_quiz', pregunta: "Un robot siguelíneas que usa sensores IR para ajustar su dirección es un ejemplo de:", opciones: ["Sistema de lazo abierto", "Sistema de lazo cerrado", "Sistema sin control", "Sistema manual"], respuestaCorrecta: 1, explicacion: "¡Lazo cerrado! El sensor detecta la línea, el cerebro decide, y los motores corrigen. Hay retroalimentación constante. 🔄" },
+            { titulo: "✅❌ Control: ¿V o F?", tipo: 'true_false', statements: [{ text: 'Un tostador con temporizador es un ejemplo de control de lazo abierto.', correct: true, explain: 'Solo usa tiempo, no mide si el pan está tostado. No tiene retroalimentación.' }, { text: 'El controlador PID solo se usa en robots industriales grandes.', correct: false, explain: 'Se usa en drones, robots pequeños, impresoras 3D, y muchos proyectos con Arduino.' }] },
+            { titulo: "🧩 Tipos de Control", tipo: 'matching_game', instruccion: 'Conecta cada sistema con su tipo de control', pairs: [{ left: '⏲️ Tostador con timer', right: 'Lazo abierto' }, { left: '🌡️ Termostato de casa', right: 'Lazo cerrado' }, { left: '🚗 Cruise control', right: 'Lazo cerrado' }, { left: '💡 Interruptor de luz', right: 'Lazo abierto' }] },
+            { titulo: "✅ Quiz: Señal de Error", tipo: 'mini_quiz', pregunta: "En un sistema de control, ¿qué es la 'señal de error'?", opciones: ["Un mensaje de error en el código", "La diferencia entre el valor deseado y el valor actual", "Un sonido de alarma", "Un fallo del sistema"], respuestaCorrecta: 1, explicacion: "Error = Setpoint - Valor actual. Si quieres 25°C y tienes 23°C, el error es 2°C. ¡El controlador intenta reducirlo a 0! 🎯" },
+            { titulo: "✅ Quiz: Control en la Vida Real", tipo: 'mini_quiz', pregunta: "¿Cuál de estos es un ejemplo de control de lazo cerrado en tu vida diaria?", opciones: ["Encender una lámpara", "Un aire acondicionado con termostato", "Abrir una llave de agua", "Prender un ventilador"], respuestaCorrecta: 1, explicacion: "¡El aire acondicionado con termostato! Mide la temperatura, la compara con la deseada y ajusta. ¡Es retroalimentación! ❄️" },
+            { titulo: "✅ Quiz: Control PID", tipo: 'mini_quiz', pregunta: "¿Qué significan las letras P, I y D en control PID?", opciones: ["Presión, Intensidad, Distancia", "Proporcional, Integral, Derivativo", "Potencia, Impulso, Dirección", "Programa, Inicio, Destino"], respuestaCorrecta: 1, explicacion: "P = error actual, I = acumulación de errores pasados, D = predicción del error futuro. Juntos logran control suave y preciso. 🎯" },
+            { titulo: "✅ Quiz: PWM Control", tipo: 'mini_quiz', pregunta: "¿Qué rango de valores acepta analogWrite() en Arduino?", opciones: ["0-1", "0-255 (8 bits de resolución PWM)", "0-1023", "0-100"], respuestaCorrecta: 1, explicacion: "analogWrite(pin, 0-255). 0 = apagado, 127 = 50%, 255 = máximo. Con 8 bits tienes 256 niveles de velocidad de motor. 📊" },
+        ]
     },
     { 
         id: 'mod_prog_avanzada', 
@@ -586,7 +712,18 @@ export const MODULOS_DATA = [
                 "**Prueba por partes:** Verifica cada componente antes de juntar todo."
             ]},
             { titulo: "💡 Tip de Programador", tipo: 'tip', texto: "**El 90% de programar es leer código, solo el 10% es escribirlo.** Un buen programador escribe código que otros puedan entender fácilmente. ¡Los comentarios valen oro! 📖✨" }
-        ] 
+,
+            { titulo: "✅ Quiz: Arrays", tipo: 'mini_quiz', pregunta: "¿Qué es un array (arreglo) en programación?", opciones: ["Un tipo de motor", "Una colección ordenada de datos del mismo tipo", "Un sensor especial", "Un error de código"], respuestaCorrecta: 1, explicacion: "Un array guarda múltiples valores bajo un solo nombre: int leds[] = {2, 3, 4, 5}. ¡Perfecto para controlar varios pines! 📊" },
+            { titulo: "✅ Quiz: Librerías", tipo: 'mini_quiz', pregunta: "¿Qué es una librería en Arduino?", opciones: ["Un lugar con libros", "Código pre-escrito que puedes reutilizar para tareas comunes", "Un tipo de cable", "Un sensor de lectura"], respuestaCorrecta: 1, explicacion: "Las librerías son código listo para usar: Servo.h para servos, NewPing.h para ultrasónico, etc. ¡No reinventes la rueda! 📚" },
+            { titulo: "✅ Quiz: Bluetooth", tipo: 'mini_quiz', pregunta: "¿Qué módulo se usa comúnmente para agregar Bluetooth a un Arduino?", opciones: ["WiFi Shield", "HC-05/HC-06", "GPS NEO-6M", "Sensor DHT11"], respuestaCorrecta: 1, explicacion: "El HC-05 y HC-06 son módulos Bluetooth económicos que se comunican por serial con el Arduino. ¡Control desde el celular! 📱" },
+            { titulo: "✅❌ Programación Avanzada: ¿V o F?", tipo: 'true_false', statements: [{ text: 'Un array puede almacenar múltiples valores bajo un solo nombre.', correct: true, explain: 'Ejemplo: int sensores[3] = {100, 200, 300}. Tres valores en una sola variable.' }, { text: 'Las funciones en Arduino solo pueden retornar números enteros.', correct: false, explain: 'Pueden retornar int, float, bool, String, char, o void (nada).' }] },
+            { titulo: "🧩 Comunicación Inalámbrica", tipo: 'matching_game', instruccion: 'Conecta cada módulo con su tecnología', pairs: [{ left: 'HC-05', right: 'Bluetooth' }, { left: 'ESP8266', right: 'WiFi' }, { left: 'nRF24L01', right: 'Radio 2.4GHz' }, { left: 'NEO-6M', right: 'GPS/Satélite' }] },
+            { titulo: "✅ Quiz: Funciones Personalizadas", tipo: 'mini_quiz', pregunta: "¿Por qué es buena práctica crear funciones personalizadas en tu código?", opciones: ["Para que el código sea más largo", "Para organizar y reutilizar bloques de código", "Para que sea más difícil de leer", "No es buena práctica"], respuestaCorrecta: 1, explicacion: "Las funciones hacen tu código organizado, legible y reutilizable. Ejemplo: moverAdelante(), girarDerecha(). 📋" },
+            { titulo: "✅ Quiz: Comunicación Serial", tipo: 'mini_quiz', pregunta: "¿Qué función usas para enviar datos desde Arduino al computador?", opciones: ["analogWrite()", "digitalRead()", "Serial.println()", "pinMode()"], respuestaCorrecta: 2, explicacion: "Serial.println() envía datos al Monitor Serial del IDE de Arduino. ¡Perfecto para depurar y ver valores de sensores! 📟" },
+            { titulo: "✅ Quiz: Índices de Array", tipo: 'mini_quiz', pregunta: "En un array de 5 elementos, ¿cuál es el índice del PRIMER elemento?", opciones: ["1", "0", "5", "-1"], respuestaCorrecta: 1, explicacion: "¡Los arrays empiezan en 0! El primer elemento es [0], el segundo [1], etc. Es uno de los conceptos más importantes en programación. 🔢" },
+            { titulo: "✅ Quiz: Interrupciones", tipo: 'mini_quiz', pregunta: "¿Qué es una interrupción (interrupt) en Arduino?", opciones: ["Un error del programa", "Una señal que pausa el programa principal para ejecutar código urgente", "Un tipo de delay", "Un comentario en el código"], respuestaCorrecta: 1, explicacion: "Las interrupciones pausan loop() cuando ocurre un evento (botón, sensor). La función ISR se ejecuta inmediatamente. Más rápido que polling. ⚡" },
+            { titulo: "✅ Quiz: EEPROM", tipo: 'mini_quiz', pregunta: "¿Para qué sirve la EEPROM del Arduino?", opciones: ["Para conectar WiFi", "Para guardar datos que sobrevivan al apagar el Arduino", "Para aumentar velocidad", "Para conectar más sensores"], respuestaCorrecta: 1, explicacion: "La EEPROM guarda datos permanentemente (1KB en UNO). Ideal para guardar configuraciones, calibraciones o high scores. ¡Memoria persistente! 💾" },
+        ]
     },
     { 
         id: 'mod_diseno', 
@@ -623,7 +760,18 @@ export const MODULOS_DATA = [
                 "**Cartón:** ¡Perfecto para tu primer prototipo rápido!"
             ]},
             { titulo: "🎯 Actividad: Tu Primer Diseño", tipo: 'activity', instruccion: "**Reto:** Entra a Tinkercad.com (gratis) y diseña un soporte para tu Arduino. Debe tener agujeros para los tornillos y espacio para cables.", materiales: ["Computadora con internet", "Cuenta gratuita en Tinkercad.com"] }
-        ] 
+,
+            { titulo: "✅ Quiz: CAD", tipo: 'mini_quiz', pregunta: "¿Qué significa CAD en diseño de robots?", opciones: ["Control Automático Digital", "Diseño Asistido por Computadora", "Cable de Alta Definición", "Centro de Análisis de Datos"], respuestaCorrecta: 1, explicacion: "CAD = Computer-Aided Design (Diseño Asistido por Computadora). Programas como TinkerCAD, Fusion 360 y FreeCAD. 🖥️" },
+            { titulo: "✅ Quiz: Impresión 3D", tipo: 'mini_quiz', pregunta: "¿Qué material es el más común para impresión 3D en robótica?", opciones: ["Metal líquido", "PLA (ácido poliláctico)", "Vidrio templado", "Cemento"], respuestaCorrecta: 1, explicacion: "¡PLA! Es biodegradable, fácil de imprimir y suficientemente resistente para prototipos de robots. 🖨️" },
+            { titulo: "✅ Quiz: Tolerancias", tipo: 'mini_quiz', pregunta: "¿Qué son las 'tolerancias' en diseño mecánico?", opciones: ["La paciencia del diseñador", "El margen de error aceptable en las medidas de una pieza", "El peso máximo del robot", "La velocidad del motor"], respuestaCorrecta: 1, explicacion: "Las tolerancias son los márgenes permitidos en medidas. Un agujero de 5mm ± 0.1mm acepta entre 4.9mm y 5.1mm. ¡Precisión! 📐" },
+            { titulo: "✅❌ Diseño: ¿V o F?", tipo: 'true_false', statements: [{ text: 'TinkerCAD es un programa gratuito para diseño 3D.', correct: true, explain: 'TinkerCAD de Autodesk es gratuito, online y perfecto para principiantes.' }, { text: 'La impresión 3D solo puede hacer piezas decorativas, no funcionales.', correct: false, explain: 'Se imprimen engranajes, chasis, soportes de sensores y piezas funcionales para robots.' }] },
+            { titulo: "🧩 Herramientas de Diseño", tipo: 'matching_game', instruccion: 'Conecta cada herramienta con su uso', pairs: [{ left: '🖥️ TinkerCAD', right: 'Diseño 3D para principiantes' }, { left: '🖨️ Impresora 3D', right: 'Fabricar piezas físicas' }, { left: '📐 Calibrador/Vernier', right: 'Medir con precisión' }, { left: '✏️ Boceto en papel', right: 'Primera idea de diseño' }] },
+            { titulo: "✅ Quiz: Materiales para Robots", tipo: 'mini_quiz', pregunta: "¿Qué material usarías para un robot que necesita ser MUY liviano?", opciones: ["Acero inoxidable", "Aluminio o fibra de carbono", "Plomo", "Concreto"], respuestaCorrecta: 1, explicacion: "El aluminio y la fibra de carbono son muy livianos pero resistentes. ¡Los drones y robots de competencia los usan! 🏎️" },
+            { titulo: "✅ Quiz: Diseño Iterativo", tipo: 'mini_quiz', pregunta: "¿Qué significa 'diseño iterativo'?", opciones: ["Diseñar solo una vez y no cambiar", "Diseñar, probar, mejorar y repetir", "Copiar el diseño de otro", "No usar computadora"], respuestaCorrecta: 1, explicacion: "¡Diseñar-probar-mejorar en ciclos! Cada versión (v1, v2, v3...) es mejor. Los ingenieros nunca se conforman con la primera versión. 🔄" },
+            { titulo: "✅ Quiz: Ergonomía en Robots", tipo: 'mini_quiz', pregunta: "¿Por qué es importante que el diseño de un robot sea accesible (fácil de abrir y reparar)?", opciones: ["Solo por estética", "Para poder cambiar componentes, pilas y cables fácilmente", "No es importante", "Para que sea más pesado"], respuestaCorrecta: 1, explicacion: "¡Un buen diseño permite mantenimiento fácil! Si no puedes llegar a las pilas o cables, cada reparación es una pesadilla. 🔧" },
+            { titulo: "✅ Quiz: CAD para Robots", tipo: 'mini_quiz', pregunta: "¿Qué software gratuito se puede usar para diseñar piezas 3D de un robot?", opciones: ["Paint", "Tinkercad o FreeCAD para modelado 3D y diseño de piezas", "Excel", "PowerPoint"], respuestaCorrecta: 1, explicacion: "Tinkercad (web, fácil) y FreeCAD (escritorio, avanzado) permiten diseñar piezas que luego puedes imprimir en 3D. ¡Diseño digital! 🖥️" },
+            { titulo: "✅ Quiz: Fritzing", tipo: 'mini_quiz', pregunta: "¿Para qué se usa Fritzing en proyectos de robótica?", opciones: ["Para programar", "Para diseñar circuitos electrónicos y crear esquemas de conexión", "Para imprimir 3D", "Para controlar servos"], respuestaCorrecta: 1, explicacion: "Fritzing permite dibujar circuitos con componentes reales (Arduino, sensores). Genera esquemas profesionales y hasta diseños de PCB. 📐" },
+        ]
     },
     { 
         id: 'mod_primer_led', 
@@ -631,7 +779,21 @@ export const MODULOS_DATA = [
         icon: '🔴', 
         descripcion: "Guía de proyecto físico paso a paso: conecta LED, resistencia, pila y botón.", 
         specialView: 'InteractiveLEDGuide',
-        contenidoTeorico: [], 
+        contenidoTeorico: [
+            { titulo: "✅ Quiz: Planificación del Proyecto", tipo: 'mini_quiz', pregunta: "¿Cuál es el primer paso para un proyecto final de robótica?", opciones: ["Comprar todo inmediatamente", "Definir el objetivo y hacer un plan", "Programar sin saber qué construir", "Copiar un proyecto de internet"], respuestaCorrecta: 1, explicacion: "¡Siempre empieza con un plan! Define qué quieres lograr, qué materiales necesitas y los pasos a seguir. 📋" },
+            { titulo: "✅ Quiz: Componentes del Proyecto", tipo: 'mini_quiz', pregunta: "Para un robot evasor de obstáculos necesitas Arduino, motor, driver y...", opciones: ["Impresora", "Sensor ultrasónico", "Pantalla OLED", "Cámara profesional"], respuestaCorrecta: 1, explicacion: "¡El sensor ultrasónico detecta obstáculos! HC-SR04 mide la distancia y el robot decide si girar o frenar. 🦇" },
+            { titulo: "✅ Quiz: Integración", tipo: 'mini_quiz', pregunta: "¿Qué significa 'integrar' componentes en un proyecto de robótica?", opciones: ["Comprar piezas nuevas", "Conectar y hacer funcionar todos los componentes juntos", "Desmontar el robot", "Pintar el chasis"], respuestaCorrecta: 1, explicacion: "Integrar es hacer que sensores, motores, cerebro y energía trabajen juntos como un sistema completo. 🤖" },
+            { titulo: "✅❌ Proyecto Final: ¿V o F?", tipo: 'true_false', statements: [{ text: 'Es normal que un proyecto no funcione a la primera; debuggear es parte del proceso.', correct: true, explain: 'Los ingenieros siempre debuggean. Encontrar y corregir errores es aprender.' }, { text: 'Un buen proyecto de robótica solo necesita hardware, el software no importa.', correct: false, explain: 'Hardware Y software son igualmente importantes. El programa es la inteligencia del robot.' }] },
+            { titulo: "🧩 Pasos del Proyecto", tipo: 'matching_game', instruccion: 'Ordena los pasos del proyecto', pairs: [{ left: '1️⃣ Primer paso', right: 'Planificar y diseñar' }, { left: '2️⃣ Segundo paso', right: 'Armar el hardware' }, { left: '3️⃣ Tercer paso', right: 'Programar el código' }, { left: '4️⃣ Cuarto paso', right: 'Probar y depurar' }] },
+            { titulo: "✅ Quiz: Debugging", tipo: 'mini_quiz', pregunta: "Si tu robot no se mueve, ¿cuál es el primer paso para encontrar el problema?", opciones: ["Comprar un robot nuevo", "Revisar las conexiones y la alimentación", "Borrar todo el código", "Rendirse"], respuestaCorrecta: 1, explicacion: "¡Revisa conexiones primero! El 80% de los problemas son cables sueltos o mala alimentación. Luego revisa el código. 🔍" },
+            { titulo: "✅ Quiz: Documentación", tipo: 'mini_quiz', pregunta: "¿Por qué es importante documentar tu proyecto?", opciones: ["No es importante", "Para poder replicarlo, mejorarlo y compartirlo con otros", "Solo para obtener puntos extra", "Para hacerlo más difícil"], respuestaCorrecta: 1, explicacion: "La documentación permite que tú u otros entiendan cómo funciona, reparen problemas y hagan mejoras. ¡Es profesional! 📝" },
+            { titulo: "✅ Quiz: Presentación", tipo: 'mini_quiz', pregunta: "¿Qué debe incluir una buena presentación de proyecto de robótica?", opciones: ["Solo el robot funcional", "Objetivo, materiales, proceso, resultado y mejoras futuras", "Solo el código fuente", "Solo fotos bonitas"], respuestaCorrecta: 1, explicacion: "¡Una presentación completa! Explica el problema, cómo lo resolviste, muestra que funciona y sugiere mejoras. 🎤" },
+            { titulo: "✅❌ Habilidades de Ingeniero: ¿V o F?", tipo: 'true_false', statements: [{ text: 'Trabajar en equipo es una habilidad importante en robótica.', correct: true, explain: 'Los proyectos reales involucran mecánicos, programadores y diseñadores trabajando juntos.' }, { text: 'Los buenos ingenieros nunca cometen errores.', correct: false, explain: 'Los mejores ingenieros cometen errores pero aprenden de ellos. ¡Cada error es una lección!' }] },
+            { titulo: "✅ Quiz: Mejora Continua", tipo: 'mini_quiz', pregunta: "Terminaste tu proyecto pero el robot es lento. ¿Qué harías?", opciones: ["Dejarlo así, ya funciona", "Analizar por qué es lento e implementar mejoras (v2)", "Empezar un proyecto completamente diferente", "Quitar los sensores"], respuestaCorrecta: 1, explicacion: "¡Mejora continua! Identifica el cuello de botella (motores, código, peso) y haz una versión mejorada. ¡Los ingenieros iteran! 🚀" },
+            { titulo: "✅ Quiz: Polaridad LED", tipo: 'mini_quiz', pregunta: "¿Cómo identificas el polo positivo (ánodo) de un LED?", opciones: ["Es la pata más corta", "Es la pata más larga y el lado sin recorte en la base", "Ambas patas son iguales", "Por el color"], respuestaCorrecta: 1, explicacion: "La pata más larga = ánodo (+). La pata más corta con recorte en la base = cátodo (-). Si lo conectas al revés, no enciende. 💡" },
+            { titulo: "✅ Quiz: digitalWrite", tipo: 'mini_quiz', pregunta: "¿Qué hace la instrucción digitalWrite(13, HIGH)?", opciones: ["Lee el pin 13", "Envía 5V al pin 13 (lo enciende)", "Apaga todo", "Configura el pin como entrada"], respuestaCorrecta: 1, explicacion: "digitalWrite(pin, HIGH) pone el pin a 5V (enciende). digitalWrite(pin, LOW) lo pone a 0V (apaga). ¡Así controlas LEDs! 🔌" },
+            { titulo: "✅ Quiz: Delay", tipo: 'mini_quiz', pregunta: "¿Qué hace delay(1000) en Arduino?", opciones: ["Espera 1 segundo (1000 milisegundos)", "Espera 1000 segundos", "Acelera el programa", "Apaga el Arduino"], respuestaCorrecta: 0, explicacion: "delay(1000) pausa el programa 1000ms = 1 segundo. delay(500) = 0.5s. ¡Útil para hacer parpadear un LED! ⏱️" },
+        ],
     },
 ];
 
@@ -1251,6 +1413,327 @@ export const CODE_CHALLENGES_DATA = [
             { id: 6, text: 'catch ValueError:', type: 'wrong', whyWrong: '"catch" es de Java/JavaScript. En Python se usa "except".' },
             { id: 7, text: 'except:', type: 'wrong', whyWrong: 'Funciona pero es mala práctica. Siempre especifica QUÉ tipo de error capturas (ValueError, TypeError, etc.).' },
             { id: 8, text: 'if error:', type: 'wrong', whyWrong: 'Los errores no se manejan con if. try/except es el mecanismo correcto para errores inesperados.' }
+        ]
+    },
+    // ===================================================================
+    // 🏜️ NIVEL 5: ROVERS AUTÓNOMOS — Clases, algoritmos, máquinas de estado
+    // ===================================================================
+    {
+        id: 'py_clase_rover',
+        name: 'Python',
+        icon: '🐍',
+        difficulty: 5,
+        category: 'clases',
+        title: 'Reto 25: Clase Rover Marciano',
+        instructions: 'Crea una clase "Rover" con atributos nombre, batería y velocidad. Luego crea un rover y muestra su estado.',
+        concept: '**Las clases** son planos para crear objetos. Definen qué datos tiene (atributos) y qué puede hacer (métodos). Un Rover tiene nombre, batería y velocidad. ¡Es como el plano de un robot real!',
+        funFact: '🚀 El rover Perseverance de la NASA tiene miles de líneas de código en Python y C. Su "clase" interna maneja batería, temperatura, motores y cámaras. ¡Tú estás aprendiendo lo mismo!',
+        hints: ['Las clases se definen con "class" y usan __init__ para inicializar atributos', 'self se refiere al propio objeto (el rover que se crea)', 'Primero define la clase, luego crea un objeto con NombreClase()'],
+        solution: [
+            { id: 1, text: 'class Rover:', type: 'setup', explanation: '📐 "class Rover:" define el plano de nuestro rover. Todo lo indentado pertenece a la clase.' },
+            { id: 2, text: '    def __init__(self, nombre):', type: 'setup', explanation: '🔧 __init__ se ejecuta al crear un rover. "self" = este rover, "nombre" = dato que recibe.' },
+            { id: 3, text: '        self.nombre = nombre', type: 'setup', explanation: '🏷️ Guardamos el nombre dentro del rover. self.nombre = atributo del objeto.' },
+            { id: 4, text: '        self.bateria = 100', type: 'setup', explanation: '🔋 Todo rover nuevo empieza con 100% de batería.' },
+            { id: 5, text: '        self.velocidad = 0', type: 'setup', explanation: '🏎️ Velocidad inicial: detenido (0 km/h).' },
+            { id: 6, text: 'spirit = Rover("Spirit")', type: 'output', explanation: '🤖 ¡Creamos un rover llamado Spirit! Python llama a __init__ automáticamente.' },
+            { id: 7, text: 'print(f"{spirit.nombre}: {spirit.bateria}%")', type: 'output', explanation: '🖨️ Accedemos a los atributos con el punto: spirit.nombre, spirit.bateria.' }
+        ],
+        extra_blocks: [
+            { id: 8, text: 'def Rover(nombre):', type: 'wrong', whyWrong: '"def" crea funciones, no clases. Para clases usamos "class".' },
+            { id: 9, text: '    def init(self, nombre):', type: 'wrong', whyWrong: 'El método constructor se llama __init__ (con doble guion bajo), no "init".' },
+            { id: 10, text: 'spirit = new Rover("Spirit")', type: 'wrong', whyWrong: 'Python NO usa "new". Simplemente llamas Rover("Spirit") directamente.' }
+        ]
+    },
+    {
+        id: 'py_a_star',
+        name: 'Python',
+        icon: '🐍',
+        difficulty: 5,
+        category: 'algoritmos',
+        title: 'Reto 26: Navegación del Rover',
+        instructions: 'Crea una función que calcule la distancia Manhattan entre dos puntos del mapa para que el rover planifique su ruta.',
+        concept: '**La distancia Manhattan** es la suma de las diferencias absolutas en X e Y. Los rovers la usan para estimar qué tan lejos está un objetivo moviéndose en cuadrícula (como calles de una ciudad).',
+        funFact: '🗺️ Se llama "Manhattan" porque en Manhattan (Nueva York) las calles forman una cuadrícula. No puedes ir en diagonal, solo derecho o girando. ¡Los rovers en terreno rocoso navegan parecido!',
+        hints: ['La distancia Manhattan se calcula como |x1-x2| + |y1-y2|', 'abs() devuelve el valor absoluto (siempre positivo) de un número', 'La función recibe 4 parámetros: x1, y1, x2, y2'],
+        solution: [
+            { id: 1, text: 'def distancia_manhattan(x1, y1, x2, y2):', type: 'setup', explanation: '📐 Función que recibe dos puntos (x1,y1) y (x2,y2) del mapa.' },
+            { id: 2, text: '    return abs(x1 - x2) + abs(y1 - y2)', type: 'output', explanation: '📏 abs() = valor absoluto. Sumamos distancia horizontal + vertical. Simple pero efectivo.' },
+            { id: 3, text: 'dist = distancia_manhattan(0, 0, 3, 4)', type: 'setup', explanation: '🎯 Calculamos distancia del punto (0,0) al (3,4). Resultado: |0-3| + |0-4| = 3 + 4 = 7.' },
+            { id: 4, text: 'print(f"Distancia al objetivo: {dist} casillas")', type: 'output', explanation: '🖨️ Muestra "Distancia al objetivo: 7 casillas". El rover sabe cuánto falta.' }
+        ],
+        extra_blocks: [
+            { id: 5, text: '    return (x1 - x2) + (y1 - y2)', type: 'wrong', whyWrong: 'Sin abs() el resultado puede ser negativo. Las distancias siempre son positivas.' },
+            { id: 6, text: '    return sqrt((x1-x2)**2 + (y1-y2)**2)', type: 'wrong', whyWrong: 'Esa es la distancia Euclidiana (línea recta). Manhattan no permite diagonales.' },
+            { id: 7, text: 'import math', type: 'wrong', whyWrong: 'No necesitas importar math. abs() es una función integrada de Python.' }
+        ]
+    },
+    {
+        id: 'py_clasificador',
+        name: 'Python',
+        icon: '🐍',
+        difficulty: 5,
+        category: 'condiciones',
+        title: 'Reto 27: Clasificador de Rocas',
+        instructions: 'Crea una función que clasifique rocas marcianas según su densidad: liviana, media o densa.',
+        concept: '**Los rovers clasifican muestras** usando sensores y lógica condicional. Según los valores medidos, categorizan lo que encuentran. Es la base de la ciencia automatizada en otros planetas.',
+        funFact: '🪨 El rover Curiosity tiene un láser que vaporiza rocas y analiza el gas resultante. ¡Puede saber de qué está hecha una roca sin tocarla! Tu función hace algo similar pero con densidad.',
+        hints: ['Usa if/elif/else para crear tres categorías según la densidad', 'Piensa en los límites: < 2.5 = liviana, < 4.0 = media, else = densa', 'La función recibe la densidad y devuelve la clasificación como texto'],
+        solution: [
+            { id: 1, text: 'def clasificar_roca(densidad):', type: 'setup', explanation: '🔬 Función que recibe la densidad de una roca en g/cm³.' },
+            { id: 2, text: '    if densidad < 2.5:', type: 'setup', explanation: '🪶 Si la densidad es menor a 2.5 g/cm³, es una roca liviana (como piedra pómez).' },
+            { id: 3, text: '        return "Roca liviana"', type: 'output', explanation: '📤 Devuelve la clasificación. El rover registra esta categoría.' },
+            { id: 4, text: '    elif densidad < 4.0:', type: 'setup', explanation: '⚖️ Entre 2.5 y 4.0 g/cm³, es densidad media (como basalto).' },
+            { id: 5, text: '        return "Roca media"', type: 'output', explanation: '📤 Clasificación intermedia.' },
+            { id: 6, text: '    else:', type: 'setup', explanation: '🪨 Si es 4.0 o más, es muy densa (posiblemente con minerales metálicos).' },
+            { id: 7, text: '        return "Roca densa"', type: 'output', explanation: '📤 ¡Estas son las más interesantes para los científicos!' },
+            { id: 8, text: 'print(clasificar_roca(3.2))', type: 'output', explanation: '🖨️ 3.2 está entre 2.5 y 4.0, así que imprime "Roca media".' }
+        ],
+        extra_blocks: [
+            { id: 9, text: '    if densidad == 2.5:', type: 'wrong', whyWrong: '== verifica un valor exacto. Necesitas < para verificar un rango (menor que).' },
+            { id: 10, text: '    elif densidad > 4.0:', type: 'wrong', whyWrong: 'El orden importa: si primero verificas > 4.0, las rocas medias nunca se clasifican correctamente.' },
+            { id: 11, text: '    switch(densidad):', type: 'wrong', whyWrong: 'Python no tiene switch (hasta Python 3.10 con match). Usa if/elif/else.' }
+        ]
+    },
+    {
+        id: 'py_fsm_rover',
+        name: 'Python',
+        icon: '🐍',
+        difficulty: 5,
+        category: 'logica',
+        title: 'Reto 28: Máquina de Estados del Rover',
+        instructions: 'Implementa una máquina de estados simple para el rover: EXPLORANDO → ANALIZANDO → TRANSMITIENDO.',
+        concept: '**Una Máquina de Estados Finitos (FSM)** controla el comportamiento del rover según su estado actual. Cada estado tiene transiciones a otros estados. ¡Es como el cerebro del rover que decide qué hacer!',
+        funFact: '🧠 Los rovers de la NASA usan máquinas de estado con docenas de estados: dormido, conduciendo, perforando, fotografiando, transmitiendo... Cada estado tiene reglas estrictas de transición.',
+        hints: ['Una FSM simple usa una variable "estado" y un diccionario con las transiciones', 'El diccionario mapea estado_actual → siguiente_estado', 'Un while loop simula el funcionamiento continuo del rover'],
+        solution: [
+            { id: 1, text: 'estados = {"EXPLORANDO": "ANALIZANDO",', type: 'setup', explanation: '📖 Diccionario de transiciones: de EXPLORANDO pasa a ANALIZANDO.' },
+            { id: 2, text: '    "ANALIZANDO": "TRANSMITIENDO",', type: 'setup', explanation: '🔬 De ANALIZANDO pasa a TRANSMITIENDO los datos a la Tierra.' },
+            { id: 3, text: '    "TRANSMITIENDO": "EXPLORANDO"}', type: 'setup', explanation: '📡 De TRANSMITIENDO vuelve a EXPLORANDO. ¡El ciclo se repite!' },
+            { id: 4, text: 'estado = "EXPLORANDO"', type: 'setup', explanation: '🏁 Estado inicial: el rover empieza explorando el terreno.' },
+            { id: 5, text: 'for ciclo in range(6):', type: 'setup', explanation: '🔄 Simulamos 6 transiciones para ver el rover cambiar de estado.' },
+            { id: 6, text: '    print(f"Rover: {estado}")', type: 'output', explanation: '🖨️ Muestra el estado actual del rover en cada ciclo.' },
+            { id: 7, text: '    estado = estados[estado]', type: 'output', explanation: '➡️ Busca en el diccionario el siguiente estado y transiciona. ¡Simple y poderoso!' }
+        ],
+        extra_blocks: [
+            { id: 8, text: '    if estado == "EXPLORANDO":', type: 'wrong', whyWrong: 'Usar if/elif funciona pero es menos elegante. El diccionario de transiciones es más limpio y escalable.' },
+            { id: 9, text: '    estado += 1', type: 'wrong', whyWrong: 'Los estados son textos, no números. No puedes sumarles 1.' },
+            { id: 10, text: 'while True:', type: 'wrong', whyWrong: 'while True crearía un bucle infinito. Usamos for con range() para controlar cuántos ciclos simular.' }
+        ]
+    },
+    {
+        id: 'py_sensor_fusion',
+        name: 'Python',
+        icon: '🐍',
+        difficulty: 5,
+        category: 'sensores',
+        title: 'Reto 29: Fusión de Sensores',
+        instructions: 'Combina lecturas de 3 sensores del rover (temperatura, presión, radiación) y calcula si el terreno es seguro.',
+        concept: '**La fusión de sensores** combina datos de múltiples fuentes para tomar mejores decisiones. Un solo sensor puede fallar, pero si 3 sensores coinciden, la decisión es más confiable.',
+        funFact: '🛰️ Los rovers marcianos tienen más de 20 sensores que se combinan: cámaras, espectrómetros, termómetros, anemómetros... La fusión de todos estos datos les permite "entender" Marte.',
+        hints: ['Crea variables para cada sensor con valores simulados', 'Define rangos seguros para cada sensor usando booleanos', 'Usa "and" para verificar que TODOS los sensores estén en rango'],
+        solution: [
+            { id: 1, text: 'temp = -20', type: 'setup', explanation: '🌡️ Temperatura simulada: -20°C (normal en Marte).' },
+            { id: 2, text: 'presion = 650', type: 'setup', explanation: '🌬️ Presión atmosférica: 650 Pa (muy baja en Marte).' },
+            { id: 3, text: 'radiacion = 0.3', type: 'setup', explanation: '☢️ Nivel de radiación: 0.3 Sv/año (relativamente bajo).' },
+            { id: 4, text: 'temp_ok = -60 < temp < 20', type: 'setup', explanation: '✅ ¿Temperatura entre -60°C y 20°C? Python permite comparaciones encadenadas.' },
+            { id: 5, text: 'presion_ok = presion > 400', type: 'setup', explanation: '✅ ¿Presión mayor a 400 Pa? Suficiente para que los instrumentos funcionen.' },
+            { id: 6, text: 'rad_ok = radiacion < 0.5', type: 'setup', explanation: '✅ ¿Radiación menor a 0.5 Sv/año? Niveles aceptables para operar.' },
+            { id: 7, text: 'seguro = temp_ok and presion_ok and rad_ok', type: 'output', explanation: '🔗 "and" requiere que TODOS sean True. Si uno falla, seguro = False.' },
+            { id: 8, text: 'print(f"Terreno seguro: {seguro}")', type: 'output', explanation: '🖨️ Muestra True si todos los sensores dan valores dentro del rango seguro.' }
+        ],
+        extra_blocks: [
+            { id: 9, text: 'seguro = temp_ok or presion_ok or rad_ok', type: 'wrong', whyWrong: '"or" solo necesita que UNO sea verdadero. Para seguridad necesitamos que TODOS estén bien (and).' },
+            { id: 10, text: 'temp_ok = temp == -20', type: 'wrong', whyWrong: '== verifica un valor exacto. Necesitamos un RANGO de temperaturas seguras, no un valor exacto.' },
+            { id: 11, text: 'if temp & presion & radiacion:', type: 'wrong', whyWrong: '& es un operador de bits, no lógico. Para lógica booleana usamos "and".' }
+        ]
+    },
+    {
+        id: 'py_energy_manager',
+        name: 'Python',
+        icon: '🐍',
+        difficulty: 5,
+        category: 'logica',
+        title: 'Reto 30: Gestión de Energía',
+        instructions: 'Crea un sistema que ajuste la velocidad del rover según su nivel de batería para optimizar el consumo.',
+        concept: '**La gestión de energía** es CRÍTICA en rovers. Si la batería se agota lejos de la base, el rover muere. Por eso ajustan velocidad y actividades según la energía restante.',
+        funFact: '🔋 El rover Opportunity de la NASA funcionó 15 AÑOS en Marte (estaba diseñado para 90 días). Su excelente gestión de energía solar fue clave. ¡Murió en una tormenta de polvo que tapó sus paneles!',
+        hints: ['Usa if/elif/else con diferentes niveles de batería', 'A mayor batería, mayor velocidad; a menor batería, el rover ahorra energía', 'Incluye un modo de emergencia cuando la batería es crítica'],
+        solution: [
+            { id: 1, text: 'def modo_energia(bateria):', type: 'setup', explanation: '🔧 Función que recibe el nivel de batería (0-100%) y decide la velocidad.' },
+            { id: 2, text: '    if bateria > 70:', type: 'setup', explanation: '🟢 Batería alta (>70%): modo rendimiento máximo.' },
+            { id: 3, text: '        return "Máxima velocidad: 5 km/h"', type: 'output', explanation: '🏎️ Con energía de sobra, el rover puede ir a toda velocidad.' },
+            { id: 4, text: '    elif bateria > 30:', type: 'setup', explanation: '🟡 Batería media (30-70%): modo ahorro moderado.' },
+            { id: 5, text: '        return "Velocidad media: 2 km/h"', type: 'output', explanation: '🐢 Reduce velocidad para conservar batería. Prioriza la misión.' },
+            { id: 6, text: '    else:', type: 'setup', explanation: '🔴 Batería crítica (<30%): modo supervivencia.' },
+            { id: 7, text: '        return "Modo ahorro: 0.5 km/h"', type: 'output', explanation: '🆘 Casi no se mueve. Solo lo esencial para sobrevivir hasta recargar.' },
+            { id: 8, text: 'print(modo_energia(45))', type: 'output', explanation: '🖨️ 45% está entre 30 y 70, así que imprime "Velocidad media: 2 km/h".' }
+        ],
+        extra_blocks: [
+            { id: 9, text: '    if bateria > 30:', type: 'wrong', whyWrong: 'Si verificas > 30 primero, cualquier batería > 30 entra ahí (incluso 95%). El orden importa: de mayor a menor.' },
+            { id: 10, text: '        return 5', type: 'wrong', whyWrong: 'Devolver solo un número no es descriptivo. Un mensaje completo ayuda a entender el modo activo.' },
+            { id: 11, text: '    elif bateria < 70:', type: 'wrong', whyWrong: 'Con < en vez de >, la lógica se invierte. Verifica siempre con > para ir de mayor a menor batería.' }
+        ]
+    },
+    // ===================================================================
+    // 🌿 NIVEL 6: AERO-BIOSFERA — Drones agrícolas, invernaderos, eco-robótica
+    // ===================================================================
+    {
+        id: 'py_sensor_humedad',
+        name: 'Python',
+        icon: '🐍',
+        difficulty: 3,
+        category: 'sensores',
+        title: 'Reto 31: Sensor de Humedad',
+        instructions: 'Lee el sensor de humedad del suelo y determina si la planta necesita riego.',
+        concept: '**Los sensores de humedad** miden cuánta agua hay en el suelo. En agricultura de precisión, los drones y robots usan estos sensores para regar solo donde se necesita, ahorrando agua.',
+        funFact: '💧 La agricultura de precisión ahorra hasta un 30% de agua usando sensores de humedad. En un mundo donde el agua escasea, ¡la tecnología nos ayuda a cuidar los cultivos sin desperdiciar!',
+        hints: ['Crea una variable con el valor del sensor de humedad (0-100%)', 'Usa if/else para decidir si necesita riego (por debajo de cierto umbral)', 'Un umbral de 40% es común: si la humedad es menor, hay que regar'],
+        solution: [
+            { id: 1, text: 'humedad = 35', type: 'setup', explanation: '💧 Lectura del sensor: 35% de humedad en el suelo (bajo).' },
+            { id: 2, text: 'umbral_riego = 40', type: 'setup', explanation: '🎯 Definimos el límite: si baja de 40%, la planta necesita agua.' },
+            { id: 3, text: 'if humedad < umbral_riego:', type: 'setup', explanation: '🤔 ¿35 es menor que 40? SÍ, el suelo está seco.' },
+            { id: 4, text: '    print("🚿 ¡Activar riego!")', type: 'output', explanation: '✅ El suelo necesita agua. El sistema activa el riego automático.' },
+            { id: 5, text: 'else:', type: 'setup', explanation: '↩️ Si la humedad es suficiente (>= 40%)...' },
+            { id: 6, text: '    print("✅ Humedad óptima")', type: 'output', explanation: '👌 No hace falta regar. ¡Ahorramos agua!' }
+        ],
+        extra_blocks: [
+            { id: 7, text: 'if humedad > umbral_riego:', type: 'wrong', whyWrong: 'Al revés: > 40 significa que HAY suficiente agua. Queremos detectar cuándo FALTA agua (< 40).' },
+            { id: 8, text: 'humedad = "35"', type: 'wrong', whyWrong: 'Con comillas es texto, no número. No podrías comparar con < correctamente.' },
+            { id: 9, text: 'if humedad = 40:', type: 'wrong', whyWrong: 'Un solo = asigna, no compara. Necesitas < (menor que) o == (igual a).' }
+        ]
+    },
+    {
+        id: 'py_riego_auto',
+        name: 'Python',
+        icon: '🐍',
+        difficulty: 4,
+        category: 'automatizacion',
+        title: 'Reto 32: Riego Automático',
+        instructions: 'Crea una función que calcule cuántos minutos regar según la humedad del suelo y la temperatura ambiente.',
+        concept: '**El riego inteligente** ajusta la cantidad de agua según las condiciones. Más calor = más evaporación = más riego. Menos humedad = suelo más seco = más riego. ¡Matemáticas para salvar cultivos!',
+        funFact: '🌾 Israel es líder mundial en riego inteligente. Con tecnología de sensores y automatización, logran cultivar en el desierto usando 75% menos agua que los métodos tradicionales. ¡Eso es agro-robótica!',
+        hints: ['La función recibe humedad y temperatura como parámetros', 'Calcula minutos base según la humedad, luego ajusta por temperatura', 'Usa max() para asegurar que nunca devuelva un valor negativo'],
+        solution: [
+            { id: 1, text: 'def calcular_riego(humedad, temp):', type: 'setup', explanation: '🔧 Función que recibe humedad del suelo (%) y temperatura (°C).' },
+            { id: 2, text: '    minutos = max(0, (50 - humedad)) // 5', type: 'setup', explanation: '⏱️ Cuanto menor la humedad, más minutos. max(0,...) evita negativos. // es división entera.' },
+            { id: 3, text: '    if temp > 30:', type: 'setup', explanation: '🌡️ ¿Hace mucho calor? Más evaporación, necesitamos más agua.' },
+            { id: 4, text: '        minutos = minutos + 3', type: 'setup', explanation: '☀️ Agregamos 3 minutos extra de riego si hace más de 30°C.' },
+            { id: 5, text: '    return minutos', type: 'output', explanation: '📤 Devuelve los minutos de riego calculados.' },
+            { id: 6, text: 'riego = calcular_riego(25, 35)', type: 'setup', explanation: '🧪 Probamos: humedad 25% (baja) y 35°C (caluroso).' },
+            { id: 7, text: 'print(f"Regar {riego} minutos")', type: 'output', explanation: '🖨️ (50-25)//5 = 5, +3 por calor = 8 minutos de riego.' }
+        ],
+        extra_blocks: [
+            { id: 8, text: '    minutos = (50 - humedad) / 5', type: 'wrong', whyWrong: 'Sin max(0,...) puede dar negativo si humedad > 50. Y / da decimales, // es más limpio.' },
+            { id: 9, text: '    if temp > 30', type: 'wrong', whyWrong: 'Falta el : (dos puntos) al final. En Python, if siempre termina con dos puntos.' },
+            { id: 10, text: '    return', type: 'wrong', whyWrong: 'return sin valor devuelve None. Necesitas devolver la variable minutos.' }
+        ]
+    },
+    {
+        id: 'py_mapa_cultivo',
+        name: 'Python',
+        icon: '🐍',
+        difficulty: 4,
+        category: 'estructuras',
+        title: 'Reto 33: Mapa de Cultivos',
+        instructions: 'Crea una cuadrícula 3x3 que represente un campo de cultivo y analiza cuántas zonas necesitan atención.',
+        concept: '**Los drones agrícolas** toman fotos aéreas y dividen el campo en zonas. Cada zona tiene un estado: saludable (🌱), necesita agua (🟡) o enfermo (🔴). Con una matriz podemos mapear todo el campo.',
+        funFact: '🛸 Los drones agrícolas pueden mapear 100 hectáreas en 30 minutos. Detectan problemas que a simple vista tomaría días encontrar. ¡Un agricultor moderno es también un piloto de drones!',
+        hints: ['Una lista de listas es una cuadrícula (matriz). Cada sub-lista es una fila', 'Usa dos ciclos for anidados para recorrer filas y columnas', 'Cuenta las zonas que necesitan atención con un contador'],
+        solution: [
+            { id: 1, text: 'campo = [["🌱","🟡","🌱"],', type: 'setup', explanation: '🗺️ Fila 1 del campo. 🌱=saludable, 🟡=necesita agua.' },
+            { id: 2, text: '         ["🔴","🌱","🟡"],', type: 'setup', explanation: '🗺️ Fila 2. 🔴=enfermo, necesita tratamiento urgente.' },
+            { id: 3, text: '         ["🌱","🌱","🔴"]]', type: 'setup', explanation: '🗺️ Fila 3. Tenemos un mapa completo 3x3 del campo.' },
+            { id: 4, text: 'alertas = 0', type: 'setup', explanation: '📊 Contador de zonas que necesitan atención.' },
+            { id: 5, text: 'for fila in campo:', type: 'setup', explanation: '🔄 Recorremos cada fila del campo.' },
+            { id: 6, text: '    for zona in fila:', type: 'setup', explanation: '🔄 Dentro de cada fila, revisamos cada zona individual.' },
+            { id: 7, text: '        if zona != "🌱":', type: 'setup', explanation: '🤔 Si la zona NO es saludable (🌱), necesita atención.' },
+            { id: 8, text: '            alertas += 1', type: 'output', explanation: '📈 Sumamos 1 al contador. alertas += 1 es lo mismo que alertas = alertas + 1.' },
+            { id: 9, text: 'print(f"Zonas con alerta: {alertas}")', type: 'output', explanation: '🖨️ Hay 4 zonas no saludables (2🟡 + 2🔴). ¡El drone planifica su ruta de atención!' }
+        ],
+        extra_blocks: [
+            { id: 10, text: 'for zona in campo:', type: 'wrong', whyWrong: '"campo" contiene filas (listas), no zonas directamente. Necesitas un for anidado.' },
+            { id: 11, text: '        if zona == "🟡":', type: 'wrong', whyWrong: 'Solo contarías las zonas amarillas. ¿Y las rojas? Mejor verificar != "🌱" (todo lo que NO sea saludable).' },
+            { id: 12, text: '    alertas = alertas + fila', type: 'wrong', whyWrong: 'No puedes sumar una lista (fila) a un número (alertas). Necesitas recorrer la fila zona por zona.' }
+        ]
+    },
+    {
+        id: 'py_alerta_plaga',
+        name: 'Python',
+        icon: '🐍',
+        difficulty: 4,
+        category: 'logica',
+        title: 'Reto 34: Detección de Plagas',
+        instructions: 'Crea un sistema que analice datos de sensores de un invernadero para detectar y alertar sobre posibles plagas.',
+        concept: '**Los biosensores** detectan cambios en temperatura, humedad y CO₂ que indican plagas. Si múltiples indicadores son anormales al mismo tiempo, el sistema genera una alerta. ¡Es como un doctor robot para plantas!',
+        funFact: '🐛 Algunas plagas cambian la humedad y temperatura de las hojas antes de ser visibles. Los sensores pueden detectar plagas hasta 2 semanas antes que el ojo humano. ¡Prevención robótica!',
+        hints: ['Crea un diccionario con los datos de los sensores del invernadero', 'Cuenta cuántos sensores están fuera de rango normal', 'Si 2 o más indicadores son anormales, genera alerta de plaga'],
+        solution: [
+            { id: 1, text: 'sensores = {"temp": 32, "humedad": 85,', type: 'setup', explanation: '📊 Datos del invernadero: temperatura alta y humedad muy alta.' },
+            { id: 2, text: '    "co2": 600, "ph_suelo": 5.5}', type: 'setup', explanation: '🔬 CO₂ y pH del suelo. Valores que los biosensores miden constantemente.' },
+            { id: 3, text: 'anomalias = 0', type: 'setup', explanation: '📈 Contador de indicadores fuera de rango normal.' },
+            { id: 4, text: 'if sensores["temp"] > 30: anomalias += 1', type: 'setup', explanation: '🌡️ Temperatura > 30°C es anormal. Las plagas prosperan en calor.' },
+            { id: 5, text: 'if sensores["humedad"] > 80: anomalias += 1', type: 'setup', explanation: '💧 Humedad > 80% favorece hongos y plagas.' },
+            { id: 6, text: 'if anomalias >= 2:', type: 'output', explanation: '🚨 ¿2 o más indicadores son anormales? ¡Alta probabilidad de plaga!' },
+            { id: 7, text: '    print("⚠️ ALERTA: Riesgo de plaga")', type: 'output', explanation: '🔔 El sistema notifica al agricultor. Temp alta + humedad alta = ¡peligro!' },
+            { id: 8, text: 'else: print("✅ Invernadero estable")', type: 'output', explanation: '👌 Si hay 0 o 1 anomalías, no hay riesgo significativo.' }
+        ],
+        extra_blocks: [
+            { id: 9, text: 'if sensores["temp"] and sensores["humedad"]:', type: 'wrong', whyWrong: 'Esto verifica que existan, no sus valores. Necesitas comparar: > 30, > 80, etc.' },
+            { id: 10, text: 'if anomalias == 2:', type: 'wrong', whyWrong: '== solo detecta exactamente 2. Con >= detectas 2 o más, que es más seguro.' },
+            { id: 11, text: 'sensores.temp > 30', type: 'wrong', whyWrong: 'Con diccionarios en Python se usa corchetes: sensores["temp"], no punto.' }
+        ]
+    },
+    {
+        id: 'py_drone_vuelo',
+        name: 'Python',
+        icon: '🐍',
+        difficulty: 3,
+        category: 'secuencia',
+        title: 'Reto 35: Secuencia de Vuelo',
+        instructions: 'Programa la secuencia de despegue de un dron agrícola: verificar, encender motores, despegar.',
+        concept: '**Los drones siguen secuencias estrictas.** Antes de volar, verifican batería, GPS, viento y sensores. Si algo falla, ¡abortan! Es programación secuencial con validaciones de seguridad.',
+        funFact: '🚁 Los drones agrícolas pueden fumigar 10 hectáreas por hora volando a 5 metros de altura. Son 40 veces más rápidos que fumigar a mano. ¡Y usan 30% menos pesticida porque aplican solo donde se necesita!',
+        hints: ['Usa una lista con los pasos de la secuencia de despegue', 'Un for loop ejecuta cada paso en orden', 'Cada paso puede ser un print que muestra el progreso'],
+        solution: [
+            { id: 1, text: 'secuencia = ["Verificar batería",', type: 'setup', explanation: '📋 Lista de pasos del protocolo de despegue. Orden estricto.' },
+            { id: 2, text: '    "Calibrar GPS",', type: 'setup', explanation: '📡 Sin GPS calibrado, el dron no sabe dónde está ni a dónde ir.' },
+            { id: 3, text: '    "Encender motores",', type: 'setup', explanation: '⚙️ Los motores se encienden gradualmente para verificar que funcionen.' },
+            { id: 4, text: '    "Despegar"]', type: 'setup', explanation: '🚁 Último paso: elevación. Solo después de que todo esté verificado.' },
+            { id: 5, text: 'for i, paso in enumerate(secuencia, 1):', type: 'setup', explanation: '🔄 enumerate da el número (i) y el texto (paso). Empezamos a contar desde 1.' },
+            { id: 6, text: '    print(f"Paso {i}: {paso} ✓")', type: 'output', explanation: '🖨️ Muestra cada paso numerado: "Paso 1: Verificar batería ✓".' },
+            { id: 7, text: 'print("🚁 ¡Dron en vuelo!")', type: 'output', explanation: '🎉 ¡Todos los pasos completados! El dron está volando listo para trabajar.' }
+        ],
+        extra_blocks: [
+            { id: 8, text: 'for paso in range(secuencia):', type: 'wrong', whyWrong: 'range() necesita un número, no una lista. Usa "for paso in secuencia" o enumerate().' },
+            { id: 9, text: 'secuencia(1) = "Verificar"', type: 'wrong', whyWrong: 'Para listas se usan corchetes [], no paréntesis ().' },
+            { id: 10, text: 'print(secuencia)', type: 'wrong', whyWrong: 'Esto imprime toda la lista de golpe. El for imprime paso por paso, que es más claro.' }
+        ]
+    },
+    {
+        id: 'py_invernadero',
+        name: 'Python',
+        icon: '🐍',
+        difficulty: 5,
+        category: 'automatizacion',
+        title: 'Reto 36: Invernadero Inteligente',
+        instructions: 'Crea un controlador de invernadero que ajuste ventilación, riego y luz según las condiciones actuales.',
+        concept: '**Un invernadero inteligente** es un sistema con múltiples sensores y actuadores trabajando juntos. El código analiza todas las variables y toma decisiones para mantener las condiciones perfectas de crecimiento.',
+        funFact: '🏠 Los invernaderos inteligentes en Holanda producen 10 veces más tomates por hectárea que los campos tradicionales. Usan IA, sensores y robótica para controlar cada aspecto del crecimiento. ¡Son fábricas de comida!',
+        hints: ['Usa un diccionario para los datos de los sensores y una lista para las acciones', 'Cada condición verifica un sensor y añade una acción a la lista', 'Al final, imprime todas las acciones que el invernadero debe ejecutar'],
+        solution: [
+            { id: 1, text: 'invernadero = {"temp": 35, "humedad": 30,', type: 'setup', explanation: '📊 Datos actuales: temperatura alta, humedad baja, poca luz.' },
+            { id: 2, text: '    "luz": 200, "co2": 450}', type: 'setup', explanation: '🔬 Luz en lux y CO₂ en ppm. Valores que los sensores miden en tiempo real.' },
+            { id: 3, text: 'acciones = []', type: 'setup', explanation: '📋 Lista vacía donde guardaremos las acciones necesarias.' },
+            { id: 4, text: 'if invernadero["temp"] > 30:', type: 'setup', explanation: '🌡️ ¿Hace demasiado calor? Las plantas sufren estrés térmico arriba de 30°C.' },
+            { id: 5, text: '    acciones.append("Abrir ventilación")', type: 'output', explanation: '💨 Agregamos la acción de ventilar. .append() añade al final de la lista.' },
+            { id: 6, text: 'if invernadero["humedad"] < 40:', type: 'setup', explanation: '💧 ¿El suelo está seco? Las plantas necesitan agua.' },
+            { id: 7, text: '    acciones.append("Activar riego")', type: 'output', explanation: '🚿 Agregamos la acción de riego a la lista.' },
+            { id: 8, text: 'for a in acciones: print(f"➡️ {a}")', type: 'output', explanation: '🖨️ Imprime cada acción: "➡️ Abrir ventilación", "➡️ Activar riego".' }
+        ],
+        extra_blocks: [
+            { id: 9, text: '    acciones = "Abrir ventilación"', type: 'wrong', whyWrong: 'Esto reemplaza la lista con un texto. Usa .append() para AGREGAR a la lista existente.' },
+            { id: 10, text: 'if invernadero.temp > 30:', type: 'wrong', whyWrong: 'Los diccionarios usan corchetes: invernadero["temp"], no punto.' },
+            { id: 11, text: 'acciones.add("Activar riego")', type: 'wrong', whyWrong: '.add() es para conjuntos (set). Las listas usan .append() para agregar elementos.' }
         ]
     },
 ];

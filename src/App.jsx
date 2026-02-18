@@ -35,10 +35,10 @@ const persistUserScores = (scores) => {
     try { localStorage.setItem('cultivatec_userScores', JSON.stringify(scores)); } catch {}
 };
 
-// Helper: verificar si un módulo está completado en userScores
+// Helper: verificar si un módulo está completado en userScores (al menos 70% = 7/10)
 const isModuleCompleted = (userScores, moduleId) => {
     const s = userScores[moduleId];
-    return s && s.total > 0 && Math.round((s.score / s.total) * 100) >= 100;
+    return s && s.total > 0 && Math.round((s.score / s.total) * 100) >= 70;
 };
 
 // Helper: verificar si un módulo está desbloqueado (progression system)
@@ -83,7 +83,7 @@ const WORLDS_CONFIG = [
         bgPattern: '🔧⚡🤖💡🔩',
         challengeIds: ['py_hola_mundo', 'py_variable_basica', 'py_suma_numeros', 'py_texto_formateado', 'ard_setup_loop', 'ard_blink_basico'],
         circuitIds: [1, 2],
-        glossaryTermIds: ['g1','g2','g3','g4','g5','g6','g7','g8','g9','g10','g11','g12','g13','g14','g18'],
+        glossaryTermIds: ['g1','g2','g3','g4','g5','g6','g7','g8','g9','g10','g11','g12','g13','g14','g18','g60','g62','g66','g67'],
     },
     {
         id: 'world_2',
@@ -101,7 +101,7 @@ const WORLDS_CONFIG = [
         bgPattern: '🦇🛤️🌡️🏗️⚡🦾🏃📡📺📱🎵🎛️🔋🔧🏆',
         challengeIds: ['py_blink_arduino', 'py_if_else', 'py_for_contar', 'py_lista_robots', 'ard_serial_monitor', 'py_input_usuario'],
         circuitIds: [3, 4],
-        glossaryTermIds: ['g15','g16','g17','g19','g20','g21','g23','g24','g25','g26','g33','g34'],
+        glossaryTermIds: ['g15','g16','g17','g19','g20','g21','g23','g24','g25','g26','g33','g34','g59','g64','g68','g69','g74'],
     },
     {
         id: 'world_3',
@@ -119,7 +119,7 @@ const WORLDS_CONFIG = [
         bgPattern: '🦎🐾💪👁️🦾🦿⌚🧠🐙🧬🌿🐜🔬🤔🎨🏆',
         challengeIds: ['py_funcion_saludar', 'ard_leer_sensor', 'py_if_elif_else', 'ard_servo_motor', 'py_funcion_retorno', 'py_while_loop'],
         circuitIds: [5, 6],
-        glossaryTermIds: ['g22','g27','g28','g29','g35','g36','g37','g38','g39','g40','g41','g42'],
+        glossaryTermIds: ['g22','g27','g28','g29','g35','g36','g37','g38','g39','g40','g41','g42','g61','g70','g71','g80'],
     },
     {
         id: 'world_4',
@@ -139,7 +139,7 @@ const WORLDS_CONFIG = [
         unlockRequirement: 5,
         challengeIds: ['ard_robot_obstaculo', 'py_diccionario', 'ard_motor_control', 'cpp_hola_mundo', 'cpp_if_else', 'py_try_except'],
         circuitIds: [7, 8],
-        glossaryTermIds: ['g30','g31','g32','g43','g44','g45','g46','g47','g48','g49','g50','g51','g52'],
+        glossaryTermIds: ['g30','g31','g32','g43','g44','g45','g46','g47','g48','g49','g50','g51','g52','g63','g72','g73','g75','g76','g77','g88','g89'],
     },
     {
         id: 'world_5',
@@ -159,7 +159,7 @@ const WORLDS_CONFIG = [
         unlockRequirement: 15,
         challengeIds: ['py_clase_rover', 'py_a_star', 'py_clasificador', 'py_fsm_rover', 'py_sensor_fusion', 'py_energy_manager'],
         circuitIds: [9, 10],
-        glossaryTermIds: ['g53','g54','g55','g56','g57','g58','g59','g60','g61','g62','g63','g64','g65'],
+        glossaryTermIds: ['g53','g54','g55','g56','g57','g58','g65','g97','g98','g99','g100','g101','g102','g103','g104','g105','g106','g107','g108'],
     },
     {
         id: 'world_6',
@@ -177,9 +177,9 @@ const WORLDS_CONFIG = [
         bgPattern: '🌱🚁🌡️💧📡🗺️🌾🐝🏠🏙️🍅📱☀️🌍🏁🏆',
         unlockType: 'friends',
         unlockRequirement: 25,
-        challengeIds: ['py_hola_mundo', 'py_variable_basica', 'py_if_else', 'py_for_contar', 'py_funcion_saludar', 'py_clase_rover'],
-        circuitIds: [1, 5],
-        glossaryTermIds: ['g1','g2','g15','g22','g27','g35','g43','g53'],
+        challengeIds: ['py_sensor_humedad', 'py_riego_auto', 'py_mapa_cultivo', 'py_alerta_plaga', 'py_drone_vuelo', 'py_invernadero'],
+        circuitIds: [11, 12],
+        glossaryTermIds: ['g93','g109','g110','g111','g112','g113','g114','g115','g116','g117','g118','g119','g120','g121','g122','g123'],
     },
 ];
 
@@ -3535,6 +3535,7 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete, userPr
     const [currentStep, setCurrentStep] = useState(0);
     const [completedSteps, setCompletedSteps] = useState(new Set());
     const [showCelebration, setShowCelebration] = useState(false);
+    const [quizResultData, setQuizResultData] = useState(null);
     const [xpEarned, setXpEarned] = useState(0);
     const [showXpPop, setShowXpPop] = useState(false);
     const [mascotMood, setMascotMood] = useState('happy'); // happy, thinking, celebrating, sad, reading
@@ -3600,12 +3601,8 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete, userPr
         return ['mini_quiz', 'matching_game', 'true_false'].includes(section?.tipo);
     };
 
-    // Check if current step can be advanced past
-    const canAdvance = (stepIdx) => {
-        const section = content[stepIdx];
-        if (!isStepInteractive(section)) return true;
-        return solvedSteps.has(stepIdx);
-    };
+    // Check if current step can be advanced past (sin restricción para avanzar)
+    const canAdvance = (stepIdx) => true;
 
     const markStepSolved = useCallback((stepIdx) => {
         setSolvedSteps(prev => {
@@ -3647,15 +3644,19 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete, userPr
     };
 
     const goNext = () => {
-        if (!canAdvance(currentStep)) return;
         markStepComplete();
         if (currentStep < totalSteps - 1) {
             setCurrentStep(currentStep + 1);
             setMascotMood('happy');
         } else {
+            // Calcular puntaje de preguntas interactivas
+            const totalInteractive = content.filter(s => isStepInteractive(s)).length;
+            const solvedInteractive = [...solvedSteps].filter(idx => isStepInteractive(content[idx])).length;
+            const result = { score: solvedInteractive, total: totalInteractive || 10 };
+            setQuizResultData(result);
             setShowCelebration(true);
             setMascotMood('celebrating');
-            onModuleComplete?.(currentModule.id, xpEarned + 10);
+            onModuleComplete?.(currentModule.id, xpEarned + 10, result);
         }
     };
 
@@ -3901,61 +3902,84 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete, userPr
 
     // Celebration screen
     if (showCelebration) {
+        const qr = quizResultData || { score: 0, total: 10 };
+        const quizPercent = qr.total > 0 ? Math.round((qr.score / qr.total) * 100) : 0;
+        const passed = quizPercent >= 70;
+        const starsCount = qr.score >= 10 ? 3 : qr.score >= 7 ? 2 : qr.score >= 4 ? 1 : 0;
         return (
-            <div className="min-h-full bg-gradient-to-b from-[#2563EB] to-[#1D4ED8] flex flex-col items-center justify-center p-6 animate-fade-in">
+            <div className={`min-h-full bg-gradient-to-b ${passed ? 'from-[#2563EB] to-[#1D4ED8]' : 'from-[#B45309] to-[#92400E]'} flex flex-col items-center justify-center p-6 animate-fade-in`}>
                 <div className="text-center">
                     {userProfile ? (
                         <div className="w-24 h-24 mx-auto mb-4 bg-white/20 rounded-3xl flex items-center justify-center animate-bounce-in">
                             <RobotAvatar config={userProfile.robotConfig} size={80} animate />
                         </div>
                     ) : (
-                        <div className="text-7xl mb-4 animate-bounce-in">🎉</div>
+                        <div className="text-7xl mb-4 animate-bounce-in">{passed ? '🎉' : '📚'}</div>
                     )}
                     <h1 className="text-3xl font-black text-white mb-2">
-                        {userProfile ? `¡Genial, ${userProfile.userName}!` : '¡Módulo Completado!'}
+                        {passed
+                            ? (userProfile ? `¡Genial, ${userProfile.userName}!` : '¡Módulo Aprobado!')
+                            : '¡Sigue practicando!'}
                     </h1>
                     <p className="text-white/80 font-bold text-base mb-6">{currentModule.titulo}</p>
                     
                     <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 mb-6 max-w-xs mx-auto">
                         <div className="flex justify-center gap-1 mb-3">
-                            {[1,2,3].map(i => <span key={i} className="text-3xl animate-bounce" style={{animationDelay: `${i*150}ms`}}>⭐</span>)}
+                            {[1,2,3].map(i => <span key={i} className={`text-3xl ${i <= starsCount ? 'animate-bounce' : 'opacity-30'}`} style={{animationDelay: `${i*150}ms`}}>{i <= starsCount ? '⭐' : '☆'}</span>)}
                         </div>
-                        <div className="text-4xl font-black text-white mb-1">+{xpEarned} XP</div>
-                        <p className="text-white/70 text-sm font-bold">Puntos de experiencia ganados</p>
+                        <div className="text-4xl font-black text-white mb-1">{qr.score}/{qr.total}</div>
+                        <p className="text-white/70 text-sm font-bold">respuestas correctas</p>
+                        <div className="w-full bg-white/20 rounded-full h-3 mt-3">
+                            <div className={`h-3 rounded-full transition-all duration-1000 ${passed ? 'bg-[#58CC02]' : 'bg-[#FF9600]'}`} style={{width: `${quizPercent}%`}} />
+                        </div>
+                        <p className="text-white/60 text-xs font-bold mt-1">Necesitas al menos {Math.ceil(qr.total * 0.7)}/{qr.total} para aprobar</p>
                     </div>
 
-                    <div className="space-y-3 max-w-xs mx-auto">
-                        <div className="bg-white/20 rounded-xl p-3 flex items-center gap-3">
-                            <span className="text-2xl">📖</span>
-                            <div className="text-left">
-                                <p className="text-white font-black text-sm">{completedSteps.size}/{totalSteps} secciones</p>
-                                <p className="text-white/60 text-xs font-bold">completadas</p>
+                    {passed ? (
+                        <div className="space-y-3 max-w-xs mx-auto">
+                            <div className="bg-white/20 rounded-xl p-3 flex items-center gap-3">
+                                <span className="text-2xl">✅</span>
+                                <div className="text-left">
+                                    <p className="text-white font-black text-sm">¡Siguiente módulo desbloqueado!</p>
+                                    <p className="text-white/60 text-xs font-bold">+{xpEarned} XP ganados</p>
+                                </div>
+                            </div>
+                            <div className="bg-[#FFC800]/30 rounded-xl p-3 flex items-center gap-3 border border-[#FFC800]/50 animate-bounce-in" style={{animationDelay: '600ms'}}>
+                                <span className="text-2xl">📜</span>
+                                <div className="text-left flex-grow">
+                                    <p className="text-white font-black text-sm">¡Licencia Obtenida!</p>
+                                    <p className="text-white/70 text-xs font-bold">{currentModule.titulo}</p>
+                                </div>
+                                <span className="text-lg">🏅</span>
                             </div>
                         </div>
-                        <div className="bg-white/20 rounded-xl p-3 flex items-center gap-3">
-                            <span className="text-2xl">🧠</span>
-                            <div className="text-left">
-                                <p className="text-white font-black text-sm">{Object.values(quizAnswers).filter(v => v === 'correct').length} respuestas</p>
-                                <p className="text-white/60 text-xs font-bold">correctas en mini-quizzes</p>
+                    ) : (
+                        <div className="space-y-3 max-w-xs mx-auto">
+                            <div className="bg-white/20 rounded-xl p-3 flex items-center gap-3">
+                                <span className="text-2xl">🔒</span>
+                                <div className="text-left">
+                                    <p className="text-white font-black text-sm">Módulo no aprobado</p>
+                                    <p className="text-white/60 text-xs font-bold">Necesitas {Math.ceil(qr.total * 0.7)}/{qr.total} correctas para desbloquear el siguiente</p>
+                                </div>
+                            </div>
+                            <div className="bg-white/20 rounded-xl p-3 flex items-center gap-3">
+                                <span className="text-2xl">💡</span>
+                                <div className="text-left">
+                                    <p className="text-white font-black text-sm">+{xpEarned} XP ganados</p>
+                                    <p className="text-white/60 text-xs font-bold">¡Repasa e inténtalo de nuevo!</p>
+                                </div>
                             </div>
                         </div>
-                        {/* License earned badge */}
-                        <div className="bg-[#FFC800]/30 rounded-xl p-3 flex items-center gap-3 border border-[#FFC800]/50 animate-bounce-in" style={{animationDelay: '600ms'}}>
-                            <span className="text-2xl">📜</span>
-                            <div className="text-left flex-grow">
-                                <p className="text-white font-black text-sm">¡Licencia Obtenida!</p>
-                                <p className="text-white/70 text-xs font-bold">{currentModule.titulo}</p>
-                            </div>
-                            <span className="text-lg">🏅</span>
-                        </div>
-                    </div>
+                    )}
 
                     <div className="flex gap-2 mt-6 max-w-xs mx-auto">
-                        <button onClick={onShowLicenses} className="flex-1 py-4 bg-white/20 text-white rounded-2xl font-black text-sm border-b-4 border-white/10 active:scale-95 transition flex items-center justify-center gap-1">
-                            📜 Mis Licencias
-                        </button>
-                        <button onClick={goToMenu} className="flex-1 py-4 bg-white text-[#2563EB] rounded-2xl font-black text-sm border-b-4 border-[#E5E5E5] active:scale-95 transition hover:bg-gray-50">
-                            Continuar 🚀
+                        {passed && (
+                            <button onClick={onShowLicenses} className="flex-1 py-4 bg-white/20 text-white rounded-2xl font-black text-sm border-b-4 border-white/10 active:scale-95 transition flex items-center justify-center gap-1">
+                                📜 Mis Licencias
+                            </button>
+                        )}
+                        <button onClick={goToMenu} className={`${passed ? 'flex-1' : 'w-full'} py-4 bg-white text-[#2563EB] rounded-2xl font-black text-sm border-b-4 border-[#E5E5E5] active:scale-95 transition hover:bg-gray-50`}>
+                            {passed ? 'Continuar 🚀' : 'Volver al menú 🔄'}
                         </button>
                     </div>
                 </div>
@@ -6050,7 +6074,7 @@ export default function App() {
             persistUserScores(scores); // Keep local backup
             // Sync completedModules Set
             const completedIds = Object.entries(scores)
-                .filter(([, s]) => s && s.total > 0 && Math.round((s.score / s.total) * 100) >= 100)
+                .filter(([, s]) => s && s.total > 0 && Math.round((s.score / s.total) * 100) >= 70)
                 .map(([id]) => id);
             if (completedIds.length > 0) {
                 setCompletedModules(new Set(completedIds));
@@ -6110,65 +6134,86 @@ export default function App() {
         }
     };
 
-    // Handle module completion
-    const handleModuleComplete = useCallback((moduleId, xpEarned = 0) => {
-        if (completedModules.has(moduleId)) return;
-        // Double-check with userScores to prevent stale closure exploits
-        const existing = userScores[moduleId];
-        if (existing && existing.total > 0 && Math.round((existing.score / existing.total) * 100) >= 100) return;
-        
-        // Mark module as completed in userScores
-        const moduleData = ALL_MODULES.find(m => m.id === moduleId) || MODULOS_DE_ROBOTICA.find(m => m.id === moduleId);
-        let totalSteps = Array.isArray(moduleData?.contenidoTeorico) 
-            ? moduleData.contenidoTeorico.length 
-            : (moduleData?.contenidoTeorico === '__MODULO_1_REF__' ? 6 : 2);
-        // Special views (e.g. InteractiveLEDGuide) may have empty contenidoTeorico — ensure at least 1
-        if (totalSteps === 0) totalSteps = 1;
-        const newScoreData = { score: totalSteps, total: totalSteps };
-
-        setUserScores(prev => {
-            const newScores = { ...prev, [moduleId]: newScoreData };
-            persistUserScores(newScores);
-            return newScores;
-        });
-
-        // Sync to Firebase
-        if (userId) {
-            saveModuleScore(userId, moduleId, newScoreData).catch(console.error);
-            syncUserStats(userId, {
-                addModulesCompleted: 1,
-                addPoints: xpEarned,
-            }).catch(console.error);
+    // Handle module completion — requiere al menos 7/10 (70%) para desbloquear siguiente
+    const handleModuleComplete = useCallback((moduleId, xpEarned = 0, quizResult = null) => {
+        // Calcular nuevo puntaje
+        let newScoreData;
+        if (quizResult && quizResult.total > 0) {
+            newScoreData = { score: quizResult.score, total: quizResult.total };
+        } else {
+            // Fallback para módulos sin quiz interactivo
+            const moduleData = ALL_MODULES.find(m => m.id === moduleId) || MODULOS_DE_ROBOTICA.find(m => m.id === moduleId);
+            let totalSteps = Array.isArray(moduleData?.contenidoTeorico) 
+                ? moduleData.contenidoTeorico.length 
+                : (moduleData?.contenidoTeorico === '__MODULO_1_REF__' ? 6 : 2);
+            if (totalSteps === 0) totalSteps = 1;
+            newScoreData = { score: totalSteps, total: totalSteps };
         }
 
-        setCompletedModules(prev => {
-            const n = new Set(prev);
-            n.add(moduleId);
-            return n;
-        });
-        setUserStats(prev => {
-            const newStats = {
-                ...prev,
-                modulesCompleted: prev.modulesCompleted + 1,
-                totalPoints: prev.totalPoints + xpEarned,
-            };
-            // Check for newly unlocked achievements
-            if (ACHIEVEMENTS && ACHIEVEMENTS.length > 0) {
-                const newlyUnlocked = ACHIEVEMENTS.find(a => {
-                    if (a.id === 'first_module' && newStats.modulesCompleted >= 1) return true;
-                    if (a.id === 'five_modules' && newStats.modulesCompleted >= 5) return true;
-                    if (a.id === 'ten_modules' && newStats.modulesCompleted >= 10) return true;
-                    if (a.id === 'all_modules' && newStats.modulesCompleted >= 13) return true;
-                    return false;
-                });
-                if (newlyUnlocked && !prev._unlockedIds?.includes(newlyUnlocked.id)) {
-                    newStats._unlockedIds = [...(prev._unlockedIds || []), newlyUnlocked.id];
-                    setTimeout(() => setUnlockedPopupAchievement(newlyUnlocked), 1500);
-                }
+        const existing = userScores[moduleId];
+        const newPercent = newScoreData.total > 0 ? Math.round((newScoreData.score / newScoreData.total) * 100) : 0;
+        const existingPercent = existing && existing.total > 0 ? Math.round((existing.score / existing.total) * 100) : 0;
+
+        // Si ya está completado con puntaje igual o mejor, no actualizar
+        if (existingPercent >= 70 && newPercent <= existingPercent) return;
+
+        // Guardar puntaje si es mejor
+        if (newPercent > existingPercent) {
+            setUserScores(prev => {
+                const newScores = { ...prev, [moduleId]: newScoreData };
+                persistUserScores(newScores);
+                return newScores;
+            });
+            if (userId) {
+                saveModuleScore(userId, moduleId, newScoreData).catch(console.error);
             }
-            return newStats;
-        });
-    }, [completedModules, userScores]);
+        }
+
+        const nowPassing = newPercent >= 70;
+        const wasAlreadyCompleted = completedModules.has(moduleId);
+
+        if (nowPassing && !wasAlreadyCompleted) {
+            // Primera vez que aprueba: marcar como completado
+            if (userId) {
+                syncUserStats(userId, {
+                    addModulesCompleted: 1,
+                    addPoints: xpEarned,
+                }).catch(console.error);
+            }
+            setCompletedModules(prev => {
+                const n = new Set(prev);
+                n.add(moduleId);
+                return n;
+            });
+            setUserStats(prev => {
+                const newStats = {
+                    ...prev,
+                    modulesCompleted: prev.modulesCompleted + 1,
+                    totalPoints: prev.totalPoints + xpEarned,
+                };
+                if (ACHIEVEMENTS && ACHIEVEMENTS.length > 0) {
+                    const newlyUnlocked = ACHIEVEMENTS.find(a => {
+                        if (a.id === 'first_module' && newStats.modulesCompleted >= 1) return true;
+                        if (a.id === 'five_modules' && newStats.modulesCompleted >= 5) return true;
+                        if (a.id === 'ten_modules' && newStats.modulesCompleted >= 10) return true;
+                        if (a.id === 'all_modules' && newStats.modulesCompleted >= 13) return true;
+                        return false;
+                    });
+                    if (newlyUnlocked && !prev._unlockedIds?.includes(newlyUnlocked.id)) {
+                        newStats._unlockedIds = [...(prev._unlockedIds || []), newlyUnlocked.id];
+                        setTimeout(() => setUnlockedPopupAchievement(newlyUnlocked), 1500);
+                    }
+                }
+                return newStats;
+            });
+        } else if (!wasAlreadyCompleted) {
+            // No aprobó pero completó el módulo — dar XP sin marcar como completado
+            if (userId) {
+                syncUserStats(userId, { addPoints: xpEarned }).catch(console.error);
+            }
+            setUserStats(prev => ({ ...prev, totalPoints: prev.totalPoints + xpEarned }));
+        }
+    }, [completedModules, userScores, userId]);
 
     // Rastrear secciones visitadas
     useEffect(() => {
