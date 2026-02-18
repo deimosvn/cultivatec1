@@ -255,6 +255,86 @@ export const ROBOT_SKINS = [
     rarityColor: '#9333EA',
     config: { skinImage: '/skin22.png' },
   },
+  {
+    id: 'skin_23',
+    name: 'Arcángel',
+    description: 'Skin divina otorgada solo por el administrador supremo 👼',
+    icon: '👼',
+    rarity: 'legendary',
+    rarityLabel: 'Admin',
+    rarityColor: '#9333EA',
+    config: { skinImage: '/skin23.png' },
+  },
+  {
+    id: 'skin_24',
+    name: 'Fénix Ancestral',
+    description: 'Renace de las cenizas del conocimiento total. Solo los verdaderos maestros lo obtienen 🔥',
+    icon: '🔥',
+    rarity: 'legend',
+    rarityLabel: '🏛️ Leyenda',
+    rarityColor: '#FF6B00',
+    config: { skinImage: '/skin24.png' },
+  },
+  {
+    id: 'skin_25',
+    name: 'Titán Cósmico',
+    description: 'Forjado en las estrellas, domina todos los mundos conocidos 🌠',
+    icon: '🌠',
+    rarity: 'legend',
+    rarityLabel: '🏛️ Leyenda',
+    rarityColor: '#FF6B00',
+    config: { skinImage: '/skin25.png' },
+  },
+  {
+    id: 'skin_26',
+    name: 'Oráculo',
+    description: 'Vidente digital que ha completado cada desafío del universo CultivaTec 🔮',
+    icon: '🔮',
+    rarity: 'legend',
+    rarityLabel: '🏛️ Leyenda',
+    rarityColor: '#FF6B00',
+    config: { skinImage: '/skin26.png' },
+  },
+  {
+    id: 'skin_27',
+    name: 'Dragón Milenario',
+    description: 'Bestia mecánica legendaria que solo aparece ante los más persistentes 🐉',
+    icon: '🐉',
+    rarity: 'legend',
+    rarityLabel: '🏛️ Leyenda',
+    rarityColor: '#FF6B00',
+    config: { skinImage: '/skin27.png' },
+  },
+  {
+    id: 'skin_28',
+    name: 'Espectro Supremo',
+    description: 'Entidad etérea que trasciende la realidad, solo accesible para la élite absoluta 👁️',
+    icon: '👁️',
+    rarity: 'legend',
+    rarityLabel: '🏛️ Leyenda',
+    rarityColor: '#FF6B00',
+    config: { skinImage: '/skin28.png' },
+  },
+  {
+    id: 'skin_29',
+    name: 'Nexus Primordial',
+    description: 'El origen de todo. Última skin legendaria, reservada para quienes dominan CultivaTec ⚜️',
+    icon: '⚜️',
+    rarity: 'legend',
+    rarityLabel: '🏛️ Leyenda',
+    rarityColor: '#FF6B00',
+    config: { skinImage: '/skin29.png' },
+  },
+  {
+    id: 'skin_30',
+    name: 'Deidad Digital',
+    description: 'La creación más sagrada del admin. Solo los elegidos la portan 🌟',
+    icon: '🛡️',
+    rarity: 'legendary',
+    rarityLabel: 'Admin',
+    rarityColor: '#9333EA',
+    config: { skinImage: '/skin30.png' },
+  },
 ];
 
 // ============================================
@@ -285,6 +365,14 @@ export const SKIN_UNLOCK_REQUIREMENTS = {
   'skin_20': { type: 'admin_only', label: 'Regalo exclusivo del admin' },
   'skin_21': { type: 'world_enter', worldIndex: 0, label: 'Entra al Mundo 1' },
   'skin_22': { type: 'admin_only', label: 'Regalo exclusivo del admin' },
+  'skin_23': { type: 'admin_only', label: 'Regalo exclusivo del admin' },
+  'skin_24': { type: 'legend', requiredWorlds: [0,1,2,3,4,5], requiredModules: 80, label: '🏛️ Completa 80 módulos y todos los mundos' },
+  'skin_25': { type: 'legend', requiredWorlds: [0,1,2,3,4,5], requiredModules: 85, label: '🏛️ Completa 85 módulos y todos los mundos' },
+  'skin_26': { type: 'legend', requiredWorlds: [0,1,2,3,4,5], requiredModules: 88, label: '🏛️ Completa 88 módulos y todos los mundos' },
+  'skin_27': { type: 'legend', requiredWorlds: [0,1,2,3,4,5], requiredModules: 90, label: '🏛️ Completa 90 módulos y todos los mundos' },
+  'skin_28': { type: 'legend', requiredWorlds: [0,1,2,3,4,5], requiredModules: 93, label: '🏛️ Completa 93 módulos y todos los mundos' },
+  'skin_29': { type: 'legend', requiredWorlds: [0,1,2,3,4,5], requiredModules: 96, label: '🏛️ Completa los 96 módulos de todos los mundos' },
+  'skin_30': { type: 'admin_only', label: 'Regalo exclusivo del admin' },
 };
 
 /**
@@ -308,6 +396,7 @@ export const getUnlockedSkinIds = (completedModulesCount = 0, completedWorldIndi
     if (req.type === 'world' && completedWorldIndices.includes(req.worldIndex)) { unlocked.add(skin.id); continue; }
     if (req.type === 'world_unlock' && unlockedWorldIndices.includes(req.worldIndex)) { unlocked.add(skin.id); continue; }
     if (req.type === 'world_enter' && enteredWorldIndices.includes(req.worldIndex)) { unlocked.add(skin.id); continue; }
+    if (req.type === 'legend' && completedModulesCount >= req.requiredModules && req.requiredWorlds.every(w => completedWorldIndices.includes(w))) { unlocked.add(skin.id); continue; }
     // admin_only: only via gifted or isAdmin (already handled above)
   }
   return unlocked;
@@ -451,6 +540,7 @@ const RobotSkinEditor = ({ isOpen, onClose, currentConfig, currentName, onSave, 
   const getRarityBorder = (rarity, isSelected) => {
     if (isSelected) return 'border-cyan-400 ring-2 ring-cyan-400/40';
     switch (rarity) {
+      case 'legend': return 'border-[#FF6B00]/50 hover:border-[#FF6B00] shadow-md shadow-orange-500/20';
       case 'legendary': return 'border-[#FFC800]/40 hover:border-[#FFC800]';
       case 'epic': return 'border-[#FF4B4B]/30 hover:border-[#FF4B4B]';
       case 'rare': return 'border-[#3B82F6]/30 hover:border-[#3B82F6]';
@@ -725,6 +815,9 @@ const RobotSkinEditor = ({ isOpen, onClose, currentConfig, currentName, onSave, 
                   )}
                   {(req?.type === 'world' || req?.type === 'world_unlock' || req?.type === 'world_enter') && (
                     <p className="text-[10px] text-amber-500/60 font-semibold mt-1">Explora los mundos para obtener esta skin</p>
+                  )}
+                  {req?.type === 'legend' && (
+                    <p className="text-[10px] text-orange-400/70 font-semibold mt-1">🏛️ Skin de Leyenda: solo los que dominan TODOS los mundos la obtienen</p>
                   )}
                 </div>
 
