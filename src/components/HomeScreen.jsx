@@ -208,10 +208,10 @@ const HomeScreen = ({
             <div style={{
                 position: 'relative', zIndex: 2,
                 display: 'flex', flexDirection: 'column',
-                alignItems: 'center', justifyContent: 'center',
+                alignItems: 'center', justifyContent: 'flex-start',
                 flex: 1,
                 gap: '6px',
-                padding: '0px 24px', width: '100%', maxWidth: '360px',
+                padding: '0px 24px', paddingTop: '10px', width: '100%', maxWidth: '360px',
                 margin: '0 auto',
                 boxSizing: 'border-box',
                 overflow: 'hidden',
@@ -228,7 +228,7 @@ const HomeScreen = ({
                         src="/logo.png"
                         alt="CultivaTec"
                         style={{
-                            width: 'min(320px, 75vw)', height: 'min(320px, 75vw)',
+                            width: 'min(380px, 85vw)', height: 'min(380px, 85vw)',
                             objectFit: 'contain',
                             filter: 'drop-shadow(0 0 32px rgba(59,130,246,0.45))',
                             imageRendering: 'auto',
