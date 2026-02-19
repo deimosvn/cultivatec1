@@ -97,7 +97,7 @@ const HomeScreen = ({
             {/* ═══ TOP HUD BAR ═══ */}
             <div style={{
                 position: 'relative', zIndex: 10,
-                padding: '6px 8px 5px',
+                padding: '10px 12px 8px',
                 background: 'linear-gradient(180deg, rgba(15,26,50,0.85) 0%, rgba(10,22,40,0.92) 100%)',
                 borderBottom: '2px solid rgba(59,130,246,0.25)',
                 boxShadow: '0 2px 12px rgba(0,0,0,0.4)',
@@ -108,24 +108,24 @@ const HomeScreen = ({
                     maxWidth: '480px', margin: '0 auto', gap: '6px',
                 }}>
                     {/* Left: Avatar + Name + Level */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flex: 1, minWidth: 0 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1, minWidth: 0 }}>
                         {userProfile && RobotMini && (
                             <button onClick={onEditRobot} style={{
                                 background: 'linear-gradient(180deg, #1e3a5f 0%, #162d4a 100%)',
                                 border: '2px solid #3b82f6',
-                                borderRadius: 0, padding: '2px', cursor: 'pointer', flexShrink: 0,
+                                borderRadius: 0, padding: '3px', cursor: 'pointer', flexShrink: 0,
                                 boxShadow: '0 0 8px rgba(59,130,246,0.2), inset 0 0 0 1px #0a1628',
                             }}>
-                                <RobotMini config={userProfile.robotConfig} size={24} />
+                                <RobotMini config={userProfile.robotConfig} size={32} />
                             </button>
                         )}
                         <div style={{ minWidth: 0, flex: 1 }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                                 <span style={{
-                                    fontSize: '7px', fontWeight: 900, color: '#e2e8f0',
+                                    fontSize: '8px', fontWeight: 900, color: '#e2e8f0',
                                     fontFamily: PF,
                                     overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-                                    maxWidth: '90px',
+                                    maxWidth: '110px',
                                     textShadow: '0 1px 3px #000',
                                 }}>
                                     {firebaseProfile?.username || 'Explorador'}
@@ -139,12 +139,12 @@ const HomeScreen = ({
                                     }}>ADM</span>
                                 )}
                             </div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '2px' }}>
-                                <span style={{ fontSize: '5px', fontWeight: 900, color: '#22c55e', fontFamily: PF }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '3px' }}>
+                                <span style={{ fontSize: '6px', fontWeight: 900, color: '#22c55e', fontFamily: PF }}>
                                     NV.{levelInfo.level}
                                 </span>
                                 <div style={{
-                                    flex: 1, maxWidth: '60px', height: '4px',
+                                    flex: 1, maxWidth: '70px', height: '5px',
                                     background: '#0a1628', border: '1px solid #1e3a5f', overflow: 'hidden',
                                 }}>
                                     <div style={{
@@ -159,45 +159,45 @@ const HomeScreen = ({
                         </div>
                     </div>
                     {/* Right: Stats + Settings */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px', flexShrink: 0 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
                         <div style={{
-                            display: 'flex', alignItems: 'center', gap: '2px',
+                            display: 'flex', alignItems: 'center', gap: '3px',
                             background: 'rgba(15,26,50,0.7)', border: '2px solid rgba(59,130,246,0.3)',
-                            padding: '2px 5px',
+                            padding: '4px 7px',
                             boxShadow: 'inset 0 0 6px rgba(0,0,0,0.3)',
                         }}>
-                            <Zap size={8} style={{ color: '#fbbf24', filter: 'drop-shadow(0 0 2px #fbbf2460)' }} />
-                            <span style={{ fontSize: '6px', fontWeight: 900, color: '#fbbf24', fontFamily: PF, textShadow: '0 0 4px #fbbf2440' }}>
+                            <Zap size={10} style={{ color: '#fbbf24', filter: 'drop-shadow(0 0 2px #fbbf2460)' }} />
+                            <span style={{ fontSize: '7px', fontWeight: 900, color: '#fbbf24', fontFamily: PF, textShadow: '0 0 4px #fbbf2440' }}>
                                 {firebaseProfile?.currentStreak || 0}
                             </span>
                         </div>
                         <div style={{
-                            display: 'flex', alignItems: 'center', gap: '2px',
+                            display: 'flex', alignItems: 'center', gap: '3px',
                             background: 'rgba(15,26,50,0.7)', border: '2px solid rgba(59,130,246,0.3)',
-                            padding: '2px 5px',
+                            padding: '4px 7px',
                             boxShadow: 'inset 0 0 6px rgba(0,0,0,0.3)',
                         }}>
-                            <Star size={8} style={{ color: '#facc15', filter: 'drop-shadow(0 0 2px #facc1560)' }} />
-                            <span style={{ fontSize: '6px', fontWeight: 900, color: '#facc15', fontFamily: PF, textShadow: '0 0 4px #facc1540' }}>
+                            <Star size={10} style={{ color: '#facc15', filter: 'drop-shadow(0 0 2px #facc1560)' }} />
+                            <span style={{ fontSize: '7px', fontWeight: 900, color: '#facc15', fontFamily: PF, textShadow: '0 0 4px #facc1540' }}>
                                 {(firebaseProfile?.totalPoints ?? userStats?.totalPoints ?? 0).toLocaleString()}
                             </span>
                         </div>
                         {onShowLicenses && (
                             <button onClick={onShowLicenses} style={{
-                                padding: '3px', background: 'rgba(15,26,50,0.7)',
+                                padding: '5px', background: 'rgba(15,26,50,0.7)',
                                 border: '2px solid rgba(59,130,246,0.3)', cursor: 'pointer',
                                 boxShadow: 'inset 0 0 6px rgba(0,0,0,0.3)',
                             }}>
-                                <GraduationCap size={10} style={{ color: '#94a3b8' }} />
+                                <GraduationCap size={13} style={{ color: '#94a3b8' }} />
                             </button>
                         )}
                         {onShowSettings && (
                             <button onClick={onShowSettings} style={{
-                                padding: '3px', background: 'rgba(15,26,50,0.7)',
+                                padding: '5px', background: 'rgba(15,26,50,0.7)',
                                 border: '2px solid rgba(59,130,246,0.3)', cursor: 'pointer',
                                 boxShadow: 'inset 0 0 6px rgba(0,0,0,0.3)',
                             }}>
-                                <Settings size={9} style={{ color: '#94a3b8' }} />
+                                <Settings size={12} style={{ color: '#94a3b8' }} />
                             </button>
                         )}
                     </div>

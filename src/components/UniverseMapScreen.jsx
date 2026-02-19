@@ -147,7 +147,6 @@ const UniverseMapScreen = ({
     return (
         <div className="retro-crt-global" style={{
             paddingBottom: '0px',
-            paddingTop: 'env(safe-area-inset-top, 0px)',
             minHeight: '100vh',
             width: '100%',
             position: 'relative',
@@ -339,7 +338,8 @@ const UniverseMapScreen = ({
                  ═══════════════════════════════════════════ */}
             <div className="retro-hud-bar retro-panel-metal" style={{
                 position: 'relative', zIndex: 2,
-                padding: '6px 8px 5px',
+                paddingTop: 'max(6px, env(safe-area-inset-top, 6px))',
+                paddingLeft: '8px', paddingRight: '8px', paddingBottom: '5px',
                 background: 'linear-gradient(180deg, #c8ccd4 0%, #c8ccd4 3%, #bcc0ca 3%, #bcc0ca 6%, #b0b8c2 6%, #b0b8c2 12%, #a0a8b4 12%, #a0a8b4 50%, #909aa4 50%, #909aa4 88%, #808a96 88%, #808a96 94%, #707a86 94%, #707a86 100%)',
                 borderBottom: '2px solid #d0d4da',
                 boxShadow: '0 0 0 1px #606a78, 0 2px 0 #707a86, 0 4px 10px rgba(0,0,0,0.3), inset 0 2px 0 #d8dce460, inset 0 -1px 0 #606a78, inset 2px 0 0 #c0c8d030, inset -2px 0 0 #707a86',
@@ -834,8 +834,8 @@ const UniverseMapScreen = ({
                                 overflowY: 'hidden',
                                 height: '100%',
                                 alignItems: 'center',
-                                paddingLeft: 'calc(50% - 70px)',
-                                paddingRight: 'calc(50% - 70px)',
+                                paddingLeft: 'calc(50% - 100px)',
+                                paddingRight: 'calc(50% - 100px)',
                                 WebkitOverflowScrolling: 'touch',
                             }}>
 
@@ -849,7 +849,7 @@ const UniverseMapScreen = ({
                                         className="universe-card-snap"
                                         onClick={() => hasContent && onSelectUniverse(idx)}
                                         style={{
-                                            flexShrink: 0, width: '140px',
+                                            flexShrink: 0, width: '200px',
                                             transition: 'all 0.5s',
                                             transform: isActive ? 'scale(1)' : 'scale(0.7)',
                                             opacity: isActive ? 1 : 0.15,
@@ -874,7 +874,7 @@ const UniverseMapScreen = ({
                                         {/* Universe Portal — Image */}
                                         <div style={{
                                             position: 'relative',
-                                            width: '130px', height: '130px',
+                                            width: '180px', height: '180px',
                                             display: 'flex', alignItems: 'center', justifyContent: 'center',
                                             marginBottom: '2px',
                                             animation: 'universe-float 5s ease-in-out infinite',
@@ -916,7 +916,7 @@ const UniverseMapScreen = ({
                                                 src={`/universo${idx + 1}.png`}
                                                 alt={universe.name}
                                                 style={{
-                                                    width: '120px', height: '120px',
+                                                    width: '170px', height: '170px',
                                                     objectFit: 'contain',
                                                     position: 'relative', zIndex: 10,
                                                     filter: isActive
