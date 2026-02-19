@@ -207,41 +207,44 @@ const HomeScreen = ({
             <div style={{
                 position: 'relative', zIndex: 2,
                 display: 'flex', flexDirection: 'column',
-                alignItems: 'center', justifyContent: 'flex-start',
+                alignItems: 'center', justifyContent: 'center',
                 flex: 1,
-                gap: '8px',
+                gap: '6px',
                 padding: '0px 24px', width: '100%', maxWidth: '360px',
                 margin: '0 auto',
-                marginTop: '2px',
+                boxSizing: 'border-box',
+                overflow: 'hidden',
             }}>
                 {/* Logo */}
                 <div style={{
                     display: 'flex', flexDirection: 'column',
-                    alignItems: 'center', gap: '10px',
+                    alignItems: 'center', gap: '4px',
                     animation: 'homeLogoFloat 4s ease-in-out infinite',
-                    marginTop: '5px',
+                    flexShrink: 1,
+                    minHeight: 0,
                 }}>
                     <img
                         src="/logo.png"
                         alt="CultivaTec"
                         style={{
-                            width: '220px', height: '220px',
+                            width: 'min(180px, 40vw)', height: 'min(180px, 40vw)',
                             objectFit: 'contain',
                             filter: 'drop-shadow(0 0 32px rgba(59,130,246,0.45))',
                             imageRendering: 'auto',
+                            flexShrink: 1,
                         }}
                     />
                     <p style={{
                         fontSize: '7px', color: 'rgba(148,163,184,0.7)',
                         letterSpacing: '0.14em', margin: 0, textAlign: 'center',
-                        marginTop: '-15px',
+                        marginTop: '-10px',
                     }}>
                         PLATAFORMA DE ROBÓTICA EDUCATIVA
                     </p>
                     <p style={{
                         fontSize: '6px', color: 'rgba(148,163,184,0.5)',
                         letterSpacing: '0.12em', margin: 0, textAlign: 'center',
-                        marginTop: '2px',
+                        marginTop: '1px',
                     }}>
                         CULTIVANDO LA CULTURA STEM
                     </p>
@@ -251,7 +254,7 @@ const HomeScreen = ({
                 <div style={{
                     display: 'flex', flexDirection: 'column',
                     gap: '8px', width: '100%',
-                    marginTop: '15px',
+                    marginTop: '8px',
                 }}>
                     {/* Estación de Control */}
                     <button onClick={onGoStation} className="pixel-nav-btn" style={{
