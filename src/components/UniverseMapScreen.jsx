@@ -99,13 +99,13 @@ const UniverseMapScreen = ({
     const themeColor = activeUniverse?.trailColor || '#60a5fa';
 
     const stations = [
-        { id: 'circuits', title: 'Circuitos', img: '/electronica.png', dailyKey: 'cultivatec_daily_circuit',
+        { id: 'circuits', title: 'Lab. de Circuitos', img: '/electronica.png', dailyKey: 'cultivatec_daily_circuit',
           gradient: 'linear-gradient(135deg, #06b6d4, #0891b2)', glow: '#06b6d4', color: '#06b6d4',
           helpMsg: '¡Robot averiado!', onClick: onGoToCircuits },
-        { id: 'programming', title: 'Código', img: '/programacion.png', dailyKey: 'cultivatec_daily_prog',
+        { id: 'programming', title: 'Est. de Programación', img: '/programacion.png', dailyKey: 'cultivatec_daily_prog',
           gradient: 'linear-gradient(135deg, #8b5cf6, #7c3aed)', glow: '#8b5cf6', color: '#8b5cf6',
           helpMsg: '¡Código roto!', onClick: onGoToProgramming },
-        { id: 'bahia', title: 'Bahía', img: '/bahia.png', dailyKey: null,
+        { id: 'bahia', title: 'Bahía de Chatarra', img: '/bahia.png', dailyKey: null,
           gradient: 'linear-gradient(135deg, #f59e0b, #d97706)', glow: '#f59e0b', color: '#f59e0b',
           helpMsg: '', onClick: onGoToBahia },
     ];
@@ -728,7 +728,7 @@ const UniverseMapScreen = ({
                                 {/* Station image — large, no container */}
                                 <div style={{ position: 'relative' }}>
                                     <img src={station.img} alt={station.title} style={{
-                                        width: '80px', height: '80px', objectFit: 'contain',
+                                        width: '110px', height: '110px', objectFit: 'contain',
                                         position: 'relative', zIndex: 2,
                                         filter: pending
                                             ? `drop-shadow(0 0 10px ${station.glow}) drop-shadow(0 0 20px ${station.glow}60)`
