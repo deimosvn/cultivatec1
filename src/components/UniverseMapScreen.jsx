@@ -668,33 +668,38 @@ const UniverseMapScreen = ({
             </div>
 
             {/* ═══════════════════════════════════════════
-                 4. STATION BUTTONS — Icon-Only with Effects
+                 4. STATION BUTTONS — Large Images
                  ═══════════════════════════════════════════ */}
             <div style={{
                 position: 'relative', zIndex: 2,
-                padding: '10px 14px 18px',
+                padding: '8px 14px 18px',
                 background: 'linear-gradient(180deg, transparent 0%, rgba(15,23,42,0.5) 100%)',
             }}>
-                {/* Station icons row */}
+                {/* Station images row */}
                 <div style={{
-                    display: 'flex', gap: '20px',
+                    display: 'flex', gap: '12px',
                     justifyContent: 'center', alignItems: 'flex-end',
-                    maxWidth: '320px', margin: '0 auto',
+                    maxWidth: '400px', margin: '0 auto',
                 }}>
                     {stations.map((station, sIdx) => {
                         const pending = hasPendingDaily(station.dailyKey);
                         return (
-                            <div key={station.id} style={{
-                                display: 'flex', flexDirection: 'column', alignItems: 'center',
-                                gap: '6px',
-                                animation: `station-btn-enter 0.4s ease-out ${0.1 + sIdx * 0.1}s both`,
-                                position: 'relative',
-                            }}>
+                            <button key={station.id} onClick={station.onClick}
+                                className="station-card"
+                                style={{
+                                    display: 'flex', flexDirection: 'column', alignItems: 'center',
+                                    gap: '4px',
+                                    animation: `station-btn-enter 0.4s ease-out ${0.1 + sIdx * 0.1}s both`,
+                                    position: 'relative',
+                                    background: 'none', border: 'none', cursor: 'pointer',
+                                    padding: '0',
+                                    WebkitTapHighlightColor: 'transparent',
+                                }}>
                                 {/* Help message bubble (only if pending) */}
                                 {pending && (
                                     <div style={{
                                         position: 'absolute',
-                                        top: '-32px', left: '50%', transform: 'translateX(-50%)',
+                                        top: '-28px', left: '50%', transform: 'translateX(-50%)',
                                         background: 'rgba(255,255,255,0.95)',
                                         color: '#1e293b',
                                         fontSize: '8px',
@@ -709,7 +714,6 @@ const UniverseMapScreen = ({
                                         border: `1.5px solid ${station.glow}50`,
                                     }}>
                                         {station.helpMsg}
-                                        {/* Arrow */}
                                         <div style={{
                                             position: 'absolute',
                                             bottom: '-4px', left: '50%', transform: 'translateX(-50%) rotate(45deg)',
@@ -721,34 +725,25 @@ const UniverseMapScreen = ({
                                     </div>
                                 )}
 
-                                {/* Icon button */}
-                                <button onClick={station.onClick}
-                                    className="station-card"
-                                    style={{
-                                        position: 'relative',
-                                        width: '56px', height: '56px',
-                                        borderRadius: '50%',
-                                        background: station.gradient,
-                                        border: `3px solid ${station.glow}60`,
-                                        cursor: 'pointer',
-                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                        boxShadow: pending
-                                            ? `0 0 16px ${station.glow}50, 0 0 32px ${station.glow}25`
-                                            : `0 4px 12px ${station.glow}30`,
-                                        animation: pending ? `station-shake 1.5s ease-in-out infinite, station-btn-enter 0.4s ease-out ${0.1 + sIdx * 0.1}s both` : `station-btn-enter 0.4s ease-out ${0.1 + sIdx * 0.1}s both`,
-                                        overflow: 'visible',
-                                    }}>
+                                {/* Station image — large, no container */}
+                                <div style={{ position: 'relative' }}>
                                     <img src={station.img} alt={station.title} style={{
-                                        width: '36px', height: '36px', objectFit: 'contain',
+                                        width: '80px', height: '80px', objectFit: 'contain',
                                         position: 'relative', zIndex: 2,
-                                        filter: 'drop-shadow(0 1px 3px rgba(0,0,0,0.3))',
+                                        filter: pending
+                                            ? `drop-shadow(0 0 10px ${station.glow}) drop-shadow(0 0 20px ${station.glow}60)`
+                                            : `drop-shadow(0 2px 6px rgba(0,0,0,0.4))`,
+                                        animation: pending
+                                            ? `station-shake 1.5s ease-in-out infinite, float-slow 3s ease-in-out ${sIdx * 0.3}s infinite`
+                                            : `float-slow 3.5s ease-in-out ${sIdx * 0.3}s infinite`,
+                                        transition: 'filter 0.3s',
                                     }} />
 
                                     {/* Sparks (only if pending) */}
                                     {pending && Array.from({ length: 8 }).map((_, i) => {
                                         const angle = (i / 8) * 360;
                                         const rad = (angle * Math.PI) / 180;
-                                        const dist = 18 + Math.random() * 12;
+                                        const dist = 28 + Math.random() * 16;
                                         return (
                                             <div key={i} style={{
                                                 position: 'absolute',
@@ -756,8 +751,8 @@ const UniverseMapScreen = ({
                                                 borderRadius: '50%',
                                                 background: i % 2 === 0 ? '#FFC800' : station.glow,
                                                 top: '50%', left: '50%',
-                                                '--sx': `${Math.cos(rad) * 6}px`,
-                                                '--sy': `${Math.sin(rad) * 6}px`,
+                                                '--sx': `${Math.cos(rad) * 8}px`,
+                                                '--sy': `${Math.sin(rad) * 8}px`,
                                                 '--ex': `${Math.cos(rad) * dist}px`,
                                                 '--ey': `${Math.sin(rad) * dist}px`,
                                                 animation: `station-spark ${0.8 + Math.random() * 0.6}s ease-out ${i * 0.15}s infinite`,
@@ -770,9 +765,9 @@ const UniverseMapScreen = ({
                                     {pending && Array.from({ length: 3 }).map((_, i) => (
                                         <div key={`smoke-${i}`} style={{
                                             position: 'absolute',
-                                            top: '-2px',
-                                            left: `${35 + i * 12}%`,
-                                            width: '10px', height: '10px',
+                                            top: '0px',
+                                            left: `${25 + i * 18}%`,
+                                            width: '12px', height: '12px',
                                             borderRadius: '50%',
                                             background: 'rgba(200,200,200,0.4)',
                                             filter: 'blur(3px)',
@@ -781,18 +776,18 @@ const UniverseMapScreen = ({
                                             pointerEvents: 'none',
                                         }} />
                                     ))}
-                                </button>
+                                </div>
 
-                                {/* Label */}
+                                {/* Name label */}
                                 <span style={{
-                                    fontSize: '9px', fontWeight: 800,
-                                    color: 'rgba(255,255,255,0.6)',
+                                    fontSize: '10px', fontWeight: 800,
+                                    color: 'rgba(255,255,255,0.7)',
                                     fontFamily: SF,
                                     textAlign: 'center',
                                 }}>
                                     {station.title}
                                 </span>
-                            </div>
+                            </button>
                         );
                     })}
                 </div>
