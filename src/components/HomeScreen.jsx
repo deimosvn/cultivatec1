@@ -228,7 +228,7 @@ const HomeScreen = ({
                         src="/logo.png"
                         alt="CultivaTec"
                         style={{
-                            width: 'min(260px, 60vw)', height: 'min(260px, 60vw)',
+                            width: 'min(320px, 75vw)', height: 'min(320px, 75vw)',
                             objectFit: 'contain',
                             filter: 'drop-shadow(0 0 32px rgba(59,130,246,0.45))',
                             imageRendering: 'auto',
