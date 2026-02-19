@@ -338,8 +338,8 @@ const UniverseMapScreen = ({
                  ═══════════════════════════════════════════ */}
             <div className="retro-hud-bar retro-panel-metal" style={{
                 position: 'relative', zIndex: 2,
-                paddingTop: 'max(6px, env(safe-area-inset-top, 6px))',
-                paddingLeft: '8px', paddingRight: '8px', paddingBottom: '5px',
+                paddingTop: 'max(10px, env(safe-area-inset-top, 10px))',
+                paddingLeft: '12px', paddingRight: '12px', paddingBottom: '8px',
                 background: 'linear-gradient(180deg, #c8ccd4 0%, #c8ccd4 3%, #bcc0ca 3%, #bcc0ca 6%, #b0b8c2 6%, #b0b8c2 12%, #a0a8b4 12%, #a0a8b4 50%, #909aa4 50%, #909aa4 88%, #808a96 88%, #808a96 94%, #707a86 94%, #707a86 100%)',
                 borderBottom: '2px solid #d0d4da',
                 boxShadow: '0 0 0 1px #606a78, 0 2px 0 #707a86, 0 4px 10px rgba(0,0,0,0.3), inset 0 2px 0 #d8dce460, inset 0 -1px 0 #606a78, inset 2px 0 0 #c0c8d030, inset -2px 0 0 #707a86',
@@ -358,36 +358,36 @@ const UniverseMapScreen = ({
                     position: 'relative', zIndex: 1,
                 }}>
                     {/* Left: Back + Avatar + Name + Level */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flex: 1, minWidth: 0 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1, minWidth: 0 }}>
                         {/* Back button */}
                         {onBack && (
                             <button onClick={onBack} style={{
-                                padding: '3px 4px', background: 'linear-gradient(180deg, #a0a8b4 0%, #808a96 100%)',
+                                padding: '5px 6px', background: 'linear-gradient(180deg, #a0a8b4 0%, #808a96 100%)',
                                 border: '2px solid #b8c0ca', cursor: 'pointer', flexShrink: 0,
                                 boxShadow: 'inset 0 1px 0 #c8d0d830, 0 0 0 1px #606a78',
                                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                             }}>
-                                <ArrowLeft size={10} style={{ color: '#e2e8f0' }} />
+                                <ArrowLeft size={14} style={{ color: '#e2e8f0' }} />
                             </button>
                         )}
                         {userProfile && RobotMini && (
                             <button onClick={onEditRobot} style={{
                                 background: 'linear-gradient(180deg, #a0a8b4 0%, #808a96 100%)',
                                 border: '2px solid #c8ccd4',
-                                borderRadius: 0, padding: '2px', cursor: 'pointer', flexShrink: 0,
+                                borderRadius: 0, padding: '3px', cursor: 'pointer', flexShrink: 0,
                                 boxShadow: '0 0 8px rgba(0,229,255,0.15), inset 0 0 0 1px #404a58, inset 0 1px 0 #909aa430',
                                 position: 'relative',
                             }}>
-                                <RobotMini config={userProfile.robotConfig} size={24} />
+                                <RobotMini config={userProfile.robotConfig} size={34} />
                             </button>
                         )}
                         <div style={{ minWidth: 0, flex: 1 }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                                 <span style={{
-                                    fontSize: '7px', fontWeight: 900, color: '#e2e8f0',
+                                    fontSize: '9px', fontWeight: 900, color: '#e2e8f0',
                                     fontFamily: PF,
                                     overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-                                    maxWidth: '90px',
+                                    maxWidth: '110px',
                                     textShadow: '0 1px 3px #000',
                                 }}>
                                     {firebaseProfile?.username || 'Explorador'}
@@ -402,13 +402,13 @@ const UniverseMapScreen = ({
                                 )}
                             </div>
                             {/* Level bar */}
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '2px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginTop: '3px' }}>
                                 <span style={{
-                                    fontSize: '5px', fontWeight: 900, color: '#22c55e',
+                                    fontSize: '7px', fontWeight: 900, color: '#22c55e',
                                     fontFamily: PF,
                                 }}>NV.{levelInfo.level}</span>
                                 <div style={{
-                                    flex: 1, maxWidth: '60px', height: '4px',
+                                    flex: 1, maxWidth: '70px', height: '5px',
                                     background: '#1a1e28',
                                     border: '1px solid #606a78',
                                     overflow: 'hidden',
@@ -426,60 +426,60 @@ const UniverseMapScreen = ({
                     </div>
 
                     {/* Right: Stats */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px', flexShrink: 0 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
                         {/* Streak */}
                         <div style={{
-                            display: 'flex', alignItems: 'center', gap: '2px',
+                            display: 'flex', alignItems: 'center', gap: '3px',
                             background: 'linear-gradient(180deg, #a0a8b4 0%, #a0a8b4 20%, #909aa4 20%, #909aa4 80%, #808a96 80%, #808a96 100%)', border: '2px solid #b8c0ca',
-                            padding: '2px 5px',
+                            padding: '4px 7px',
                             boxShadow: 'inset 0 1px 0 #c8d0d830, inset 0 -1px 0 #606a78, 0 0 0 1px #606a78, inset 0 0 6px rgba(0,0,0,0.15)',
                         }}>
-                            <Zap size={8} style={{ color: '#fbbf24', filter: 'drop-shadow(0 0 2px #fbbf2460)' }} />
-                            <span style={{ fontSize: '6px', fontWeight: 900, color: '#fbbf24', fontFamily: PF, textShadow: '0 0 4px #fbbf2440' }}>
+                            <Zap size={12} style={{ color: '#fbbf24', filter: 'drop-shadow(0 0 2px #fbbf2460)' }} />
+                            <span style={{ fontSize: '8px', fontWeight: 900, color: '#fbbf24', fontFamily: PF, textShadow: '0 0 4px #fbbf2440' }}>
                                 {firebaseProfile?.currentStreak || 0}
                             </span>
                         </div>
                         {/* Points */}
                         <div style={{
-                            display: 'flex', alignItems: 'center', gap: '2px',
+                            display: 'flex', alignItems: 'center', gap: '3px',
                             background: 'linear-gradient(180deg, #a0a8b4 0%, #a0a8b4 20%, #909aa4 20%, #909aa4 80%, #808a96 80%, #808a96 100%)', border: '2px solid #b8c0ca',
-                            padding: '2px 5px',
+                            padding: '4px 7px',
                             boxShadow: 'inset 0 1px 0 #c8d0d830, inset 0 -1px 0 #606a78, 0 0 0 1px #606a78, inset 0 0 6px rgba(0,0,0,0.15)',
                         }}>
-                            <Star size={8} style={{ color: '#facc15', filter: 'drop-shadow(0 0 2px #facc1560)' }} />
-                            <span style={{ fontSize: '6px', fontWeight: 900, color: '#facc15', fontFamily: PF, textShadow: '0 0 4px #facc1540' }}>
+                            <Star size={12} style={{ color: '#facc15', filter: 'drop-shadow(0 0 2px #facc1560)' }} />
+                            <span style={{ fontSize: '8px', fontWeight: 900, color: '#facc15', fontFamily: PF, textShadow: '0 0 4px #facc1540' }}>
                                 {(firebaseProfile?.totalPoints ?? userStats?.totalPoints ?? 0).toLocaleString()}
                             </span>
                         </div>
                         {/* Licenses */}
                         {onShowLicenses && (
                             <button onClick={onShowLicenses} style={{
-                                padding: '3px', background: 'linear-gradient(180deg, #a0a8b4 0%, #a0a8b4 30%, #909aa4 30%, #909aa4 100%)',
+                                padding: '5px', background: 'linear-gradient(180deg, #a0a8b4 0%, #a0a8b4 30%, #909aa4 30%, #909aa4 100%)',
                                 border: '2px solid #b8c0ca', cursor: 'pointer',
                                 boxShadow: 'inset 0 1px 0 #c8d0d830, 0 0 0 1px #606a78, inset 0 -1px 0 #606a78',
                             }}>
-                                <GraduationCap size={10} style={{ color: '#64748b' }} />
+                                <GraduationCap size={14} style={{ color: '#64748b' }} />
                             </button>
                         )}
                         {/* Settings */}
                         {onShowSettings && (
                             <button onClick={onShowSettings} style={{
-                                padding: '3px', background: 'linear-gradient(180deg, #a0a8b4 0%, #a0a8b4 30%, #909aa4 30%, #909aa4 100%)',
+                                padding: '5px', background: 'linear-gradient(180deg, #a0a8b4 0%, #a0a8b4 30%, #909aa4 30%, #909aa4 100%)',
                                 border: '2px solid #b8c0ca', cursor: 'pointer',
                                 boxShadow: 'inset 0 1px 0 #c8d0d830, 0 0 0 1px #606a78, inset 0 -1px 0 #606a78',
                             }}>
-                                <Settings size={9} style={{ color: '#64748b' }} />
+                                <Settings size={13} style={{ color: '#64748b' }} />
                             </button>
                         )}
                         {/* Help */}
                         <button onClick={() => { showHelp ? playCollapse() : playExpand(); setShowHelp(h => !h); }} style={{
-                            padding: '3px', background: showHelp
+                            padding: '5px', background: showHelp
                                 ? 'linear-gradient(180deg, #3b82f6 0%, #2563eb 100%)'
                                 : 'linear-gradient(180deg, #a0a8b4 0%, #a0a8b4 30%, #909aa4 30%, #909aa4 100%)',
                             border: '2px solid #b8c0ca', cursor: 'pointer',
                             boxShadow: 'inset 0 1px 0 #c8d0d830, 0 0 0 1px #606a78, inset 0 -1px 0 #606a78',
                         }}>
-                            <HelpCircle size={9} style={{ color: showHelp ? '#fff' : '#64748b' }} />
+                            <HelpCircle size={13} style={{ color: showHelp ? '#fff' : '#64748b' }} />
                         </button>
                     </div>
                 </div>
@@ -834,8 +834,8 @@ const UniverseMapScreen = ({
                                 overflowY: 'hidden',
                                 height: '100%',
                                 alignItems: 'center',
-                                paddingLeft: 'calc(50% - 100px)',
-                                paddingRight: 'calc(50% - 100px)',
+                                paddingLeft: 'calc(50% - 130px)',
+                                paddingRight: 'calc(50% - 130px)',
                                 WebkitOverflowScrolling: 'touch',
                             }}>
 
@@ -849,7 +849,7 @@ const UniverseMapScreen = ({
                                         className="universe-card-snap"
                                         onClick={() => hasContent && onSelectUniverse(idx)}
                                         style={{
-                                            flexShrink: 0, width: '200px',
+                                            flexShrink: 0, width: '260px',
                                             transition: 'all 0.5s',
                                             transform: isActive ? 'scale(1)' : 'scale(0.7)',
                                             opacity: isActive ? 1 : 0.15,
@@ -874,7 +874,7 @@ const UniverseMapScreen = ({
                                         {/* Universe Portal — Image */}
                                         <div style={{
                                             position: 'relative',
-                                            width: '180px', height: '180px',
+                                            width: '240px', height: '240px',
                                             display: 'flex', alignItems: 'center', justifyContent: 'center',
                                             marginBottom: '2px',
                                             animation: 'universe-float 5s ease-in-out infinite',
@@ -916,7 +916,7 @@ const UniverseMapScreen = ({
                                                 src={`/universo${idx + 1}.png`}
                                                 alt={universe.name}
                                                 style={{
-                                                    width: '170px', height: '170px',
+                                                    width: '230px', height: '230px',
                                                     objectFit: 'contain',
                                                     position: 'relative', zIndex: 10,
                                                     filter: isActive
