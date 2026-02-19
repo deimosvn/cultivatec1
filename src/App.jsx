@@ -3672,16 +3672,18 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete, userPr
             setCurrentStep(currentStep + 1);
             setMascotMood('happy');
         } else {
-            // Calcular puntaje de preguntas interactivas
+            // Calcular puntaje de preguntas interactivas (solo para mostrar en pantalla de celebración)
             const totalInteractive = content.filter(s => isStepInteractive(s)).length;
             const solvedInteractive = [...solvedSteps].filter(idx => isStepInteractive(content[idx])).length;
-            // If no interactive steps, pass null so handleModuleComplete uses fallback (100%)
             const result = totalInteractive > 0 ? { score: solvedInteractive, total: totalInteractive } : null;
             setQuizResultData(result || { score: totalSteps, total: totalSteps });
             setShowCelebration(true);
             setMascotMood('celebrating');
             playVictory();
-            onModuleComplete?.(currentModule.id, xpEarned + 10, result);
+            // Siempre completar el módulo al terminar todas las secciones.
+            // El usuario recorrió todo el contenido, se marca como completado (100%).
+            // Las preguntas interactivas son para aprendizaje, no bloquean el avance.
+            onModuleComplete?.(currentModule.id, xpEarned + 10, null);
         }
     };
 
@@ -3929,8 +3931,9 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete, userPr
     if (showCelebration) {
         const qr = quizResultData || { score: 0, total: 10 };
         const quizPercent = qr.total > 0 ? Math.round((qr.score / qr.total) * 100) : 0;
-        const passed = quizPercent >= 70;
-        const starsCount = qr.score >= 10 ? 3 : qr.score >= 7 ? 2 : qr.score >= 4 ? 1 : 0;
+        // Siempre se aprueba al completar todas las secciones del módulo
+        const passed = true;
+        const starsCount = quizPercent >= 90 ? 3 : quizPercent >= 70 ? 2 : 1;
         return (
             <div className={`min-h-full bg-gradient-to-b ${passed ? 'from-[#2563EB] to-[#1D4ED8]' : 'from-[#B45309] to-[#92400E]'} flex flex-col items-center justify-center p-6 animate-fade-in`}>
                 <div className="text-center">
@@ -6470,7 +6473,7 @@ export default function App() {
         // Check if module was already completed — no XP for retakes
         const alreadyCompleted = completedModules.has(moduleId) || 
             (userScores[moduleId] && userScores[moduleId].total > 0 && 
-             Math.round((userScores[moduleId].score / userScores[moduleId].total) * 100) >= 100);
+             Math.round((userScores[moduleId].score / userScores[moduleId].total) * 100) >= 70);
         
         // Update userScores with quiz result (only if better score)
         if (percentage >= 70 && !alreadyCompleted) {
@@ -6484,10 +6487,8 @@ export default function App() {
             if (userId) {
                 saveModuleScore(userId, moduleId, quizScoreData).catch(console.error);
             }
-            // Also mark as completed if >= 100%
-            if (percentage >= 100) {
-                handleModuleComplete(moduleId, correct * 10);
-            }
+            // Marcar como completado si aprobó (>= 70%)
+            handleModuleComplete(moduleId, correct * 10);
         }
 
         // Only award XP and stats for first completion
