@@ -130,12 +130,12 @@ export const updateUserProfile = async (uid, data) => {
 /**
  * Verificar y actualizar la racha diaria.
  * Se llama al cargar la app cuando el usuario está autenticado.
- * Retorna la racha actual.
+ * Retorna { streak, isNewDay } para que la app sepa si mostrar notificación.
  */
 export const checkAndUpdateStreak = async (uid) => {
   const userRef = doc(db, 'users', uid);
   const snap = await getDoc(userRef);
-  if (!snap.exists()) return 0;
+  if (!snap.exists()) return { streak: 0, isNewDay: false };
 
   const data = snap.data();
   const now = new Date();
@@ -143,7 +143,7 @@ export const checkAndUpdateStreak = async (uid) => {
 
   // Si ya se registró hoy, no hacer nada
   if (data.lastLoginDate === todayStr) {
-    return data.currentStreak || 0;
+    return { streak: data.currentStreak || 0, isNewDay: false };
   }
 
   // Calcular si es día consecutivo
@@ -169,7 +169,7 @@ export const checkAndUpdateStreak = async (uid) => {
     lastActive: serverTimestamp(),
   });
 
-  return newStreak;
+  return { streak: newStreak, isNewDay: true };
 };
 
 /**

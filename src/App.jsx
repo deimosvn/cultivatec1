@@ -6011,6 +6011,7 @@ export default function App() {
     const [visitedSections, setVisitedSections] = useState(new Set(['Biblioteca']));
     const [showRobotEditor, setShowRobotEditor] = useState(false);
     const [skinGiftNotification, setSkinGiftNotification] = useState(null); // { id, name, config }
+    const [energyNotification, setEnergyNotification] = useState(null); // { streak: number }
 
     // Persist userStats to localStorage
     useEffect(() => {
@@ -6036,8 +6037,15 @@ export default function App() {
     useEffect(() => {
         if (!userId) return;
 
-        // Verificar y actualizar racha diaria
-        checkAndUpdateStreak(userId).catch(console.error);
+        // Verificar y actualizar racha diaria + mostrar notificación de energía
+        checkAndUpdateStreak(userId).then(result => {
+            if (result && result.isNewDay) {
+                setTimeout(() => {
+                    playStreak();
+                    setEnergyNotification({ streak: result.streak });
+                }, 1200);
+            }
+        }).catch(console.error);
 
         // Sincronizar friendsCount con el conteo real de amigos
         syncFriendsCount(userId).catch(console.error);
@@ -6896,6 +6904,113 @@ export default function App() {
                         <button onClick={() => setSkinGiftNotification(null)}
                             className="w-full py-3 rounded-2xl bg-gradient-to-r from-[#2563EB] to-[#3B82F6] text-white font-black text-sm shadow-lg shadow-[#2563EB]/30 active:scale-95 transition-all border-b-4 border-[#1D4ED8]">
                             ¡Genial! 🎉
+                        </button>
+                    </div>
+                </div>
+            )}
+            {/* Energy / Streak Daily Notification */}
+            {energyNotification && (
+                <div className="fixed inset-0 z-[65] bg-black/60 backdrop-blur-sm flex items-center justify-center p-6" onClick={() => setEnergyNotification(null)}>
+                    <style>{`
+                        @keyframes energyPulse {
+                            0%, 100% { transform: scale(1); }
+                            50% { transform: scale(1.08); }
+                        }
+                        @keyframes energyGlow {
+                            0%, 100% { box-shadow: 0 0 30px #F59E0B40, 0 0 60px #F59E0B20; }
+                            50% { box-shadow: 0 0 50px #F59E0B60, 0 0 100px #F59E0B30; }
+                        }
+                        @keyframes energySpark {
+                            0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
+                            50% { opacity: 1; transform: scale(1) rotate(180deg); }
+                        }
+                        @keyframes energySlideUp {
+                            from { opacity: 0; transform: translateY(30px) scale(0.9); }
+                            to { opacity: 1; transform: translateY(0) scale(1); }
+                        }
+                        @keyframes energyBolt {
+                            0%, 100% { transform: translateY(0) scale(1); filter: brightness(1); }
+                            25% { transform: translateY(-8px) scale(1.15); filter: brightness(1.3); }
+                            50% { transform: translateY(-3px) scale(1.05); filter: brightness(1.1); }
+                        }
+                        @keyframes energyBarFill {
+                            from { width: 0%; }
+                            to { width: 100%; }
+                        }
+                    `}</style>
+                    {/* Sparkle particles */}
+                    {Array.from({ length: 16 }).map((_, i) => (
+                        <div key={i} className="absolute rounded-full" style={{
+                            width: `${3 + Math.random() * 5}px`,
+                            height: `${3 + Math.random() * 5}px`,
+                            backgroundColor: i % 4 === 0 ? '#FFC800' : i % 4 === 1 ? '#FF6B00' : i % 4 === 2 ? '#FBBF24' : '#FFF',
+                            top: `${15 + Math.random() * 70}%`,
+                            left: `${15 + Math.random() * 70}%`,
+                            animation: `energySpark ${1.5 + Math.random() * 2}s ease-in-out ${Math.random() * 1.5}s infinite`,
+                        }} />
+                    ))}
+                    <div className="bg-gradient-to-b from-[#FFF7ED] to-white rounded-3xl p-6 max-w-sm w-full shadow-2xl text-center relative overflow-hidden"
+                        onClick={e => e.stopPropagation()}
+                        style={{ animation: 'energySlideUp 0.5s ease-out' }}>
+                        {/* Decorative top glow */}
+                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-40 rounded-full opacity-30"
+                            style={{ background: 'radial-gradient(circle, #F59E0B, transparent 70%)', filter: 'blur(20px)', top: '-60px' }} />
+                        {/* Bolt icon */}
+                        <div className="relative z-10 mx-auto w-24 h-24 rounded-full flex items-center justify-center mb-3"
+                            style={{
+                                background: 'linear-gradient(135deg, #FFC800, #F59E0B, #D97706)',
+                                animation: 'energyGlow 2s ease-in-out infinite',
+                            }}>
+                            <span className="text-5xl" style={{ animation: 'energyBolt 2s ease-in-out infinite' }}>⚡</span>
+                        </div>
+                        {/* Title */}
+                        <h3 className="text-xl font-black text-[#92400E] mb-1 relative z-10">¡Energía del día!</h3>
+                        <p className="text-sm text-[#B45309] font-bold mb-4 relative z-10">
+                            {energyNotification.streak === 1
+                                ? '¡Bienvenido de vuelta! Tu energía se ha recargado'
+                                : energyNotification.streak <= 3
+                                    ? '¡Sigues conectado! Tu energía crece'
+                                    : energyNotification.streak <= 7
+                                        ? '¡Increíble constancia! Energía al máximo'
+                                        : '🔥 ¡Energía LEGENDARIA! Eres imparable'}
+                        </p>
+                        {/* Streak counter */}
+                        <div className="relative z-10 bg-gradient-to-r from-[#FEF3C7] to-[#FDE68A] rounded-2xl p-4 mb-4 border-2 border-[#F59E0B]/30"
+                            style={{ animation: 'energyPulse 2.5s ease-in-out infinite' }}>
+                            <div className="flex items-center justify-center gap-3">
+                                <div className="flex flex-col items-center">
+                                    <span className="text-4xl font-black text-[#92400E]">{energyNotification.streak}</span>
+                                    <span className="text-[10px] font-bold text-[#B45309] uppercase tracking-wider">
+                                        {energyNotification.streak === 1 ? 'día' : 'días'}
+                                    </span>
+                                </div>
+                                <div className="flex flex-col items-start gap-1">
+                                    <span className="text-xs font-black text-[#92400E]">Energía Acumulada</span>
+                                    <div className="w-32 h-3 bg-[#FDE68A] rounded-full overflow-hidden border border-[#F59E0B]/40">
+                                        <div className="h-full rounded-full"
+                                            style={{
+                                                background: 'linear-gradient(90deg, #F59E0B, #FFC800, #F59E0B)',
+                                                animation: 'energyBarFill 1.5s ease-out 0.5s both',
+                                            }} />
+                                    </div>
+                                    <div className="flex gap-1">
+                                        {Array.from({ length: Math.min(energyNotification.streak, 7) }).map((_, i) => (
+                                            <span key={i} className="text-xs" style={{ animationDelay: `${0.8 + i * 0.1}s` }}>⚡</span>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {/* Motivational tip */}
+                        <p className="text-[11px] text-[#92400E]/60 font-bold mb-4 relative z-10">
+                            {energyNotification.streak >= 7 ? '¡7+ días seguidos! Eres un verdadero ingeniero ⭐'
+                                : energyNotification.streak >= 3 ? '¡Sigue así para desbloquear más energía!'
+                                : '¡Vuelve mañana para acumular más energía!'}
+                        </p>
+                        {/* Dismiss button */}
+                        <button onClick={() => setEnergyNotification(null)}
+                            className="relative z-10 w-full py-3 rounded-2xl bg-gradient-to-r from-[#D97706] to-[#F59E0B] text-white font-black text-sm shadow-lg shadow-[#D97706]/30 active:scale-95 transition-all border-b-4 border-[#B45309]">
+                            ¡A explorar! 🚀
                         </button>
                     </div>
                 </div>
