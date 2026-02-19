@@ -6,6 +6,7 @@
 import React, { useState, useRef } from 'react';
 import { ArrowLeft, Download, ChevronRight, ChevronLeft, Wrench, Package, Clock, Star, AlertTriangle, CheckCircle2, Sparkles, X } from 'lucide-react';
 import { jsPDF } from 'jspdf';
+import { playClick, playTab, playBack, playNavigate, playPageFlip } from '../utils/retroSounds';
 
 // ============================================
 // DATOS DE ROBOTS CASEROS
@@ -878,7 +879,7 @@ const RobotDetailModal = ({ robot, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/70 z-50 flex items-end sm:items-center justify-center animate-fade-in" onClick={onClose}>
+    <div className="fixed inset-0 bg-black/70 z-50 flex items-end sm:items-center justify-center animate-fade-in" onClick={() => { playBack(); onClose(); }}>
       <div className="bg-[#0F172A] w-full sm:max-w-lg sm:rounded-3xl rounded-t-3xl max-h-[92vh] flex flex-col overflow-hidden border border-indigo-500/20" onClick={e => e.stopPropagation()}>
         {/* Header */}
         <div className="bg-gradient-to-r from-indigo-900 via-purple-900 to-indigo-900 px-5 py-4 flex items-center justify-between border-b border-indigo-500/30 relative overflow-hidden">
@@ -904,7 +905,7 @@ const RobotDetailModal = ({ robot, onClose }) => {
               </div>
             </div>
           </div>
-          <button onClick={onClose} className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center active:scale-90 transition relative z-10">
+          <button onClick={() => { playBack(); onClose(); }} className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center active:scale-90 transition relative z-10">
             <X size={16} className="text-white" />
           </button>
         </div>
@@ -943,7 +944,7 @@ const RobotDetailModal = ({ robot, onClose }) => {
                 </div>
                 <div className="space-y-2">
                   {robot.pasos.map((paso, i) => (
-                    <button key={i} onClick={() => setCurrentStep(i)}
+                    <button key={i} onClick={() => { playClick(); setCurrentStep(i); }}
                       className="w-full flex items-center gap-3 p-2.5 rounded-xl bg-white/5 hover:bg-white/10 transition active:scale-[0.98] text-left border border-white/5">
                       <div className="w-7 h-7 rounded-full bg-indigo-600 flex items-center justify-center flex-shrink-0">
                         <span className="text-[10px] font-black text-white">{i + 1}</span>
@@ -962,13 +963,13 @@ const RobotDetailModal = ({ robot, onClose }) => {
             <div className="p-5 space-y-4">
               {/* Step navigation */}
               <div className="flex items-center justify-between mb-2">
-                <button onClick={() => setCurrentStep(currentStep - 1 < 0 ? -1 : currentStep - 1)}
+                <button onClick={() => { playPageFlip(); setCurrentStep(currentStep - 1 < 0 ? -1 : currentStep - 1); }}
                   className="flex items-center gap-1 text-indigo-400 text-xs font-black active:scale-95 transition">
                   <ChevronLeft size={14} /> {currentStep === 0 ? 'Materiales' : `Paso ${currentStep}`}
                 </button>
                 <span className="text-[10px] font-black text-indigo-400/60">Paso {currentStep + 1} de {robot.pasos.length}</span>
                 {currentStep < robot.pasos.length - 1 && (
-                  <button onClick={() => setCurrentStep(currentStep + 1)}
+                  <button onClick={() => { playPageFlip(); setCurrentStep(currentStep + 1); }}
                     className="flex items-center gap-1 text-indigo-400 text-xs font-black active:scale-95 transition">
                     Paso {currentStep + 2} <ChevronRight size={14} />
                   </button>
@@ -978,7 +979,7 @@ const RobotDetailModal = ({ robot, onClose }) => {
               {/* Progress dots */}
               <div className="flex items-center justify-center gap-1.5">
                 {robot.pasos.map((_, i) => (
-                  <button key={i} onClick={() => setCurrentStep(i)}
+                  <button key={i} onClick={() => { playTab(); setCurrentStep(i); }}
                     className={`h-1.5 rounded-full transition-all ${i === currentStep ? 'w-6 bg-indigo-400' : i < currentStep ? 'w-1.5 bg-indigo-500' : 'w-1.5 bg-indigo-800'}`} />
                 ))}
               </div>
@@ -1014,7 +1015,7 @@ const RobotDetailModal = ({ robot, onClose }) => {
 
                     {/* Next step button */}
                     {currentStep < robot.pasos.length - 1 ? (
-                      <button onClick={() => setCurrentStep(currentStep + 1)}
+                      <button onClick={() => { playPageFlip(); setCurrentStep(currentStep + 1); }}
                         className="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-black text-sm active:scale-95 transition flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/30">
                         Siguiente Paso <ChevronRight size={16} />
                       </button>
@@ -1025,7 +1026,7 @@ const RobotDetailModal = ({ robot, onClose }) => {
                           <p className="text-sm font-black text-emerald-300">¡Has terminado todos los pasos!</p>
                           <p className="text-xs text-emerald-400/60 font-semibold mt-1">Tu {robot.nombre} está listo</p>
                         </div>
-                        <button onClick={() => setCurrentStep(-1)}
+                        <button onClick={() => { playBack(); setCurrentStep(-1); }}
                           className="w-full py-3 bg-white/10 text-white rounded-xl font-black text-sm active:scale-95 transition border border-white/10">
                           Ver resumen
                         </button>
@@ -1040,11 +1041,11 @@ const RobotDetailModal = ({ robot, onClose }) => {
 
         {/* Bottom bar with download */}
         <div className="px-5 py-3 bg-indigo-950/80 border-t border-indigo-500/20 flex items-center gap-3">
-          <button onClick={() => setCurrentStep(-1)}
+          <button onClick={() => { playClick(); setCurrentStep(-1); }}
             className={`px-4 py-2.5 rounded-xl text-xs font-black transition active:scale-95 ${currentStep === -1 ? 'bg-indigo-600 text-white' : 'bg-white/5 text-indigo-300 border border-indigo-500/20'}`}>
             📋 Resumen
           </button>
-          <button onClick={handleDownload} disabled={downloading}
+          <button onClick={() => { playClick(); handleDownload(); }} disabled={downloading}
             className="flex-1 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-xl font-black text-sm active:scale-95 transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 disabled:opacity-50">
             <Download size={14} />
             {downloading ? 'Generando PDF...' : 'Descargar PDF con planos'}
@@ -1112,7 +1113,7 @@ const BahiaChatarraScreen = ({ onBack }) => {
       <div className="relative z-10">
         <div className="bg-gradient-to-b from-amber-900/40 via-amber-900/20 to-transparent px-5 pt-5 pb-8">
           {onBack && (
-            <button onClick={onBack} className="text-amber-300/60 hover:text-amber-300 mb-4 flex items-center text-sm font-black active:scale-95 transition">
+            <button onClick={() => { playBack(); onBack(); }} className="text-amber-300/60 hover:text-amber-300 mb-4 flex items-center text-sm font-black active:scale-95 transition">
               <ArrowLeft size={18} className="mr-1" /> Mapa Galáctico
             </button>
           )}
@@ -1156,7 +1157,7 @@ const BahiaChatarraScreen = ({ onBack }) => {
 
         {/* Robot grid */}
         {ROBOTS_CASEROS.map((robot, idx) => (
-          <button key={robot.id} onClick={() => setSelectedRobot(robot)}
+          <button key={robot.id} onClick={() => { playClick(); setSelectedRobot(robot); }}
             className="w-full text-left animate-fade-in"
             style={{ animationDelay: `${idx * 100}ms` }}>
             <div className="bg-gradient-to-br from-indigo-950/80 to-purple-950/60 rounded-2xl p-4 border border-indigo-500/20 hover:border-indigo-400/40 transition-all active:scale-[0.98] shadow-lg shadow-indigo-900/20 group relative overflow-hidden">

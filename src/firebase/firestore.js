@@ -734,3 +734,59 @@ export const adminGiftSkin = async (targetUid, skin) => {
     robotConfig: skin.config,
   });
 };
+
+// ================================================================
+// CLASES / CLASSROOM — Tracking de estudiantes por código
+// ================================================================
+
+/**
+ * Unirse a una clase con un código.
+ * Crea/actualiza el documento de la clase y agrega el uid al array members.
+ */
+export const joinClassroom = async (classCode, uid) => {
+  const classRef = doc(db, 'classrooms', classCode);
+  const snap = await getDoc(classRef);
+  if (snap.exists()) {
+    const data = snap.data();
+    if (data.members && data.members.includes(uid)) return; // ya está
+    await updateDoc(classRef, { members: arrayUnion(uid) });
+  } else {
+    await setDoc(classRef, { members: [uid], createdAt: serverTimestamp() });
+  }
+};
+
+/**
+ * Salir de una clase.
+ */
+export const leaveClassroom = async (classCode, uid) => {
+  const classRef = doc(db, 'classrooms', classCode);
+  await updateDoc(classRef, { members: arrayRemove(uid) });
+};
+
+/**
+ * Obtener la cantidad de estudiantes en una clase.
+ */
+export const getClassroomMemberCount = async (classCode) => {
+  const classRef = doc(db, 'classrooms', classCode);
+  const snap = await getDoc(classRef);
+  if (snap.exists()) {
+    const data = snap.data();
+    return (data.members || []).length;
+  }
+  return 0;
+};
+
+/**
+ * Listener en tiempo real para el conteo de miembros de una clase.
+ */
+export const onClassroomMembers = (classCode, callback) => {
+  const classRef = doc(db, 'classrooms', classCode);
+  return onSnapshot(classRef, (snap) => {
+    if (snap.exists()) {
+      const data = snap.data();
+      callback((data.members || []).length);
+    } else {
+      callback(0);
+    }
+  });
+};

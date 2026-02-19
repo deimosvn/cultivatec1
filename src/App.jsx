@@ -3,6 +3,7 @@ import { Zap, Home, BookOpen, Settings, Sun, Moon, ArrowLeft, Lightbulb, Play, T
 import QuizScreen from './components/QuizScreen';
 import GlossaryScreen, { GLOSSARY_TERMS as GLOSSARY_TERMS_DATA } from './components/GlossaryScreen';
 import ClassroomScreen from './components/ClassroomScreen';
+import JoinClassScreen from './components/JoinClassScreen';
 import { AchievementsScreen, AchievementToast, AchievementUnlockPopup, ACHIEVEMENTS } from './components/AchievementsScreen';
 import RobotSimulator from './components/RobotSimulator';
 import LicensesScreen from './components/LicensesScreen';
@@ -20,6 +21,13 @@ import FriendsScreen from './components/FriendsScreen';
 import RobotSkinEditor, { getUnlockedSkinIds, ROBOT_SKINS } from './components/RobotSkinEditor';
 import SettingsScreen from './components/SettingsScreen';
 import BahiaChatarraScreen from './components/BahiaChatarraScreen';
+import UniverseMapScreen from './components/UniverseMapScreen';
+import HomeScreen from './components/HomeScreen';
+import AnimatedBlackHole from './components/AnimatedBlackHole';
+import DiagnosticExam from './components/DiagnosticExam';
+import Universe4Shell from './components/Universe4Shell';
+import { UNIVERSES, WORLDS_CONFIG as UNIVERSES_WORLDS_CONFIG, ROLE_TO_UNIVERSE, USER_ROLES } from './data/universesData';
+import { UniverseProvider, useUniverse } from './context/UniverseContext';
 import {
   playClick, playTab, playNavigate, playBack, playCorrect, playWrong, playXP, playLevelUp,
   playVictory, playAchievement, playSkinUnlock, playError, playStart, playToggleOn, playToggleOff,
@@ -3667,8 +3675,9 @@ const GenericLessonScreen = ({ currentModule, goToMenu, onModuleComplete, userPr
             // Calcular puntaje de preguntas interactivas
             const totalInteractive = content.filter(s => isStepInteractive(s)).length;
             const solvedInteractive = [...solvedSteps].filter(idx => isStepInteractive(content[idx])).length;
-            const result = { score: solvedInteractive, total: totalInteractive || 10 };
-            setQuizResultData(result);
+            // If no interactive steps, pass null so handleModuleComplete uses fallback (100%)
+            const result = totalInteractive > 0 ? { score: solvedInteractive, total: totalInteractive } : null;
+            setQuizResultData(result || { score: totalSteps, total: totalSteps });
             setShowCelebration(true);
             setMascotMood('celebrating');
             playVictory();
@@ -4330,7 +4339,12 @@ const SectionBanner = ({ section, modulesInSection, userScores, sectionIndex, al
 };
 
 // --- WORLD MAP SCREEN (Selección de Mundos) ---
-const WorldMapScreen = ({ userScores, onSelectWorld, userProfile, firebaseProfile, onShowAchievements, onShowLicenses, onLogout, onEditRobot, userStats, onGoToCircuits, onGoToProgramming, onGoToBahia, onShowSettings }) => {
+const WorldMapScreen = ({ userScores, onSelectWorld, userProfile, firebaseProfile, onShowAchievements, onShowLicenses, onLogout, onEditRobot, userStats, onShowSettings, onBackToUniverses, universeConfig, worlds: worldsProp }) => {
+    const worlds = worldsProp || WORLDS_CONFIG;
+    const isEmptyUniverse = !worlds || worlds.length === 0;
+    const isUniversidad = universeConfig?.uiTheme === 'industrial';
+    const uniAccent = universeConfig?.trailColor || '#A855F7';
+    const uniGlow = universeConfig?.glowColor || 'rgba(168,85,247,0.5)';
     // Generate stars deterministically
     const stars = React.useMemo(() => 
         Array.from({ length: 80 }, (_, i) => ({
@@ -4355,28 +4369,36 @@ const WorldMapScreen = ({ userScores, onSelectWorld, userProfile, firebaseProfil
         <div className="pb-24 min-h-full galaxy-bg w-full relative overflow-hidden">
             {/* Galaxy background layers */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                {/* Nebula blobs */}
+                {/* Nebula blobs — teñidas con el color del universo */}
                 <div className="galaxy-nebula" style={{
                     width: '300px', height: '300px',
-                    background: 'radial-gradient(circle, rgba(139,92,246,0.35) 0%, rgba(99,102,241,0.15) 40%, transparent 70%)',
+                    background: isUniversidad
+                        ? 'radial-gradient(circle, rgba(239,68,68,0.2) 0%, rgba(127,29,29,0.1) 40%, transparent 70%)'
+                        : `radial-gradient(circle, ${uniGlow.replace('0.5','0.35')} 0%, ${uniGlow.replace('0.5','0.15')} 40%, transparent 70%)`,
                     left: '-5%', top: '10%',
                     '--nebula-duration': '18s'
                 }}></div>
                 <div className="galaxy-nebula-2" style={{
                     width: '250px', height: '250px',
-                    background: 'radial-gradient(circle, rgba(59,130,246,0.3) 0%, rgba(37,99,235,0.1) 40%, transparent 70%)',
+                    background: isUniversidad
+                        ? 'radial-gradient(circle, rgba(185,28,28,0.2) 0%, rgba(127,29,29,0.08) 40%, transparent 70%)'
+                        : 'radial-gradient(circle, rgba(59,130,246,0.3) 0%, rgba(37,99,235,0.1) 40%, transparent 70%)',
                     right: '-8%', top: '30%',
                     '--nebula-duration': '22s'
                 }}></div>
                 <div className="galaxy-nebula" style={{
                     width: '350px', height: '350px',
-                    background: 'radial-gradient(circle, rgba(168,85,247,0.25) 0%, rgba(192,132,252,0.1) 40%, transparent 70%)',
+                    background: isUniversidad
+                        ? 'radial-gradient(circle, rgba(153,27,27,0.18) 0%, rgba(127,29,29,0.07) 40%, transparent 70%)'
+                        : 'radial-gradient(circle, rgba(168,85,247,0.25) 0%, rgba(192,132,252,0.1) 40%, transparent 70%)',
                     left: '30%', bottom: '5%',
                     '--nebula-duration': '25s'
                 }}></div>
                 <div className="galaxy-nebula-2" style={{
                     width: '200px', height: '200px',
-                    background: 'radial-gradient(circle, rgba(236,72,153,0.2) 0%, rgba(244,114,182,0.08) 40%, transparent 70%)',
+                    background: isUniversidad
+                        ? 'radial-gradient(circle, rgba(239,68,68,0.15) 0%, rgba(127,29,29,0.06) 40%, transparent 70%)'
+                        : 'radial-gradient(circle, rgba(236,72,153,0.2) 0%, rgba(244,114,182,0.08) 40%, transparent 70%)',
                     right: '20%', top: '5%',
                     '--nebula-duration': '16s'
                 }}></div>
@@ -4461,113 +4483,55 @@ const WorldMapScreen = ({ userScores, onSelectWorld, userProfile, firebaseProfil
 
             {/* Header */}
             <div className="text-center pt-6 pb-3 px-4 relative z-10">
+                {onBackToUniverses && (
+                    <button onClick={onBackToUniverses}
+                        className="absolute left-4 top-6 flex items-center gap-1 bg-white/10 hover:bg-white/20 backdrop-blur rounded-xl px-3 py-2 text-purple-200 transition active:scale-95 border border-white/10 z-20">
+                        <ArrowLeft size={14}/>
+                        <span className="text-[10px] font-bold">Universos</span>
+                    </button>
+                )}
                 <h1 className="text-2xl font-black text-white mb-1 tracking-tight drop-shadow-lg flex items-center justify-center gap-2">
-                    <Rocket size={22} className="text-purple-300" /> Mapa Galáctico
+                    {universeConfig ? (
+                        <><span style={{ color: uniAccent }}>{universeConfig.icon}</span> {universeConfig.name}</>
+                    ) : (
+                        <><Rocket size={22} className="text-purple-300" /> Mapa Galáctico</>
+                    )}
                 </h1>
-                <p className="text-xs text-purple-200/60 font-bold">Elige tu destino y conquista los mundos</p>
+                <p className="text-xs font-bold" style={{ color: universeConfig ? `${uniAccent}99` : 'rgba(196,181,253,0.6)' }}>
+                    {universeConfig ? universeConfig.subtitle : 'Elige tu destino y conquista los mundos'}
+                </p>
             </div>
 
-            {/* Station Ships */}
-            <div className="px-4 max-w-xl mx-auto relative z-10 mb-8">
-                <div className="flex justify-between gap-4 items-start">
-                    {/* Left Ship - Circuit Lab */}
-                    <div className="flex-1 flex flex-col items-center gap-1">
-                        <button onClick={onGoToCircuits}
-                            className="group relative active:scale-90 transition-transform duration-200 focus:outline-none"
-                            style={{ animation: 'ship-fly 6s ease-in-out infinite' }}>
-                            {/* Outer glow ring */}
-                            <div className="absolute inset-[-20px] rounded-full pointer-events-none opacity-60 group-hover:opacity-100 transition-opacity duration-500"
-                                style={{ background: 'radial-gradient(circle, rgba(34,211,238,0.45) 0%, rgba(34,211,238,0.15) 40%, transparent 70%)', filter: 'blur(10px)' }}></div>
-                            {/* Ship image */}
-                            <img src="/electronica.png" alt="Laboratorio de Circuitos"
-                                className="w-36 h-36 sm:w-40 sm:h-40 object-contain relative z-10 group-hover:scale-110 transition-transform duration-300"
-                                style={{ filter: 'drop-shadow(0 0 22px rgba(34,211,238,0.7)) drop-shadow(0 0 50px rgba(34,211,238,0.35))' }} />
-                            {/* Thruster glow */}
-                            <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-16 h-6 rounded-full bg-[#22D3EE]/50 blur-lg z-0" style={{ animation: 'twinkle 1.5s ease-in-out infinite' }}></div>
-                            {/* Sparkles around ship */}
-                            <div className="absolute top-0 right-0 w-2.5 h-2.5 bg-[#22D3EE]/70 rounded-full" style={{ animation: 'twinkle 2s ease-in-out infinite' }}></div>
-                            <div className="absolute bottom-6 left-0 w-2 h-2 bg-white/50 rounded-full" style={{ animation: 'twinkle 2.5s ease-in-out infinite 0.5s' }}></div>
-                            <div className="absolute top-8 left-1 w-1.5 h-1.5 bg-[#22D3EE]/50 rounded-full" style={{ animation: 'twinkle 3s ease-in-out infinite 1s' }}></div>
-                        </button>
-                        {/* Info below */}
-                        <div className="text-center mt-2 px-1">
-                            <div className="inline-flex items-center gap-1 bg-[#22D3EE]/10 border border-[#22D3EE]/25 rounded-full px-3 py-1 mb-1">
-                                <div className="w-1.5 h-1.5 rounded-full bg-[#22D3EE] animate-pulse"></div>
-                                <h3 className="text-[11px] font-black text-[#22D3EE] leading-tight">Laboratorio de Circuitos</h3>
-                            </div>
-                            <span className="text-[9px] font-bold text-purple-200/50 block">Practica libremente</span>
+            {/* Empty Universe - Coming Soon */}
+            {isEmptyUniverse && (
+                <div className="px-4 max-w-xl mx-auto relative z-10 pb-8">
+                    <div className="flex flex-col items-center py-10">
+                        {/* Animated Black Hole portal */}
+                        <div className="relative mb-6 flex items-center justify-center">
+                            <AnimatedBlackHole
+                                color={uniAccent}
+                                glowColor={uniGlow}
+                                size={176}
+                            />
                         </div>
-                    </div>
-
-                    {/* Right Ship - Programming Station */}
-                    <div className="flex-1 flex flex-col items-center gap-1">
-                        <button onClick={onGoToProgramming}
-                            className="group relative active:scale-90 transition-transform duration-200 focus:outline-none"
-                            style={{ animation: 'ship-fly 7s ease-in-out infinite 0.8s' }}>
-                            {/* Outer glow ring */}
-                            <div className="absolute inset-[-20px] rounded-full pointer-events-none opacity-60 group-hover:opacity-100 transition-opacity duration-500"
-                                style={{ background: 'radial-gradient(circle, rgba(167,139,250,0.45) 0%, rgba(167,139,250,0.15) 40%, transparent 70%)', filter: 'blur(10px)' }}></div>
-                            {/* Ship image */}
-                            <img src="/programacion.png" alt="Estación de Programación"
-                                className="w-36 h-36 sm:w-40 sm:h-40 object-contain relative z-10 group-hover:scale-110 transition-transform duration-300"
-                                style={{ filter: 'drop-shadow(0 0 22px rgba(167,139,250,0.7)) drop-shadow(0 0 50px rgba(167,139,250,0.35))' }} />
-                            {/* Thruster glow */}
-                            <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-16 h-6 rounded-full bg-[#93C5FD]/50 blur-lg z-0" style={{ animation: 'twinkle 1.8s ease-in-out infinite 0.3s' }}></div>
-                            {/* Sparkles around ship */}
-                            <div className="absolute top-0 left-0 w-2.5 h-2.5 bg-[#93C5FD]/70 rounded-full" style={{ animation: 'twinkle 2.5s ease-in-out infinite 0.3s' }}></div>
-                            <div className="absolute bottom-6 right-0 w-2 h-2 bg-white/50 rounded-full" style={{ animation: 'twinkle 3s ease-in-out infinite 1s' }}></div>
-                            <div className="absolute top-8 right-1 w-1.5 h-1.5 bg-[#93C5FD]/50 rounded-full" style={{ animation: 'twinkle 2s ease-in-out infinite 0.7s' }}></div>
-                        </button>
-                        {/* Info below */}
-                        <div className="text-center mt-2 px-1">
-                            <div className="inline-flex items-center gap-1 bg-[#93C5FD]/10 border border-[#93C5FD]/25 rounded-full px-3 py-1 mb-1">
-                                <div className="w-1.5 h-1.5 rounded-full bg-[#93C5FD] animate-pulse"></div>
-                                <h3 className="text-[11px] font-black text-[#93C5FD] leading-tight">Estación de Programación</h3>
-                            </div>
-                            <span className="text-[9px] font-bold text-purple-200/50 block">Tutoriales y retos</span>
+                        <span className="text-4xl mb-2">{universeConfig?.icon || '🚀'}</span>
+                        <h2 className="text-xl font-black text-white mb-1">{universeConfig?.name || 'Universo'}</h2>
+                        <p className="text-xs font-bold mb-4" style={{ color: uniAccent }}>{universeConfig?.description}</p>
+                        <div className="bg-white/5 border border-white/10 rounded-2xl p-6 text-center max-w-sm backdrop-blur-sm">
+                            <span className="text-4xl mb-3 block">{isUniversidad ? '🎓' : '🚀'}</span>
+                            <p className="text-sm font-black text-white mb-1">{isUniversidad ? 'Próximamente — Certificaciones' : '¡Próximamente!'}</p>
+                            <p className="text-xs text-gray-400">{isUniversidad
+                                ? 'Este sector está en preparación. Contenido de nivel profesional, certificaciones y proyectos de grado llegarán aquí.'
+                                : 'Este universo está en desarrollo. Mientras tanto, explora el Universo Secundaria con los 6 mundos disponibles.'
+                            }</p>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            {/* Bahía de la Chatarra Estelar */}
-            <div className="px-4 max-w-xl mx-auto relative z-10 mb-6">
-                <div className="flex justify-center">
-                    <div className="flex flex-col items-center gap-2">
-                        <button onClick={onGoToBahia}
-                            className="group relative active:scale-90 transition-transform duration-200 focus:outline-none"
-                            style={{ animation: 'float-planet 6.5s ease-in-out infinite 0.4s' }}>
-                            {/* Outer glow ring */}
-                            <div className="absolute inset-[-16px] rounded-full pointer-events-none opacity-60 group-hover:opacity-100 transition-opacity duration-500"
-                                style={{ background: 'radial-gradient(circle, rgba(245,158,11,0.4) 0%, rgba(245,158,11,0.1) 40%, transparent 70%)', filter: 'blur(8px)' }}></div>
-                            {/* Bahia image */}
-                            <img src="/bahia.png" alt="Bahía de la Chatarra Estelar"
-                                className="w-28 h-28 sm:w-32 sm:h-32 object-contain relative z-10 group-hover:scale-110 transition-transform duration-300"
-                                style={{ filter: 'drop-shadow(0 0 18px rgba(245,158,11,0.6)) drop-shadow(0 0 40px rgba(245,158,11,0.3))' }} />
-                            {/* Thruster glow */}
-                            <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-14 h-5 rounded-full bg-[#F59E0B]/40 blur-lg z-0" style={{ animation: 'twinkle 2s ease-in-out infinite 0.2s' }}></div>
-                            {/* Sparkles */}
-                            <div className="absolute top-1 right-1 w-2 h-2 bg-[#F59E0B]/70 rounded-full" style={{ animation: 'twinkle 2s ease-in-out infinite' }}></div>
-                            <div className="absolute bottom-5 left-1 w-1.5 h-1.5 bg-amber-300/50 rounded-full" style={{ animation: 'twinkle 2.5s ease-in-out infinite 0.7s' }}></div>
-                            <div className="absolute top-8 left-0 w-1 h-1 bg-[#F59E0B]/40 rounded-full" style={{ animation: 'twinkle 3s ease-in-out infinite 1.2s' }}></div>
-                            {/* Floating scrap emoji orbit */}
-                            <div className="absolute inset-[-18px] rounded-full pointer-events-none" style={{ animation: 'orbit-ring 12s linear infinite' }}>
-                                <span className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 text-xs opacity-60">🔩</span>
-                            </div>
-                        </button>
-                        {/* Info below */}
-                        <div className="text-center mt-1">
-                            <h3 className="text-xs font-black text-[#F59E0B] leading-tight">Bahía de la</h3>
-                            <h3 className="text-xs font-black text-[#F59E0B] leading-tight">Chatarra Estelar</h3>
-                            <span className="text-[9px] font-bold text-purple-200/50 mt-0.5 block">Robots caseros paso a paso</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            )}
 
             {/* World Planets */}
-            <div className="px-4 max-w-xl mx-auto space-y-10 pb-8 relative z-10">
-                {WORLDS_CONFIG.map((world, idx) => {
+            {!isEmptyUniverse && <div className="px-4 max-w-xl mx-auto space-y-10 pb-8 relative z-10">
+                {worlds.map((world, idx) => {
                     const unlocked = isWorldUnlocked(userScores, idx, firebaseProfile);
                     const completedCount = world.modules.filter(m => isModuleCompleted(userScores, m.id)).length;
                     const totalCount = world.modules.length;
@@ -4693,7 +4657,7 @@ const WorldMapScreen = ({ userScores, onSelectWorld, userProfile, firebaseProfil
                         <span className="text-xs font-black text-purple-300/60">¡Más mundos próximamente!</span>
                     </div>
                 </div>
-            </div>
+            </div>}
         </div>
     );
 };
@@ -5870,7 +5834,7 @@ const ChallengeView = ({ currentChallengeId, startChallenge, goToMenu, userScore
         </div>
     );
 };
-const BottomNavBar = ({ currentTab, onSelectTab, setViewMode }) => {
+const BottomNavBar = ({ currentTab, onSelectTab, setViewMode, onGoBack }) => {
     const tabs = [
         { id: 'Glosario', icon: BookOpen, label: 'Glosario' },
         { id: 'Simulador', icon: Bot, label: 'Robot' },
@@ -5895,7 +5859,7 @@ const BottomNavBar = ({ currentTab, onSelectTab, setViewMode }) => {
                             return (
                                 <button
                                     key={tab.id}
-                                    onClick={() => { playTab(); onSelectTab(tab.id); setViewMode('menu'); }}
+                                    onClick={() => { playTab(); if (onGoBack) { onGoBack(); } }}
                                     className="pixel-nav-center relative -mt-6 flex flex-col items-center"
                                 >
                                     <div className={`pixel-center-box w-[54px] h-[54px] rounded-lg flex items-center justify-center border-[3px] transition-all
@@ -5964,6 +5928,32 @@ export default function App() {
     const [currentChallengeId, setCurrentChallengeId] = useState(null); 
     const [currentWorldIndex, setCurrentWorldIndex] = useState(null); // null = world map, number = inside that world
     const [circuitInitialId, setCircuitInitialId] = useState(null); // for opening circuit builder on specific challenge
+
+    // === UNIVERSE SYSTEM STATE ===
+    const [currentUniverseIdx, setCurrentUniverseIdx] = useState(() => {
+        try {
+            const saved = localStorage.getItem('cultivatec_currentUniverse');
+            return saved !== null ? parseInt(saved, 10) : null;
+        } catch { return null; }
+    });
+    const [userRole, setUserRole] = useState(() => {
+        try { return localStorage.getItem('cultivatec_userRole') || null; } catch { return null; }
+    });
+    const [diagnosticCompleted, setDiagnosticCompleted] = useState(() => {
+        try { return localStorage.getItem('cultivatec_diagnosticCompleted') === 'true'; } catch { return false; }
+    });
+    const [showUniverseMap, setShowUniverseMap] = useState(() => {
+        try {
+            const saved = localStorage.getItem('cultivatec_currentUniverse');
+            return saved === null;
+        } catch { return true; }
+    });
+    const [showHomeScreen, setShowHomeScreen] = useState(true);
+    
+    // Track entered worlds as React state (for skin unlock reactivity)
+    const [enteredWorlds, setEnteredWorlds] = useState(() => {
+        try { return JSON.parse(localStorage.getItem('cultivatec_enteredWorlds') || '[]'); } catch { return []; }
+    });
     
     // User Profile (from Onboarding)
     const [userProfile, setUserProfile] = useState(() => {
@@ -6297,15 +6287,14 @@ export default function App() {
         const unlockedWorldIndices = WORLDS_CONFIG
             .map((_, i) => isWorldUnlocked(userScores, i, firebaseProfile) ? i : -1)
             .filter(i => i >= 0);
-        // Get entered worlds from localStorage
-        let enteredWorldIndices = [];
-        try { enteredWorldIndices = JSON.parse(localStorage.getItem('cultivatec_enteredWorlds') || '[]'); } catch {}
+        // Use enteredWorlds state (reactive) instead of reading from localStorage
+        const enteredWorldIndices = enteredWorlds;
         // Get gifted skin IDs from firebase profile
         const giftedSkinIds = (firebaseProfile?.giftedSkins || []).map(g => g.id);
         // Admin check
         const admin = isAdminEmail(firebaseProfile?.email);
         return getUnlockedSkinIds(completedModulesCount, completedWorldIndices, giftedSkinIds, admin, unlockedWorldIndices, enteredWorldIndices);
-    }, [completedModules, userScores, firebaseProfile]);
+    }, [completedModules, userScores, firebaseProfile, enteredWorlds]);
 
     // === SKIN UNLOCK ANIMATION ===
     const knownSkinsRef = useRef(new Set());
@@ -6383,6 +6372,32 @@ export default function App() {
         return <OnboardingScreen onComplete={handleOnboardingComplete} firebaseProfile={firebaseProfile} />;
     }
 
+    // Show diagnostic exam after onboarding if not completed yet
+    if (!diagnosticCompleted) {
+        return <DiagnosticExam
+            onComplete={(role, universeIndex) => {
+                setUserRole(role);
+                setDiagnosticCompleted(true);
+                setCurrentUniverseIdx(universeIndex);
+                setShowUniverseMap(false);
+                try {
+                    localStorage.setItem('cultivatec_userRole', role);
+                    localStorage.setItem('cultivatec_diagnosticCompleted', 'true');
+                    localStorage.setItem('cultivatec_currentUniverse', universeIndex.toString());
+                } catch {}
+            }}
+            onSkip={() => {
+                // Saltar diagnóstico → mostrar mapa de universos
+                setDiagnosticCompleted(true);
+                setShowUniverseMap(true);
+                try { localStorage.setItem('cultivatec_diagnosticCompleted', 'true'); } catch {}
+            }}
+        />;
+    }
+
+    // All universes now use the same galaxy-style WorldMapScreen
+    // (empty universes show "coming soon" within that same design)
+
     const goToMenu = (tab = currentTab) => {
         playBack();
         setCurrentTab(tab);
@@ -6417,11 +6432,13 @@ export default function App() {
     };
     
     const startChallenge = (challengeId) => {
+        playStart();
         setCurrentChallengeId(challengeId);
         setViewMode('challenge'); 
     };
     
     const startPractice = (moduleId = 'mod_electr') => {
+        playStart();
         setQuizModuleId(moduleId || currentModuleId || 'mod_electr');
         setViewMode('quiz');
     };
@@ -6531,8 +6548,8 @@ export default function App() {
         ScreenContent = <AchievementsScreen 
                             onBack={() => goToMenu('Biblioteca')}
                             userStats={userStats}
-                            onShowRanking={() => setViewMode('ranking')}
-                            onShowFriends={() => setViewMode('friends')}
+                            onShowRanking={() => { playNavigate(); setViewMode('ranking'); }}
+                            onShowFriends={() => { playNavigate(); setViewMode('friends'); }}
                             pendingFriendRequests={pendingFriendRequests}
                         />;
     } else if (viewMode === 'ranking') {
@@ -6544,7 +6561,7 @@ export default function App() {
                         />;
     } else if (viewMode === 'friends') {
         ScreenContent = <FriendsScreen
-                            onBack={() => setViewMode('achievements')}
+                            onBack={() => { playBack(); setViewMode('achievements'); }}
                             currentUserId={userId}
                             currentUserProfile={firebaseProfile}
                         />;
@@ -6554,6 +6571,11 @@ export default function App() {
                             userScores={userScores}
                             userProfile={userProfile}
                             completedModules={completedModules}
+                        />;
+    } else if (viewMode === 'joinClass') {
+        ScreenContent = <JoinClassScreen
+                            onBack={() => goToMenu('Biblioteca')}
+                            userId={userId}
                         />;
     } else if (viewMode === 'settings') {
         ScreenContent = <SettingsScreen
@@ -6578,33 +6600,78 @@ export default function App() {
          // Modo 'menu'
          switch (currentTab) {
             case 'Biblioteca':
-                if (currentWorldIndex === null) {
+                if ((showUniverseMap || currentUniverseIdx === null) && showHomeScreen) {
+                    // Show Home Screen (launcher)
+                    ScreenContent = <HomeScreen
+                        onGoStation={() => { playNavigate(); setShowHomeScreen(false); }}
+                        onGoGarage={() => { playClick(); setShowRobotEditor(true); }}
+                        firebaseProfile={firebaseProfile}
+                        userProfile={userProfile}
+                        userStats={userStats}
+                        onShowSettings={() => { playClick(); setViewMode('settings'); }}
+                        onShowLicenses={() => { playClick(); setViewMode('licenses'); }}
+                        onJoinClass={() => { playClick(); setViewMode('joinClass'); }}
+                        onEditRobot={() => { playClick(); setShowRobotEditor(true); }}
+                        RobotMini={RobotMini}
+                        isAdminEmail={isAdminEmail}
+                        calculateLevel={calculateLevel}
+                    />;
+                } else if (showUniverseMap || currentUniverseIdx === null) {
+                    // Show Universe Map (portal selection)
+                    ScreenContent = <UniverseMapScreen
+                        onBack={() => { playBack(); setShowHomeScreen(true); }}
+                        onSelectUniverse={(idx) => {
+                            playNavigate();
+                            setCurrentUniverseIdx(idx);
+                            setShowUniverseMap(false);
+                            setCurrentWorldIndex(null);
+                            try { localStorage.setItem('cultivatec_currentUniverse', idx.toString()); } catch {}
+                        }}
+                        userRole={userRole}
+                        onShowSettings={() => { playClick(); setViewMode('settings'); }}
+                        firebaseProfile={firebaseProfile}
+                        userProfile={userProfile}
+                        userStats={userStats}
+                        onEditRobot={() => { playClick(); setShowRobotEditor(true); }}
+                        onShowLicenses={() => { playClick(); setViewMode('licenses'); }}
+                        RobotMini={RobotMini}
+                        isAdminEmail={isAdminEmail}
+                        calculateLevel={calculateLevel}
+                        onGoToCircuits={() => { playNavigate(); setCurrentTab('CircuitLab'); }}
+                        onGoToProgramming={() => { playNavigate(); setCurrentTab('ProgrammingStation'); }}
+                        onGoToBahia={() => { playNavigate(); setCurrentTab('BahiaChatarra'); }}
+                    />;
+                } else if (currentWorldIndex === null) {
                     // Show World Map
                     ScreenContent = <WorldMapScreen 
                         userScores={userScores}
+                        universeConfig={currentUniverseIdx !== null ? UNIVERSES[currentUniverseIdx] : null}
+                        worlds={currentUniverseIdx !== null ? (UNIVERSES[currentUniverseIdx]?.worlds || []) : WORLDS_CONFIG}
                         onSelectWorld={(idx) => {
                             playWorldEnter();
                             setCurrentWorldIndex(idx);
-                            // Track entered worlds for skin unlock system
-                            try {
-                                const entered = JSON.parse(localStorage.getItem('cultivatec_enteredWorlds') || '[]');
-                                if (!entered.includes(idx)) {
-                                    entered.push(idx);
-                                    localStorage.setItem('cultivatec_enteredWorlds', JSON.stringify(entered));
-                                }
-                            } catch {}
+                            // Track entered worlds for skin unlock system (React state + localStorage)
+                            setEnteredWorlds(prev => {
+                                if (prev.includes(idx)) return prev;
+                                const updated = [...prev, idx];
+                                try { localStorage.setItem('cultivatec_enteredWorlds', JSON.stringify(updated)); } catch {}
+                                return updated;
+                            });
                         }}
                         userProfile={userProfile}
                         firebaseProfile={firebaseProfile}
-                        onShowAchievements={() => setViewMode('achievements')}
-                        onShowLicenses={() => setViewMode('licenses')}
+                        onShowAchievements={() => { playClick(); setViewMode('achievements'); }}
+                        onShowLicenses={() => { playClick(); setViewMode('licenses'); }}
                         onLogout={handleLogout}
-                        onEditRobot={() => setShowRobotEditor(true)}
+                        onEditRobot={() => { playClick(); setShowRobotEditor(true); }}
                         userStats={userStats}
-                        onGoToCircuits={() => setCurrentTab('CircuitLab')}
-                        onGoToProgramming={() => setCurrentTab('ProgrammingStation')}
-                        onGoToBahia={() => setCurrentTab('BahiaChatarra')}
-                        onShowSettings={() => setViewMode('settings')}
+                        onShowSettings={() => { playClick(); setViewMode('settings'); }}
+                        onBackToUniverses={() => {
+                            playBack();
+                            setCurrentUniverseIdx(null);
+                            setShowUniverseMap(true);
+                            try { localStorage.removeItem('cultivatec_currentUniverse'); } catch {}
+                        }}
                     />;
                 } else {
                     // Show Library for selected world
@@ -6612,18 +6679,18 @@ export default function App() {
                         startLesson={startLesson} 
                         userId={userId} 
                         userScores={userScores}
-                        onShowAchievements={() => setViewMode('achievements')}
-                        onShowLicenses={() => setViewMode('licenses')}
+                        onShowAchievements={() => { playClick(); setViewMode('achievements'); }}
+                        onShowLicenses={() => { playClick(); setViewMode('licenses'); }}
                         userStats={userStats}
                         userProfile={userProfile}
                         onLogout={handleLogout}
                         firebaseProfile={firebaseProfile}
-                        onEditRobot={() => setShowRobotEditor(true)}
+                        onEditRobot={() => { playClick(); setShowRobotEditor(true); }}
                         currentWorld={currentWorldIndex}
-                        onBackToWorlds={() => setCurrentWorldIndex(null)}
+                        onBackToWorlds={() => { playBack(); setCurrentWorldIndex(null); }}
                         startChallenge={startChallenge}
-                        onGoToCircuitChallenge={(circuitId) => { setCircuitInitialId(circuitId); setCurrentTab('Circuitos'); setViewMode('menu'); }}
-                        onShowSettings={() => setViewMode('settings')}
+                        onGoToCircuitChallenge={(circuitId) => { playNavigate(); setCircuitInitialId(circuitId); setCurrentTab('Circuitos'); setViewMode('menu'); }}
+                        onShowSettings={() => { playClick(); setViewMode('settings'); }}
                     />;
                 }
                 break;
@@ -6675,32 +6742,76 @@ export default function App() {
                 />;
                 break;
             default:
-                ScreenContent = <WorldMapScreen 
+                if ((showUniverseMap || currentUniverseIdx === null) && showHomeScreen) {
+                    ScreenContent = <HomeScreen
+                        onGoStation={() => { playNavigate(); setShowHomeScreen(false); }}
+                        onGoGarage={() => { playClick(); setShowRobotEditor(true); }}
+                        firebaseProfile={firebaseProfile}
+                        userProfile={userProfile}
+                        userStats={userStats}
+                        onShowSettings={() => { playClick(); setViewMode('settings'); }}
+                        onShowLicenses={() => { playClick(); setViewMode('licenses'); }}
+                        onJoinClass={() => { playClick(); setViewMode('joinClass'); }}
+                        onEditRobot={() => { playClick(); setShowRobotEditor(true); }}
+                        RobotMini={RobotMini}
+                        isAdminEmail={isAdminEmail}
+                        calculateLevel={calculateLevel}
+                    />;
+                } else if (showUniverseMap || currentUniverseIdx === null) {
+                    ScreenContent = <UniverseMapScreen
+                        onBack={() => { playBack(); setShowHomeScreen(true); }}
+                        onSelectUniverse={(idx) => {
+                            playNavigate();
+                            setCurrentUniverseIdx(idx);
+                            setShowUniverseMap(false);
+                            setCurrentWorldIndex(null);
+                            try { localStorage.setItem('cultivatec_currentUniverse', idx.toString()); } catch {}
+                        }}
+                        userRole={userRole}
+                        onShowSettings={() => { playClick(); setViewMode('settings'); }}
+                        firebaseProfile={firebaseProfile}
+                        userProfile={userProfile}
+                        userStats={userStats}
+                        onEditRobot={() => { playClick(); setShowRobotEditor(true); }}
+                        onShowLicenses={() => { playClick(); setViewMode('licenses'); }}
+                        RobotMini={RobotMini}
+                        isAdminEmail={isAdminEmail}
+                        calculateLevel={calculateLevel}
+                        onGoToCircuits={() => { playNavigate(); setCurrentTab('CircuitLab'); }}
+                        onGoToProgramming={() => { playNavigate(); setCurrentTab('ProgrammingStation'); }}
+                        onGoToBahia={() => { playNavigate(); setCurrentTab('BahiaChatarra'); }}
+                    />;
+                } else {
+                    ScreenContent = <WorldMapScreen 
                     userScores={userScores}
+                    universeConfig={currentUniverseIdx !== null ? UNIVERSES[currentUniverseIdx] : null}
+                    worlds={currentUniverseIdx !== null ? (UNIVERSES[currentUniverseIdx]?.worlds || []) : WORLDS_CONFIG}
                     onSelectWorld={(idx) => {
                         playWorldEnter();
                         setCurrentWorldIndex(idx);
-                        // Track entered worlds for skin unlock system
-                        try {
-                            const entered = JSON.parse(localStorage.getItem('cultivatec_enteredWorlds') || '[]');
-                            if (!entered.includes(idx)) {
-                                entered.push(idx);
-                                localStorage.setItem('cultivatec_enteredWorlds', JSON.stringify(entered));
-                            }
-                        } catch {}
+                        setEnteredWorlds(prev => {
+                            if (prev.includes(idx)) return prev;
+                            const updated = [...prev, idx];
+                            try { localStorage.setItem('cultivatec_enteredWorlds', JSON.stringify(updated)); } catch {}
+                            return updated;
+                        });
                     }}
                     userProfile={userProfile}
                     firebaseProfile={firebaseProfile}
-                    onShowAchievements={() => setViewMode('achievements')}
-                    onShowLicenses={() => setViewMode('licenses')}
+                    onShowAchievements={() => { playClick(); setViewMode('achievements'); }}
+                    onShowLicenses={() => { playClick(); setViewMode('licenses'); }}
                     onLogout={handleLogout}
-                    onEditRobot={() => setShowRobotEditor(true)}
+                    onEditRobot={() => { playClick(); setShowRobotEditor(true); }}
                     userStats={userStats}
-                    onGoToCircuits={() => setCurrentTab('CircuitLab')}
-                    onGoToProgramming={() => setCurrentTab('ProgrammingStation')}
-                    onGoToBahia={() => setCurrentTab('BahiaChatarra')}
-                    onShowSettings={() => setViewMode('settings')}
-                />; 
+                    onShowSettings={() => { playClick(); setViewMode('settings'); }}
+                    onBackToUniverses={() => {
+                        playBack();
+                        setCurrentUniverseIdx(null);
+                        setShowUniverseMap(true);
+                        try { localStorage.removeItem('cultivatec_currentUniverse'); } catch {}
+                    }}
+                />;
+                } 
         }
     }
 
@@ -6711,11 +6822,29 @@ export default function App() {
                 <div className="min-h-screen overflow-y-auto pb-24 animate-fade-in"> 
                     {ScreenContent}
                 </div>
-                <BottomNavBar 
-                    currentTab={viewMode === 'achievements' ? 'Logros' : viewMode === 'ranking' ? 'Ranking' : currentTab} 
-                    onSelectTab={setCurrentTab} 
-                    setViewMode={setViewMode}
-                />
+                {/* Hide nav bar when inside a universe, the station, licenses, or joinClass */}
+                {(currentTab !== 'Biblioteca' || showHomeScreen) && viewMode !== 'licenses' && viewMode !== 'joinClass' && (
+                    <BottomNavBar 
+                        currentTab={viewMode === 'achievements' ? 'Logros' : viewMode === 'ranking' ? 'Ranking' : currentTab} 
+                        onSelectTab={setCurrentTab} 
+                        setViewMode={setViewMode}
+                        onGoBack={() => {
+                            // Go back one screen at a time
+                            if (viewMode !== 'menu' || currentTab !== 'Biblioteca') {
+                                setCurrentTab('Biblioteca');
+                                setViewMode('menu');
+                            } else if (currentWorldIndex !== null) {
+                                setCurrentWorldIndex(null);
+                            } else if (currentUniverseIdx !== null) {
+                                setCurrentUniverseIdx(null);
+                                setShowUniverseMap(true);
+                                try { localStorage.removeItem('cultivatec_currentUniverse'); } catch {}
+                            } else if (!showHomeScreen) {
+                                setShowHomeScreen(true);
+                            }
+                        }}
+                    />
+                )}
             </div>
             {/* Achievement Unlock Popup */}
             {unlockedPopupAchievement && (

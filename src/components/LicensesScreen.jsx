@@ -1,25 +1,25 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Download, Award, CheckCircle, Lock, ChevronRight } from 'lucide-react';
+import { ArrowLeft, Download, ChevronRight } from 'lucide-react';
 import { jsPDF } from 'jspdf';
 
 // Module licenses data — maps module IDs to license info
 const MODULE_LICENSES = [
-  { moduleId: 'mod_intro_robot', title: 'Introducción a la Robótica', icon: '🤖', licenseTitle: 'Explorador Robótico', color: '#2563EB', description: 'Conoces qué es un robot y sus componentes básicos' },
-  { moduleId: 'mod_partes_robot', title: 'Partes de un Robot', icon: '🧩', licenseTitle: 'Anatomista Mecánico', color: '#3B82F6', description: 'Identificas las partes esenciales de un robot' },
-  { moduleId: 'mod_primer_proyecto', title: 'Primer Proyecto', icon: '🛠️', licenseTitle: 'Constructor Principiante', color: '#059669', description: 'Has completado tu primer proyecto de robótica' },
-  { moduleId: 'mod_electr', title: 'Electricidad Básica', icon: '⚡', licenseTitle: 'Electricista Junior', color: '#F59E0B', description: 'Entiendes los fundamentos de la electricidad' },
-  { moduleId: 'mod_electon', title: 'Electrónica', icon: '🔌', licenseTitle: 'Técnico Electrónico', color: '#EF4444', description: 'Dominas los componentes electrónicos básicos' },
-  { moduleId: 'mod_prog_gen', title: 'Programación General', icon: '💻', licenseTitle: 'Programador Novato', color: '#3B82F6', description: 'Conoces los fundamentos de la programación' },
-  { moduleId: 'mod_mecanica', title: 'Mecánica', icon: '⚙️', licenseTitle: 'Ingeniero Mecánico Jr.', color: '#6366F1', description: 'Entiendes los principios mecánicos de la robótica' },
-  { moduleId: 'mod_arduino', title: 'Arduino', icon: '🔷', licenseTitle: 'Especialista Arduino', color: '#00979D', description: 'Sabes programar y usar placas Arduino' },
-  { moduleId: 'mod_cpp', title: 'C++', icon: '🔧', licenseTitle: 'Programador C++', color: '#659AD2', description: 'Dominas los fundamentos de C++ para robótica' },
-  { moduleId: 'mod_python', title: 'Python', icon: '🐍', licenseTitle: 'Programador Python', color: '#3776AB', description: 'Programas en Python con confianza' },
-  { moduleId: 'mod_robotica', title: 'Robótica Avanzada', icon: '🤖', licenseTitle: 'Robótico Avanzado', color: '#DC2626', description: 'Dominas conceptos avanzados de robótica' },
-  { moduleId: 'mod_componentes', title: 'Componentes', icon: '🧬', licenseTitle: 'Experto en Componentes', color: '#0891B2', description: 'Conoces todos los componentes electrónicos' },
-  { moduleId: 'mod_control', title: 'Control', icon: '🎮', licenseTitle: 'Controlador de Sistemas', color: '#4F46E5', description: 'Entiendes los sistemas de control robótico' },
-  { moduleId: 'mod_prog_avanzada', title: 'Programación Avanzada', icon: '🚀', licenseTitle: 'Programador Experto', color: '#2563EB', description: 'Dominas la programación avanzada para robots' },
-  { moduleId: 'mod_diseno', title: 'Diseño', icon: '✏️', licenseTitle: 'Diseñador Robótico', color: '#EC4899', description: 'Sabes diseñar robots desde cero' },
-  { moduleId: 'mod_primer_led', title: 'Primer LED', icon: '💡', licenseTitle: 'Iluminador Digital', color: '#F97316', description: 'Has dado vida a tu primer circuito LED' },
+  { moduleId: 'mod_intro_robot', title: 'Introducción a la Robótica', licenseTitle: 'Explorador Robótico', color: '#2563EB', description: 'Conoces qué es un robot y sus componentes básicos' },
+  { moduleId: 'mod_partes_robot', title: 'Partes de un Robot', licenseTitle: 'Anatomista Mecánico', color: '#3B82F6', description: 'Identificas las partes esenciales de un robot' },
+  { moduleId: 'mod_primer_proyecto', title: 'Primer Proyecto', licenseTitle: 'Constructor Principiante', color: '#059669', description: 'Has completado tu primer proyecto de robótica' },
+  { moduleId: 'mod_electr', title: 'Electricidad Básica', licenseTitle: 'Electricista Junior', color: '#F59E0B', description: 'Entiendes los fundamentos de la electricidad' },
+  { moduleId: 'mod_electon', title: 'Electrónica', licenseTitle: 'Técnico Electrónico', color: '#EF4444', description: 'Dominas los componentes electrónicos básicos' },
+  { moduleId: 'mod_prog_gen', title: 'Programación General', licenseTitle: 'Programador Novato', color: '#3B82F6', description: 'Conoces los fundamentos de la programación' },
+  { moduleId: 'mod_mecanica', title: 'Mecánica', licenseTitle: 'Ingeniero Mecánico Jr.', color: '#6366F1', description: 'Entiendes los principios mecánicos de la robótica' },
+  { moduleId: 'mod_arduino', title: 'Arduino', licenseTitle: 'Especialista Arduino', color: '#00979D', description: 'Sabes programar y usar placas Arduino' },
+  { moduleId: 'mod_cpp', title: 'C++', licenseTitle: 'Programador C++', color: '#659AD2', description: 'Dominas los fundamentos de C++ para robótica' },
+  { moduleId: 'mod_python', title: 'Python', licenseTitle: 'Programador Python', color: '#3776AB', description: 'Programas en Python con confianza' },
+  { moduleId: 'mod_robotica', title: 'Robótica Avanzada', licenseTitle: 'Robótico Avanzado', color: '#DC2626', description: 'Dominas conceptos avanzados de robótica' },
+  { moduleId: 'mod_componentes', title: 'Componentes', licenseTitle: 'Experto en Componentes', color: '#0891B2', description: 'Conoces todos los componentes electrónicos' },
+  { moduleId: 'mod_control', title: 'Control', licenseTitle: 'Controlador de Sistemas', color: '#4F46E5', description: 'Entiendes los sistemas de control robótico' },
+  { moduleId: 'mod_prog_avanzada', title: 'Programación Avanzada', licenseTitle: 'Programador Experto', color: '#2563EB', description: 'Dominas la programación avanzada para robots' },
+  { moduleId: 'mod_diseno', title: 'Diseño', licenseTitle: 'Diseñador Robótico', color: '#EC4899', description: 'Sabes diseñar robots desde cero' },
+  { moduleId: 'mod_primer_led', title: 'Primer LED', licenseTitle: 'Iluminador Digital', color: '#F97316', description: 'Has dado vida a tu primer circuito LED' },
 ];
 
 const DIRECTOR_NAME = 'Abraham Isaías Navarro Doñate';
@@ -31,85 +31,280 @@ const getFormattedDate = () => {
   return `${d.getDate()} de ${months[d.getMonth()]} de ${d.getFullYear()}`;
 };
 
-// License Card component
+// License Card component — official certificate style
 const LicenseCard = ({ license, isUnlocked, onView }) => {
-  const rarity = isUnlocked ? 'unlocked' : 'locked';
-  
   return (
-    <div 
+    <div
       onClick={isUnlocked ? onView : null}
-      className={`relative rounded-2xl border-2 p-4 transition-all ${
-        isUnlocked 
-          ? 'bg-white border-[#58CC02]/30 shadow-md hover:shadow-lg cursor-pointer active:scale-[0.98] hover:border-[#58CC02]' 
-          : 'bg-gray-50 border-[#E5E5E5] opacity-60'
-      }`}
+      style={{
+        position: 'relative',
+        overflow: 'hidden',
+        borderRadius: '12px',
+        border: isUnlocked ? `2px solid ${license.color}40` : '2px solid #e0e0e0',
+        background: isUnlocked
+          ? 'linear-gradient(135deg, #fffdf5 0%, #faf8f0 40%, #f5f0e0 100%)'
+          : '#f5f5f5',
+        padding: '16px',
+        cursor: isUnlocked ? 'pointer' : 'default',
+        opacity: isUnlocked ? 1 : 0.5,
+        transition: 'all 0.2s',
+        boxShadow: isUnlocked ? '0 4px 20px rgba(0,0,0,0.08), inset 0 0 0 1px rgba(195,160,40,0.15)' : 'none',
+      }}
     >
-      {/* Badge */}
+      {/* Watermark pattern */}
       {isUnlocked && (
-        <div className="absolute -top-2 -right-2 w-7 h-7 bg-[#58CC02] rounded-full flex items-center justify-center shadow-md">
-          <CheckCircle size={16} className="text-white" />
-        </div>
+        <div style={{
+          position: 'absolute', inset: 0, opacity: 0.03, pointerEvents: 'none',
+          backgroundImage: `repeating-linear-gradient(45deg, ${license.color} 0px, ${license.color} 1px, transparent 1px, transparent 12px)`,
+        }} />
       )}
-      
-      <div className="flex items-center gap-3">
-        <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl ${
-          isUnlocked ? 'bg-gradient-to-br from-white to-gray-50 shadow-inner' : 'bg-gray-100'
-        }`} style={isUnlocked ? { border: `2px solid ${license.color}20` } : {}}>
-          {isUnlocked ? license.icon : <Lock size={20} className="text-gray-300" />}
-        </div>
-        <div className="flex-grow min-w-0">
-          <p className={`text-sm font-black truncate ${isUnlocked ? 'text-[#3C3C3C]' : 'text-[#AFAFAF]'}`}>
+
+      {/* Gold corner accents */}
+      {isUnlocked && <>
+        <div style={{ position: 'absolute', top: 0, left: 0, width: 28, height: 28, borderTop: '3px solid #c8a832', borderLeft: '3px solid #c8a832', borderRadius: '12px 0 0 0', opacity: 0.6 }} />
+        <div style={{ position: 'absolute', top: 0, right: 0, width: 28, height: 28, borderTop: '3px solid #c8a832', borderRight: '3px solid #c8a832', borderRadius: '0 12px 0 0', opacity: 0.6 }} />
+        <div style={{ position: 'absolute', bottom: 0, left: 0, width: 28, height: 28, borderBottom: '3px solid #c8a832', borderLeft: '3px solid #c8a832', borderRadius: '0 0 0 12px', opacity: 0.6 }} />
+        <div style={{ position: 'absolute', bottom: 0, right: 0, width: 28, height: 28, borderBottom: '3px solid #c8a832', borderRight: '3px solid #c8a832', borderRadius: '0 0 12px 0', opacity: 0.6 }} />
+      </>}
+
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12, position: 'relative', zIndex: 1 }}>
+        {/* Color accent bar */}
+        <div style={{
+          width: 4, alignSelf: 'stretch', flexShrink: 0,
+          borderRadius: 2,
+          background: isUnlocked
+            ? `linear-gradient(180deg, ${license.color}, ${license.color}80)`
+            : '#ddd',
+        }} />
+
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <p style={{
+            fontSize: 12, fontWeight: 900,
+            color: isUnlocked ? '#2c2c2c' : '#aaa',
+            margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+            fontFamily: 'Georgia, "Times New Roman", serif',
+            letterSpacing: '0.02em',
+          }}>
             {license.licenseTitle}
           </p>
-          <p className={`text-xs font-semibold truncate ${isUnlocked ? 'text-[#777]' : 'text-[#CDCDCD]'}`}>
+          <p style={{
+            fontSize: 10, fontWeight: 600,
+            color: isUnlocked ? '#888' : '#ccc',
+            margin: '2px 0 0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+          }}>
             {license.title}
           </p>
           {isUnlocked && (
-            <p className="text-[10px] text-[#58CC02] font-black mt-0.5">✅ Licencia obtenida</p>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 4 }}>
+              <div style={{
+                fontSize: 8, fontWeight: 800, color: '#c8a832',
+                letterSpacing: '0.08em', textTransform: 'uppercase',
+                padding: '2px 8px', borderRadius: 4,
+                border: '1px solid #c8a83240',
+                background: 'linear-gradient(135deg, #fdf8e8, #faf2d0)',
+              }}>
+                CERTIFICADA
+              </div>
+            </div>
           )}
         </div>
+
         {isUnlocked && (
-          <ChevronRight size={16} className="text-[#CDCDCD] flex-shrink-0" />
+          <ChevronRight size={16} color="#c8a832" style={{ flexShrink: 0 }} />
         )}
       </div>
     </div>
   );
 };
 
-// License Detail Modal
+// License Detail Modal — Official certificate look
 const LicenseModal = ({ license, fullName, onClose }) => {
   if (!license) return null;
-  
+
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in" onClick={onClose}>
-      <div className="bg-white rounded-3xl max-w-sm w-full p-6 animate-scale-in shadow-2xl" onClick={e => e.stopPropagation()}>
-        {/* License visual */}
-        <div className="text-center mb-4">
-          <div className="w-20 h-20 mx-auto rounded-2xl flex items-center justify-center text-4xl mb-3 shadow-lg"
-            style={{ background: `linear-gradient(135deg, ${license.color}15, ${license.color}30)`, border: `3px solid ${license.color}40` }}>
-            {license.icon}
-          </div>
-          <div className="inline-block px-3 py-1 rounded-full text-xs font-black text-white mb-2" style={{ backgroundColor: license.color }}>
-            LICENCIA OBTENIDA
-          </div>
-          <h2 className="text-xl font-black text-[#3C3C3C]">{license.licenseTitle}</h2>
-          <p className="text-sm text-[#777] font-semibold mt-1">{license.title}</p>
+    <div style={{
+      position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.65)',
+      backdropFilter: 'blur(6px)', zIndex: 50,
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      padding: 16, animation: 'fadeIn 0.2s',
+    }} onClick={onClose}>
+      <div style={{
+        background: 'linear-gradient(160deg, #fffef7 0%, #faf6e8 30%, #f5efd8 100%)',
+        borderRadius: 20, maxWidth: 370, width: '100%',
+        padding: 0, boxShadow: '0 20px 60px rgba(0,0,0,0.25)',
+        position: 'relative', overflow: 'hidden',
+        animation: 'scaleIn 0.25s ease-out',
+      }} onClick={e => e.stopPropagation()}>
+
+        {/* Ornate double border */}
+        <div style={{
+          position: 'absolute', inset: 6,
+          border: '2px solid #c8a83240',
+          borderRadius: 14, pointerEvents: 'none',
+        }} />
+        <div style={{
+          position: 'absolute', inset: 10,
+          border: '1px solid #c8a83220',
+          borderRadius: 10, pointerEvents: 'none',
+        }} />
+
+        {/* Corner flourishes */}
+        {[{t:6,l:6,br:'0'},{t:6,r:6,br:'0'},{b:6,l:6,br:'0'},{b:6,r:6,br:'0'}].map((pos,i) => (
+          <div key={i} style={{
+            position:'absolute',
+            ...(pos.t !== undefined ? {top:pos.t} : {}),
+            ...(pos.b !== undefined ? {bottom:pos.b} : {}),
+            ...(pos.l !== undefined ? {left:pos.l} : {}),
+            ...(pos.r !== undefined ? {right:pos.r} : {}),
+            width:24,height:24,pointerEvents:'none',
+            borderTop: pos.t !== undefined ? '3px solid #c8a832' : 'none',
+            borderBottom: pos.b !== undefined ? '3px solid #c8a832' : 'none',
+            borderLeft: pos.l !== undefined ? '3px solid #c8a832' : 'none',
+            borderRight: pos.r !== undefined ? '3px solid #c8a832' : 'none',
+            borderTopLeftRadius: (pos.t !== undefined && pos.l !== undefined) ? 14 : 0,
+            borderTopRightRadius: (pos.t !== undefined && pos.r !== undefined) ? 14 : 0,
+            borderBottomLeftRadius: (pos.b !== undefined && pos.l !== undefined) ? 14 : 0,
+            borderBottomRightRadius: (pos.b !== undefined && pos.r !== undefined) ? 14 : 0,
+          }} />
+        ))}
+
+        {/* Watermark */}
+        <div style={{
+          position: 'absolute', top: '50%', left: '50%',
+          transform: 'translate(-50%, -50%) rotate(-25deg)',
+          fontSize: 60, fontWeight: 900, color: license.color,
+          opacity: 0.03, pointerEvents: 'none', whiteSpace: 'nowrap',
+          fontFamily: 'Georgia, "Times New Roman", serif',
+        }}>
+          CultivaTec
         </div>
-        
-        {/* Certificate-like content */}
-        <div className="bg-[#F7F7F7] rounded-2xl p-4 mb-4 border border-[#E5E5E5]">
-          <p className="text-xs text-[#AFAFAF] font-bold text-center mb-2">Se certifica que</p>
-          <p className="text-base font-black text-center mb-2" style={{ color: license.color }}>{fullName}</p>
-          <p className="text-xs text-[#777] font-semibold text-center leading-relaxed">{license.description}</p>
-          <div className="mt-3 pt-3 border-t border-[#E5E5E5] flex justify-between items-center">
-            <p className="text-[10px] text-[#AFAFAF] font-bold">CultivaTec</p>
-            <p className="text-[10px] text-[#AFAFAF] font-bold">{getFormattedDate()}</p>
+
+        {/* Content */}
+        <div style={{ padding: '28px 24px 20px', position: 'relative', zIndex: 1 }}>
+          {/* Top ornament line */}
+          <div style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            gap: 8, marginBottom: 16,
+          }}>
+            <div style={{ flex: 1, maxWidth: 60, height: 1, background: 'linear-gradient(90deg, transparent, #c8a832)' }} />
+            <span style={{ fontSize: 7, color: '#c8a832', fontWeight: 800, letterSpacing: '0.15em' }}>CULTIVATEC</span>
+            <div style={{ flex: 1, maxWidth: 60, height: 1, background: 'linear-gradient(90deg, #c8a832, transparent)' }} />
           </div>
+
+          {/* Badge */}
+          <div style={{ textAlign: 'center', marginBottom: 12 }}>
+            <div style={{
+              display: 'inline-block',
+              padding: '4px 14px', borderRadius: 20,
+              fontSize: 9, fontWeight: 900, color: '#fff',
+              backgroundColor: license.color,
+              letterSpacing: '0.1em',
+              boxShadow: `0 2px 8px ${license.color}40`,
+            }}>
+              LICENCIA OFICIAL
+            </div>
+          </div>
+
+          {/* Title */}
+          <h2 style={{
+            textAlign: 'center', fontSize: 20, fontWeight: 900,
+            color: '#1a1a1a', margin: '8px 0 2px',
+            fontFamily: 'Georgia, "Times New Roman", serif',
+          }}>
+            {license.licenseTitle}
+          </h2>
+          <p style={{
+            textAlign: 'center', fontSize: 11, fontWeight: 600,
+            color: '#888', margin: 0,
+          }}>
+            {license.title}
+          </p>
+
+          {/* Certificate body */}
+          <div style={{
+            margin: '16px 0', padding: '16px 14px',
+            background: 'linear-gradient(135deg, rgba(255,255,255,0.8), rgba(250,248,240,0.9))',
+            borderRadius: 12,
+            border: '1px solid #c8a83225',
+            boxShadow: 'inset 0 0 12px rgba(200,168,50,0.04)',
+          }}>
+            <p style={{
+              textAlign: 'center', fontSize: 9, color: '#aaa',
+              fontWeight: 700, letterSpacing: '0.12em',
+              textTransform: 'uppercase', margin: '0 0 8px',
+            }}>
+              Se certifica que
+            </p>
+            <p style={{
+              textAlign: 'center', fontSize: 16, fontWeight: 900,
+              color: license.color, margin: '0 0 4px',
+              fontFamily: 'Georgia, "Times New Roman", serif',
+              fontStyle: 'italic',
+            }}>
+              {fullName}
+            </p>
+            {/* Decorative line under name */}
+            <div style={{
+              width: '65%', height: 1, margin: '4px auto 10px',
+              background: `linear-gradient(90deg, transparent, ${license.color}50, transparent)`,
+            }} />
+            <p style={{
+              textAlign: 'center', fontSize: 11, color: '#666',
+              fontWeight: 500, lineHeight: 1.5, margin: 0,
+            }}>
+              {license.description}
+            </p>
+
+            {/* Signature / date area */}
+            <div style={{
+              display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end',
+              marginTop: 14, paddingTop: 10,
+              borderTop: '1px solid #e8e0c8',
+            }}>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ width: 70, height: 1, background: '#999', marginBottom: 4 }} />
+                <p style={{ fontSize: 7, color: '#aaa', fontWeight: 700, margin: 0, letterSpacing: '0.05em' }}>FECHA</p>
+                <p style={{ fontSize: 8, color: '#666', fontWeight: 700, margin: '1px 0 0' }}>{getFormattedDate()}</p>
+              </div>
+              {/* Mini seal */}
+              <div style={{
+                width: 36, height: 36, borderRadius: '50%',
+                background: 'linear-gradient(135deg, #c8a832, #dfc04a)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                boxShadow: '0 2px 8px rgba(200,168,50,0.3)',
+                flexShrink: 0,
+              }}>
+                <span style={{ fontSize: 8, fontWeight: 900, color: '#fff', fontFamily: 'Georgia, serif' }}>CT</span>
+              </div>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ width: 70, height: 1, background: '#999', marginBottom: 4 }} />
+                <p style={{ fontSize: 7, color: '#aaa', fontWeight: 700, margin: 0, letterSpacing: '0.05em' }}>DIRECTOR</p>
+                <p style={{ fontSize: 7, color: '#666', fontWeight: 700, margin: '1px 0 0' }}>A. Navarro D.</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Folio */}
+          <p style={{
+            textAlign: 'center', fontSize: 7, color: '#ccc',
+            fontWeight: 600, margin: '0 0 14px',
+            letterSpacing: '0.08em',
+          }}>
+            FOLIO: CT-{license.moduleId.toUpperCase().replace(/_/g, '')}-{Date.now().toString(36).toUpperCase().slice(-4)}
+          </p>
+
+          <button onClick={onClose} style={{
+            width: '100%', padding: '12px 0',
+            background: `linear-gradient(135deg, ${license.color}, ${license.color}dd)`,
+            color: '#fff', fontWeight: 900, fontSize: 13,
+            border: 'none', borderRadius: 12, cursor: 'pointer',
+            borderBottom: `4px solid ${license.color}90`,
+            letterSpacing: '0.03em',
+            boxShadow: `0 4px 12px ${license.color}30`,
+          }}>
+            Cerrar
+          </button>
         </div>
-        
-        <button onClick={onClose} className="w-full py-3 bg-[#2563EB] text-white font-black rounded-xl border-b-4 border-[#1D4ED8] active:scale-95 transition text-sm">
-          ¡Genial! 🎉
-        </button>
       </div>
     </div>
   );
@@ -933,173 +1128,334 @@ const LicensesScreen = ({ onBack, userScores, userProfile, completedModules }) =
   };
 
   return (
-    <div className="pb-24 min-h-full bg-[#F7F7F7] w-full animate-fade-in">
-      {/* Header */}
-      <div className="bg-gradient-to-br from-[#2563EB] to-[#1D4ED8] px-6 pt-8 pb-10 text-center relative overflow-hidden">
-        <div className="absolute top-2 right-4 text-7xl opacity-10 rotate-12">📜</div>
-        <div className="absolute bottom-2 left-4 text-5xl opacity-10 -rotate-12">🏅</div>
-        
-        <button onClick={onBack}
-          className="absolute top-4 left-4 text-white/80 hover:text-white transition flex items-center bg-white/10 p-2 rounded-xl active:scale-95">
+    <div style={{ paddingBottom: 96, minHeight: '100%', width: '100%', background: 'linear-gradient(180deg, #faf8f0 0%, #f5f0e0 100%)' }}>
+      {/* Header — premium parchment style */}
+      <div style={{
+        position: 'relative', overflow: 'hidden',
+        background: 'linear-gradient(145deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
+        padding: '32px 24px 40px', textAlign: 'center',
+      }}>
+        {/* Subtle pattern overlay */}
+        <div style={{
+          position: 'absolute', inset: 0, opacity: 0.04, pointerEvents: 'none',
+          backgroundImage: 'repeating-linear-gradient(45deg, #c8a832 0px, #c8a832 1px, transparent 1px, transparent 16px)',
+        }} />
+        {/* Gold border bottom */}
+        <div style={{
+          position: 'absolute', bottom: 0, left: 0, right: 0, height: 3,
+          background: 'linear-gradient(90deg, transparent, #c8a832, #dfc04a, #c8a832, transparent)',
+        }} />
+
+        <button onClick={onBack} style={{
+          position: 'absolute', top: 16, left: 16,
+          color: 'rgba(255,255,255,0.7)', background: 'rgba(255,255,255,0.08)',
+          border: '1px solid rgba(200,168,50,0.2)', borderRadius: 10, padding: 8,
+          cursor: 'pointer', display: 'flex', alignItems: 'center',
+        }}>
           <ArrowLeft size={18} />
         </button>
-        
-        <span className="text-5xl mb-2 block animate-float">🏅</span>
-        <h1 className="text-3xl font-black text-white">Mis Licencias</h1>
-        <p className="text-white/80 text-sm font-bold mt-1">Cada módulo completado te otorga una licencia</p>
-        
-        <div className="mt-3 flex justify-center gap-3">
-          <div className="bg-white/20 px-3 py-1.5 rounded-xl">
-            <span className="text-white text-xs font-black">{completedWorlds}/{WORLD_CERTIFICATES.length} Mundos</span>
+
+        {/* Gold ornament top */}
+        <div style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          gap: 8, marginBottom: 12,
+        }}>
+          <div style={{ width: 40, height: 1, background: 'linear-gradient(90deg, transparent, #c8a832)' }} />
+          <span style={{ fontSize: 7, color: '#c8a832', fontWeight: 800, letterSpacing: '0.2em' }}>CULTIVATEC</span>
+          <div style={{ width: 40, height: 1, background: 'linear-gradient(90deg, #c8a832, transparent)' }} />
+        </div>
+
+        <h1 style={{
+          fontSize: 24, fontWeight: 900, color: '#fff', margin: '0 0 4px',
+          fontFamily: 'Georgia, "Times New Roman", serif',
+          textShadow: '0 2px 8px rgba(0,0,0,0.3)',
+          letterSpacing: '0.04em',
+        }}>
+          Mis Certificaciones
+        </h1>
+        <p style={{
+          fontSize: 11, color: '#c8a832', fontWeight: 700, margin: 0,
+          letterSpacing: '0.08em',
+        }}>
+          ACREDITACIONES OFICIALES
+        </p>
+
+        <div style={{
+          display: 'flex', justifyContent: 'center', gap: 10, marginTop: 14,
+        }}>
+          <div style={{
+            background: 'rgba(200,168,50,0.15)', border: '1px solid rgba(200,168,50,0.3)',
+            borderRadius: 10, padding: '6px 14px',
+          }}>
+            <span style={{ fontSize: 11, fontWeight: 900, color: '#c8a832' }}>
+              {completedWorlds}/{WORLD_CERTIFICATES.length} Mundos
+            </span>
           </div>
-          <div className="bg-white/20 px-3 py-1.5 rounded-xl">
-            <span className="text-white text-xs font-black">{completedModulesAll}/{totalModulesAll} Módulos</span>
+          <div style={{
+            background: 'rgba(200,168,50,0.15)', border: '1px solid rgba(200,168,50,0.3)',
+            borderRadius: 10, padding: '6px 14px',
+          }}>
+            <span style={{ fontSize: 11, fontWeight: 900, color: '#c8a832' }}>
+              {completedModulesAll}/{totalModulesAll} Módulos
+            </span>
           </div>
         </div>
       </div>
       
       {/* Progress bar */}
-      <div className="px-4 -mt-5 max-w-2xl mx-auto relative z-10">
-        <div className="bg-white rounded-2xl border-2 border-[#E5E5E5] p-4 mb-4 shadow-sm">
-          <div className="flex items-center gap-3 mb-2">
-            <span className="text-xl">📊</span>
-            <div className="flex-grow">
-              <div className="flex justify-between items-center mb-1">
-                <p className="text-sm font-black text-[#3C3C3C]">Progreso hacia el Certificado Oficial</p>
-                <span className="text-xs font-black text-[#2563EB]">{completedWorlds}/{WORLD_CERTIFICATES.length} mundos</span>
+      <div style={{ padding: '0 16px', marginTop: -20, maxWidth: 520, marginLeft: 'auto', marginRight: 'auto', position: 'relative', zIndex: 10 }}>
+        <div style={{
+          background: 'linear-gradient(135deg, #fffef7, #faf6e8)',
+          borderRadius: 14, border: '2px solid #c8a83230',
+          padding: 16, marginBottom: 16,
+          boxShadow: '0 4px 20px rgba(0,0,0,0.06), inset 0 0 0 1px rgba(200,168,50,0.1)',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
+            <div style={{ flex: 1 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+                <p style={{ fontSize: 12, fontWeight: 900, color: '#2c2c2c', margin: 0, fontFamily: 'Georgia, serif' }}>
+                  Progreso al Certificado General
+                </p>
+                <span style={{ fontSize: 10, fontWeight: 900, color: '#c8a832' }}>
+                  {completedWorlds}/{WORLD_CERTIFICATES.length} mundos
+                </span>
               </div>
-              <div className="w-full h-4 bg-[#E5E5E5] rounded-full overflow-hidden">
-                <div className="h-full bg-gradient-to-r from-[#2563EB] to-[#1CB0F6] rounded-full transition-all duration-700"
-                  style={{ width: `${officialProgressPercent}%` }}>
+              <div style={{
+                width: '100%', height: 14, background: '#e8e0c8', borderRadius: 7,
+                overflow: 'hidden', border: '1px solid #d8d0b8',
+              }}>
+                <div style={{
+                  height: '100%',
+                  width: `${officialProgressPercent}%`,
+                  background: 'linear-gradient(90deg, #c8a832, #dfc04a, #c8a832)',
+                  borderRadius: 7,
+                  transition: 'width 0.7s ease',
+                  display: 'flex', alignItems: 'center', justifyContent: 'flex-end',
+                  paddingRight: officialProgressPercent > 10 ? 8 : 0,
+                }}>
                   {officialProgressPercent > 10 && (
-                    <span className="flex items-center justify-end pr-2 h-full text-[10px] font-black text-white">{officialProgressPercent}%</span>
+                    <span style={{ fontSize: 8, fontWeight: 900, color: '#fff', textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}>
+                      {officialProgressPercent}%
+                    </span>
                   )}
                 </div>
               </div>
             </div>
           </div>
-          
+
           {allWorldsComplete ? (
-            <div className="bg-[#58CC02]/10 rounded-xl p-3 border border-[#58CC02]/20 mt-2">
-              <p className="text-sm font-black text-[#58CC02] text-center">🎉 ¡Completaste TODOS los mundos!</p>
-              <p className="text-xs text-[#777] text-center font-semibold mt-1">Ya puedes descargar tu certificado oficial de CultivaTec</p>
+            <div style={{
+              background: 'linear-gradient(135deg, #f0fdf0, #dcfce7)',
+              borderRadius: 10, padding: 10, border: '1px solid #22c55e30', marginTop: 8,
+            }}>
+              <p style={{ fontSize: 12, fontWeight: 900, color: '#16a34a', textAlign: 'center', margin: 0 }}>
+                Completaste TODOS los mundos
+              </p>
+              <p style={{ fontSize: 10, color: '#666', textAlign: 'center', fontWeight: 600, marginTop: 4, marginBottom: 0 }}>
+                Ya puedes descargar tu certificado oficial
+              </p>
             </div>
           ) : (
-            <p className="text-xs text-[#AFAFAF] font-semibold mt-1 text-center">
-              Completa los 5 mundos ({totalModulesAll} módulos) para obtener tu certificado oficial
+            <p style={{ fontSize: 10, color: '#aaa', fontWeight: 600, marginTop: 4, textAlign: 'center', marginBottom: 0 }}>
+              Completa los 5 mundos ({totalModulesAll} módulos) para tu certificado oficial
             </p>
           )}
         </div>
       </div>
       
       {/* Certificate download section */}
-      <div className="px-4 max-w-2xl mx-auto mb-4">
-        <div className={`rounded-2xl border-2 p-4 transition-all ${
-          allWorldsComplete 
-            ? 'bg-gradient-to-br from-[#FFC800]/10 to-[#FF9600]/10 border-[#FFC800]/40 shadow-lg' 
-            : 'bg-gray-50 border-[#E5E5E5]'
-        }`}>
-          <div className="flex items-center gap-4">
-            <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-3xl ${
-              allWorldsComplete ? 'bg-[#FFC800]/20 shadow-inner' : 'bg-gray-100'
-            }`}>
-              {allWorldsComplete ? '📜' : '🔒'}
+      <div style={{ padding: '0 16px', maxWidth: 520, margin: '0 auto 16px' }}>
+        <div style={{
+          borderRadius: 14, border: allWorldsComplete ? '2px solid #c8a83250' : '2px solid #e0e0e0',
+          padding: 16, position: 'relative', overflow: 'hidden',
+          background: allWorldsComplete
+            ? 'linear-gradient(135deg, #fffef7 0%, #fdf6e0 50%, #f8edc8 100%)'
+            : '#f5f5f5',
+          boxShadow: allWorldsComplete ? '0 8px 30px rgba(200,168,50,0.12)' : 'none',
+        }}>
+          {/* Gold corner ornaments for unlocked */}
+          {allWorldsComplete && <>
+            <div style={{ position: 'absolute', top: 0, left: 0, width: 20, height: 20, borderTop: '3px solid #c8a832', borderLeft: '3px solid #c8a832', borderRadius: '14px 0 0 0' }} />
+            <div style={{ position: 'absolute', top: 0, right: 0, width: 20, height: 20, borderTop: '3px solid #c8a832', borderRight: '3px solid #c8a832', borderRadius: '0 14px 0 0' }} />
+            <div style={{ position: 'absolute', bottom: 0, left: 0, width: 20, height: 20, borderBottom: '3px solid #c8a832', borderLeft: '3px solid #c8a832', borderRadius: '0 0 0 14px' }} />
+            <div style={{ position: 'absolute', bottom: 0, right: 0, width: 20, height: 20, borderBottom: '3px solid #c8a832', borderRight: '3px solid #c8a832', borderRadius: '0 0 14px 0' }} />
+          </>}
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14, position: 'relative', zIndex: 1 }}>
+            <div style={{
+              width: 60, height: 60, borderRadius: '50%', flexShrink: 0,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 28,
+              background: allWorldsComplete
+                ? 'linear-gradient(135deg, #c8a832, #dfc04a)'
+                : '#eee',
+              boxShadow: allWorldsComplete ? '0 4px 12px rgba(200,168,50,0.25)' : 'none',
+            }}>
+              <span style={{ fontSize: 14, fontWeight: 900, color: allWorldsComplete ? '#fff' : '#999', fontFamily: 'Georgia, serif' }}>{allWorldsComplete ? 'CT' : '—'}</span>
             </div>
-            <div className="flex-grow">
-              <p className={`text-sm font-black ${allWorldsComplete ? 'text-[#FF9600]' : 'text-[#AFAFAF]'}`}>
-                Certificado Oficial CultivaTec
+            <div style={{ flex: 1 }}>
+              <p style={{
+                fontSize: 13, fontWeight: 900, margin: '0 0 2px',
+                color: allWorldsComplete ? '#8b6914' : '#aaa',
+                fontFamily: 'Georgia, "Times New Roman", serif',
+              }}>
+                Certificado General CultivaTec
               </p>
-              <p className={`text-xs font-semibold ${allWorldsComplete ? 'text-[#777]' : 'text-[#CDCDCD]'}`}>
-                {allWorldsComplete 
-                  ? 'Avalado por el Director Abraham Isaías Navarro Doñate' 
-                  : `Completa ${WORLD_CERTIFICATES.length - completedWorlds} mundo${WORLD_CERTIFICATES.length - completedWorlds !== 1 ? 's' : ''} más para desbloquearlo`}
+              <p style={{ fontSize: 10, fontWeight: 600, color: allWorldsComplete ? '#888' : '#ccc', margin: '0 0 2px' }}>
+                {allWorldsComplete
+                  ? `Avalado por ${DIRECTOR_NAME}`
+                  : `Completa ${WORLD_CERTIFICATES.length - completedWorlds} mundo${WORLD_CERTIFICATES.length - completedWorlds !== 1 ? 's' : ''} más`}
               </p>
-              <p className={`text-[10px] font-bold mt-0.5 ${allWorldsComplete ? 'text-[#FF9600]' : 'text-[#E5E5E5]'}`}>
+              <p style={{ fontSize: 8, fontWeight: 700, color: allWorldsComplete ? '#c8a832' : '#ddd', margin: 0 }}>
                 A nombre de: {fullName}
               </p>
             </div>
           </div>
-          
+
           {allWorldsComplete && (
-            <button onClick={() => setShowCertConfirm(true)}
-              className="w-full mt-3 py-3 bg-gradient-to-r from-[#FFC800] to-[#FF9600] text-white font-black rounded-xl border-b-4 border-[#E5A000] active:scale-95 transition text-sm flex items-center justify-center gap-2 shadow-lg">
-              <Download size={18} /> Descargar Certificado PDF
+            <button onClick={() => setShowCertConfirm(true)} style={{
+              width: '100%', marginTop: 12, padding: '12px 0',
+              background: 'linear-gradient(135deg, #c8a832, #a88a20)',
+              color: '#fff', fontWeight: 900, fontSize: 12, letterSpacing: '0.04em',
+              border: 'none', borderRadius: 10, cursor: 'pointer',
+              borderBottom: '4px solid #8b6914',
+              boxShadow: '0 4px 16px rgba(200,168,50,0.3)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+            }}>
+              <Download size={16} /> Descargar Certificado PDF
             </button>
           )}
         </div>
       </div>
 
       {/* World Certificates Section */}
-      <div className="px-4 max-w-2xl mx-auto mb-4">
-        <h2 className="text-sm font-black text-[#3C3C3C] mb-3 flex items-center gap-2">
-          🌍 Certificados de Mundo <span className="text-[10px] font-bold text-[#AFAFAF] ml-1">{completedWorlds}/{WORLD_CERTIFICATES.length}</span>
-        </h2>
-        <div className="grid grid-cols-1 gap-3">
+      <div style={{ padding: '0 16px', maxWidth: 520, margin: '0 auto 16px' }}>
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12,
+        }}>
+          <div style={{ flex: 1, height: 1, background: 'linear-gradient(90deg, transparent, #c8a83250)' }} />
+          <h2 style={{
+            fontSize: 12, fontWeight: 900, color: '#5a4a1a', margin: 0,
+            fontFamily: 'Georgia, serif', letterSpacing: '0.06em',
+          }}>
+            Certificados por Mundo
+          </h2>
+          <span style={{ fontSize: 9, fontWeight: 800, color: '#c8a832' }}>
+            {completedWorlds}/{WORLD_CERTIFICATES.length}
+          </span>
+          <div style={{ flex: 1, height: 1, background: 'linear-gradient(90deg, #c8a83250, transparent)' }} />
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           {worldCertStatus.map(wc => (
             <div key={wc.worldId}
-              className={`rounded-2xl border-2 p-4 transition-all ${
-                wc.isWorldComplete
-                  ? 'bg-white border-opacity-30 shadow-md hover:shadow-lg cursor-pointer active:scale-[0.98]'
-                  : 'bg-gray-50 border-[#E5E5E5] opacity-60'
-              }`}
-              style={wc.isWorldComplete ? { borderColor: `${wc.color}50` } : {}}
               onClick={wc.isWorldComplete ? () => setShowWorldCertConfirm(wc) : undefined}
+              style={{
+                borderRadius: 14, position: 'relative', overflow: 'hidden',
+                border: wc.isWorldComplete ? `2px solid ${wc.color}40` : '2px solid #e0e0e0',
+                padding: 16, cursor: wc.isWorldComplete ? 'pointer' : 'default',
+                opacity: wc.isWorldComplete ? 1 : 0.5,
+                background: wc.isWorldComplete
+                  ? 'linear-gradient(135deg, #fffdf5 0%, #faf8f0 40%, #f5f0e0 100%)'
+                  : '#f5f5f5',
+                boxShadow: wc.isWorldComplete ? '0 4px 16px rgba(0,0,0,0.06)' : 'none',
+                transition: 'all 0.2s',
+              }}
             >
-              <div className="flex items-center gap-3">
-                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl ${
-                  wc.isWorldComplete ? 'shadow-inner' : 'bg-gray-100'
-                }`} style={wc.isWorldComplete ? { 
-                  background: `linear-gradient(135deg, ${wc.color}15, ${wc.color}30)`, 
-                  border: `2px solid ${wc.color}40` 
-                } : {}}>
-                  {wc.isWorldComplete ? wc.emoji : <Lock size={20} className="text-gray-300" />}
+              {/* Corner accents for unlocked */}
+              {wc.isWorldComplete && <>
+                <div style={{ position: 'absolute', top: 0, left: 0, width: 18, height: 18, borderTop: `2px solid ${wc.color}60`, borderLeft: `2px solid ${wc.color}60`, borderRadius: '14px 0 0 0' }} />
+                <div style={{ position: 'absolute', top: 0, right: 0, width: 18, height: 18, borderTop: `2px solid ${wc.color}60`, borderRight: `2px solid ${wc.color}60`, borderRadius: '0 14px 0 0' }} />
+                <div style={{ position: 'absolute', bottom: 0, left: 0, width: 18, height: 18, borderBottom: `2px solid ${wc.color}60`, borderLeft: `2px solid ${wc.color}60`, borderRadius: '0 0 0 14px' }} />
+                <div style={{ position: 'absolute', bottom: 0, right: 0, width: 18, height: 18, borderBottom: `2px solid ${wc.color}60`, borderRight: `2px solid ${wc.color}60`, borderRadius: '0 0 14px 0' }} />
+              </>}
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, position: 'relative', zIndex: 1 }}>
+                <div style={{
+                  width: 52, height: 52, borderRadius: '50%', flexShrink: 0,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: 24,
+                  background: wc.isWorldComplete
+                    ? `linear-gradient(135deg, ${wc.color}15, ${wc.color}30)`
+                    : '#eee',
+                  border: wc.isWorldComplete ? `2px solid ${wc.color}35` : '2px solid #ddd',
+                  boxShadow: wc.isWorldComplete ? `0 2px 8px ${wc.color}15` : 'none',
+                }}>
+                  <span style={{ fontSize: 11, fontWeight: 900, color: wc.isWorldComplete ? wc.color : '#bbb', fontFamily: 'Georgia, serif' }}>{wc.isWorldComplete ? 'CT' : '—'}</span>
                 </div>
-                <div className="flex-grow min-w-0">
-                  <div className="flex items-center gap-2">
-                    <p className={`text-sm font-black truncate ${wc.isWorldComplete ? 'text-[#3C3C3C]' : 'text-[#AFAFAF]'}`}>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 2 }}>
+                    <p style={{
+                      fontSize: 12, fontWeight: 900, margin: 0,
+                      color: wc.isWorldComplete ? '#2c2c2c' : '#aaa',
+                      fontFamily: 'Georgia, serif',
+                      overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                    }}>
                       {wc.certificateTitle}
                     </p>
                     {wc.isWorldComplete && (
-                      <span className="inline-block px-2 py-0.5 rounded-full text-[9px] font-black text-white" style={{ backgroundColor: wc.color }}>
-                        DESBLOQUEADO
+                      <span style={{
+                        fontSize: 7, fontWeight: 900, color: '#fff',
+                        padding: '2px 6px', borderRadius: 4,
+                        backgroundColor: wc.color,
+                        letterSpacing: '0.05em',
+                        flexShrink: 0,
+                      }}>
+                        OTORGADO
                       </span>
                     )}
                   </div>
-                  <p className={`text-xs font-semibold truncate ${wc.isWorldComplete ? 'text-[#777]' : 'text-[#CDCDCD]'}`}>
+                  <p style={{
+                    fontSize: 10, fontWeight: 600, margin: 0,
+                    color: wc.isWorldComplete ? '#888' : '#ccc',
+                    overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                  }}>
                     {wc.worldName}
                   </p>
                   {/* Progress bar */}
-                  <div className="mt-1.5 flex items-center gap-2">
-                    <div className="flex-grow h-2 bg-[#E5E5E5] rounded-full overflow-hidden">
-                      <div className="h-full rounded-full transition-all duration-500"
-                        style={{ 
-                          width: `${Math.round((wc.completedInWorld / wc.totalInWorld) * 100)}%`,
-                          backgroundColor: wc.isWorldComplete ? wc.color : '#CDCDCD'
-                        }} />
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 6 }}>
+                    <div style={{
+                      flex: 1, height: 6, background: '#e8e0c8', borderRadius: 3,
+                      overflow: 'hidden', border: '1px solid #d8d0b8',
+                    }}>
+                      <div style={{
+                        height: '100%', borderRadius: 3,
+                        width: `${Math.round((wc.completedInWorld / wc.totalInWorld) * 100)}%`,
+                        background: wc.isWorldComplete
+                          ? `linear-gradient(90deg, ${wc.color}, ${wc.color}cc)`
+                          : '#ccc',
+                        transition: 'width 0.5s',
+                      }} />
                     </div>
-                    <span className={`text-[10px] font-black flex-shrink-0 ${wc.isWorldComplete ? '' : 'text-[#CDCDCD]'}`}
-                      style={wc.isWorldComplete ? { color: wc.color } : {}}>
+                    <span style={{
+                      fontSize: 9, fontWeight: 900, flexShrink: 0,
+                      color: wc.isWorldComplete ? wc.color : '#ccc',
+                    }}>
                       {wc.completedInWorld}/{wc.totalInWorld}
                     </span>
                   </div>
+                  {/* Skill tags */}
                   {wc.isWorldComplete && (
-                    <div className="flex flex-wrap gap-1 mt-2">
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, marginTop: 6 }}>
                       {wc.skills.slice(0, 4).map((skill, i) => (
-                        <span key={i} className="text-[8px] font-bold px-1.5 py-0.5 rounded-md"
-                          style={{ backgroundColor: `${wc.color}12`, color: wc.color }}>
+                        <span key={i} style={{
+                          fontSize: 7, fontWeight: 700, padding: '2px 6px',
+                          borderRadius: 4, color: wc.color,
+                          background: `${wc.color}10`, border: `1px solid ${wc.color}20`,
+                        }}>
                           {skill}
                         </span>
                       ))}
                       {wc.skills.length > 4 && (
-                        <span className="text-[8px] font-bold text-[#AFAFAF] px-1.5 py-0.5">+{wc.skills.length - 4} más</span>
+                        <span style={{ fontSize: 7, fontWeight: 700, color: '#aaa', padding: '2px 4px' }}>
+                          +{wc.skills.length - 4} más
+                        </span>
                       )}
                     </div>
                   )}
                 </div>
                 {wc.isWorldComplete && (
-                  <div className="flex-shrink-0">
-                    <Download size={16} style={{ color: wc.color }} />
-                  </div>
+                  <Download size={16} color={wc.color} style={{ flexShrink: 0 }} />
                 )}
               </div>
             </div>
@@ -1108,11 +1464,20 @@ const LicensesScreen = ({ onBack, userScores, userProfile, completedModules }) =
       </div>
       
       {/* Licenses grid */}
-      <div className="px-4 max-w-2xl mx-auto">
-        <h2 className="text-sm font-black text-[#3C3C3C] mb-3 flex items-center gap-2">
-          <Award size={16} className="text-[#2563EB]" /> Licencias por Módulo
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div style={{ padding: '0 16px', maxWidth: 520, margin: '0 auto' }}>
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12,
+        }}>
+          <div style={{ flex: 1, height: 1, background: 'linear-gradient(90deg, transparent, #c8a83250)' }} />
+          <h2 style={{
+            fontSize: 12, fontWeight: 900, color: '#5a4a1a', margin: 0,
+            fontFamily: 'Georgia, serif', letterSpacing: '0.06em',
+          }}>
+            Licencias por Módulo
+          </h2>
+          <div style={{ flex: 1, height: 1, background: 'linear-gradient(90deg, #c8a83250, transparent)' }} />
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 10 }}>
           {MODULE_LICENSES.map(license => (
             <LicenseCard
               key={license.moduleId}
@@ -1135,38 +1500,67 @@ const LicensesScreen = ({ onBack, userScores, userProfile, completedModules }) =
       
       {/* Certificate download confirmation modal */}
       {showCertConfirm && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in" onClick={() => setShowCertConfirm(false)}>
-          <div className="bg-white rounded-3xl max-w-sm w-full p-6 animate-scale-in shadow-2xl" onClick={e => e.stopPropagation()}>
-            <div className="text-center mb-4">
-              <span className="text-5xl block mb-3">📜</span>
-              <h2 className="text-xl font-black text-[#3C3C3C] mb-1">¿Descargar Certificado?</h2>
-              <p className="text-sm text-[#777] font-semibold">Se generará un PDF oficial a nombre de:</p>
-              <p className="text-base font-black text-[#2563EB] mt-2">{fullName}</p>
+        <div style={{
+          position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.65)',
+          backdropFilter: 'blur(6px)', zIndex: 50,
+          display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16,
+        }} onClick={() => setShowCertConfirm(false)}>
+          <div style={{
+            background: 'linear-gradient(160deg, #fffef7, #faf6e8)',
+            borderRadius: 20, maxWidth: 370, width: '100%', padding: 24,
+            boxShadow: '0 20px 60px rgba(0,0,0,0.25)',
+            position: 'relative', overflow: 'hidden',
+          }} onClick={e => e.stopPropagation()}>
+            {/* Corner ornaments */}
+            <div style={{ position: 'absolute', top: 0, left: 0, width: 20, height: 20, borderTop: '3px solid #c8a832', borderLeft: '3px solid #c8a832', borderRadius: '20px 0 0 0' }} />
+            <div style={{ position: 'absolute', top: 0, right: 0, width: 20, height: 20, borderTop: '3px solid #c8a832', borderRight: '3px solid #c8a832', borderRadius: '0 20px 0 0' }} />
+            <div style={{ position: 'absolute', bottom: 0, left: 0, width: 20, height: 20, borderBottom: '3px solid #c8a832', borderLeft: '3px solid #c8a832', borderRadius: '0 0 0 20px' }} />
+            <div style={{ position: 'absolute', bottom: 0, right: 0, width: 20, height: 20, borderBottom: '3px solid #c8a832', borderRight: '3px solid #c8a832', borderRadius: '0 0 20px 0' }} />
+
+            <div style={{ textAlign: 'center', marginBottom: 16 }}>
+              <h2 style={{ fontSize: 18, fontWeight: 900, color: '#1a1a1a', margin: '0 0 4px', fontFamily: 'Georgia, serif' }}>
+                ¿Descargar Certificado?
+              </h2>
+              <p style={{ fontSize: 11, color: '#888', fontWeight: 600, margin: 0 }}>
+                Se generará un PDF oficial a nombre de:
+              </p>
+              <p style={{ fontSize: 14, fontWeight: 900, color: '#c8a832', marginTop: 8, fontFamily: 'Georgia, serif' }}>
+                {fullName}
+              </p>
             </div>
-            
-            <div className="bg-[#F7F7F7] rounded-xl p-3 mb-4 border border-[#E5E5E5]">
-              <div className="flex items-center gap-2 text-xs text-[#777] font-semibold">
-                <span>📝</span>
-                <span>Avalado por: <b className="text-[#3C3C3C]">{DIRECTOR_NAME}</b></span>
+
+            <div style={{
+              background: 'rgba(200,168,50,0.06)', borderRadius: 10,
+              padding: 12, marginBottom: 16, border: '1px solid #c8a83220',
+            }}>
+              <div style={{ fontSize: 10, color: '#888', fontWeight: 600, marginBottom: 4 }}>
+                Avalado por: <b style={{ color: '#2c2c2c' }}>{DIRECTOR_NAME}</b>
               </div>
-              <div className="flex items-center gap-2 text-xs text-[#777] font-semibold mt-1">
-                <span>📅</span>
-                <span>Fecha: <b className="text-[#3C3C3C]">{getFormattedDate()}</b></span>
+              <div style={{ fontSize: 10, color: '#888', fontWeight: 600, marginBottom: 4 }}>
+                Fecha: <b style={{ color: '#2c2c2c' }}>{getFormattedDate()}</b>
               </div>
-              <div className="flex items-center gap-2 text-xs text-[#777] font-semibold mt-1">
-                <span>📊</span>
-                <span>Mundos: <b className="text-[#3C3C3C]">{WORLD_CERTIFICATES.length}/{WORLD_CERTIFICATES.length} completados ({completedModulesAll} módulos)</b></span>
+              <div style={{ fontSize: 10, color: '#888', fontWeight: 600 }}>
+                Mundos: <b style={{ color: '#2c2c2c' }}>{WORLD_CERTIFICATES.length}/{WORLD_CERTIFICATES.length} completados ({completedModulesAll} módulos)</b>
               </div>
             </div>
-            
-            <div className="flex gap-2">
-              <button onClick={() => setShowCertConfirm(false)}
-                className="flex-1 py-3 bg-[#F7F7F7] text-[#777] font-black rounded-xl border-2 border-[#E5E5E5] active:scale-95 transition text-sm">
+
+            <div style={{ display: 'flex', gap: 8 }}>
+              <button onClick={() => setShowCertConfirm(false)} style={{
+                flex: 1, padding: '12px 0', background: '#f5f0e0',
+                color: '#888', fontWeight: 900, fontSize: 12,
+                border: '2px solid #e8e0c8', borderRadius: 10, cursor: 'pointer',
+              }}>
                 Cancelar
               </button>
-              <button onClick={handleDownloadCertificate}
-                className="flex-1 py-3 bg-gradient-to-r from-[#2563EB] to-[#1D4ED8] text-white font-black rounded-xl border-b-4 border-[#1a3fa0] active:scale-95 transition text-sm flex items-center justify-center gap-1">
-                <Download size={16} /> Descargar
+              <button onClick={handleDownloadCertificate} style={{
+                flex: 1, padding: '12px 0',
+                background: 'linear-gradient(135deg, #c8a832, #a88a20)',
+                color: '#fff', fontWeight: 900, fontSize: 12,
+                border: 'none', borderRadius: 10, cursor: 'pointer',
+                borderBottom: '4px solid #8b6914',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+              }}>
+                <Download size={14} /> Descargar
               </button>
             </div>
           </div>
@@ -1175,53 +1569,104 @@ const LicensesScreen = ({ onBack, userScores, userProfile, completedModules }) =
 
       {/* World Certificate download confirmation modal */}
       {showWorldCertConfirm && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in" onClick={() => setShowWorldCertConfirm(null)}>
-          <div className="bg-white rounded-3xl max-w-sm w-full p-6 animate-scale-in shadow-2xl" onClick={e => e.stopPropagation()}>
-            <div className="text-center mb-4">
-              <div className="w-20 h-20 mx-auto rounded-2xl flex items-center justify-center text-4xl mb-3 shadow-lg"
-                style={{ background: `linear-gradient(135deg, ${showWorldCertConfirm.color}15, ${showWorldCertConfirm.color}30)`, border: `3px solid ${showWorldCertConfirm.color}40` }}>
-                {showWorldCertConfirm.emoji}
-              </div>
-              <div className="inline-block px-3 py-1 rounded-full text-xs font-black text-white mb-2" style={{ backgroundColor: showWorldCertConfirm.color }}>
+        <div style={{
+          position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.65)',
+          backdropFilter: 'blur(6px)', zIndex: 50,
+          display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16,
+        }} onClick={() => setShowWorldCertConfirm(null)}>
+          <div style={{
+            background: 'linear-gradient(160deg, #fffef7, #faf6e8)',
+            borderRadius: 20, maxWidth: 370, width: '100%', padding: 24,
+            boxShadow: '0 20px 60px rgba(0,0,0,0.25)',
+            position: 'relative', overflow: 'hidden',
+          }} onClick={e => e.stopPropagation()}>
+            {/* Corner ornaments in world color */}
+            {[{t:0,l:0,r:'20px 0 0 0'},{t:0,r:0,ra:'0 20px 0 0'},{b:0,l:0,ra:'0 0 0 20px'},{b:0,r:0,ra:'0 0 20px 0'}].map((pos,i) => (
+              <div key={i} style={{
+                position:'absolute', width:20, height:20,
+                ...(pos.t !== undefined ? {top:0} : {bottom:0}),
+                ...(pos.l !== undefined ? {left:0} : {right:0}),
+                borderTop: pos.t !== undefined ? `3px solid ${showWorldCertConfirm.color}` : 'none',
+                borderBottom: pos.b !== undefined ? `3px solid ${showWorldCertConfirm.color}` : 'none',
+                borderLeft: pos.l !== undefined ? `3px solid ${showWorldCertConfirm.color}` : 'none',
+                borderRight: pos.r !== undefined ? `3px solid ${showWorldCertConfirm.color}` : 'none',
+                borderTopLeftRadius: (pos.t !== undefined && pos.l !== undefined) ? 20 : 0,
+                borderTopRightRadius: (pos.t !== undefined && pos.r !== undefined) ? 20 : 0,
+                borderBottomLeftRadius: (pos.b !== undefined && pos.l !== undefined) ? 20 : 0,
+                borderBottomRightRadius: (pos.b !== undefined && pos.r !== undefined) ? 20 : 0,
+              }} />
+            ))}
+
+            <div style={{ textAlign: 'center', marginBottom: 16 }}>
+              <div style={{
+                display: 'inline-block', padding: '3px 12px', borderRadius: 16,
+                fontSize: 8, fontWeight: 900, color: '#fff',
+                backgroundColor: showWorldCertConfirm.color,
+                letterSpacing: '0.1em', marginBottom: 6,
+              }}>
                 CERTIFICADO DE MUNDO
               </div>
-              <h2 className="text-xl font-black text-[#3C3C3C] mb-1">{showWorldCertConfirm.certificateTitle}</h2>
-              <p className="text-sm text-[#777] font-semibold">{showWorldCertConfirm.worldName}</p>
-              <p className="text-base font-black mt-2" style={{ color: showWorldCertConfirm.color }}>{fullName}</p>
+              <h2 style={{ fontSize: 18, fontWeight: 900, color: '#1a1a1a', margin: '6px 0 2px', fontFamily: 'Georgia, serif' }}>
+                {showWorldCertConfirm.certificateTitle}
+              </h2>
+              <p style={{ fontSize: 11, color: '#888', fontWeight: 600, margin: 0 }}>
+                {showWorldCertConfirm.worldName}
+              </p>
+              <p style={{ fontSize: 14, fontWeight: 900, marginTop: 8, fontFamily: 'Georgia, serif', color: showWorldCertConfirm.color }}>
+                {fullName}
+              </p>
             </div>
-            
-            <div className="bg-[#F7F7F7] rounded-xl p-3 mb-3 border border-[#E5E5E5]">
-              <p className="text-[10px] font-black text-[#AFAFAF] mb-2">HABILIDADES ESPECIALES</p>
-              <div className="flex flex-wrap gap-1.5">
+
+            <div style={{
+              background: `${showWorldCertConfirm.color}06`, borderRadius: 10,
+              padding: 10, marginBottom: 10, border: `1px solid ${showWorldCertConfirm.color}15`,
+            }}>
+              <p style={{ fontSize: 8, fontWeight: 800, color: '#aaa', margin: '0 0 6px', letterSpacing: '0.1em' }}>
+                COMPETENCIAS ACREDITADAS
+              </p>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
                 {showWorldCertConfirm.skills.map((skill, i) => (
-                  <span key={i} className="text-[10px] font-bold px-2 py-1 rounded-lg"
-                    style={{ backgroundColor: `${showWorldCertConfirm.color}12`, color: showWorldCertConfirm.color }}>
+                  <span key={i} style={{
+                    fontSize: 8, fontWeight: 700, padding: '3px 8px',
+                    borderRadius: 6, color: showWorldCertConfirm.color,
+                    background: `${showWorldCertConfirm.color}10`,
+                    border: `1px solid ${showWorldCertConfirm.color}20`,
+                  }}>
                     {skill}
                   </span>
                 ))}
               </div>
             </div>
 
-            <div className="bg-[#F7F7F7] rounded-xl p-3 mb-4 border border-[#E5E5E5]">
-              <div className="flex items-center gap-2 text-xs text-[#777] font-semibold">
-                <span>📝</span>
-                <span>Avalado por: <b className="text-[#3C3C3C]">{DIRECTOR_NAME}</b></span>
+            <div style={{
+              background: 'rgba(200,168,50,0.06)', borderRadius: 10,
+              padding: 10, marginBottom: 16, border: '1px solid #c8a83215',
+            }}>
+              <div style={{ fontSize: 10, color: '#888', fontWeight: 600, marginBottom: 4 }}>
+                Avalado por: <b style={{ color: '#2c2c2c' }}>{DIRECTOR_NAME}</b>
               </div>
-              <div className="flex items-center gap-2 text-xs text-[#777] font-semibold mt-1">
-                <span>📅</span>
-                <span>Fecha: <b className="text-[#3C3C3C]">{getFormattedDate()}</b></span>
+              <div style={{ fontSize: 10, color: '#888', fontWeight: 600 }}>
+                Fecha: <b style={{ color: '#2c2c2c' }}>{getFormattedDate()}</b>
               </div>
             </div>
-            
-            <div className="flex gap-2">
-              <button onClick={() => setShowWorldCertConfirm(null)}
-                className="flex-1 py-3 bg-[#F7F7F7] text-[#777] font-black rounded-xl border-2 border-[#E5E5E5] active:scale-95 transition text-sm">
+
+            <div style={{ display: 'flex', gap: 8 }}>
+              <button onClick={() => setShowWorldCertConfirm(null)} style={{
+                flex: 1, padding: '12px 0', background: '#f5f0e0',
+                color: '#888', fontWeight: 900, fontSize: 12,
+                border: '2px solid #e8e0c8', borderRadius: 10, cursor: 'pointer',
+              }}>
                 Cancelar
               </button>
-              <button onClick={() => handleDownloadWorldCertificate(showWorldCertConfirm)}
-                className="flex-1 py-3 text-white font-black rounded-xl border-b-4 active:scale-95 transition text-sm flex items-center justify-center gap-1"
-                style={{ background: `linear-gradient(to right, ${showWorldCertConfirm.color}, ${showWorldCertConfirm.colorDark})`, borderColor: showWorldCertConfirm.colorDark }}>
-                <Download size={16} /> Descargar
+              <button onClick={() => handleDownloadWorldCertificate(showWorldCertConfirm)} style={{
+                flex: 1, padding: '12px 0',
+                background: `linear-gradient(135deg, ${showWorldCertConfirm.color}, ${showWorldCertConfirm.colorDark})`,
+                color: '#fff', fontWeight: 900, fontSize: 12,
+                border: 'none', borderRadius: 10, cursor: 'pointer',
+                borderBottom: `4px solid ${showWorldCertConfirm.colorDark}`,
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+              }}>
+                <Download size={14} /> Descargar
               </button>
             </div>
           </div>

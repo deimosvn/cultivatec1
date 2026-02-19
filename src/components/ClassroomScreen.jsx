@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ArrowLeft, Calendar, Users, Bell, Clock, MapPin, BookOpen, ChevronRight, Plus, CheckCircle, Star } from 'lucide-react';
+import { playClick, playTab, playBack } from '../utils/retroSounds';
 
 // --- DATOS DE CLASES DE ROBÓTICA ---
 const CLASS_SCHEDULE = [
@@ -181,7 +182,7 @@ const ClassroomScreen = ({ onBack }) => {
       const cls = CLASS_SCHEDULE.find(c => c.id === selectedClass);
       return (
         <div className="space-y-3">
-          <button onClick={() => setSelectedClass(null)} className="text-[#AFAFAF] hover:text-[#1CB0F6] font-black text-sm flex items-center transition active:scale-95">
+          <button onClick={() => { playBack(); setSelectedClass(null); }} className="text-[#AFAFAF] hover:text-[#1CB0F6] font-black text-sm flex items-center transition active:scale-95">
             <ArrowLeft size={16} className="mr-1" /> Volver al Horario
           </button>
           
@@ -226,7 +227,7 @@ const ClassroomScreen = ({ onBack }) => {
         {CLASS_SCHEDULE.map(cls => (
           <div
             key={cls.id}
-            onClick={() => setSelectedClass(cls.id)}
+            onClick={() => { playClick(); setSelectedClass(cls.id); }}
             className="bg-white p-3.5 rounded-2xl border-2 border-[#E5E5E5] cursor-pointer hover:border-[#1CB0F6] transition-all active:scale-[0.98] flex items-center justify-between"
           >
             <div className="flex items-center gap-3">
@@ -362,7 +363,7 @@ const ClassroomScreen = ({ onBack }) => {
           {tabs.map(tab => (
             <button
               key={tab.id}
-              onClick={() => { setActiveTab(tab.id); setSelectedClass(null); }}
+              onClick={() => { playTab(); setActiveTab(tab.id); setSelectedClass(null); }}
               className={`flex-shrink-0 px-3.5 py-2 rounded-xl font-black text-xs transition-all active:scale-95 ${
                 activeTab === tab.id
                   ? 'bg-white text-[#1CB0F6] border-2 border-[#1CB0F6]'

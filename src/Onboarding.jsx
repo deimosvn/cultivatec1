@@ -561,7 +561,7 @@ const OnboardingScreen = ({ onComplete, firebaseProfile }) => {
               <button onClick={() => setStep(0)} className="flex-1 py-3 rounded-xl bg-white/10 border border-white/20 font-bold hover:bg-white/20 transition-colors flex items-center justify-center gap-1">
                 <ChevronLeft size={18}/> Atrás
               </button>
-              <button onClick={() => setStep(2)}
+              <button onClick={handleComplete}
                 className="flex-1 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 font-bold shadow-lg shadow-blue-500/30 active:scale-95 transition-all flex items-center justify-center gap-2">
                 <Sparkles size={16}/> ¡Listo!
               </button>
@@ -569,19 +569,11 @@ const OnboardingScreen = ({ onComplete, firebaseProfile }) => {
           </div>
         )}
 
-        {/* Step 2: Story intro — Robot speaks! */}
-        {step === 2 && (
-          <RobotWelcomeStory 
-            robotConfig={robotConfig} 
-            robotName={robotName || 'Sparky'} 
-            userName={userName} 
-            onComplete={handleComplete}
-          />
-        )}
+        {/* Step 2 removed — story intro eliminated */}
 
         {/* Step indicators */}
         <div className="flex gap-2 mt-8">
-          {[0,1,2].map(i => (
+          {[0,1].map(i => (
             <div key={i} className={`h-1.5 rounded-full transition-all duration-300 ${i === step ? 'w-8 bg-cyan-400' : i < step ? 'w-4 bg-blue-500' : 'w-4 bg-white/20'}`}/>
           ))}
         </div>
