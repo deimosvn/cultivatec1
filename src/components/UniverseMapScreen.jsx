@@ -99,16 +99,26 @@ const UniverseMapScreen = ({
     const themeColor = activeUniverse?.trailColor || '#60a5fa';
 
     const stations = [
-        { id: 'circuits', title: 'Circuitos', subtitle: 'Taller de Hardware', icon: Cpu, img: '/electronica.png',
-          gradient: 'linear-gradient(135deg, #06b6d4, #0891b2)', hoverGlow: '#06b6d4',
-          bgCard: 'linear-gradient(135deg, #ecfeff, #cffafe)', borderColor: '#67e8f9', onClick: onGoToCircuits },
-        { id: 'programming', title: 'Código', subtitle: 'Terminal de Código', icon: Code2, img: '/programacion.png',
-          gradient: 'linear-gradient(135deg, #8b5cf6, #7c3aed)', hoverGlow: '#8b5cf6',
-          bgCard: 'linear-gradient(135deg, #f5f3ff, #ede9fe)', borderColor: '#c4b5fd', onClick: onGoToProgramming },
-        { id: 'bahia', title: 'Bahía', subtitle: 'Hangar de Robots', icon: Wrench, img: '/bahia.png',
-          gradient: 'linear-gradient(135deg, #f59e0b, #d97706)', hoverGlow: '#f59e0b',
-          bgCard: 'linear-gradient(135deg, #fffbeb, #fef3c7)', borderColor: '#fcd34d', onClick: onGoToBahia },
+        { id: 'circuits', title: 'Circuitos', icon: Cpu, dailyKey: 'cultivatec_daily_circuit',
+          gradient: 'linear-gradient(135deg, #06b6d4, #0891b2)', glow: '#06b6d4', color: '#06b6d4',
+          helpMsg: '¡Robot averiado!', onClick: onGoToCircuits },
+        { id: 'programming', title: 'Código', icon: Code2, dailyKey: 'cultivatec_daily_prog',
+          gradient: 'linear-gradient(135deg, #8b5cf6, #7c3aed)', glow: '#8b5cf6', color: '#8b5cf6',
+          helpMsg: '¡Código roto!', onClick: onGoToProgramming },
+        { id: 'bahia', title: 'Bahía', icon: Wrench, dailyKey: null,
+          gradient: 'linear-gradient(135deg, #f59e0b, #d97706)', glow: '#f59e0b', color: '#f59e0b',
+          helpMsg: '', onClick: onGoToBahia },
     ];
+
+    // Check which stations have unsolved daily missions
+    const todayKey = (() => {
+        const d = new Date();
+        return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    })();
+    const hasPendingDaily = (dailyKey) => {
+        if (!dailyKey) return false;
+        try { return localStorage.getItem(dailyKey) !== todayKey; } catch { return false; }
+    };
 
     const levelInfo = calculateLevel
         ? calculateLevel(firebaseProfile?.totalPoints ?? userStats?.totalPoints ?? 0)
@@ -149,6 +159,26 @@ const UniverseMapScreen = ({
                 @keyframes station-btn-enter {
                     0% { opacity: 0; transform: translateY(16px) scale(0.92); }
                     100% { opacity: 1; transform: translateY(0) scale(1); }
+                }
+                @keyframes station-spark {
+                    0% { opacity: 0; transform: translate(0, 0) scale(0); }
+                    30% { opacity: 1; transform: translate(var(--sx), var(--sy)) scale(1); }
+                    100% { opacity: 0; transform: translate(var(--ex), var(--ey)) scale(0); }
+                }
+                @keyframes station-smoke {
+                    0% { opacity: 0.5; transform: translateY(0) scale(0.6); }
+                    100% { opacity: 0; transform: translateY(-22px) scale(1.4); }
+                }
+                @keyframes station-shake {
+                    0%, 100% { transform: rotate(0deg); }
+                    20% { transform: rotate(-3deg); }
+                    40% { transform: rotate(3deg); }
+                    60% { transform: rotate(-2deg); }
+                    80% { transform: rotate(2deg); }
+                }
+                @keyframes help-bubble {
+                    0%, 100% { transform: translateY(0); }
+                    50% { transform: translateY(-3px); }
                 }
                 @keyframes orb-breathe {
                     0%, 100% { transform: scale(1); }
@@ -638,93 +668,128 @@ const UniverseMapScreen = ({
             </div>
 
             {/* ═══════════════════════════════════════════
-                 4. STATION BUTTONS — Friendly Cards
+                 4. STATION BUTTONS — Icon-Only with Effects
                  ═══════════════════════════════════════════ */}
             <div style={{
                 position: 'relative', zIndex: 2,
-                padding: '12px 14px 20px',
+                padding: '10px 14px 18px',
                 background: 'linear-gradient(180deg, transparent 0%, rgba(15,23,42,0.5) 100%)',
             }}>
-                {/* Section title */}
+                {/* Station icons row */}
                 <div style={{
-                    textAlign: 'center', marginBottom: '14px',
-                }}>
-                    <span style={{
-                        fontSize: '12px', fontWeight: 800, color: 'rgba(255,255,255,0.7)',
-                        fontFamily: SF,
-                    }}>
-                        🛠️ Estaciones de Trabajo
-                    </span>
-                </div>
-
-                {/* Station cards */}
-                <div style={{
-                    display: 'flex', gap: '10px',
-                    maxWidth: '420px', margin: '0 auto',
+                    display: 'flex', gap: '20px',
+                    justifyContent: 'center', alignItems: 'flex-end',
+                    maxWidth: '320px', margin: '0 auto',
                 }}>
                     {stations.map((station, sIdx) => {
                         const StIcon = station.icon;
+                        const pending = hasPendingDaily(station.dailyKey);
                         return (
-                            <button key={station.id} onClick={station.onClick}
-                                className="station-card"
-                                style={{
-                                    flex: 1,
-                                    background: station.bgCard,
-                                    border: `2px solid ${station.borderColor}`,
-                                    borderRadius: '18px',
-                                    padding: '14px 6px 12px',
-                                    cursor: 'pointer',
-                                    display: 'flex', flexDirection: 'column',
-                                    alignItems: 'center', gap: '8px',
-                                    animation: `station-btn-enter 0.4s ease-out ${0.1 + sIdx * 0.1}s both`,
-                                    position: 'relative',
-                                    overflow: 'hidden',
-                                    boxShadow: `0 4px 16px ${station.hoverGlow}15`,
-                                }}>
+                            <div key={station.id} style={{
+                                display: 'flex', flexDirection: 'column', alignItems: 'center',
+                                gap: '6px',
+                                animation: `station-btn-enter 0.4s ease-out ${0.1 + sIdx * 0.1}s both`,
+                                position: 'relative',
+                            }}>
+                                {/* Help message bubble (only if pending) */}
+                                {pending && (
+                                    <div style={{
+                                        position: 'absolute',
+                                        top: '-32px', left: '50%', transform: 'translateX(-50%)',
+                                        background: 'rgba(255,255,255,0.95)',
+                                        color: '#1e293b',
+                                        fontSize: '8px',
+                                        fontWeight: 800,
+                                        fontFamily: SF,
+                                        padding: '3px 8px',
+                                        borderRadius: '8px',
+                                        whiteSpace: 'nowrap',
+                                        boxShadow: `0 2px 8px ${station.glow}40`,
+                                        animation: 'help-bubble 2s ease-in-out infinite',
+                                        zIndex: 5,
+                                        border: `1.5px solid ${station.glow}50`,
+                                    }}>
+                                        {station.helpMsg}
+                                        {/* Arrow */}
+                                        <div style={{
+                                            position: 'absolute',
+                                            bottom: '-4px', left: '50%', transform: 'translateX(-50%) rotate(45deg)',
+                                            width: '7px', height: '7px',
+                                            background: 'rgba(255,255,255,0.95)',
+                                            borderRight: `1.5px solid ${station.glow}50`,
+                                            borderBottom: `1.5px solid ${station.glow}50`,
+                                        }} />
+                                    </div>
+                                )}
 
-                                {/* Floating image */}
-                                <img
-                                    src={station.img}
-                                    alt={station.title}
+                                {/* Icon button */}
+                                <button onClick={station.onClick}
+                                    className="station-card"
                                     style={{
-                                        width: '48px', height: '48px',
-                                        objectFit: 'contain',
-                                        filter: `drop-shadow(0 2px 6px ${station.hoverGlow}50)`,
-                                        animation: `float-slow 3.5s ease-in-out ${sIdx * 0.3}s infinite`,
-                                    }}
-                                />
+                                        position: 'relative',
+                                        width: '56px', height: '56px',
+                                        borderRadius: '50%',
+                                        background: station.gradient,
+                                        border: `3px solid ${station.glow}60`,
+                                        cursor: 'pointer',
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                        boxShadow: pending
+                                            ? `0 0 16px ${station.glow}50, 0 0 32px ${station.glow}25`
+                                            : `0 4px 12px ${station.glow}30`,
+                                        animation: pending ? `station-shake 1.5s ease-in-out infinite, station-btn-enter 0.4s ease-out ${0.1 + sIdx * 0.1}s both` : `station-btn-enter 0.4s ease-out ${0.1 + sIdx * 0.1}s both`,
+                                        overflow: 'visible',
+                                    }}>
+                                    <StIcon size={24} style={{ color: '#fff', position: 'relative', zIndex: 2 }} />
 
-                                {/* Icon badge */}
-                                <div style={{
-                                    width: '32px', height: '32px',
-                                    borderRadius: '10px',
-                                    background: station.gradient,
-                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                    boxShadow: `0 3px 10px ${station.hoverGlow}40`,
-                                }}>
-                                    <StIcon size={16} style={{ color: '#fff' }} />
-                                </div>
+                                    {/* Sparks (only if pending) */}
+                                    {pending && Array.from({ length: 8 }).map((_, i) => {
+                                        const angle = (i / 8) * 360;
+                                        const rad = (angle * Math.PI) / 180;
+                                        const dist = 18 + Math.random() * 12;
+                                        return (
+                                            <div key={i} style={{
+                                                position: 'absolute',
+                                                width: '3px', height: '3px',
+                                                borderRadius: '50%',
+                                                background: i % 2 === 0 ? '#FFC800' : station.glow,
+                                                top: '50%', left: '50%',
+                                                '--sx': `${Math.cos(rad) * 6}px`,
+                                                '--sy': `${Math.sin(rad) * 6}px`,
+                                                '--ex': `${Math.cos(rad) * dist}px`,
+                                                '--ey': `${Math.sin(rad) * dist}px`,
+                                                animation: `station-spark ${0.8 + Math.random() * 0.6}s ease-out ${i * 0.15}s infinite`,
+                                                zIndex: 1,
+                                            }} />
+                                        );
+                                    })}
 
-                                {/* Title */}
+                                    {/* Smoke wisps (only if pending) */}
+                                    {pending && Array.from({ length: 3 }).map((_, i) => (
+                                        <div key={`smoke-${i}`} style={{
+                                            position: 'absolute',
+                                            top: '-2px',
+                                            left: `${35 + i * 12}%`,
+                                            width: '10px', height: '10px',
+                                            borderRadius: '50%',
+                                            background: 'rgba(200,200,200,0.4)',
+                                            filter: 'blur(3px)',
+                                            animation: `station-smoke ${1.5 + i * 0.4}s ease-out ${i * 0.5}s infinite`,
+                                            zIndex: 1,
+                                            pointerEvents: 'none',
+                                        }} />
+                                    ))}
+                                </button>
+
+                                {/* Label */}
                                 <span style={{
-                                    fontSize: '11px', fontWeight: 800,
-                                    color: '#1e293b',
+                                    fontSize: '9px', fontWeight: 800,
+                                    color: 'rgba(255,255,255,0.6)',
                                     fontFamily: SF,
                                     textAlign: 'center',
                                 }}>
                                     {station.title}
                                 </span>
-
-                                {/* Subtitle */}
-                                <span style={{
-                                    fontSize: '8px', fontWeight: 600,
-                                    color: '#64748b',
-                                    fontFamily: SF,
-                                    textAlign: 'center',
-                                }}>
-                                    {station.subtitle}
-                                </span>
-                            </button>
+                            </div>
                         );
                     })}
                 </div>
