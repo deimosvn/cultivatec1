@@ -147,7 +147,8 @@ const UniverseMapScreen = ({
     return (
         <div className="retro-crt-global" style={{
             paddingBottom: '0px',
-            minHeight: '100%',
+            paddingTop: 'env(safe-area-inset-top, 0px)',
+            minHeight: '100vh',
             width: '100%',
             position: 'relative',
             overflow: 'hidden',

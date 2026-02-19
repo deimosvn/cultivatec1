@@ -83,6 +83,7 @@ const HomeScreen = ({
             background: 'linear-gradient(180deg, #0f2240 0%, #1a3a6a 40%, #1e4a7a 70%, #0f2240 100%)',
             overflow: 'hidden',
             fontFamily: '"Press Start 2P", monospace',
+            paddingTop: 'env(safe-area-inset-top, 0px)',
         }}>
             {/* Star canvas */}
             <canvas ref={canvasRef} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', zIndex: 0 }} />
