@@ -5,7 +5,7 @@
 // Features: colorful HUD, big universe cards, friendly buttons
 
 import React, { useMemo, useRef, useState, useCallback, useEffect } from 'react';
-import { Settings, Zap, Star, Cpu, Code2, Wrench, ArrowLeft, HelpCircle, Sparkles } from 'lucide-react';
+import { Settings, Zap, Star, ArrowLeft, HelpCircle, Sparkles } from 'lucide-react';
 import { UNIVERSES } from '../data/universesData';
 import { playClick, playTab, playExpand, playCollapse } from '../utils/retroSounds';
 
@@ -99,13 +99,13 @@ const UniverseMapScreen = ({
     const themeColor = activeUniverse?.trailColor || '#60a5fa';
 
     const stations = [
-        { id: 'circuits', title: 'Circuitos', icon: Cpu, dailyKey: 'cultivatec_daily_circuit',
+        { id: 'circuits', title: 'Circuitos', img: '/electronica.png', dailyKey: 'cultivatec_daily_circuit',
           gradient: 'linear-gradient(135deg, #06b6d4, #0891b2)', glow: '#06b6d4', color: '#06b6d4',
           helpMsg: '¡Robot averiado!', onClick: onGoToCircuits },
-        { id: 'programming', title: 'Código', icon: Code2, dailyKey: 'cultivatec_daily_prog',
+        { id: 'programming', title: 'Código', img: '/programacion.png', dailyKey: 'cultivatec_daily_prog',
           gradient: 'linear-gradient(135deg, #8b5cf6, #7c3aed)', glow: '#8b5cf6', color: '#8b5cf6',
           helpMsg: '¡Código roto!', onClick: onGoToProgramming },
-        { id: 'bahia', title: 'Bahía', icon: Wrench, dailyKey: null,
+        { id: 'bahia', title: 'Bahía', img: '/bahia.png', dailyKey: null,
           gradient: 'linear-gradient(135deg, #f59e0b, #d97706)', glow: '#f59e0b', color: '#f59e0b',
           helpMsg: '', onClick: onGoToBahia },
     ];
@@ -682,7 +682,6 @@ const UniverseMapScreen = ({
                     maxWidth: '320px', margin: '0 auto',
                 }}>
                     {stations.map((station, sIdx) => {
-                        const StIcon = station.icon;
                         const pending = hasPendingDaily(station.dailyKey);
                         return (
                             <div key={station.id} style={{
@@ -739,7 +738,11 @@ const UniverseMapScreen = ({
                                         animation: pending ? `station-shake 1.5s ease-in-out infinite, station-btn-enter 0.4s ease-out ${0.1 + sIdx * 0.1}s both` : `station-btn-enter 0.4s ease-out ${0.1 + sIdx * 0.1}s both`,
                                         overflow: 'visible',
                                     }}>
-                                    <StIcon size={24} style={{ color: '#fff', position: 'relative', zIndex: 2 }} />
+                                    <img src={station.img} alt={station.title} style={{
+                                        width: '36px', height: '36px', objectFit: 'contain',
+                                        position: 'relative', zIndex: 2,
+                                        filter: 'drop-shadow(0 1px 3px rgba(0,0,0,0.3))',
+                                    }} />
 
                                     {/* Sparks (only if pending) */}
                                     {pending && Array.from({ length: 8 }).map((_, i) => {
