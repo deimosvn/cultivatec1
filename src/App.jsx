@@ -6297,7 +6297,17 @@ export default function App() {
     }, [completedModules, userScores, firebaseProfile, enteredWorlds]);
 
     // === SKIN UNLOCK ANIMATION ===
-    const knownSkinsRef = useRef(new Set());
+    // Persist known skins in localStorage so re-login never re-animates old skins
+    const knownSkinsRef = useRef(() => {
+        try {
+            const stored = localStorage.getItem('knownUnlockedSkins');
+            return stored ? new Set(JSON.parse(stored)) : new Set();
+        } catch { return new Set(); }
+    });
+    // Lazy-init: call the initializer once
+    if (typeof knownSkinsRef.current === 'function') {
+        knownSkinsRef.current = knownSkinsRef.current();
+    }
     const [skinAnimReady, setSkinAnimReady] = useState(false);
     const [skinUnlockPopup, setSkinUnlockPopup] = useState(null);
     const [skinUnlockQueue, setSkinUnlockQueue] = useState([]);
@@ -6315,7 +6325,7 @@ export default function App() {
         const currentIds = [...computedUnlockedSkinIds];
         const prevKnown = knownSkinsRef.current;
 
-        // Only animate if ready AND we have a non-empty baseline
+        // Only animate if ready AND we already had a baseline (from localStorage or prior render)
         if (skinAnimReady && prevKnown.size > 0) {
             const newIds = currentIds.filter(id => !prevKnown.has(id));
             if (newIds.length > 0) {
@@ -6326,8 +6336,10 @@ export default function App() {
             }
         }
 
-        // Always update the known set
-        knownSkinsRef.current = new Set(currentIds);
+        // Always update the known set and persist to localStorage
+        const updated = new Set(currentIds);
+        knownSkinsRef.current = updated;
+        try { localStorage.setItem('knownUnlockedSkins', JSON.stringify(currentIds)); } catch {}
     }, [computedUnlockedSkinIds, skinAnimReady]);
 
     useEffect(() => {
