@@ -3,6 +3,7 @@ import { ArrowLeft, Play, RotateCcw, Trash2, Zap, Cpu, ChevronRight, Pause, Chev
 import RobotBuildGamesHub from './RobotBuildGames';
 import AxonMerge from './AxonMerge';
 import SumoBotPush from './SumoBotPush';
+import FlappyRobotChallenge from './FlappyRobotChallenge';
 import { RobotMini } from '../Onboarding';
 
 /* ================================================================
@@ -1904,7 +1905,7 @@ const SimulationArena = ({ robotType, isRunning, simStep, totalSteps, simAction,
 /* ================================================================
    MAIN COMPONENT
    ================================================================ */
-export default function RobotSimulator({ onBack }) {
+export default function RobotSimulator({ onBack, onGameActive }) {
   const [phase, setPhase] = useState('select'); // select | instructions | build | program | simulate | battle
   const [template, setTemplate] = useState(null);
   const [workspace, setWorkspace] = useState([]); // placed parts
@@ -2500,12 +2501,17 @@ export default function RobotSimulator({ onBack }) {
 
   // -- Axon Merge mini-game --
   if (phase === 'axon_merge') {
-    return <AxonMerge onBack={() => setPhase('select')} />;
+    return <AxonMerge onBack={() => { onGameActive?.(false); setPhase('select'); }} />;
   }
 
   // -- SumoBot Push mini-game --
   if (phase === 'sumo_push') {
-    return <SumoBotPush onBack={() => setPhase('select')} />;
+    return <SumoBotPush onBack={() => { onGameActive?.(false); setPhase('select'); }} />;
+  }
+
+  // -- Flappy Robot Challenge --
+  if (phase === 'flappy_robot') {
+    return <FlappyRobotChallenge onBack={() => { onGameActive?.(false); setPhase('select'); }} onGameActive={onGameActive} />;
   }
 
   // -- Select screen (Space Station Hub) --
@@ -2560,7 +2566,7 @@ export default function RobotSimulator({ onBack }) {
 
             <div className="space-y-3">
               {/* Axon Merge */}
-              <div onClick={() => setPhase('axon_merge')}
+              <div onClick={() => { onGameActive?.(true); setPhase('axon_merge'); }}
                 className="mech-btn mech-btn-cyan p-4 station-scanline active:scale-[0.97] transition-transform">
                 <div className="flex items-center gap-4 relative z-10">
                   <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-cyan-500/30 to-blue-600/30 border border-cyan-400/30 flex items-center justify-center text-3xl flex-shrink-0">
@@ -2583,7 +2589,7 @@ export default function RobotSimulator({ onBack }) {
               </div>
 
               {/* SumoBot Push */}
-              <div onClick={() => setPhase('sumo_push')}
+              <div onClick={() => { onGameActive?.(true); setPhase('sumo_push'); }}
                 className="mech-btn mech-btn-red p-4 station-scanline active:scale-[0.97] transition-transform">
                 <div className="flex items-center gap-4 relative z-10">
                   <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-red-500/30 to-orange-600/30 border border-red-400/30 flex items-center justify-center text-3xl flex-shrink-0">
@@ -2602,6 +2608,29 @@ export default function RobotSimulator({ onBack }) {
                 <div className="flex gap-2 mt-3 relative z-10">
                   <span className="station-tag text-red-300"><Users size={10} /> 2 Jugadores</span>
                   <span className="station-tag text-amber-300"><Trophy size={10} /> Mejor de 3</span>
+                </div>
+              </div>
+
+              {/* Flappy Robot */}
+              <div onClick={() => { onGameActive?.(true); setPhase('flappy_robot'); }}
+                className="mech-btn mech-btn-green p-4 station-scanline active:scale-[0.97] transition-transform">
+                <div className="flex items-center gap-4 relative z-10">
+                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-green-500/30 to-cyan-600/30 border border-green-400/30 flex items-center justify-center text-3xl flex-shrink-0">
+                    🚀
+                  </div>
+                  <div className="flex-grow min-w-0">
+                    <h3 className="text-base font-black text-white">Flappy Robot</h3>
+                    <p className="text-xs text-blue-300/70 mt-0.5">Programa y vuela — ¡estilo Flappy Bird!</p>
+                  </div>
+                  <div className="flex-shrink-0">
+                    <div className="w-10 h-10 rounded-xl bg-green-500/20 border border-green-400/30 flex items-center justify-center">
+                      <ChevronRight size={20} className="text-green-400" />
+                    </div>
+                  </div>
+                </div>
+                <div className="flex gap-2 mt-3 relative z-10">
+                  <span className="station-tag text-green-300"><Cpu size={10} /> Programa por bloques</span>
+                  <span className="station-tag text-cyan-300"><Zap size={10} /> 6 sistemas</span>
                 </div>
               </div>
             </div>

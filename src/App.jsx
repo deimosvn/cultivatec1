@@ -5927,6 +5927,7 @@ const BottomNavBar = ({ currentTab, onSelectTab, setViewMode, onGoBack }) => {
 export default function App() {
     const [currentTab, setCurrentTab] = useState('Biblioteca'); 
     const [viewMode, setViewMode] = useState('menu'); 
+    const [isPlayingGame, setIsPlayingGame] = useState(false);
     const [currentModuleId, setCurrentModuleId] = useState(null);
     const [currentChallengeId, setCurrentChallengeId] = useState(null); 
     const [currentWorldIndex, setCurrentWorldIndex] = useState(null); // null = world map, number = inside that world
@@ -6719,7 +6720,7 @@ export default function App() {
                 ScreenContent = <WorkshopScreen goToMenu={goToMenu} />; // <-- El taller de código
                 break;
             case 'Simulador':
-                ScreenContent = <RobotSimulator onBack={() => goToMenu('Biblioteca')} />;
+                ScreenContent = <RobotSimulator onBack={() => goToMenu('Biblioteca')} onGameActive={setIsPlayingGame} />;
                 break;
             case 'Circuitos':
                 ScreenContent = <CircuitBuilder onBack={() => { setCircuitInitialId(null); goToMenu('Biblioteca'); }} initialChallengeId={circuitInitialId} />;
@@ -6843,8 +6844,8 @@ export default function App() {
                 <div className="min-h-screen overflow-y-auto pb-24 animate-fade-in"> 
                     {ScreenContent}
                 </div>
-                {/* Hide nav bar when inside a universe, the station, licenses, or joinClass */}
-                {(currentTab !== 'Biblioteca' || showHomeScreen) && viewMode !== 'licenses' && viewMode !== 'joinClass' && (
+                {/* Hide nav bar when inside a universe, the station, licenses, joinClass, or playing a game */}
+                {!isPlayingGame && (currentTab !== 'Biblioteca' || showHomeScreen) && viewMode !== 'licenses' && viewMode !== 'joinClass' && (
                     <BottomNavBar 
                         currentTab={viewMode === 'achievements' ? 'Logros' : viewMode === 'ranking' ? 'Ranking' : currentTab} 
                         onSelectTab={setCurrentTab} 
